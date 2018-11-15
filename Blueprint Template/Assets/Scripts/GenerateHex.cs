@@ -17,19 +17,19 @@ public class GenerateHex : MonoBehaviour {
 	private static float hexH = 0.86602540f;
 
 	// Grid containing coordinates of hexagon map.
-	private Vector3[,] mapGrid = new Vector3[mapSize, mapSize];
+	private static Vector3[,] mapGrid = new Vector3[mapSize, mapSize];
 
 	// Grid containing hex tile objects of hexagon map.
-	private GameObject[,] hexGrid = new GameObject[mapSize, mapSize];
+	private static GameObject[,] hexGrid = new GameObject[mapSize, mapSize];
 
 	// Grid containing objects placed on hexagon map.
-	private GameObject[,] objectGrid = new GameObject[mapSize, mapSize];
+	private static GameObject[,] objectGrid = new GameObject[mapSize, mapSize];
 
 	// Creates a grid of number coordinates, same reference as to the hexgrid of objects.
 	void CreateGrid() {
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
-				mapGrid[i, j] = new Vector3((float)(i * hexH * 2.0f + (hexH * (j%2))), UnityEngine.Random.Range(-1.2f, -0.8f), (float)(1.5 * j));
+				mapGrid[i, j] = new Vector3((float)(i * hexH * 2.0f + (hexH * (j%2))), UnityEngine.Random.Range(-1.1f, -0.9f), (float)(1.5 * j));
 			}
 		}
 	}
@@ -37,7 +37,7 @@ public class GenerateHex : MonoBehaviour {
 	// Places an object on the grid
 	void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GameObject obj) {
 		Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + 1.5f, mapGrid[xCo, yCo][2]);
-		// Debug.Log("Object placed at" + objPos);
+		Debug.Log("Object placed at" + objPos);
 		objectGrid[xCo, yCo] = (GameObject)Instantiate(obj, objPos, rot);
 	}
 
@@ -54,7 +54,9 @@ public class GenerateHex : MonoBehaviour {
 	}
 
 	// Given a player location and direction, places an object if ok
-	void PlayerPlace(float xPos, float yPos, float zPos, Quaternion dir) {
+	public bool PlayerPlace(float xPos, float yPos, float zPos, Quaternion dir) {
+		Debug.Log("PlayerPlace called");
+
 		// Add in amount to relevant vectors given player facing direction.
 		xPos = xPos + (float)(Math.Cos(dir[1]) * hexH * 2.0f);
 		yPos = yPos + (float)(Math.Sin(dir[1] * 1.5f));
@@ -67,10 +69,14 @@ public class GenerateHex : MonoBehaviour {
 		// (likely from Z direction than the others due to nature of this script)
 		// Checks to see if the player is allowed to place the object type should take
 		// place in the player code where the inventory is known.
-		if (Math.Abs(zPos - mapGrid[nearestX, nearestY][2]) < 5.0f) {
-			PlaceOnGrid(nearestX, nearestY, Quaternion.Euler(0, 0, 0), p_machinery);
-		}
 
+		PlaceOnGrid(UnityEngine.Random.Range(0, mapSize), UnityEngine.Random.Range(0, mapSize), Quaternion.Euler(0, 0, 0), p_machinery);
+
+		// if (Math.Abs(zPos - mapGrid[nearestX, nearestY][2]) < 5.0f) {
+			// PlaceOnGrid(nearestX, nearestY, Quaternion.Euler(0, 0, 0), p_machinery);
+			// return true;
+		// }
+		return false;
 	}
 
 	void PrintTests() {
@@ -102,7 +108,7 @@ public class GenerateHex : MonoBehaviour {
 			PlaceOnGrid(UnityEngine.Random.Range(0, mapSize), UnityEngine.Random.Range(0, mapSize), Quaternion.Euler(0, 0, 0), p_machinery);
 		}
 
-		PrintTests();
+		// PrintTests();
 	}
 
 	// Update is called once per frame

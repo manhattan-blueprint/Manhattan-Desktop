@@ -14,7 +14,7 @@ public class PlayerLook : MonoBehaviour {
 		LockCursor ();
 		xAxisClamp = 0;
 	}
-		
+
 	private void LockCursor() {
 		Cursor.lockState = CursorLockMode.Locked;
 	}

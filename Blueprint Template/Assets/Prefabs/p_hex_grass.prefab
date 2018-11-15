@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23694395852441952}
   - component: {fileID: 65150823091309088}
   m_Layer: 0
-  m_Name: p_hex_tile 1
+  m_Name: p_hex_grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
