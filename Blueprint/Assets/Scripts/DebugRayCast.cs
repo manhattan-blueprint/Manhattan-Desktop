@@ -24,12 +24,12 @@ public class DebugRayCast : MonoBehaviour {
 		if (Physics.Raycast(transform.position, direction, out hit, maxDistance)) {
 			SetFocus(hit.collider.GetComponent<Interactable>());
 		}
+
 		if (Input.GetMouseButtonDown(0)){
 			Debug.Log ("Left-mouse click");
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
+			hit = new RaycastHit();
 			if (Physics.Raycast(ray, out hit)){
-				Destroy(hit.transform.gameObject);
 				Debug.Log(hit.transform.gameObject);
 			}
 		}
