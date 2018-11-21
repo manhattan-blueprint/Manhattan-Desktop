@@ -21,8 +21,7 @@ public class ClickObject : MonoBehaviour {
 	void Update () {
 		Debug.DrawRay (transform.position, direction * maxDistance, Color.red);
 
-		if (Input.GetMouseButtonDown(0)){
-			Debug.Log ("Left-mouse click");
+		if (Input.GetMouseButtonDown(1)){
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			hit = new RaycastHit();
 			if (Physics.Raycast(ray, out hit)){

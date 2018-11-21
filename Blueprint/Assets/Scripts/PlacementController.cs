@@ -5,49 +5,42 @@ using UnityEngine;
 public class PlacementController : MonoBehaviour {
 
 
-	[SerializeField] private GameObject placeableObjectPrefab;
-	[SerializeField] private KeyCode newObjectHotkey = KeyCode.Q;
+	public GameObject item;
+	public GameObject tempParent;
+	public Transform guide;
+	private bool moved;
 
-	private GameObject currentPlaceableObject;
 
-	private float mouseWheelRotation;
-	
+	// Use this for initialisation
+	void Start() {
+		item.GetComponent<Rigidbody>().useGravity = true;
+	}
+
 	// Update is called once per frame
 	void Update () {
-		HandleNewObjectHotKey();
 
-		if (currentPlaceableObject != null) {
-			MoveCurrentObjectToMouse();
+	}
 
-			ReleaseIfClicked();
+	void OnMouseDown() {
+		float dist = Vector3.Distance(item.transform.position, guide.transform.position);
+		Debug.Log(dist);
+		if (dist < 2) {
+			moved = true;
+			item.GetComponent<Rigidbody>().useGravity = false;
+			item.GetComponent<Rigidbody>().isKinematic = true;
+			item.transform.position = guide.transform.position;
+			item.transform.rotation = guide.transform.rotation;
+			item.transform.parent = tempParent.transform;
 		}
 	}
 
-	private void HandleNewObjectHotKey() {
-		if (Input.GetKeyDown(newObjectHotkey)) {
-			if (currentPlaceableObject != null) {
-				Destroy(currentPlaceableObject);
-			} else {
-				currentPlaceableObject = Instantiate(placeableObjectPrefab);
-			}
-		}
-	}
-
-
-	private void MoveCurrentObjectToMouse() {
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-		RaycastHit hitInfo;
-
-		if(Physics.Raycast(ray, out hitInfo)) {
-			currentPlaceableObject.transform.position = Camera.main.gameObject.transform.position + new Vector3(0,0,3);
-			currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-		}
-	}
-
-	private void ReleaseIfClicked() {
-		if (Input.GetMouseButtonDown(0)) {
-			currentPlaceableObject = null;
+	void OnMouseUp() {
+		if (moved) {
+			item.GetComponent<Rigidbody>().useGravity = true;
+			item.GetComponent<Rigidbody>().isKinematic = false;
+			item.transform.parent = null;
+			item.transform.position = guide.transform.position;
+			moved = !moved;
 		}
 	}
 
