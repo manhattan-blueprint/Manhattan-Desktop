@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugRayCast : MonoBehaviour {
+public class ClickObject : MonoBehaviour {
 
 	public Vector3 direction = Vector3.forward;
 	public RaycastHit hit;
@@ -21,16 +21,13 @@ public class DebugRayCast : MonoBehaviour {
 	void Update () {
 		Debug.DrawRay (transform.position, direction * maxDistance, Color.red);
 
-		if (Physics.Raycast(transform.position, direction, out hit, maxDistance)) {
-			SetFocus(hit.collider.GetComponent<Interactable>());
-		}
-
 		if (Input.GetMouseButtonDown(0)){
 			Debug.Log ("Left-mouse click");
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			hit = new RaycastHit();
 			if (Physics.Raycast(ray, out hit)){
 				Debug.Log(hit.transform.gameObject);
+				SetFocus(hit.collider.GetComponent<Interactable>());
 			}
 		}
 	}

@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour {
 	[SerializeField] private string mouseXInputName, mouseYInputName;
 	[SerializeField] private float mouseSensitivity;
-
 	[SerializeField] private Transform playerBody;
 
 	private float xAxisClamp;
