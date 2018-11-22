@@ -16,30 +16,30 @@ public class PlayerMove : MonoBehaviour {
 	private bool isJumping;
 
 	private void Awake() {
-		charController = GetComponent<CharacterController> ();
+		charController = GetComponent<CharacterController>();
 	}
 
 	private void Update() {
-		PlayerMovement ();
+		PlayerMovement();
 	}
 
 	private void PlayerMovement() {
-		float horizInput = Input.GetAxis (horizontalInputName) * movementSpeed;
-		float vertInput = Input.GetAxis (verticalInputName) * movementSpeed;
+		float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
+		float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
 
 		Vector3 forwardMovement = transform.forward * vertInput;
 		Vector3 rightMovement = transform.right * horizInput;
 
 		// applies delta time so don't need to multiply above
-		charController.SimpleMove (forwardMovement + rightMovement);
+		charController.SimpleMove(forwardMovement + rightMovement);
 
-		JumpInput ();
+		JumpInput();
 	}
 
 	private void JumpInput() {
-		if (Input.GetKeyDown (jumpKey) && !isJumping) {
+		if (Input.GetKeyDown(jumpKey) && !isJumping) {
 			isJumping = true;
-			StartCoroutine (JumpEvent ());
+			StartCoroutine(JumpEvent());
 		}
 	}
 
