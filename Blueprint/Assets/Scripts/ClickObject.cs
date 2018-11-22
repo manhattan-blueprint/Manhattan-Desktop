@@ -10,29 +10,29 @@ public class ClickObject : MonoBehaviour {
 	public LayerMask layermask;
 	Camera cam;
 
+	private Inventory inventory;
 	public InventoryItem focus;
 
 	// Use this for initialization
 	void Start () {
-		// GameObject cam1 = GameObject.Find("PlayerCamera");
+		inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+	}
+
+	void SetFocus (InventoryItem newFocus) {
+		focus = newFocus;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.DrawRay (transform.position, direction * maxDistance, Color.red);
-
 		if (Input.GetMouseButtonDown(1)){
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			hit = new RaycastHit();
 			if (Physics.Raycast(ray, out hit)){
 				Debug.Log(hit.transform.gameObject);
 				SetFocus(hit.collider.GetComponent<InventoryItem>());
-				transform.parent.gameObject.GetComponent<Inventory>().GetItems();
-			}
+				Debug.Log(inventory.itemSlots.Length);
+				inventory.AddItem(focus);
+			}	
 		}
-	}
-
-	void SetFocus (InventoryItem newFocus) {
-		focus = newFocus;
 	}
 }

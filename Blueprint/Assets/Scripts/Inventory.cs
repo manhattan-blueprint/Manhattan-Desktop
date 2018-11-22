@@ -9,24 +9,38 @@ public class Inventory : MonoBehaviour {
 	// Seperate data from UI
 	[SerializeField] List<InventoryItem> items;
 	[SerializeField] Transform itemsParent;
-	[SerializeField] ItemSlot[] itemSlots;
+	public ItemSlot[] itemSlots;
 
 
-	public Inventory(List<InventoryItem> items) {
-		this.items = items;
-	}
+	// public Inventory(List<InventoryItem> items) {
+	// 	this.items = items;
+	// }
 
 	public List<InventoryItem> GetItems() {
 		return items;
 	}
 	
-	private void addToInventorySlot() {
+	private void OnValidate() {
 		if (itemsParent != null) {
 			itemSlots = itemsParent.GetComponentsInChildren<ItemSlot>();
 		}
 		RefreshUI();
 	}
 
+	public void AddItem(InventoryItem item) {
+		if (isSpace()){
+			Debug.Log("Added item yo");
+			this.items.Add(item);
+		} else {
+			Debug.Log("No space bro");
+		}
+	}
+
+	public bool isSpace(){
+		if (items.Count > 9) return false;
+		return true;
+	}
+	
 	private void RefreshUI() {
 		int i = 0;
 		for (; i < items.Count && i < itemSlots.Length; i++) {
