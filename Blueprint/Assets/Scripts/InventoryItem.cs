@@ -4,50 +4,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace DefaultNamespace
-{
-    public class InventoryItem : MonoBehaviour
+public class InventoryItem : MonoBehaviour {
+
+    public int id;
+    [SerializeField] int quantity;
+    public Sprite icon;
+
+    public InventoryItem(int id, int quantity)
     {
-        [SerializeField] private string _id;
+        this.id = id;
+        this.quantity = quantity;
+    }
 
-        [SerializeField] private int _quantity;
+    public int GetQuantity()
+    {
+        return quantity;
+    }
 
-        public InventoryItem(string id, int quantity)
+    public int GetId()
+    {
+        return id;
+    }
+
+    public Boolean Equals(Object obj)
+    {
+        Boolean result = false;
+        if (obj.GetType() == typeof(InventoryItem))
         {
-            this._id = id;
-            this._quantity = quantity;
+            InventoryItem other = (InventoryItem) obj;
+            result = this.id.Equals(other.id) && this.quantity == other.quantity;
         }
-
-
-        public int GetQuantity()
-        {
-            return _quantity;
-        }
-
-        public string GetId()
-        {
-            return _id;
-        }
-
-        public Boolean Equals(Object obj)
-        {
-            Boolean result = false;
-            if (obj.GetType() == typeof(InventoryItem))
-            {
-                InventoryItem other = (InventoryItem) obj;
-                result = this._id.Equals(other._id) && this._quantity == other._quantity;
-            }
-            return result;
-        }
-
-        // Use this for initialization
-        void Start () {
-		
-        }
-	
-        // Update is called once per frame
-        void Update () {
-		
-        }
+        return result;
     }
 }

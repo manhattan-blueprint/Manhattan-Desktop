@@ -10,11 +10,11 @@ public class ClickObject : MonoBehaviour {
 	public LayerMask layermask;
 	Camera cam;
 
-	public Interactable focus;
+	public InventoryItem focus;
 
 	// Use this for initialization
 	void Start () {
-		GameObject cam1 = GameObject.Find("PlayerCamera");
+		// GameObject cam1 = GameObject.Find("PlayerCamera");
 	}
 	
 	// Update is called once per frame
@@ -26,12 +26,13 @@ public class ClickObject : MonoBehaviour {
 			hit = new RaycastHit();
 			if (Physics.Raycast(ray, out hit)){
 				Debug.Log(hit.transform.gameObject);
-				SetFocus(hit.collider.GetComponent<Interactable>());
+				SetFocus(hit.collider.GetComponent<InventoryItem>());
+				transform.parent.gameObject.GetComponent<Inventory>().GetItems();
 			}
 		}
 	}
 
-	void SetFocus (Interactable newFocus) {
+	void SetFocus (InventoryItem newFocus) {
 		focus = newFocus;
 	}
 }
