@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\GenerateHex.cs" />
+    <Compile Include="Assets\Scripts\HexMap.cs" />
     <Compile Include="Assets\Scripts\PlayerLook.cs" />
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
     <Reference Include="UnityEditor.StandardEvents">

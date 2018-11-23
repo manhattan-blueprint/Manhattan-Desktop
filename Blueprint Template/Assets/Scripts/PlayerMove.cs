@@ -48,7 +48,6 @@ public class PlayerMove : MonoBehaviour {
 	private void JumpInput() {
 		if (Input.GetKeyDown (jumpKey)) {
 			isJumping = true;
-			Debug.Log("jump key pressed");
 			StartCoroutine (JumpEvent ());
 		}
 	}
