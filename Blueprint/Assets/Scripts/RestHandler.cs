@@ -5,36 +5,36 @@ using System.IO;
 using System.Net;
 using UnityEngine;
 
-public class RestHandler : MonoBehaviour {
+public class RestHandler
+{
+	private string _base_url;
 
-	// Use this for initialization
-	void Start () {
-		print("Hello");
-		performGET("http://adamcfox.ddns.net:8000");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-
-	public string performGET(string url)
+	public RestHandler(string baseUrl)
 	{
-		HttpWebRequest request = (HttpWebRequest) WebRequest.Create(String.Format(url));
-		HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+		_base_url = baseUrl;
+	}
 
-//		print(response.StatusDescription);
+	private string GetBaseURL()
+		{
+			return _base_url;
+		}
+
+	public string performGET(string endpoint)
+	{
+		string request_url = string.Concat(GetBaseURL(), endpoint);
+		HttpWebRequest request = (HttpWebRequest) WebRequest.Create(String.Format(request_url));
+		
+		HttpWebResponse response = (HttpWebResponse) request.GetResponse();
 		Stream stream = response.GetResponseStream();
 		StreamReader reader = new StreamReader(stream);
-
+	
 		string str_response = reader.ReadToEnd();
-		print(str_response);
-		
+			
 		reader.Close();
 		response.Close();
 		return str_response;
 	}
+	
 }
 
 

@@ -13,9 +13,9 @@ public class RestHandler_Tests {
     public void TestPerformGET()
     {
         var go = new GameObject();
-        var resthandler = go.AddComponent<RestHandler>();
-
-        var response = resthandler.performGET("http://jsonplaceholder.typicode.com/posts/1");
+        var rest_handler = new RestHandler("http://jsonplaceholder.typicode.com");
+        
+        var response = rest_handler.performGET("/posts/1");
         
         JSONplaceholder inv = new JSONplaceholder();
         inv = JsonUtility.FromJson<JSONplaceholder>(response);
@@ -27,6 +27,7 @@ public class RestHandler_Tests {
                                          "cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est " +
                                          "autem sunt rem eveniet architecto"));
     }
+
 }
 
 public class JSONplaceholder
