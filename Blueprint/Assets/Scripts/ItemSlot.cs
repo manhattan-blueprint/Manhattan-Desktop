@@ -4,25 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour {
-	[SerializeField] Image image;
 
-	private InventoryItem _item;
-	public InventoryItem item {
-		get {return _item;}
-		set {
-			_item = value;
-			if (_item == null) {
-				image.enabled = false;
-			} else {
-				image.sprite = _item.icon;
-				image.enabled = true;
-			} 
-		}
+	private Inventory inventory;
+	
+	public void Start() {
+		inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
 	}
 
-	private void OnValidate() {
-		if (image == null) {
-			image = GetComponent<Image>();
+	public void DropItem() {
+		Debug.Log("Hello");
+		foreach (Transform child in transform) {
+			GameObject.Destroy(child.gameObject);
+
 		}
 	}
 }

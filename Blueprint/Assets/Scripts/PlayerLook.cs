@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerLook : MonoBehaviour {
-	[SerializeField] private string mouseXInputName, mouseYInputName;
+	[SerializeField] private string mouseXInputName;
+	[SerializeField] private string mouseYInputName;
 	[SerializeField] private float mouseSensitivity;
 	[SerializeField] private Transform playerBody;
 
 	private float xAxisClamp;
+	public bool paused = false; 
 
 	private void Awake() {
 		LockCursor();

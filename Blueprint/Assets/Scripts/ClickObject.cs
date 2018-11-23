@@ -31,15 +31,17 @@ public class ClickObject : MonoBehaviour {
 		if (Input.GetMouseButtonDown(1)){
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			hit = new RaycastHit();
+
 			if (Physics.Raycast(ray, out hit)){
 				Debug.Log("Game object hit: " + hit.transform.gameObject);
 				SetFocus(hit.collider.GetComponent<InventoryItem>());
-				if (focus != null) {
+				length = inventory.GetItems().Count;
+
+				if (focus != null && length < 9) {
 					inventory.AddItem(focus);
-					length = inventory.GetItems().Count;
 					txt = itemButton.GetComponent<Text>();
 					txt.text = hit.transform.gameObject.name;
-					Instantiate(itemButton, inventory.itemSlots[length - 1].transform, false);
+					Instantiate(itemButton, inventory.itemSlots[length].transform, false);
 					Destroy(hit.transform.gameObject);
 				} else {
 					Debug.Log("No inventory items hit");
