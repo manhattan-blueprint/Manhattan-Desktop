@@ -29,10 +29,10 @@ public class Inventory : MonoBehaviour {
 
 	public void AddItem(InventoryItem item) {
 		if (isSpace()){
-			Debug.Log("Added item yo");
+			Debug.Log("Added item to inventory");
 			this.items.Add(item);
 		} else {
-			Debug.Log("No space bro");
+			Debug.Log("No space in inventory");
 		}
 	}
 

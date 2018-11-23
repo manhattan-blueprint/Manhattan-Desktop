@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClickObject : MonoBehaviour {
 
@@ -8,7 +9,10 @@ public class ClickObject : MonoBehaviour {
 	public RaycastHit hit;
 	public float maxDistance = 10;
 	public LayerMask layermask;
+	public GameObject itemButton;
 	Camera cam;
+	int length;
+	Text txt;
 
 	private Inventory inventory;
 	public InventoryItem focus;
@@ -28,10 +32,18 @@ public class ClickObject : MonoBehaviour {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			hit = new RaycastHit();
 			if (Physics.Raycast(ray, out hit)){
-				Debug.Log(hit.transform.gameObject);
+				Debug.Log("Game object hit: " + hit.transform.gameObject);
 				SetFocus(hit.collider.GetComponent<InventoryItem>());
-				Debug.Log(inventory.itemSlots.Length);
-				inventory.AddItem(focus);
+				if (focus != null) {
+					inventory.AddItem(focus);
+					length = inventory.GetItems().Count;
+					txt = itemButton.GetComponent<Text>();
+					txt.text = hit.transform.gameObject.name;
+					Instantiate(itemButton, inventory.itemSlots[length - 1].transform, false);
+					Destroy(hit.transform.gameObject);
+				} else {
+					Debug.Log("No inventory items hit");
+				}
 			}	
 		}
 	}
