@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
-
+using System.Collections;
 
 public class HexMap
 {
@@ -11,7 +11,7 @@ public class HexMap
     private Dictionary<string, GameObject> objects;
 
     private static int mapSize = 50;
-    private static float hexH = 0.86602540f;
+    private static float hexH = 0.86602540378f;
 
     // Grid containing coordinates of hexagon map.
     private static Vector3[,] mapGrid = new Vector3[mapSize, mapSize];
