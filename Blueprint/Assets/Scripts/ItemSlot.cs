@@ -5,17 +5,18 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour {
 
-	private Inventory inventory;
-	
-	public void Start() {
+	public int id;
+	public Inventory inventory;
+
+	void Start() {
 		inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
 	}
 
 	public void DropItem() {
-		Debug.Log("Hello");
 		foreach (Transform child in transform) {
+			Debug.Log("Dropping item:" + child.gameObject.name);
 			GameObject.Destroy(child.gameObject);
-
+			inventory.GetItems()[id] = null;
 		}
 	}
 }

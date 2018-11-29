@@ -35,14 +35,15 @@ public class ClickObject : MonoBehaviour {
 			if (Physics.Raycast(ray, out hit)){
 				Debug.Log("Game object hit: " + hit.transform.gameObject);
 				SetFocus(hit.collider.GetComponent<InventoryItem>());
-				length = inventory.GetItems().Count;
+				int nextSlot = inventory.GetNextFreeSlot();
+				Debug.Log("Next free slot: "+ nextSlot);
 
-				if (focus != null && length < 9) {
+				if (focus != null && length <= nextSlot) {
 					inventory.AddItem(focus);
 					txt = itemButton.GetComponent<Text>();
 					txt.text = hit.transform.gameObject.name;
-					Instantiate(itemButton, inventory.itemSlots[length].transform, false);
-					Destroy(hit.transform.gameObject);
+					Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
+					hit.transform.gameObject.SetActive(false);
 				} else {
 					Debug.Log("No inventory items hit");
 				}
