@@ -1,2 +1,0 @@
-C:\Users\BVRL\Documents\Eli_GitHub\Manhattan-Desktop\Blueprint Template\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
-C:\Users\BVRL\Documents\Eli_GitHub\Manhattan-Desktop\Blueprint Template\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
