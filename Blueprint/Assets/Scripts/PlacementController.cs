@@ -23,13 +23,11 @@ public class PlacementController : MonoBehaviour {
 
 	void OnMouseDown() {
 		float dist = Vector3.Distance(item.transform.position, guide.transform.position);
-		Debug.Log(dist);
 		if (dist < 2) {
 			moved = true;
 			item.GetComponent<Rigidbody>().useGravity = false;
 			item.GetComponent<Rigidbody>().isKinematic = true;
 			item.transform.position = guide.transform.position;
-			item.transform.rotation = guide.transform.rotation;
 			item.transform.parent = tempParent.transform;
 		}
 	}

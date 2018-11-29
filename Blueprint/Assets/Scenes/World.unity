@@ -487,7 +487,7 @@ GameObject:
   - component: {fileID: 404898458}
   - component: {fileID: 404898457}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: Capsule2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2738,7 +2738,6 @@ GameObject:
   - component: {fileID: 1912050191}
   - component: {fileID: 1912050190}
   - component: {fileID: 1912050193}
-  - component: {fileID: 1912050194}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2784,7 +2783,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  jumpMultiplier: 10
+  jumpMultiplier: 6
   jumpKey: 32
 --- !u!143 &1912050191
 CharacterController:
@@ -2850,17 +2849,6 @@ MonoBehaviour:
   - {fileID: 599758537}
   - {fileID: 916237489}
   size: 9
---- !u!114 &1912050194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1912050189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c01bb716c79ce64ab8098efe71dcab4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1981311055
 GameObject:
   m_ObjectHideFlags: 0
