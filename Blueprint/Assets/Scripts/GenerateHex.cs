@@ -1,4 +1,4 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -11,9 +11,9 @@ public class GenerateHex : MonoBehaviour {
 
     void Start ()
     {
-        stringToObject["grass"] = Resources.Load("p_hex_tile") as GameObject;
-        stringToObject["machinery"] = Resources.Load("p_machinery") as GameObject;
-        stringToObject["rock"] = Resources.Load("p_rock") as GameObject;
+        stringToObject["Grass"] = Resources.Load("Hex_Tile") as GameObject;
+        stringToObject["Machinery"] = Resources.Load("Machinery") as GameObject;
+        stringToObject["Rock"] = Resources.Load("Rock") as GameObject;
         hexmap.Create(stringToObject);
 	}
 
@@ -22,7 +22,11 @@ public class GenerateHex : MonoBehaviour {
     {
         if (Input.GetKeyDown("e"))
         {
-            hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "machinery");
+            hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "Machinery");
+        }
+        if (Input.GetKeyDown("r"))
+        {
+            hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "Grass");
         }
     }
 }

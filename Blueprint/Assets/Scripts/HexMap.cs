@@ -14,7 +14,7 @@ public class HexMap
     private static float hexH = 0.86602540378f;
 
     // Grid containing coordinates of hexagon map.
-    private static Vector3[,] mapGrid = new Vector3[mapSize, mapSize];
+    private Vector3[,] mapGrid;
 
     // Grid containing hex tile objects of hexagon map.
     private static GameObject[,] hexGrid = new GameObject[mapSize, mapSize];
@@ -26,8 +26,9 @@ public class HexMap
     {
         objects = stringToObjectMap;
 
+        mapGrid = CreateGrid();
+
         Debug.Log("Create called");
-        CreateGrid();
 
         Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
@@ -39,18 +40,18 @@ public class HexMap
                 {
                     // Central flat tiles.
                     mapGrid[i, j].y = -1.0f;
-                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects["grass"], mapGrid[i, j], rotation);
+                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects["Grass"], mapGrid[i, j], rotation);
                 }
                 else if (i > 10 && i < mapSize - 10 && j > 10 && j < mapSize - 10)
                 {
                     // Bumpy grass outer
                     mapGrid[i, j].y = UnityEngine.Random.Range(-1.0f, 0.0f);
-                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects["grass"], mapGrid[i, j], rotation);
+                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects["Grass"], mapGrid[i, j], rotation);
                 }
                 else
                 {
                     mapGrid[i, j].y = UnityEngine.Random.Range(-5.0f, .0f);
-                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects["rock"], mapGrid[i, j], rotation);
+                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects["Rock"], mapGrid[i, j], rotation);
                 }
             }
         }
@@ -61,15 +62,15 @@ public class HexMap
             for (int j = 10; j < 15; j++)
             {
                 mapGrid[i, j].y = UnityEngine.Random.Range(-1.0f, -0.8f);
-                hexGrid[i, j] = MonoBehaviour.Instantiate(objects["grass"], mapGrid[i, j], rotation);
+                hexGrid[i, j] = MonoBehaviour.Instantiate(objects["Grass"], mapGrid[i, j], rotation);
                 mapGrid[mapSize - i, mapSize - j].y = UnityEngine.Random.Range(-1.0f, -0.8f);
-                hexGrid[mapSize - i, mapSize - j] = MonoBehaviour.Instantiate(objects["grass"], mapGrid[i, j], rotation);
+                hexGrid[mapSize - i, mapSize - j] = MonoBehaviour.Instantiate(objects["Grass"], mapGrid[i, j], rotation);
             }
         }
 
         for (int i = 0; i < 20; i++)
         {
-            PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "machinery");
+            PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "Machinery");
         }
 
         // PrintTests();
@@ -92,32 +93,33 @@ public class HexMap
     }
 
     // Converts in game coordinates to nearest x grid coordinate.
-    public int XToCo(float xPos, float yPos)
+    private int XToCo(float xPos, float yPos)
     {
-        int xCo = (int)Math.Round(xPos / (hexH * 2) - ((Math.Round(yPos) % 2) * hexH));
-        return xCo;
+        return (int)Math.Round(xPos / (hexH * 2) - ((Math.Round(yPos) % 2) * hexH));
     }
 
     // Converts in game coordinates to nearest y grid coordinate.
-    public int YToCo(float xPos, float yPos)
+    private int YToCo(float xPos, float yPos)
     {
-        int yCo = (int)Math.Round(yPos / 1.5f);
-        return yCo;
+        return (int)Math.Round(yPos / 1.5f);
     }
 
     // Creates a grid of number coordinates, same reference as to the hexgrid of objects.
-    private void CreateGrid()
+    private static Vector3[,] CreateGrid()
     {
+        Debug.Log("Creating Grid");
+        Vector3[,] newMapGrid = new Vector3[mapSize, mapSize];
         for (int i = 0; i < mapSize; i++)
         {
             for (int j = 0; j < mapSize; j++)
             {
-                mapGrid[i, j] = new Vector3((float)(i * hexH * 2.0f + (hexH * (j % 2))), 0.0f, (float)(1.5f * j));
+                newMapGrid[i, j] = new Vector3((float)(i * hexH * 2.0f + (hexH * (j % 2))), 0.0f, (float)(1.5f * j));
             }
         }
+        return newMapGrid;
     }
 
-    private void PrintTests()
+    public void PrintTests()
     {
         Debug.Log("XToCo");
         Debug.Log(XToCo(0.0f, 0.0f)); // 0
@@ -131,5 +133,4 @@ public class HexMap
         Debug.Log(YToCo(8.0f, 1.5f)); // 1
         Debug.Log(YToCo(12.0f, 15.0f)); // 10
     }
-
 }
