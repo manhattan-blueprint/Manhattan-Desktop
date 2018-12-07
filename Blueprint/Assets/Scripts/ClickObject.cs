@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,9 @@ public class ClickObject : MonoBehaviour {
 
 	private Inventory inventory;
 	public InventoryItem focus;
+	public Transform cube;
+	public Transform cubeLarge;
+	public Transform capsule;
 
 	// Use this for initialization
 	void Start () {
