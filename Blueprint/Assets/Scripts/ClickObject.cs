@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Pick up items
 public class ClickObject : MonoBehaviour {
 
 	public Vector3 direction = Vector3.forward;
@@ -11,8 +12,6 @@ public class ClickObject : MonoBehaviour {
 	public float maxDistance = 10;
 	public LayerMask layermask;
 	public GameObject itemButton;
-	Camera cam;
-	int length;
 	Text txt;
 
 	private Inventory inventory;
@@ -42,7 +41,7 @@ public class ClickObject : MonoBehaviour {
 				int nextSlot = inventory.GetNextFreeSlot();
 				Debug.Log("Next free slot: "+ nextSlot);
 
-				if (focus != null && length <= nextSlot) {
+				if (focus != null) {
 					inventory.AddItem(focus);
 					txt = itemButton.GetComponent<Text>();
 					txt.text = hit.transform.gameObject.name;
