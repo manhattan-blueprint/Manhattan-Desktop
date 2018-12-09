@@ -7,14 +7,13 @@ using UnityEngine.UI;
 // Pick up items
 public class ClickObject : MonoBehaviour {
 
-	private Vector3 direction = Vector3.forward;
-	private RaycastHit hit;
-	private float maxDistance = 10;
+    private RaycastHit hit;
 	private Text txt;
 	private Inventory inventory;
 	private InventoryItem focus;
     private const int LeftButton = 1;
 
+    public float maxDistance;
     public GameObject itemButton;
     public Transform cube;
 	public Transform cubeLarge;
@@ -38,8 +37,9 @@ public class ClickObject : MonoBehaviour {
 		if (Physics.Raycast(ray, out hit)){
 			SetFocus(hit.collider.GetComponent<InventoryItem>());
 			int nextSlot = inventory.GetNextFreeSlot();
+            float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
-			if (focus != null) {
+			if (focus != null && dist < maxDistance) {
 				inventory.AddItem(focus);
 				txt = itemButton.GetComponent<Text>();
 				txt.text = hit.transform.gameObject.name;

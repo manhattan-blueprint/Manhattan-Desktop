@@ -20,14 +20,11 @@ public class ItemSlot : MonoBehaviour {
 
 	public void DropItem() {
 		foreach (Transform child in transform) {
-			Debug.Log("Dropping item:" + inventory.GetItems()[id].name);
 			position = Camera.main.gameObject.transform.position;
 			facing = Camera.main.gameObject.transform.forward * 2;
-			Debug.Log("Forward vector: " + position);
             itemId = inventory.GetItems()[id].id;
 			GameObject.Destroy(child.gameObject);
 			inventory.GetItems()[id] = null;
-			Debug.Log("Item ID is: " + itemId);
 			switch (itemId) {
 				case (0):
 					Transform cube = Instantiate(items.cube, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);

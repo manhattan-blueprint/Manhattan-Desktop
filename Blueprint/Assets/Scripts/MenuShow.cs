@@ -8,7 +8,6 @@ public class MenuShow : MonoBehaviour {
 
 	void Start() {
 	    CanvasObject = GetComponent<Canvas> ();
-	    Debug.Log(CanvasObject.name);
 	    CanvasObject.enabled = false;
     }
 
