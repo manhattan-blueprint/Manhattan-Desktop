@@ -7,27 +7,19 @@ using Object = UnityEngine.Object;
 public class InventoryItem : MonoBehaviour {
 
     public int id;
-    [SerializeField] int quantity;
+    private int quantity;
     public Sprite icon;
 
-    public InventoryItem(int id, int quantity)
-    {
+    public InventoryItem(int id, int quantity) {
         this.id = id;
         this.quantity = quantity;
     }
 
-    public int GetQuantity()
-    {
+    public int GetQuantity() {
         return quantity;
     }
 
-    public int GetId()
-    {
-        return id;
-    }
-
-    public Boolean Equals(Object obj)
-    {
+    public Boolean Equals(Object obj) {
         Boolean result = false;
         if (obj.GetType() == typeof(InventoryItem))
         {

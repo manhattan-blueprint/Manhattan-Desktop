@@ -4,24 +4,23 @@ using UnityEngine;
 
 public class MenuShow : MonoBehaviour {
 
-	private Canvas CanvasObject; // Assign in inspector
+	private Canvas CanvasObject;
 
-	void Start()
-		 {
-			 CanvasObject = GetComponent<Canvas> ();
-			 Debug.Log(CanvasObject.name);
-			 CanvasObject.enabled = false;
-		 }
+	void Start() {
+	    CanvasObject = GetComponent<Canvas> ();
+	    Debug.Log(CanvasObject.name);
+	    CanvasObject.enabled = false;
+    }
 
 	void Update() {
-			if (Input.GetKeyDown(KeyCode.E)) {
-				if (!CanvasObject.enabled) {
-					PauseGame();
-				} else {
-					ContinueGame();
-				}
+		if (Input.GetKeyDown(KeyCode.E)) {
+			if (!CanvasObject.enabled) {
+				PauseGame();
+			} else {
+				ContinueGame();
 			}
 		}
+    }
 
 	private void PauseGame() {
 		Time.timeScale = 0;

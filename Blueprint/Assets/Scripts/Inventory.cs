@@ -12,17 +12,12 @@ public class Inventory : MonoBehaviour {
 	public List<ItemSlot> itemSlots;
 	public int size = 9;
 
-	// public Inventory(InventoryItem[] items) {
-	// 	this.items = items;
-	// }
-
 	public InventoryItem[] GetItems() {
 		return items;
 	}
 
 	public void AddItem(InventoryItem item) {
-		if (isSpace()){
-			Debug.Log("Added item to inventory: " + item.name);
+		if (IsSpace()){
 			this.items[this.GetNextFreeSlot()] = item;
 		} else {
 			Debug.Log("No space in inventory");
@@ -32,18 +27,15 @@ public class Inventory : MonoBehaviour {
 	public int GetNextFreeSlot() {
 		for (int i=0; i<this.size; i++) {
 			if (items[i] == null) {
-				Debug.Log(i);
 				return i;
 			}
 		}
-		Debug.Log("-1");
 		return -1;
 	
 	}
 
-	public bool isSpace(){
-		if (items.Length > 9) return false;
-		return true;
+	public bool IsSpace(){
+        return items.Length < 9;
 	}
 
 		public bool Equals(Object obj) {
@@ -52,7 +44,6 @@ public class Inventory : MonoBehaviour {
 			Inventory other = (Inventory) obj;
 			eq = other.GetItems().OrderBy(t => t).SequenceEqual(items.OrderBy(t => t));
 		}
-
 		return eq;
 	}
 }

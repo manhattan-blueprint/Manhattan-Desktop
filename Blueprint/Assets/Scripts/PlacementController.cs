@@ -4,21 +4,14 @@ using UnityEngine;
 
 public class PlacementController : MonoBehaviour {
 
-
 	public GameObject item;
 	public GameObject tempParent;
 	public Transform guide;
 	private bool moved;
 
 
-	// Use this for initialisation
 	void Start() {
 		item.GetComponent<Rigidbody>().useGravity = true;
-	}
-
-	// Update is called once per frame
-	void Update () {
-
 	}
 
 	void OnMouseDown() {

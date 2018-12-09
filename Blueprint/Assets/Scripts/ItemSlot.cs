@@ -28,8 +28,7 @@ public class ItemSlot : MonoBehaviour {
 			GameObject.Destroy(child.gameObject);
 			inventory.GetItems()[id] = null;
 			Debug.Log("Item ID is: " + itemId);
-			switch (itemId)
-			{
+			switch (itemId) {
 				case (0):
 					Transform cube = Instantiate(items.cube, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
 					cube.name = "Cube";
@@ -43,8 +42,7 @@ public class ItemSlot : MonoBehaviour {
 					capsule.name = "Capsule";
 					break;
 				default:
-					Debug.Log("Damn you Stormcloaks. Skyrim was fine until you came along. Empire was nice and lazy. If they hadn't been looking for you, I could've stolen that horse and been half way to Hammerfell. You there. You and me -- we should be here. It's these Stormcloaks the Empire wants.!");
-
+					Debug.Log("The man who passes the sentence should swing the sword.");
                     break;
 			}	
 		}
