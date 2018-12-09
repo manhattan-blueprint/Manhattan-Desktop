@@ -35,15 +35,15 @@ public class Inventory : MonoBehaviour {
 	}
 
 	public bool IsSpace(){
-        return items.Length < 9;
+        return items.Length <= 9;
 	}
 
-		public bool Equals(Object obj) {
-		bool eq = false;
-		if (obj.GetType () == typeof(Inventory)) {
-			Inventory other = (Inventory) obj;
-			eq = other.GetItems().OrderBy(t => t).SequenceEqual(items.OrderBy(t => t));
-		}
-		return eq;
-	}
+	public bool Equals(Object obj) {
+	    bool eq = false;
+	    if (obj.GetType () == typeof(Inventory)) {
+		    Inventory other = (Inventory) obj;
+		    eq = other.GetItems().OrderBy(t => t).SequenceEqual(items.OrderBy(t => t));
+	    }
+	    return eq;
+    }
 }
