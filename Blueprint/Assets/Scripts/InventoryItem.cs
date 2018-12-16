@@ -21,8 +21,7 @@ public class InventoryItem : MonoBehaviour {
 
     public Boolean Equals(Object obj) {
         Boolean result = false;
-        if (obj.GetType() == typeof(InventoryItem))
-        {
+        if (obj.GetType() == typeof(InventoryItem)) {
             InventoryItem other = (InventoryItem) obj;
             result = this.id.Equals(other.id) && this.quantity == other.quantity;
         }
