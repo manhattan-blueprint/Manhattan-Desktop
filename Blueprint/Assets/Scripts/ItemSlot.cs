@@ -23,6 +23,7 @@ public class ItemSlot : MonoBehaviour {
             position = Camera.main.gameObject.transform.position;
             facing = Camera.main.gameObject.transform.forward * 2;
             itemId = inventory.GetItems()[id].id;
+            Debug.Log(inventory.GetItems()[id]);
             GameObject.Destroy(child.gameObject);
             inventory.GetItems()[id] = null;
             switch (itemId) {

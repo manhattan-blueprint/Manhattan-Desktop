@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3412,13 +3412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17fd2ca136b7d495ab2e8b17f6be7352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0, z: 1}
   maxDistance: 10
-  layermask:
-    serializedVersion: 2
-    m_Bits: 0
   itemButton: {fileID: 1188492057334766, guid: e24afbe408f679946b70962ac5e8f83f, type: 2}
-  focus: {fileID: 0}
   cube: {fileID: 4178118753178404, guid: 3b40ceb137fe54b9c9c286cbf68279ee, type: 2}
   cubeLarge: {fileID: 4860563762599424, guid: 6dc5f2df4889e4ff49d078c16bae0217, type: 2}
   capsule: {fileID: 4341569406944394, guid: baf27c7d89b914e96ab73de5358017fc, type: 2}
