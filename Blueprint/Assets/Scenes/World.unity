@@ -38,11 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-<<<<<<< HEAD:Blueprint/Assets/Scenes/world.unity
   m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
-=======
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
->>>>>>> 45f2f6fd25daae74b9963fe8443a2638c2ffc4be:Blueprint/Assets/Scenes/World.unity
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -386,11 +382,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 924651128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< HEAD:Blueprint/Assets/Scenes/world.unity
   m_LocalPosition: {x: 52.4, y: 1.23, z: 52.7}
-=======
-  m_LocalPosition: {x: 7.12, y: 1.65, z: -6.55}
->>>>>>> 45f2f6fd25daae74b9963fe8443a2638c2ffc4be:Blueprint/Assets/Scenes/World.unity
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -541,11 +533,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1535938348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< HEAD:Blueprint/Assets/Scenes/world.unity
   m_LocalPosition: {x: 52.552834, y: 0.5, z: 60.06743}
-=======
-  m_LocalPosition: {x: 0, y: 1.22, z: 2.6574285}
->>>>>>> 45f2f6fd25daae74b9963fe8443a2638c2ffc4be:Blueprint/Assets/Scenes/World.unity
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -795,11 +783,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1912050189}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< HEAD:Blueprint/Assets/Scenes/world.unity
   m_LocalPosition: {x: 53.6, y: 0.3179162, z: 49.8}
-=======
-  m_LocalPosition: {x: 6.55, y: 0.3179162, z: 0.07489159}
->>>>>>> 45f2f6fd25daae74b9963fe8443a2638c2ffc4be:Blueprint/Assets/Scenes/World.unity
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2127419266}
