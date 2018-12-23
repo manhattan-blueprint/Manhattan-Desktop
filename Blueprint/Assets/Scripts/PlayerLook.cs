@@ -11,7 +11,7 @@ public class PlayerLook : MonoBehaviour {
 	private float xAxisClamp;
 
 	private void Awake() {
-		LockCursor ();
+		LockCursor();
 		xAxisClamp = 0;
 	}
 		
@@ -20,27 +20,27 @@ public class PlayerLook : MonoBehaviour {
 	}
 
 	private void Update() {
-		CameraRotation ();
+		CameraRotation();
 	}
 
 	private void CameraRotation() {
-		float mouseX = Input.GetAxis (mouseXInputName) * mouseSensitivity * Time.deltaTime;
-		float mouseY = Input.GetAxis (mouseYInputName) * mouseSensitivity * Time.deltaTime;
+		float mouseX = Input.GetAxis(mouseXInputName) * mouseSensitivity * Time.deltaTime;
+		float mouseY = Input.GetAxis(mouseYInputName) * mouseSensitivity * Time.deltaTime;
 
 		xAxisClamp += mouseY;
 
 		if (xAxisClamp > 90.0f) {
 			xAxisClamp = 90.0f;
 			mouseY = 0.0f;
-			ClampAxisRotationToValue (270.0f);
+			ClampAxisRotationToValue(270.0f);
 		} else if (xAxisClamp < -90.0f) {
 			xAxisClamp = -90.0f;
 			mouseY = 0.0f;
-			ClampAxisRotationToValue (90.0f);
+			ClampAxisRotationToValue(90.0f);
 		}
 
-		transform.Rotate (Vector3.left * mouseY);
-		playerBody.Rotate (Vector3.up * mouseX);
+		transform.Rotate(Vector3.left * mouseY);
+		playerBody.Rotate(Vector3.up * mouseX);
 	}
 
 	private void ClampAxisRotationToValue(float value) {
