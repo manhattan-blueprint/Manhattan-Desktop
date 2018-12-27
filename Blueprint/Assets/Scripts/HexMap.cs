@@ -36,12 +36,6 @@ public class HexMap
         {
             for (int j = 0; j < mapSize; j++)
             {
-                // if (i > 15 && i < mapSize - 15 && j > 15 && j < mapSize - 15)
-                // {
-                //     // Central flat tiles.
-                //     mapGrid[i, j].y = -1.0f;
-                //     hexGrid[i, j] = MonoBehaviour.Instantiate(objects["Grass"], mapGrid[i, j], rotation);
-                // }
                 if (i > 10 && i < mapSize - 10 && j > 10 && j < mapSize - 10)
                 {
                     // Bumpy grass outer

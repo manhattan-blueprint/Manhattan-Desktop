@@ -20,13 +20,9 @@ public class GenerateHex : MonoBehaviour {
   // Update is called once per frame
   void Update ()
   {
-      if (Input.GetKeyDown("e"))
+      if (Input.GetKeyDown("''"))
       {
           hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "Machinery");
-      }
-      if (Input.GetKeyDown("r"))
-      {
-          hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), "Grass");
       }
   }
 }
