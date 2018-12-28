@@ -12,7 +12,7 @@ public class PlayerLook : MonoBehaviour {
     public bool paused = false; 
 
     private void Awake() {
-        LockCursor ();
+        LockCursor();
         xAxisClamp = 0;
     }
         
