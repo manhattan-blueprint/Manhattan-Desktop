@@ -116,19 +116,4 @@ public class HexMap
         }
         return newMapGrid;
     }
-
-    public void printTests()
-    {
-        Debug.Log("XToCo");
-        Debug.Log(XToCo(0.0f, 0.0f)); // 0
-        Debug.Log(XToCo(1.732f * 1.0f, 0.0f)); // 1
-        Debug.Log(XToCo(1.732f * 10.0f, 0.0f)); // 10
-        Debug.Log(XToCo(0.866f, 1.5f)); // 0
-        Debug.Log(XToCo(0.0f, 1.5f * 9.0f)); // 0
-
-        Debug.Log("YToCo");
-        Debug.Log(YToCo(0.0f, 0.0f)); // 0
-        Debug.Log(YToCo(8.0f, 1.5f)); // 1
-        Debug.Log(YToCo(12.0f, 15.0f)); // 10
-    }
 }
