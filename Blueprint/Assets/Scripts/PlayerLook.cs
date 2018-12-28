@@ -41,7 +41,7 @@ public class PlayerLook : MonoBehaviour {
         }
 
         transform.Rotate (Vector3.left * mouseY);
-        playerBody.Rotate (Vector3.up * mouseX);
+        playerBody.Rotate(Vector3.up * mouseX);
     }
 
     private void ClampAxisRotationToValue(float value) {
