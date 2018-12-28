@@ -11,6 +11,10 @@ public class HexMap
     private Dictionary<string, GameObject> objects;
 
     private static int mapSize = 50;
+
+    // Value of the distance from the origin of a hexmap to the perpendicular
+    // distance of each edge, given a hexagon where the distance of the origin
+    // to each corner is one. This is equivalent to sqrt(3)/2.
     private static float hexH = 0.86602540378f;
 
     // Grid containing coordinates of hexagon map.
