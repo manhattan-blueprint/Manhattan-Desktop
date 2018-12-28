@@ -16,7 +16,7 @@ public class PlayerMove : MonoBehaviour {
     private bool isJumping;
 
     private void Awake() {
-        charController = GetComponent<CharacterController> ();
+        charController = GetComponent<CharacterController>();
     }
 
     private void Update() {
