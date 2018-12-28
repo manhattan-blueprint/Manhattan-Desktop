@@ -40,7 +40,7 @@ public class PlayerLook : MonoBehaviour {
             ClampAxisRotationToValue (90.0f);
         }
 
-        transform.Rotate (Vector3.left * mouseY);
+        transform.Rotate(Vector3.left * mouseY);
         playerBody.Rotate(Vector3.up * mouseX);
     }
 
