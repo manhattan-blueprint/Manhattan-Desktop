@@ -15,9 +15,11 @@ public class ClickObject : MonoBehaviour {
 
     public float maxDistance;
     public GameObject itemButton;
+    public GameObject dropButton;
     public Transform cube;
     public Transform cubeLarge;
     public Transform capsule;
+    private string index;
 
     // Use this for initialization
     void Start() {
@@ -43,8 +45,12 @@ public class ClickObject : MonoBehaviour {
                 inventory.AddItem(focus);
                 txt = itemButton.GetComponent<Text>();
                 txt.text = hit.transform.gameObject.name;
-                Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
                 hit.transform.gameObject.SetActive(false);
+                Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
+                index = "Button" + (nextSlot + 1);
+                dropButton = GameObject.Find(index);
+                itemButton.transform.SetSiblingIndex(0);c
+                dropButton.transform.SetSiblingIndex(1);
             } else {
                 Debug.Log("No inventory items hit");
             }

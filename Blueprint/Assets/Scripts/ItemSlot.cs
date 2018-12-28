@@ -23,7 +23,9 @@ public class ItemSlot : MonoBehaviour {
             position = Camera.main.gameObject.transform.position;
             facing = Camera.main.gameObject.transform.forward * 2;
             itemId = inventory.GetItems()[id].id;
-            GameObject.Destroy(child.gameObject);
+			if (child.gameObject.name == "InventoryButton(Clone)") {
+                GameObject.Destroy(child.gameObject);
+			}
 			bool init = false;
             switch (itemId) {
                 case (0):
