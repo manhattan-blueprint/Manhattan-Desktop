@@ -24,7 +24,7 @@ public class PlayerMove : MonoBehaviour {
     }
 
     private void PlayerMovement() {
-        float horizInput = Input.GetAxis (horizontalInputName) * movementSpeed;
+        float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
         float vertInput = Input.GetAxis (verticalInputName) * movementSpeed;
 
         Vector3 forwardMovement = transform.forward * vertInput;
