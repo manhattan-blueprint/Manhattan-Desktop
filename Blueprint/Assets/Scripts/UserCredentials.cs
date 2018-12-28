@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//[Serializable]
 public class UserCredentials
 {
     private string _username;
@@ -13,9 +15,17 @@ public class UserCredentials
 
     public UserCredentials(string username, string password)
     {
+        this._username = username;
+        this._password = password;
+    }
+
+    public UserCredentials(string username, string password, string access, string refresh) {
         _username = username;
         _password = password;
+        _access = access;
+        _refresh = refresh;
     }
+
 
     //setters
     public void setUsername(string username)
@@ -58,4 +68,5 @@ public class UserCredentials
     {
         return _refresh;
     }
+    
 }
