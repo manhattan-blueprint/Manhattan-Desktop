@@ -31,7 +31,7 @@ public class PlayerMove : MonoBehaviour {
         Vector3 rightMovement = transform.right * horizInput;
 
         // applies delta time so don't need to multiply above
-        charController.SimpleMove (forwardMovement + rightMovement);
+        charController.SimpleMove(forwardMovement + rightMovement);
 
         JumpInput ();
     }
