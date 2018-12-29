@@ -10,66 +10,68 @@ public class HexMap
     // Objects used in map
     private Dictionary<GenerateHex.Resource, GameObject> objects;
 
+    // Needs to be static as used in array creation.
     private static int mapSize = 50;
 
     // Value of the distance from the origin of a hexmap to centre point
     // of each edge, given a hexagon where the distance of the origin
     // to each corner is one. This is equivalent to sqrt(3)/2.
-    private static float hexH = 0.86602540378f;
+    private float hexH = 0.86602540378f;
 
     // Grid containing coordinates of hexagon map.
     private Vector3[,] mapGrid;
 
     // Grid containing hex tile objects of hexagon map.
-    private static GameObject[,] hexGrid = new GameObject[mapSize, mapSize];
+    private GameObject[,] hexGrid;
 
     // Grid containing objects placed on hexagon map.
-    private static GameObject[,] objectGrid = new GameObject[mapSize, mapSize];
+    private GameObject[,] objectGrid;
 
     public void Create(Dictionary<GenerateHex.Resource, GameObject> resourceToObjectMap)
     {
         objects = resourceToObjectMap;
 
+        hexGrid = new GameObject[mapSize, mapSize];
+
+        objectGrid = new GameObject[mapSize, mapSize];
+
         mapGrid = CreateGrid();
 
         Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
+        ////////////////////////////////////////////////////////////////////////
+        // Basic procedural system for generating the MVP construction area,
+        // almsot certainly won't be used past the MVP.
+        int bumpyWidth = 10;
         for (int i = 0; i < mapSize; i++)
         {
             for (int j = 0; j < mapSize; j++)
             {
-                if (i > 10 && i < mapSize - 10 && j > 10 && j < mapSize - 10)
+                if (i > bumpyWidth && i < mapSize - bumpyWidth && j > bumpyWidth && j < mapSize - bumpyWidth)
                 {
-                    // Bumpy grass outer
                     mapGrid[i, j].y = UnityEngine.Random.Range(-1.1f, -1.0f);
                     hexGrid[i, j] = MonoBehaviour.Instantiate(objects[GenerateHex.Resource.Grass], mapGrid[i, j], rotation);
                 }
                 else
                 {
+                    // Bumpy outer grass on the edges of the map.
                     mapGrid[i, j].y = UnityEngine.Random.Range(-5.0f, .0f);
                     hexGrid[i, j] = MonoBehaviour.Instantiate(objects[GenerateHex.Resource.Rock], mapGrid[i, j], rotation);
                 }
             }
         }
 
-        // First outer ring, bumpy grass
-        for (int i = 10; i < 15; i++)
+        // Place some random machinery just to make it feel more dynamic; can
+        // remove this bit if deemed not neccessary.
+        int numOfMachines = 0;
+        for (int i = 0; i < numOfMachines; i++)
         {
-            for (int j = 10; j < 15; j++)
-            {
-                mapGrid[i, j].y = UnityEngine.Random.Range(-1.0f, -0.8f);
-                hexGrid[i, j] = MonoBehaviour.Instantiate(objects[GenerateHex.Resource.Grass], mapGrid[i, j], rotation);
-                mapGrid[mapSize - i, mapSize - j].y = UnityEngine.Random.Range(-1.0f, -0.8f);
-                hexGrid[mapSize - i, mapSize - j] = MonoBehaviour.Instantiate(objects[GenerateHex.Resource.Grass], mapGrid[i, j], rotation);
-            }
+            PlaceOnGrid(UnityEngine.Random.Range(bumpyWidth, mapSize-bumpyWidth),
+              UnityEngine.Random.Range(bumpyWidth, mapSize-bumpyWidth),
+              Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
         }
-
-        for (int i = 0; i < 20; i++)
-        {
-            PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
-        }
-
-        // PrintTests();
+        // End MVP only area
+        ////////////////////////////////////////////////////////////////////////
     }
 
     // Places an object on the grid according to placement system of ints and map
@@ -84,7 +86,7 @@ public class HexMap
     {
         int xCo = XToCo(fxCo, fyCo);
         int yCo = YToCo(fxCo, fyCo);
-        Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + 1.5f, mapGrid[xCo, yCo][2]);
+        Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1], mapGrid[xCo, yCo][2]);
         objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
     }
 
@@ -101,7 +103,7 @@ public class HexMap
     }
 
     // Creates a grid of number coordinates, same reference as to the hexgrid of objects.
-    private static Vector3[,] CreateGrid()
+    private Vector3[,] CreateGrid()
     {
         Vector3[,] newMapGrid = new Vector3[mapSize, mapSize];
         for (int i = 0; i < mapSize; i++)
