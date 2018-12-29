@@ -5,6 +5,9 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
+# Mac directory info file
+.DS_Store
+
 # Visual Studio cache directory
 .vs/
 
@@ -27,6 +30,7 @@ ExportedObj/
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
+*.cs.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
