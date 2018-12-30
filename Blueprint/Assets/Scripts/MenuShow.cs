@@ -25,11 +25,13 @@ public class MenuShow : MonoBehaviour {
         Time.timeScale = 0;
         CanvasObject.enabled = true;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void ContinueGame() {
         Time.timeScale = 1;
         CanvasObject.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }

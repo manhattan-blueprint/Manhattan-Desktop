@@ -55,6 +55,15 @@ public class ItemSlot : MonoBehaviour {
                         capsule.name = "Capsule";
                     }
                     break;
+	            case (3):
+		            InventoryItem invMac = inventory.GetItems()[id];
+		            invMac.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
+		            invMac.transform.gameObject.SetActive(true);
+		            if (init) {
+			            Transform machinery = Instantiate(items.machinery, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
+			            machinery.name = "Machinery";
+		            }
+		            break;
                 default:
                     Debug.Log("Item ID does not exist.");
                     break;

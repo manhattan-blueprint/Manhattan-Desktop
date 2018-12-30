@@ -1,11 +1,16 @@
 fileFormatVersion: 2
 guid: 17fd2ca136b7d495ab2e8b17f6be7352
-timeCreated: 1541683092
-licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - itemButton: {instanceID: 0}
+  - dropButton: {instanceID: 0}
+  - cube: {instanceID: 0}
+  - cubeLarge: {instanceID: 0}
+  - capsule: {instanceID: 0}
+  - machinery: {fileID: 4573807389177294, guid: e2032d64f6722460ca19b7a6adb03ae8,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

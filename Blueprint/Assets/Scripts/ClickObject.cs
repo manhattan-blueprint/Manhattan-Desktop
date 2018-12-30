@@ -19,6 +19,7 @@ public class ClickObject : MonoBehaviour {
     public Transform cube;
     public Transform cubeLarge;
     public Transform capsule;
+    public Transform machinery;
     private string index;
 
     // Use this for initialization
