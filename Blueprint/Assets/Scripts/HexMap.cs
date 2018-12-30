@@ -18,6 +18,12 @@ public class HexMap
     // to each corner is one. This is equivalent to sqrt(3)/2.
     private float hexH = 0.86602540378f;
 
+    // This is the height of the block of grass from the midpoint, which
+    // currently depends on the height of the prefab used for grass. Past
+    // the MVP this will likely be made taller but can probably remain
+    // hardcoded, depending on the direction we go with the terrain.
+    float grassTopHeight = 1.5f;
+
     // Grid containing coordinates of hexagon map.
     private Vector3[,] mapGrid;
 
@@ -41,7 +47,7 @@ public class HexMap
 
         ////////////////////////////////////////////////////////////////////////
         // Basic procedural system for generating the MVP construction area,
-        // almsot certainly won't be used past the MVP.
+        // almost certainly won't be used past the MVP.
         int bumpyWidth = 10;
         for (int i = 0; i < mapSize; i++)
         {
@@ -62,12 +68,14 @@ public class HexMap
         }
 
         // Place some random machinery just to make it feel more dynamic; can
-        // remove this bit if deemed not neccessary.
+        // remove this bit if deemed unnecessary.
         int numOfMachines = 20;
+        Debug.Log(bumpyWidth);
+        Debug.Log(mapSize-bumpyWidth);
         for (int i = 0; i < numOfMachines; i++)
         {
-            PlaceOnGrid(UnityEngine.Random.Range(bumpyWidth, mapSize-bumpyWidth),
-              UnityEngine.Random.Range(bumpyWidth, mapSize-bumpyWidth),
+            PlaceOnGrid(UnityEngine.Random.Range(10, 40),
+              UnityEngine.Random.Range(10, 40),
               Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
         }
         // End MVP only area
@@ -75,9 +83,9 @@ public class HexMap
     }
 
     // Places an object on the grid according to placement system of ints and map
-    public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode )
+    public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
     {
-        Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + 1.5f, mapGrid[xCo, yCo][2]);
+        Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
         objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
     }
 
@@ -86,7 +94,7 @@ public class HexMap
     {
         int xCo = XToCo(fxCo, fyCo);
         int yCo = YToCo(fxCo, fyCo);
-        Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1], mapGrid[xCo, yCo][2]);
+        Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
         objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
     }
 
