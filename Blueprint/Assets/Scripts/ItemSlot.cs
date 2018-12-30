@@ -56,7 +56,7 @@ public class ItemSlot : MonoBehaviour {
                     }
                     break;
                 default:
-                    Debug.Log("You know nothin' Jeh Leeees.");
+                    Debug.Log("");
                     break;
             }   
         }
