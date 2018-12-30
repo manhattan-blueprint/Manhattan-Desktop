@@ -23,47 +23,47 @@ public class ItemSlot : MonoBehaviour {
             position = Camera.main.gameObject.transform.position;
             facing = Camera.main.gameObject.transform.forward * 2;
             itemId = inventory.GetItems()[id].id;
-			if (child.gameObject.name == "InventoryButton(Clone)") {
+            if (child.gameObject.name == "InventoryButton(Clone)") {
                 GameObject.Destroy(child.gameObject);
-			}
-			bool init = false;
+            }
+            bool init = false;
             switch (itemId) {
                 case (0):
-					InventoryItem invCub = inventory.GetItems()[id];
-					invCub.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
+                    InventoryItem invCub = inventory.GetItems()[id];
+                    invCub.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
                     invCub.transform.gameObject.SetActive(true);
-					if (init) {
+                    if (init) {
                         Transform cube = Instantiate(items.cube, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
                         cube.name = "Cube";
-					}
+                    }
                     break;
                 case (1):
-					InventoryItem invCube = inventory.GetItems()[id];
-					invCube.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
+                    InventoryItem invCube = inventory.GetItems()[id];
+                    invCube.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
                     invCube.transform.gameObject.SetActive(true);
-					if (init) {
+                    if (init) {
                         Transform cubeLarge = Instantiate(items.cubeLarge, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
                         cubeLarge.name = "Cube Large";
-					}	
+                    }   
                     break;
                 case (2):
-					InventoryItem invCap = inventory.GetItems()[id];
-					invCap.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
+                    InventoryItem invCap = inventory.GetItems()[id];
+                    invCap.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
                     invCap.transform.gameObject.SetActive(true);
-					if (init) {
+                    if (init) {
                         Transform capsule = Instantiate(items.capsule, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
                         capsule.name = "Capsule";
                     }
                     break;
-	            case (3):
-		            InventoryItem invMac = inventory.GetItems()[id];
-		            invMac.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
-		            invMac.transform.gameObject.SetActive(true);
-		            if (init) {
-			            Transform machinery = Instantiate(items.machinery, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
-			            machinery.name = "Machinery";
-		            }
-		            break;
+                case (3):
+                    InventoryItem invMac = inventory.GetItems()[id];
+                    invMac.transform.position = new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z);
+                    invMac.transform.gameObject.SetActive(true);
+                    if (init) {
+                        Transform machinery = Instantiate(items.machinery, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);
+                        machinery.name = "Machinery";
+                    }
+                    break;
                 default:
                     Debug.Log("Item ID does not exist.");
                     break;
