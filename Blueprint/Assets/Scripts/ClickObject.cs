@@ -49,7 +49,7 @@ public class ClickObject : MonoBehaviour {
                 Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
                 index = "Button" + (nextSlot + 1);
                 dropButton = GameObject.Find(index);
-                itemButton.transform.SetSiblingIndex(0);c
+                itemButton.transform.SetSiblingIndex(0);
                 dropButton.transform.SetSiblingIndex(1);
             } else {
                 Debug.Log("No inventory items hit");
