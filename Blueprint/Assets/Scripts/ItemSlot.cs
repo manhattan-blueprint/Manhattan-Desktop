@@ -56,7 +56,7 @@ public class ItemSlot : MonoBehaviour {
                     }
                     break;
                 default:
-                    Debug.Log("");
+                    Debug.Log("Item ID does not exist.");
                     break;
             }   
         }
