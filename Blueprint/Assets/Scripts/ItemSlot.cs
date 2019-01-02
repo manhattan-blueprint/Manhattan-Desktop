@@ -12,11 +12,13 @@ public class ItemSlot : MonoBehaviour {
     private Vector3 position;
     private Vector3 facing;
     private int itemId;
+    private bool pickUp;
 
     void Start() {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
         items = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ClickObject>(); 
     }
+
 
     public void DropItem() {
         foreach (Transform child in transform) {

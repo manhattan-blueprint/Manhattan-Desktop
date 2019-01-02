@@ -1237,8 +1237,8 @@ GameObject:
   - component: {fileID: 623768141}
   - component: {fileID: 623768140}
   m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: MapGenerator
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2867,6 +2867,7 @@ GameObject:
   - component: {fileID: 1582219105}
   - component: {fileID: 1582219107}
   - component: {fileID: 1582219106}
+  - component: {fileID: 1582219108}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -2926,6 +2927,17 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1582219104}
   m_CullTransparentMesh: 0
+--- !u!114 &1582219108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1582219104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26535d6646a5d41beaf5a763f3cf283d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1618408073
 Prefab:
   m_ObjectHideFlags: 0
@@ -3879,6 +3891,6 @@ MonoBehaviour:
   itemButton: {fileID: 1188492057334766, guid: e24afbe408f679946b70962ac5e8f83f, type: 2}
   dropButton: {fileID: 0}
   cube: {fileID: 4178118753178404, guid: 3b40ceb137fe54b9c9c286cbf68279ee, type: 2}
-  cubeLarge: {fileID: 0}
+  cubeLarge: {fileID: 4860563762599424, guid: 6dc5f2df4889e4ff49d078c16bae0217, type: 2}
   capsule: {fileID: 4341569406944394, guid: baf27c7d89b914e96ab73de5358017fc, type: 2}
-  machinery: {fileID: 0}
+  machinery: {fileID: 4573807389177294, guid: e2032d64f6722460ca19b7a6adb03ae8, type: 2}

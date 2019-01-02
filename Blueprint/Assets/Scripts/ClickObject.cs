@@ -11,7 +11,7 @@ public class ClickObject : MonoBehaviour {
     private Text txt;
     private Inventory inventory;
     private InventoryItem focus;
-    private const int LeftButton = 1;
+    private const int RightButton = 1;
 
     public float maxDistance;
     public GameObject itemButton;
@@ -21,40 +21,53 @@ public class ClickObject : MonoBehaviour {
     public Transform capsule;
     public Transform machinery;
     private string index;
+    private GenerateHex generateHex;
+    private bool pickUp;
+    private GameObject drop;
 
-    // Use this for initialization
     void Start() {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+        generateHex = GameObject.FindGameObjectWithTag("Map").GetComponent<GenerateHex>();
+        pickUp = false;
     }
 
     void SetFocus(InventoryItem newFocus) {
         focus = newFocus;
     }
     
-    // Update is called once per frame
     void Update() {
-        if (!Input.GetMouseButtonDown(LeftButton)) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Input.GetMouseButtonDown(RightButton)) return;
+        // Cast ray from the cursor through the centre of the viewport (what's the mouse hovering over?)
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         hit = new RaycastHit();
-
+        
+        // If a GameObject is hit
         if (Physics.Raycast(ray, out hit)){
             SetFocus(hit.collider.GetComponent<InventoryItem>());
-            int nextSlot = inventory.GetNextFreeSlot();
-            float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
+            
+            if (pickUp) {
+                int nextSlot = inventory.GetNextFreeSlot();
+                float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
-            if (focus != null && dist < maxDistance) {
-                inventory.AddItem(focus);
-                txt = itemButton.GetComponent<Text>();
-                txt.text = hit.transform.gameObject.name;
-                hit.transform.gameObject.SetActive(false);
-                Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
-                index = "Button" + (nextSlot + 1);
-                dropButton = GameObject.Find(index);
-                itemButton.transform.SetSiblingIndex(0);
-                dropButton.transform.SetSiblingIndex(1);
-            } else {
-                Debug.Log("No inventory items hit");
+                if (focus != null && dist < maxDistance) {
+                    inventory.AddItem(focus);
+                    txt = itemButton.GetComponent<Text>();
+                    txt.text = hit.transform.gameObject.name;
+                    hit.transform.gameObject.SetActive(false);
+                    Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
+                    index = "Button" + (nextSlot + 1);
+                    dropButton = GameObject.Find(index);
+                    itemButton.transform.SetSiblingIndex(0);
+                    dropButton.transform.SetSiblingIndex(1);
+                } else {
+                    Debug.Log("No inventory items hit");
+                }
             }
+            else {
+                generateHex.hexmap.PlaceOnGrid((float) hit.transform.position.x, (float) hit.transform.position.z, Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
+                // GameObject.Destroy(hit.transform.gameObject);
+            }
+            
         }   
     }
 }
