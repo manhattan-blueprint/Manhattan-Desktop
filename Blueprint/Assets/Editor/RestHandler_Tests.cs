@@ -8,6 +8,7 @@ using System.Security.Authentication;
 using UnityEngine;
 using NUnit.Framework;
 using NUnit.Framework.Api;
+using Random = System.Random;
 
 public class RestHandler_Tests {
     private string baseUrl = "http://smithwjv.ddns.net";
@@ -108,6 +109,35 @@ public class RestHandler_Tests {
         try {
             UserCredentials return_user = rest_handler.RegisterUser("adam", "failure");
 
+            //if execution reaches here, no exception has been thrown
+            Assert.Fail();
+        }
+        catch (InvalidCredentialException e) {
+            
+        }
+    }
+    
+    [Test]
+    public void TestRegisterUser_3() {
+        var rest_handler = new RestHandler(baseUrl);
+        Random random = new Random();
+
+        try {
+            UserCredentials return_user = rest_handler.RegisterUser("adam" + random.Next(10000), "Failure123");
+        }
+        catch (InvalidCredentialException e) {
+            Assert.Fail();
+        }
+    }
+    
+    [Test]
+    public void TestRegisterUser_4() {
+        var rest_handler = new RestHandler(baseUrl);
+        Random random = new Random();
+
+        try {
+            UserCredentials return_user = rest_handler.RegisterUser("adam" + random.Next(10000), "FAILURE123");
+            
             //if execution reaches here, no exception has been thrown
             Assert.Fail();
         }
