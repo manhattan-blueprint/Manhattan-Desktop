@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -53,20 +51,59 @@ public class RestHandler {
         return str_response;
     }
 
-    //returns refresh and access tokens
-    public UserCredentials AuthenticateUser(UserCredentials user, string endpoint) {
+    public UserCredentials AuthenticateUser(UserCredentials user) {
+        //prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new PayloadAuthenticate(user));
-        //string response = performPOST("/api/v1/authenticate", json);
-        string response = performPOST(endpoint, json);
-        ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+        UserCredentials output = null;
 
-        UserCredentials output =
-            new UserCredentials(user.getUsername(), user.getPassword(), tokens.access, tokens.refresh);
+        //attempt user authentication
+        try {
+            string response = performPOST(":8000/api/v1/authenticate", json);
+            ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+
+            output =
+                new UserCredentials(user.getUsername(), user.getPassword(), tokens.access, tokens.refresh);
+        }
+        catch (WebException e) {
+            Debug.Log(user.getUsername() + " | " + e.Message);
+            
+            //return user without tokens in Exception instance
+            output = new UserCredentials(user.getUsername(), user.getPassword(), null, null);
+        }
         
         return output;
     }
-}
+    
+    public UserCredentials RegisterUser(string username, string password) {
+        //prepare JSON payload & local variables
+        string json = JsonUtility.ToJson(new PayloadAuthenticate(username, password));
+        UserCredentials output = null;
+        
+        //attempt user registration
+        try {
+            string response = performPOST(":8000/api/v1/authenticate/register", json);
+            ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+        
+            output = new UserCredentials(username, password, tokens.access, tokens.refresh);
+        }
+        catch (WebException e) {
+            var response_detailed = e.Response as HttpWebResponse;
+            int http_status = (int)response_detailed.StatusCode;
 
+            //bad request
+            if (http_status == 400) {
+                Debug.Log(response_detailed.StatusDescription);
+            }
+            
+            Debug.Log(username + " | " + e.Message);
+            
+            //returns user without tokens in exception instance
+            output = new UserCredentials(username, password, null, null);
+        }
+
+        return output;
+    }
+}
 
 //payload classes
 [Serializable]
@@ -77,6 +114,11 @@ public class PayloadAuthenticate {
     public PayloadAuthenticate(UserCredentials user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
+    }
+
+    public PayloadAuthenticate(string username, string password) {
+        this.username = username;
+        this.password = password;
     }
 }
 

@@ -9,6 +9,8 @@ using NUnit.Framework;
 using NUnit.Framework.Api;
 
 public class RestHandler_Tests {
+    private string baseUrl = "http://smithwjv.ddns.net";
+    
     [Test]
     public void TestPerformGET() {
         var rest_handler = new RestHandler("http://jsonplaceholder.typicode.com");
@@ -43,8 +45,9 @@ public class RestHandler_Tests {
         Assert.That(response_json.value, Is.EqualTo("hello"));
     }
 
-    [Test]
-    public void TestAuthenticateUser() {
+    //DEPRECATED
+    /* [Test]
+    public void TestAuthenticateUser_1() {
         var rest_handler = new RestHandler("http://jsonplaceholder.typicode.com");
         
         UserCredentials user = new UserCredentials("adam", "test");
@@ -54,7 +57,48 @@ public class RestHandler_Tests {
         Assert.That(return_user.getPassword(), Is.EqualTo("test"));
         Assert.That(return_user.getAccessToken(), Is.EqualTo(null));
         Assert.That(return_user.getRefreshToken(), Is.EqualTo(null));
+    } */
+
+    [Test]
+    public void TestAuthenticateUser_2() {
+        var rest_handler = new RestHandler(baseUrl);
+        
+        UserCredentials user = new UserCredentials("adam", "test");
+        UserCredentials return_user = rest_handler.AuthenticateUser(user);
+       
+        Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
+        Assert.That(return_user.getPassword(), Is.EqualTo("test"));    
+        Assert.IsNotNull(return_user.getAccessToken());
+        Assert.IsNotNull(return_user.getRefreshToken());
     }
+    
+    [Test]
+    public void TestAuthenticateUser_3() {
+        var rest_handler = new RestHandler(baseUrl);
+        
+        UserCredentials user = new UserCredentials("adam", "test123");
+        UserCredentials return_user = rest_handler.AuthenticateUser(user);
+       
+        Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
+        Assert.That(return_user.getPassword(), Is.EqualTo("test123"));    
+        
+        //null in error case
+        Assert.IsNull(return_user.getAccessToken());
+        Assert.IsNull(return_user.getRefreshToken());
+    }
+    
+    /*[Test]
+    public void TestRegisterUser_1() {
+        var rest_handler = new RestHandler(baseUrl);
+        
+        UserCredentials return_user = rest_handler.RegisterUser("adam", "test");
+        //Debug.Log(return_user.getUsername() + return_user.getPassword() + return_user.getAccessToken() + return_user.getRefreshToken());
+       
+        Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
+        Assert.That(return_user.getPassword(), Is.EqualTo("test"));    
+        Assert.IsNotNull(return_user.getAccessToken());
+        Assert.IsNotNull(return_user.getRefreshToken());
+    }*/
 }
 
 
