@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Net;
+using System.Security.Authentication;
 using UnityEngine;
 using NUnit.Framework;
 using NUnit.Framework.Api;
@@ -99,6 +100,21 @@ public class RestHandler_Tests {
         Assert.IsNotNull(return_user.getAccessToken());
         Assert.IsNotNull(return_user.getRefreshToken());
     }*/
+
+    [Test]
+    public void TestRegisterUser_2() {
+        var rest_handler = new RestHandler(baseUrl);
+
+        try {
+            UserCredentials return_user = rest_handler.RegisterUser("adam", "failure");
+
+            //if execution reaches here, no exception has been thrown
+            Assert.Fail();
+        }
+        catch (InvalidCredentialException e) {
+            
+        }
+    }
 }
 
 

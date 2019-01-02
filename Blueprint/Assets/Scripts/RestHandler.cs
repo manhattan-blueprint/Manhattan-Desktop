@@ -1,11 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Security.Authentication;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class RestHandler {
     private string _base_url;
+    private string _password_regex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
+
+    private bool check_password_valid(string password) {
+        Regex rgx = new Regex(_password_regex);
+        return rgx.IsMatch(password);
+    }
 
     public RestHandler(string baseUrl) {
         _base_url = baseUrl;
@@ -75,6 +83,11 @@ public class RestHandler {
     }
     
     public UserCredentials RegisterUser(string username, string password) {
+        //check validity of password
+        if (!check_password_valid(password)) {
+            throw new InvalidCredentialException("Password not valid.");
+        }
+        
         //prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new PayloadAuthenticate(username, password));
         UserCredentials output = null;
@@ -105,7 +118,7 @@ public class RestHandler {
     }
 }
 
-//payload classes
+//payload classes (DAOs)
 [Serializable]
 public class PayloadAuthenticate {
     public string username;
