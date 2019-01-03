@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
+  type: Large Cube
   icon: {fileID: 0}
 --- !u!114 &114879896625055808
 MonoBehaviour:

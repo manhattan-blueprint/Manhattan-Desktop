@@ -10,31 +10,44 @@ public class Inventory : MonoBehaviour {
     [SerializeField] InventoryItem[] items;
     [SerializeField] Transform itemsParent;
     public List<ItemSlot> itemSlots;
-    public int size = 9;
+    public int Size = 9;
 
     public InventoryItem[] GetItems() {
         return items;
     }
 
     public void AddItem(InventoryItem item) {
-        if (IsSpace()){
-            this.items[this.GetNextFreeSlot()] = item;
+        if (IsSpace()) {
+            InventoryItem slotItem = this.items[this.GetNextFreeSlot(item)];
+            if (slotItem != null) {
+                Debug.Log("Quantity before: " + this.items[this.GetNextFreeSlot(item)].GetQuantity());
+                this.items[this.GetNextFreeSlot(item)].SetQuantity(slotItem.GetQuantity()+1);
+                Debug.Log("Quantity after: " + this.items[this.GetNextFreeSlot(item)].GetQuantity());
+            } else {
+                item.SetQuantity(1);
+                this.items[this.GetNextFreeSlot(item)] = item;
+            }
         } else {
             Debug.Log("No space in inventory");
         }
     }
 
-    public int GetNextFreeSlot() {
-        for (int i=0; i<this.size; i++) {
+    public int GetNextFreeSlot(InventoryItem item) {
+        int firstNull = this.Size+1;
+        for (int i=0; i < this.Size; i++) {
             if (items[i] == null) {
+                if (i < firstNull) {
+                    firstNull = i;
+                }
+            } else if (items[i].id == item.id) {
                 return i;
             }
         }
-        return -1;
+        return firstNull;
     
     }
 
-    public bool IsSpace(){
+    private bool IsSpace(){
         return items.Length <= 9;
     }
 

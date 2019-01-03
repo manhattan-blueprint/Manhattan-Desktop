@@ -10,7 +10,7 @@ public class Highlight : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	private Color tempColor;
+	public Color tempColor;
 	public Color highlightColor;
 	private Renderer rend;
 	void OnMouseEnter()
@@ -18,8 +18,10 @@ public class Highlight : MonoBehaviour {
 		tempColor = rend.material.color;
 		rend.material.color = highlightColor;
 	}
+	
 	void OnMouseExit()
 	{
 		rend.material.color = tempColor;
 	}
+
 }

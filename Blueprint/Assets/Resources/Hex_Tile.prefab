@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33852144263677488}
   - component: {fileID: 23189156968168248}
   - component: {fileID: 65914474617766806}
+  - component: {fileID: 114325623164749694}
   m_Layer: 0
   m_Name: Hex_Tile
   m_TagString: Untagged
@@ -96,3 +97,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.020000005, y: 0.02, z: 0.017320514}
   m_Center: {x: 0, y: 0, z: -4.656614e-10}
+--- !u!114 &114325623164749694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1887627159649710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0, g: 0.93781066, b: 1, a: 0}

@@ -70,8 +70,8 @@ public class HexMap
         // Place some random machinery just to make it feel more dynamic; can
         // remove this bit if deemed unnecessary.
         int numOfMachines = 20;
-        Debug.Log(bumpyWidth);
-        Debug.Log(mapSize-bumpyWidth);
+        //Debug.Log(bumpyWidth);
+        //Debug.Log(mapSize-bumpyWidth);
         for (int i = 0; i < numOfMachines; i++)
         {
             PlaceOnGrid(UnityEngine.Random.Range(10, 40),

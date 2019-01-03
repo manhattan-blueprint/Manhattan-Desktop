@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 65122053991412904}
   - component: {fileID: 23236874180164012}
   - component: {fileID: 114614630605316760}
+  - component: {fileID: 114267030647136964}
   - component: {fileID: 54054499327318790}
   m_Layer: 0
   m_Name: Machinery
@@ -113,6 +114,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114267030647136964
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461298687545314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!114 &114614630605316760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,4 +138,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
+  type: Machinery
   icon: {fileID: 0}

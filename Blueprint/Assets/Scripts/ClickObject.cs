@@ -28,10 +28,10 @@ public class ClickObject : MonoBehaviour {
     void Start() {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
         generateHex = GameObject.FindGameObjectWithTag("Map").GetComponent<GenerateHex>();
-        pickUp = false;
+        pickUp = true;
     }
 
-    void SetFocus(InventoryItem newFocus) {
+    private void SetFocus(InventoryItem newFocus) {
         focus = newFocus;
     }
     
@@ -42,32 +42,50 @@ public class ClickObject : MonoBehaviour {
         hit = new RaycastHit();
         
         // If a GameObject is hit
-        if (Physics.Raycast(ray, out hit)){
-            SetFocus(hit.collider.GetComponent<InventoryItem>());
+        if (!Physics.Raycast(ray, out hit)) return;
+        SetFocus(hit.collider.GetComponent<InventoryItem>());
             
-            if (pickUp) {
-                int nextSlot = inventory.GetNextFreeSlot();
-                float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
+        if (pickUp) {
+            int nextSlot = inventory.GetNextFreeSlot(hit.collider.GetComponent<InventoryItem>());
+            float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
-                if (focus != null && dist < maxDistance) {
-                    inventory.AddItem(focus);
-                    txt = itemButton.GetComponent<Text>();
-                    txt.text = hit.transform.gameObject.name;
-                    hit.transform.gameObject.SetActive(false);
+            if (focus != null && dist < maxDistance) {
+                // This is not great, help meh fix it pls
+                Renderer rend = hit.collider.GetComponent<Renderer>();
+                Highlight hi = hit.collider.GetComponent<Highlight>();
+                rend.material.color = hi.tempColor;
+                // end zone
+                    
+                // Add to inventory object
+                inventory.AddItem(focus);
+                // Set to make access unique
+                itemButton.name= "InventoryItemSlot " + nextSlot;
+                itemButton.GetComponent<Text>().text = hit.transform.gameObject.name;
+                    
+                // Make game world object invisible and collider inactive
+                hit.transform.gameObject.SetActive(false);
+                    
+                // Create a slot with text in inventory window, or update quantity bracket
+                if (inventory.itemSlots[nextSlot].transform.childCount < 2) {
                     Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
-                    index = "Button" + (nextSlot + 1);
-                    dropButton = GameObject.Find(index);
-                    itemButton.transform.SetSiblingIndex(0);
-                    dropButton.transform.SetSiblingIndex(1);
                 } else {
-                    Debug.Log("No inventory items hit");
+                    GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text = 
+                        focus.name + " (" + inventory.GetItems()[nextSlot].GetQuantity() + ")";
                 }
+                    
+                // Change load order or UI elements for accessible hit-box
+                index = "Button" + (nextSlot + 1);
+                dropButton = GameObject.Find(index);
+                itemButton.transform.SetSiblingIndex(0);
+                dropButton.transform.SetSiblingIndex(1);
+            } else {
+                Debug.Log("No inventory items hit");
             }
-            else {
-                generateHex.hexmap.PlaceOnGrid((float) hit.transform.position.x, (float) hit.transform.position.z, Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
-                // GameObject.Destroy(hit.transform.gameObject);
-            }
-            
-        }   
+        }
+        else {
+            generateHex.hexmap.PlaceOnGrid((float) hit.transform.position.x, (float) hit.transform.position.z, 
+                Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
+            // GameObject.Destroy(hit.transform.gameObject);
+        }
     }
 }

@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
+  type: Capsule
   icon: {fileID: 0}
 --- !u!114 &114969658209693666
 MonoBehaviour:

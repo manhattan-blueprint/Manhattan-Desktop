@@ -8,7 +8,7 @@ public class InventoryItem : MonoBehaviour {
 
     public int id;
     private int quantity;
-    public Sprite icon;
+    public string type;
 
     public InventoryItem(int id, int quantity) {
         this.id = id;
@@ -17,6 +17,10 @@ public class InventoryItem : MonoBehaviour {
 
     public int GetQuantity() {
         return quantity;
+    }
+    
+    public void SetQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public Boolean Equals(Object obj) {
