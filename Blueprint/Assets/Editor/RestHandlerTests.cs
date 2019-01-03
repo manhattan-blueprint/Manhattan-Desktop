@@ -41,12 +41,13 @@ public class RestHandlerTests {
     }
 
     [Test]
-    public void TestAuthenticateUser_2() {
+    public void TestValidAuthenticateUser() {
         var restHandler = new RestHandler(baseUrl);
         
         UserCredentials user = new UserCredentials("adam", "test");
         UserCredentials returnUser = restHandler.AuthenticateUser(user);
        
+        // Check returned user is correct and contains access tokens
         Assert.That(returnUser.getUsername(), Is.EqualTo("adam"));
         Assert.That(returnUser.getPassword(), Is.EqualTo("test"));    
         Assert.IsNotNull(returnUser.getAccessToken());
@@ -54,7 +55,7 @@ public class RestHandlerTests {
     }
     
     [Test]
-    public void TestAuthenticateUser_3() {
+    public void TestInvalidAuthenticateUser() {
         var restHandler = new RestHandler(baseUrl);
         
         UserCredentials user = new UserCredentials("adam", "test123");
@@ -63,9 +64,58 @@ public class RestHandlerTests {
         Assert.That(returnUser.getUsername(), Is.EqualTo("adam"));
         Assert.That(returnUser.getPassword(), Is.EqualTo("test123"));    
         
-        //null in error case
+        // Null as it's an error case
         Assert.IsNull(returnUser.getAccessToken());
         Assert.IsNull(returnUser.getRefreshToken());
+    }
+
+    [Test]
+    public void TestRegisterUserLowercaseOnlyPassword() {
+        var restHandler = new RestHandler(baseUrl);
+
+        try {
+            UserCredentials returnUser = restHandler.RegisterUser("adam", "failure");
+
+            // If execution reaches here, no exception has been thrown
+            // Failure case
+            Assert.Fail();
+        }
+        catch (InvalidCredentialException e) {
+            // Exception correctly thrown
+            // Pass case
+        }
+    }
+    
+    [Test]
+    public void TestRegisterUserValidPassword() {
+        var restHandler = new RestHandler(baseUrl);
+        Random random = new Random();
+
+        try {
+            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "Failure123");
+        }
+        catch (InvalidCredentialException e) {
+            // Password is valid, failure case when exception is thrown
+            Assert.Fail();
+        }
+    }
+    
+    [Test]
+    public void TestRegisterUserNoLowercasePassword() {
+        var restHandler = new RestHandler(baseUrl);
+        Random random = new Random();
+
+        try {
+            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "FAILURE123");
+            
+            // If execution reaches here, no exception has been thrown
+            // Failure case
+            Assert.Fail();
+        }
+        catch (InvalidCredentialException e) {
+            // Exception correctly thrown
+            // Pass case
+        }
     }
     
     // Blocked by user removal functionality
@@ -81,50 +131,6 @@ public class RestHandlerTests {
         Assert.IsNotNull(return_user.getAccessToken());
         Assert.IsNotNull(return_user.getRefreshToken());
     }*/
-
-    [Test]
-    public void TestRegisterUser_2() {
-        var restHandler = new RestHandler(baseUrl);
-
-        try {
-            UserCredentials returnUser = restHandler.RegisterUser("adam", "failure");
-
-            //if execution reaches here, no exception has been thrown
-            Assert.Fail();
-        }
-        catch (InvalidCredentialException e) {
-            
-        }
-    }
-    
-    [Test]
-    public void TestRegisterUser_3() {
-        var restHandler = new RestHandler(baseUrl);
-        Random random = new Random();
-
-        try {
-            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "Failure123");
-        }
-        catch (InvalidCredentialException e) {
-            Assert.Fail();
-        }
-    }
-    
-    [Test]
-    public void TestRegisterUser_4() {
-        var restHandler = new RestHandler(baseUrl);
-        Random random = new Random();
-
-        try {
-            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "FAILURE123");
-            
-            //if execution reaches here, no exception has been thrown
-            Assert.Fail();
-        }
-        catch (InvalidCredentialException e) {
-            
-        }
-    }
 }
 
 
