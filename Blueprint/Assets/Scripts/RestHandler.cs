@@ -7,43 +7,42 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class RestHandler {
-    private string _base_url;
-    private string _password_regex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
+    private string baseUrl;
+    private string passwordRegex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
 
-    private bool check_password_valid(string password) {
-        Regex rgx = new Regex(_password_regex);
+    private bool checkPasswordValid(string password) {
+        Regex rgx = new Regex(passwordRegex);
         return rgx.IsMatch(password);
     }
 
     public RestHandler(string baseUrl) {
-        _base_url = baseUrl;
+        this.baseUrl = baseUrl;
     }
 
-    private string GetBaseURL() {
-        return _base_url;
+    private string getBaseURL() {
+        return baseUrl;
     }
 
-    public string performGET(string endpoint) {
-        string request_url = string.Concat(GetBaseURL(), endpoint);
-        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(String.Format(request_url));
+    public string PerformGET(string endpoint) {
+        string requestUrl = string.Concat(getBaseURL(), endpoint);
+        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(String.Format(requestUrl));
 
         HttpWebResponse response = (HttpWebResponse) request.GetResponse();
         Stream stream = response.GetResponseStream();
         StreamReader reader = new StreamReader(stream);
 
-        string str_response = reader.ReadToEnd();
+        string strResponse = reader.ReadToEnd();
 
         reader.Close();
         response.Close();
-        return str_response;
+        return strResponse;
     }
 
+    public string PerformPOST(string endpoint, string postData) {
+        string requestUrl = string.Concat(getBaseURL(), endpoint);
+        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(requestUrl);
 
-    public string performPOST(string endpoint, string post_data) {
-        string request_url = string.Concat(GetBaseURL(), endpoint);
-        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(request_url);
-
-        var data = Encoding.ASCII.GetBytes(post_data);
+        var data = Encoding.ASCII.GetBytes(postData);
 
         request.Method = "POST";
         request.ContentType = "application/json";
@@ -54,9 +53,9 @@ public class RestHandler {
         }
 
         HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-        string str_response = new StreamReader(response.GetResponseStream()).ReadToEnd();
+        string strResponse = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
-        return str_response;
+        return strResponse;
     }
 
     public UserCredentials AuthenticateUser(UserCredentials user) {
@@ -66,7 +65,7 @@ public class RestHandler {
 
         //attempt user authentication
         try {
-            string response = performPOST(":8000/api/v1/authenticate", json);
+            string response = PerformPOST(":8000/api/v1/authenticate", json);
             ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
 
             output =
@@ -84,7 +83,7 @@ public class RestHandler {
     
     public UserCredentials RegisterUser(string username, string password) {
         //check validity of password
-        if (!check_password_valid(password)) {
+        if (!checkPasswordValid(password)) {
             throw new InvalidCredentialException("Password not valid.");
         }
         
@@ -94,18 +93,18 @@ public class RestHandler {
         
         //attempt user registration
         try {
-            string response = performPOST(":8000/api/v1/authenticate/register", json);
+            string response = PerformPOST(":8000/api/v1/authenticate/register", json);
             ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
         
             output = new UserCredentials(username, password, tokens.access, tokens.refresh);
         }
         catch (WebException e) {
-            var response_detailed = e.Response as HttpWebResponse;
-            int http_status = (int)response_detailed.StatusCode;
+            var responseDetailed = e.Response as HttpWebResponse;
+            int httpStatus = (int)responseDetailed.StatusCode;
 
             //bad request
-            if (http_status == 400) {
-                Debug.Log(response_detailed.StatusDescription);
+            if (httpStatus == 400) {
+                Debug.Log(responseDetailed.StatusDescription);
             }
             
             Debug.Log(username + " | " + e.Message);

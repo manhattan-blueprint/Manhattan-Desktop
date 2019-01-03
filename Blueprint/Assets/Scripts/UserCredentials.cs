@@ -6,67 +6,45 @@ using UnityEngine;
 
 public class UserCredentials
 {
-    private string _username;
-    private string _password;
+    private string username;
+    private string password;
     
     //server tokens
-    private string _access;
-    private string _refresh;
+    private string access;
+    private string refresh;
 
     public UserCredentials(string username, string password)
     {
-        this._username = username;
-        this._password = password;
+        this.username = username;
+        this.password = password;
     }
 
     public UserCredentials(string username, string password, string access, string refresh) {
-        _username = username;
-        _password = password;
-        _access = access;
-        _refresh = refresh;
-    }
-
-
-    //setters
-    public void setUsername(string username)
-    {
-        _username = username;
-    }
-
-    public void setPassword(string password)
-    {
-        _password = password;
-    }
-
-    public void setAccessToken(string access)
-    {
-        _access = access;
-    }
-
-    public void setRefreshToken(string refresh)
-    {
-        _refresh = refresh;
+        this.username = username;
+        this.password = password;
+        this.access = access;
+        this.refresh = refresh;
     }
     
     //getters
     public string getUsername()
     {
-        return _username;
+        return username;
     }
     
     public string getPassword()
     {
-        return _password;
+        return password;
     }
     
     public string getAccessToken()
     {
-        return _access;
+        return access;
     }
     
     public string getRefreshToken()
     {
-        return _refresh;
+        return refresh;
     }
     
 }

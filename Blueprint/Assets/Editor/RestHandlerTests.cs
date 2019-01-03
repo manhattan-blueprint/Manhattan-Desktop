@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.IsolatedStorage;
-using System.Net;
-using System.Security.Authentication;
+﻿using System.Security.Authentication;
 using UnityEngine;
 using NUnit.Framework;
-using NUnit.Framework.Api;
 using Random = System.Random;
 
-public class RestHandler_Tests {
+public class RestHandlerTests {
     private string baseUrl = "http://smithwjv.ddns.net";
     
     [Test]
     public void TestPerformGET() {
-        var rest_handler = new RestHandler("http://jsonplaceholder.typicode.com");
+        var restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
 
-        var response = rest_handler.performGET("/posts/1");
+        var response = restHandler.PerformGET("/posts/1");
 
         JSONplaceholder inv = new JSONplaceholder();
         inv = JsonUtility.FromJson<JSONplaceholder>(response);
@@ -33,7 +26,7 @@ public class RestHandler_Tests {
 
     [Test]
     public void TestPerformPOST() {
-        var rest_handler = new RestHandler("http://jsonplaceholder.typicode.com");
+        var restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
 
         //setup
         var data = new JSONpost();
@@ -41,54 +34,41 @@ public class RestHandler_Tests {
         var payload = JsonUtility.ToJson(data);
 
         //response
-        var response = rest_handler.performPOST("/posts", payload);
-        var response_json = JsonUtility.FromJson<JSONpost>(response);
+        var response = restHandler.PerformPOST("/posts", payload);
+        var responseJson = JsonUtility.FromJson<JSONpost>(response);
 
-        Assert.That(response_json.value, Is.EqualTo("hello"));
+        Assert.That(responseJson.value, Is.EqualTo("hello"));
     }
-
-    //DEPRECATED
-    /* [Test]
-    public void TestAuthenticateUser_1() {
-        var rest_handler = new RestHandler("http://jsonplaceholder.typicode.com");
-        
-        UserCredentials user = new UserCredentials("adam", "test");
-        UserCredentials return_user = rest_handler.AuthenticateUser(user, "/posts");
-       
-        Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
-        Assert.That(return_user.getPassword(), Is.EqualTo("test"));
-        Assert.That(return_user.getAccessToken(), Is.EqualTo(null));
-        Assert.That(return_user.getRefreshToken(), Is.EqualTo(null));
-    } */
 
     [Test]
     public void TestAuthenticateUser_2() {
-        var rest_handler = new RestHandler(baseUrl);
+        var restHandler = new RestHandler(baseUrl);
         
         UserCredentials user = new UserCredentials("adam", "test");
-        UserCredentials return_user = rest_handler.AuthenticateUser(user);
+        UserCredentials returnUser = restHandler.AuthenticateUser(user);
        
-        Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
-        Assert.That(return_user.getPassword(), Is.EqualTo("test"));    
-        Assert.IsNotNull(return_user.getAccessToken());
-        Assert.IsNotNull(return_user.getRefreshToken());
+        Assert.That(returnUser.getUsername(), Is.EqualTo("adam"));
+        Assert.That(returnUser.getPassword(), Is.EqualTo("test"));    
+        Assert.IsNotNull(returnUser.getAccessToken());
+        Assert.IsNotNull(returnUser.getRefreshToken());
     }
     
     [Test]
     public void TestAuthenticateUser_3() {
-        var rest_handler = new RestHandler(baseUrl);
+        var restHandler = new RestHandler(baseUrl);
         
         UserCredentials user = new UserCredentials("adam", "test123");
-        UserCredentials return_user = rest_handler.AuthenticateUser(user);
+        UserCredentials returnUser = restHandler.AuthenticateUser(user);
        
-        Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
-        Assert.That(return_user.getPassword(), Is.EqualTo("test123"));    
+        Assert.That(returnUser.getUsername(), Is.EqualTo("adam"));
+        Assert.That(returnUser.getPassword(), Is.EqualTo("test123"));    
         
         //null in error case
-        Assert.IsNull(return_user.getAccessToken());
-        Assert.IsNull(return_user.getRefreshToken());
+        Assert.IsNull(returnUser.getAccessToken());
+        Assert.IsNull(returnUser.getRefreshToken());
     }
     
+    // Blocked by user removal functionality
     /*[Test]
     public void TestRegisterUser_1() {
         var rest_handler = new RestHandler(baseUrl);
@@ -104,10 +84,10 @@ public class RestHandler_Tests {
 
     [Test]
     public void TestRegisterUser_2() {
-        var rest_handler = new RestHandler(baseUrl);
+        var restHandler = new RestHandler(baseUrl);
 
         try {
-            UserCredentials return_user = rest_handler.RegisterUser("adam", "failure");
+            UserCredentials returnUser = restHandler.RegisterUser("adam", "failure");
 
             //if execution reaches here, no exception has been thrown
             Assert.Fail();
@@ -119,11 +99,11 @@ public class RestHandler_Tests {
     
     [Test]
     public void TestRegisterUser_3() {
-        var rest_handler = new RestHandler(baseUrl);
+        var restHandler = new RestHandler(baseUrl);
         Random random = new Random();
 
         try {
-            UserCredentials return_user = rest_handler.RegisterUser("adam" + random.Next(10000), "Failure123");
+            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "Failure123");
         }
         catch (InvalidCredentialException e) {
             Assert.Fail();
@@ -132,11 +112,11 @@ public class RestHandler_Tests {
     
     [Test]
     public void TestRegisterUser_4() {
-        var rest_handler = new RestHandler(baseUrl);
+        var restHandler = new RestHandler(baseUrl);
         Random random = new Random();
 
         try {
-            UserCredentials return_user = rest_handler.RegisterUser("adam" + random.Next(10000), "FAILURE123");
+            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "FAILURE123");
             
             //if execution reaches here, no exception has been thrown
             Assert.Fail();
@@ -149,7 +129,6 @@ public class RestHandler_Tests {
 
 
 //TEST CLASSES
-
 public class JSONplaceholder {
     public int userId;
     public int id;
