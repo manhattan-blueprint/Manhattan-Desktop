@@ -41,10 +41,10 @@ public class RestHandlerTests {
 
     [Test]
     public void TestValidAuthenticateUser() {
-        var restHandler = new RestHandler(baseUrl);
+        var blueprintApi = new BlueprintAPI(baseUrl);
         
         UserCredentials user = new UserCredentials("adam", "test");
-        UserCredentials returnUser = restHandler.AuthenticateUser(user);
+        UserCredentials returnUser = blueprintApi.AuthenticateUser(user);
        
         // Check returned user is correct and contains access tokens
         Assert.That(returnUser.getUsername(), Is.EqualTo("adam"));
@@ -55,10 +55,10 @@ public class RestHandlerTests {
     
     [Test]
     public void TestInvalidAuthenticateUser() {
-        var restHandler = new RestHandler(baseUrl);
+        var blueprintApi = new BlueprintAPI(baseUrl);
         
         UserCredentials user = new UserCredentials("adam", "test123");
-        UserCredentials returnUser = restHandler.AuthenticateUser(user);
+        UserCredentials returnUser = blueprintApi.AuthenticateUser(user);
        
         Assert.That(returnUser.getUsername(), Is.EqualTo("adam"));
         Assert.That(returnUser.getPassword(), Is.EqualTo("test123"));    
@@ -70,10 +70,10 @@ public class RestHandlerTests {
 
     [Test]
     public void TestRegisterUserLowercaseOnlyPassword() {
-        var restHandler = new RestHandler(baseUrl);
+        var blueprintApi = new BlueprintAPI(baseUrl);
 
         try {
-            UserCredentials returnUser = restHandler.RegisterUser("adam", "failure");
+            UserCredentials returnUser = blueprintApi.RegisterUser("adam", "failure");
 
             // If execution reaches here, no exception has been thrown
             // Failure case
@@ -87,11 +87,11 @@ public class RestHandlerTests {
     
     [Test]
     public void TestRegisterUserValidPassword() {
-        var restHandler = new RestHandler(baseUrl);
+        var blueprintApi = new BlueprintAPI(baseUrl);
         Random random = new Random();
 
         try {
-            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "Failure123");
+            UserCredentials returnUser = blueprintApi.RegisterUser("adam" + random.Next(10000), "Failure123");
         }
         catch (InvalidCredentialException e) {
             // Password is valid, failure case when exception is thrown
@@ -101,11 +101,11 @@ public class RestHandlerTests {
     
     [Test]
     public void TestRegisterUserNoLowercasePassword() {
-        var restHandler = new RestHandler(baseUrl);
+        var blueprintApi = new BlueprintAPI(baseUrl);
         Random random = new Random();
 
         try {
-            UserCredentials returnUser = restHandler.RegisterUser("adam" + random.Next(10000), "FAILURE123");
+            UserCredentials returnUser = blueprintApi.RegisterUser("adam" + random.Next(10000), "FAILURE123");
             
             // If execution reaches here, no exception has been thrown
             // Failure case
