@@ -19,12 +19,8 @@ public class RestHandler {
         this.baseUrl = baseUrl;
     }
 
-    private string getBaseURL() {
-        return baseUrl;
-    }
-
     public string PerformGET(string endpoint) {
-        string requestUrl = string.Concat(getBaseURL(), endpoint);
+        string requestUrl = string.Concat(baseUrl, endpoint);
         HttpWebRequest request = (HttpWebRequest) WebRequest.Create(String.Format(requestUrl));
 
         HttpWebResponse response = (HttpWebResponse) request.GetResponse();
@@ -39,7 +35,7 @@ public class RestHandler {
     }
 
     public string PerformPOST(string endpoint, string postData) {
-        string requestUrl = string.Concat(getBaseURL(), endpoint);
+        string requestUrl = string.Concat(baseUrl, endpoint);
         HttpWebRequest request = (HttpWebRequest) WebRequest.Create(requestUrl);
 
         var data = Encoding.ASCII.GetBytes(postData);
