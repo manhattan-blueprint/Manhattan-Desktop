@@ -4,11 +4,16 @@ using System.Net;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.RegularExpressions;
+using Boo.Lang;
 using UnityEngine;
 
 public class RestHandler {
     private string baseUrl;
     private string passwordRegex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
+
+    // Const
+    private const string httpPost = "POST";
+    private const string JsonContentType = "application/json";
     
     // Constructor
     public RestHandler(string baseUrl) {
@@ -41,8 +46,8 @@ public class RestHandler {
 
         var data = Encoding.ASCII.GetBytes(postData);
 
-        request.Method = "POST";
-        request.ContentType = "application/json";
+        request.Method        = httpPost;
+        request.ContentType   = JsonContentType;
         request.ContentLength = data.Length;
 
         using (var stream = request.GetRequestStream()) {
