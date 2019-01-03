@@ -12,8 +12,7 @@ public class RestHandlerTests {
 
         var response = restHandler.PerformGET("/posts/1");
 
-        JSONplaceholder inv = new JSONplaceholder();
-        inv = JsonUtility.FromJson<JSONplaceholder>(response);
+        JsonPlaceholder inv = JsonUtility.FromJson<JsonPlaceholder>(response);
 
         Assert.That(inv.userId, Is.EqualTo(1));
         Assert.That(inv.id, Is.EqualTo(1));
@@ -29,13 +28,13 @@ public class RestHandlerTests {
         var restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
 
         //setup
-        var data = new JSONpost();
+        var data = new JsonPost();
         data.value = "hello";
         var payload = JsonUtility.ToJson(data);
 
         //response
         var response = restHandler.PerformPOST("/posts", payload);
-        var responseJson = JsonUtility.FromJson<JSONpost>(response);
+        var responseJson = JsonUtility.FromJson<JsonPost>(response);
 
         Assert.That(responseJson.value, Is.EqualTo("hello"));
     }
@@ -131,17 +130,18 @@ public class RestHandlerTests {
         Assert.IsNotNull(return_user.getAccessToken());
         Assert.IsNotNull(return_user.getRefreshToken());
     }*/
+    
+    //TEST CLASSES
+    private class JsonPlaceholder {
+        public int userId;
+        public int id;
+        public string title;
+        public string body;
+    }
+
+    private class JsonPost {
+        public string value;
+    }
 }
 
 
-//TEST CLASSES
-public class JSONplaceholder {
-    public int userId;
-    public int id;
-    public string title;
-    public string body;
-}
-
-public class JSONpost {
-    public string value;
-}
