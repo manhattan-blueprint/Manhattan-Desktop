@@ -33,13 +33,13 @@ public class RestHandlerTests {
     public void TestPerformAsyncPOST() {
         var restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
 
-        //setup
+        // Setup
         var data = new JsonPost();
         data.value = "hello";
         var payload = JsonUtility.ToJson(data);
         var responseJson= new JsonPost();
 
-        //response
+        // Response
         Task.Run(async () => {
             var response = await restHandler.PerformAsyncPost("/posts", payload);
             responseJson = JsonUtility.FromJson<JsonPost>(response);

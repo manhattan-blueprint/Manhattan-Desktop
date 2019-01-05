@@ -9,7 +9,7 @@ public class UserCredentials
     private string username;
     private string password;
     
-    //server tokens
+    // Server tokens
     private string access;
     private string refresh;
 
@@ -26,7 +26,7 @@ public class UserCredentials
         this.refresh = refresh;
     }
     
-    //getters
+    // Getters
     public string getUsername()
     {
         return username;
