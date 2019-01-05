@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Boo.Lang;
 using UnityEngine;
 
@@ -40,25 +41,27 @@ public class RestHandler {
         return strResponse;
     }
 
-    public string PerformPOST(string endpoint, string postData) {
-        string requestUrl = string.Concat(baseUrl, endpoint);
-        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(requestUrl);
+    public async Task<string> PerformAsyncPost(string endpoint, string postData) {
+        var content = new MemoryStream();
+        var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+        byte[] payload = Encoding.ASCII.GetBytes(postData);
 
-        var data = Encoding.ASCII.GetBytes(postData);
+        webReq.Method = httpPost;
+        webReq.ContentType = JsonContentType;
+        webReq.ContentLength = payload.Length;
 
-        request.Method        = httpPost;
-        request.ContentType   = JsonContentType;
-        request.ContentLength = data.Length;
-
-        using (var stream = request.GetRequestStream()) {
-            stream.Write(data, 0, data.Length);
+        using (var stream = webReq.GetRequestStream()) {
+            stream.Write(payload, 0, payload.Length);
         }
 
-        HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-        string strResponse = new StreamReader(response.GetResponseStream()).ReadToEnd();
+        using (WebResponse response = await webReq.GetResponseAsync()) {
+            using (Stream responseStream = response.GetResponseStream()) {
+                await responseStream.CopyToAsync(content);
+            }
+        }
 
-        return strResponse;
+        return Encoding.Default.GetString(content.ToArray());
     }
 
-    
+
 }
