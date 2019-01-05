@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class UserCredentials
-{
+public class UserCredentials {
     private string username;
     private string password;
     

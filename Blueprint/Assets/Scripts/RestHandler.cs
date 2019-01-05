@@ -21,7 +21,7 @@ public class RestHandler {
         this.baseUrl = baseUrl;
     }
 
-    public bool checkPasswordValid(string password) {
+    public bool CheckPasswordValid(string password) {
         Regex rgx = new Regex(passwordRegex);
         return rgx.IsMatch(password);
     }

@@ -56,7 +56,6 @@ public class RestHandlerTests {
         UserCredentials user = new UserCredentials("adam1", "Test123");
         UserCredentials returnUser = null;
         
-        
         Task.Run(async () => {
             // Example asynchronous call
             Task<UserCredentials> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
@@ -210,7 +209,7 @@ public class RestHandlerTests {
         Assert.IsNotNull(return_user.getRefreshToken());
     }*/
     
-    //TEST CLASSES
+    // TEST CLASSES
     private class JsonPlaceholder {
         public int userId;
         public int id;

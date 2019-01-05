@@ -1,15 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.InteropServices;
+﻿using System.Net;
 using System.Security.Authentication;
-using System.Text;
-using System.Threading;
-using System.Xml.Serialization;
-using Boo.Lang.Runtime;
 using UnityEngine;
-using UnityEngine.Networking;
 using System.Threading.Tasks;
 
 public class BlueprintAPI {
@@ -34,14 +25,12 @@ public class BlueprintAPI {
     public int RetrieveHTTPCode(WebException e) {
         var responseDetailed = e.Response as HttpWebResponse;
         int httpStatus = (int)responseDetailed.StatusCode;
-
         return httpStatus;
     }
 
-
     private void validateUsernamePassword(string username, string password) {
         // Check validity of password
-        if (!rs.checkPasswordValid(password)) {
+        if (!rs.CheckPasswordValid(password)) {
             throw new InvalidCredentialException("Password invalid");
         }
         
@@ -56,7 +45,6 @@ public class BlueprintAPI {
         
         // Prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new PayloadAuthenticate(user));
-        UserCredentials output = null;
         
         // Fetch
         string response = await rs.PerformAsyncPost(authenticateEndpoint, json);
@@ -74,7 +62,6 @@ public class BlueprintAPI {
         
         // Prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new PayloadAuthenticate(username, password));
-        UserCredentials output = null;
         
         // Fetch
         string response = await rs.PerformAsyncPost(registerEndpoint, json);
