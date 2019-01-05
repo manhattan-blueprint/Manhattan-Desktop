@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33954860185415990}
   - component: {fileID: 65945796727645862}
   - component: {fileID: 23623330603633106}
+  - component: {fileID: 114396823416858094}
   - component: {fileID: 54520596172014648}
   - component: {fileID: 114288308107481152}
   - component: {fileID: 114964794031087804}
@@ -128,6 +129,20 @@ MonoBehaviour:
   item: {fileID: 1058848286454568}
   tempParent: {fileID: 1021377530112246, guid: bd0456c57ed3844f1a717a970acaa962, type: 2}
   guide: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 2}
+--- !u!114 &114396823416858094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1058848286454568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PickUpColor: {r: 0, g: 0, b: 0, a: 0}
+  highlightColor: {r: 1, g: 0, b: 0, a: 0}
+  Holdable: 1
 --- !u!114 &114964794031087804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -141,4 +156,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   type: Cube
-  icon: {fileID: 0}

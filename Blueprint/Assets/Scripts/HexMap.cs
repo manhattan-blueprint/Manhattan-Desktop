@@ -95,6 +95,7 @@ public class HexMap
         int xCo = XToCo(fxCo, fyCo);
         int yCo = YToCo(fxCo, fyCo);
         Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
+        Debug.Log("Hex location: " + objPos);
         objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
     }
 

@@ -125,7 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PickUpColor: {r: 0, g: 0, b: 0, a: 0}
   highlightColor: {r: 1, g: 0, b: 0, a: 0}
+  Holdable: 1
 --- !u!114 &114614630605316760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -139,4 +141,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   type: Machinery
-  icon: {fileID: 0}

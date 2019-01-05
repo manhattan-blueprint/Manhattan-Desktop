@@ -13,12 +13,20 @@ public class Highlight : MonoBehaviour {
 	public Color tempColor;
 	public Color highlightColor;
 	private Renderer rend;
+	public bool Holdable;
+	
+	
 	void OnMouseEnter()
 	{
 		tempColor = rend.material.color;
 		rend.material.color = highlightColor;
 	}
-	
+
+	private void OnMouseDown() {
+		if (!Holdable) return;
+		rend.material.color = Color.yellow;
+	}
+
 	void OnMouseExit()
 	{
 		rend.material.color = tempColor;
