@@ -103,7 +103,7 @@ public class HexMap
     // Converts in game coordinates to nearest x grid coordinate.
     private int XToCo(float xPos, float yPos)
     {
-        return (int)Math.Round(xPos / (hexH * 2) - ((Math.Round(yPos) % 2) * hexH));
+        return (int)Math.Round((xPos - (YToCo(xPos, yPos) % 2) * hexH)/ (hexH * 2));
     }
 
     // Converts in game coordinates to nearest y grid coordinate.
