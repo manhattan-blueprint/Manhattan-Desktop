@@ -18,7 +18,7 @@ public class ClickObject : MonoBehaviour {
     public float maxDistance;
     private float timer;
     public GameObject itemButton;
-    public GameObject dropButton;
+    private GameObject dropButton;
     public Transform cube;
     public Transform cubeLarge;
     public Transform capsule;
