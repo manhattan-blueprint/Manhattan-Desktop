@@ -72,4 +72,12 @@ public class BlueprintAPI {
         // Form and return UserCredentials object
         return new UserCredentials(username, password, tokens.access, tokens.refresh);
     }
+    
+    //TODO: Inventory, GetAll
+    //TODO: Inventory, Add
+    //TODO: Inventory, Delete
+    
+    //TODO: Resources, Get
+    //^ Probably not necessary
+    
 }
