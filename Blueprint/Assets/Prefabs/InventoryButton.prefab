@@ -31,7 +31,7 @@ GameObject:
   - component: {fileID: 114812766800620828}
   - component: {fileID: 114159623413793046}
   m_Layer: 5
-  m_Name: InventoryItemSlot 0
+  m_Name: InventoryButton
   m_TagString: Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Machinery(Clone)
+  m_Text: Machinery
 --- !u!222 &222262592785764904
 CanvasRenderer:
   m_ObjectHideFlags: 1
