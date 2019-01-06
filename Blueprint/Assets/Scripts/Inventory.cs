@@ -9,8 +9,12 @@ public class Inventory : MonoBehaviour {
     // Seperate data from UI
     [SerializeField] InventoryItem[] items;
     [SerializeField] Transform itemsParent;
-    public List<ItemSlot> itemSlots;
-    public int Size = 9;
+    [SerializeField] List<ItemSlot> itemSlots;
+    [SerializeField] int Size = 9;
+
+    public void Start() {
+        items = new InventoryItem[Size];
+    }
 
     public InventoryItem[] GetItems() {
         return items;
@@ -20,9 +24,7 @@ public class Inventory : MonoBehaviour {
         if (IsSpace()) {
             InventoryItem slotItem = this.items[this.GetNextFreeSlot(item)];
             if (slotItem != null) {
-                Debug.Log("Quantity before: " + this.items[this.GetNextFreeSlot(item)].GetQuantity());
                 this.items[this.GetNextFreeSlot(item)].SetQuantity(slotItem.GetQuantity()+1);
-                Debug.Log("Quantity after: " + this.items[this.GetNextFreeSlot(item)].GetQuantity());
             } else {
                 item.SetQuantity(1);
                 this.items[this.GetNextFreeSlot(item)] = item;
@@ -39,12 +41,15 @@ public class Inventory : MonoBehaviour {
                 if (i < firstNull) {
                     firstNull = i;
                 }
-            } else if (items[i].id == item.id) {
+            } else if (items[i].GetId() == item.GetId()) {
                 return i;
             }
         }
         return firstNull;
-    
+    }
+
+    public List<ItemSlot> GetUISlots() {
+        return this.itemSlots;
     }
 
     private bool IsSpace(){

@@ -11,7 +11,7 @@ public class ClickObject : MonoBehaviour {
     private RaycastHit hit;
     private Text txt;
     private Inventory inventory;
-    private InventoryItem focus;
+    private Interactable focus;
     private const int RightButton = 1;
     private const int LeftButton = 0;
 
@@ -36,22 +36,23 @@ public class ClickObject : MonoBehaviour {
         holdInitiated = false;
     }
 
-    private void SetFocus(InventoryItem newFocus) {
+    private void SetFocus(Interactable newFocus) {
         focus = newFocus;
     }
     
     void Update() {
         if (Input.GetMouseButton(LeftButton) && timer > holdLength && holdInitiated) {
-            Debug.Log("Hello, you held the button down for longer than two seconds.");
             // Cast ray from the cursor through the centre of the viewport (what's the mouse hovering over?)
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             hit = new RaycastHit();
 
             // If a GameObject is hit
             if (!Physics.Raycast(ray, out hit)) return;
-            SetFocus(hit.collider.GetComponent<InventoryItem>());
+            SetFocus(hit.collider.GetComponent<Interactable>());
+            
+            InventoryItem newItem = new InventoryItem(focus.GetId(), focus.GetItemType(), 1);
 
-            int nextSlot = inventory.GetNextFreeSlot(hit.collider.GetComponent<InventoryItem>());
+            int nextSlot = inventory.GetNextFreeSlot(newItem);
             float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
             if (focus != null && dist < maxDistance) {
@@ -62,21 +63,21 @@ public class ClickObject : MonoBehaviour {
                 // end zone
 
                 // Add to inventory object
-                inventory.AddItem(focus);
+                inventory.AddItem(newItem);
                 // Set to make access unique
                 itemButton.name = "InventoryItemSlot " + nextSlot;
-                itemButton.GetComponent<Text>().text = hit.transform.gameObject.name;
+                itemButton.GetComponent<Text>().text = newItem.GetItemType();
 
                 // Make game world object invisible and collider inactive
-                hit.transform.gameObject.SetActive(false);
+                Destroy(hit.transform.gameObject);
 
                 // Create a slot with text in inventory window, or update quantity bracket
-                if (inventory.itemSlots[nextSlot].transform.childCount < 2) {
-                    Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
+                if (inventory.GetUISlots()[nextSlot].transform.childCount < 2) {
+                    Instantiate(itemButton, inventory.GetUISlots()[nextSlot].transform, false);
                 }
                 else {
                     GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
-                        focus.name + " (" + inventory.GetItems()[nextSlot].GetQuantity() + ")";
+                        newItem.GetItemType() + " (" + inventory.GetItems()[nextSlot].GetQuantity() + ")";
                 }
 
                 // Change load order or UI elements for accessible hit-box
@@ -110,7 +111,7 @@ public class ClickObject : MonoBehaviour {
             // If a GameObject is hit
             if (!Physics.Raycast(ray, out hit)) return;
             Debug.Log("Hit location: " + hit.transform.position.x + ", " + hit.transform.position.z);
-            SetFocus(hit.collider.GetComponent<InventoryItem>());
+            SetFocus(hit.collider.GetComponent<Interactable>());
             generateHex.hexmap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
             Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
             // GameObject.Destroy(hit.transform.gameObject);
