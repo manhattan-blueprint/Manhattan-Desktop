@@ -80,6 +80,8 @@ public class HexMap
         }
         // End MVP only area
         ////////////////////////////////////////////////////////////////////////
+
+        Debug.Log(objectGrid[0,0]);
     }
 
     // Places an object on the grid according to placement system of ints and map
@@ -87,6 +89,12 @@ public class HexMap
     {
         Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
         objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
+    }
+
+    // Removes an object from the grid according to placement system of ints and map
+    public void RemoveFromGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
+    {
+        Destroy(objectGrid[xCo,yCo]);
     }
 
     // Places an object on the grid using floats
