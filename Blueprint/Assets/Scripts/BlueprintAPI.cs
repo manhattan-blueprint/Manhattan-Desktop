@@ -9,6 +9,7 @@ public class BlueprintAPI {
     // Const
     private const string authenticateEndpoint = ":8000/api/v1/authenticate";
     private const string registerEndpoint     = ":8000/api/v1/authenticate/register";
+    private const string inventoryEndpoint     = ":8001/api/v1/inventory";
     
     // Enum
     public enum httpResponseCode {
@@ -73,9 +74,32 @@ public class BlueprintAPI {
         return new UserCredentials(username, password, tokens.access, tokens.refresh);
     }
     
-    //TODO: Inventory, GetAll
-    //TODO: Inventory, Add
-    //TODO: Inventory, Delete
+    public async Task<ResponseGetInventory> AsyncGetInventory(string accessToken) {
+        // Fetch
+        string response = await rs.PerformAsyncGet(inventoryEndpoint, accessToken);
+
+        // Serialize JSON
+        ResponseGetInventory inventory = JsonUtility.FromJson<ResponseGetInventory>(response);
+
+        return inventory;
+    }
+    
+    public async Task<string> AsyncAddToInventory(string accessToken, ResponseGetInventory items) {
+        // Prepare JSON payload
+        string json = JsonUtility.ToJson(items);
+        
+        // Send payload
+        string response = await rs.PerformAsyncPost(inventoryEndpoint, json, accessToken);
+
+        return json;
+    }
+    
+    public async Task<string> AsyncDeleteInventory(string accessToken) {
+        // Perform request
+        string response = await rs.PerformAsyncDelete(inventoryEndpoint, accessToken);
+
+        return response;
+    }
     
     //TODO: Resources, Get
     //^ Probably not necessary
