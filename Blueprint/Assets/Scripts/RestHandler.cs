@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Security.Authentication;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Boo.Lang;
-using UnityEngine;
 
 public class RestHandler {
     private string baseUrl;
