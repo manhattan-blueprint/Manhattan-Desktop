@@ -33,6 +33,10 @@ public class Inventory : MonoBehaviour {
             Debug.Log("No space in inventory");
         }
     }
+    
+    public string GetNameForSlot(int id) {
+        return "InventoryItemSlot" + id;
+    }
 
     public int GetNextFreeSlot(InventoryItem item) {
         int firstNull = this.Size+1;

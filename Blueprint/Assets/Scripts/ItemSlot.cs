@@ -14,19 +14,23 @@ public class ItemSlot : MonoBehaviour {
     private int itemId;
     private bool pickUp;
     private bool empty;
+    private Transform cameraTransform;
 
     void Start() {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
         items = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ClickObject>(); 
+        cameraTransform = Camera.main.gameObject.transform;
     }
 
-
+    // Loops through the child elements of the item slot to find the associated text/sprite and delete it from the menu 
     public void DropItem() {
         foreach (Transform child in transform) {
             if (child.gameObject.CompareTag("Inventory")) {
-                Transform cameraTransform = Camera.main.gameObject.transform;
+                // Set up drop position
                 position = cameraTransform.position;
                 facing = cameraTransform.forward * 2;
+                
+                // Get ID and quantity of item to be dropped
                 itemId = inventory.GetItems()[id].GetId();
                 int quantity = inventory.GetItems()[id].GetQuantity();
                 inventory.GetItems()[id].SetQuantity(quantity - 1);
@@ -40,7 +44,6 @@ public class ItemSlot : MonoBehaviour {
                     empty = false;
                 }
                
-                
                 switch (itemId) {
                     case (0):
                         Transform cube = Instantiate(items.cube, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);

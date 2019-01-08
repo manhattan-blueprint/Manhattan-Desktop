@@ -56,16 +56,14 @@ public class ClickObject : MonoBehaviour {
             float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
             if (focus != null && dist < maxDistance) {
-                // This is not great, help meh fix it pls
                 Renderer rend = hit.collider.GetComponent<Renderer>();
                 Highlight hi = hit.collider.GetComponent<Highlight>();
                 rend.material.color = hi.tempColor;
-                // end zone
 
                 // Add to inventory object
                 inventory.AddItem(newItem);
                 // Set to make access unique
-                itemButton.name = "InventoryItemSlot " + nextSlot;
+                itemButton.name = inventory.GetNameForSlot(nextSlot);
                 itemButton.GetComponent<Text>().text = newItem.GetItemType();
 
                 // Make game world object invisible and collider inactive
@@ -80,7 +78,8 @@ public class ClickObject : MonoBehaviour {
                         newItem.GetItemType() + " (" + inventory.GetItems()[nextSlot].GetQuantity() + ")";
                 }
 
-                // Change load order or UI elements for accessible hit-box
+                // Change load order or UI elements within world hierarchy. This prevents the
+                // item slot hitbox overlapping the button hitbox and preventing press
                 index = "Button" + (nextSlot + 1);
                 dropButton = GameObject.Find(index);
                 itemButton.transform.SetSiblingIndex(0);
@@ -114,7 +113,6 @@ public class ClickObject : MonoBehaviour {
             SetFocus(hit.collider.GetComponent<Interactable>());
             generateHex.hexmap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
             Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
-            // GameObject.Destroy(hit.transform.gameObject);
         }
     }
 }
