@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
 
@@ -11,6 +12,8 @@ public class Inventory : MonoBehaviour {
     [SerializeField] Transform itemsParent;
     [SerializeField] List<ItemSlot> itemSlots;
     [SerializeField] int Size = 9;
+    [SerializeField] GameObject itemButton;
+    private GameObject dropButton;
 
     public void Start() {
         items = new InventoryItem[Size];
@@ -34,8 +37,46 @@ public class Inventory : MonoBehaviour {
         }
     }
     
+    public int CollectItem(Interactable focus, GameObject pickup) {
+        
+        InventoryItem newItem = new InventoryItem(focus.GetId(), focus.GetItemType(), 1);
+
+        int nextSlot = GetNextFreeSlot(newItem);
+
+        // Add to inventory object
+        AddItem(newItem);
+
+        // Set to make access unique
+        itemButton.name = GetNameForSlot(nextSlot);
+        itemButton.GetComponent<Text>().text = newItem.GetItemType();
+        
+        // Make game world object invisible and collider inactive
+        Destroy(pickup);
+        
+        // Create a slot with text in inventory window, or update quantity bracket
+        if (GetUISlots()[nextSlot].transform.childCount < 2) {
+            Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
+        }
+        else {
+            GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
+                newItem.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
+        }
+
+        // Change load order or UI elements for accessible hit-box
+        string index = GetNameForButton(nextSlot);
+        dropButton = GameObject.Find(index);
+        itemButton.transform.SetSiblingIndex(0);
+        dropButton.transform.SetSiblingIndex(1);
+
+        return nextSlot;
+    }
+    
     public string GetNameForSlot(int id) {
-        return "InventoryItemSlot" + id;
+        return "InventoryItemSlot " + id;
+    }
+    
+    public string GetNameForButton(int id) {
+        return "Button" + (id + 1);;
     }
 
     public int GetNextFreeSlot(InventoryItem item) {

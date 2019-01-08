@@ -1,7 +1,3 @@
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +13,6 @@ public class ClickObject : MonoBehaviour {
 
     public float maxDistance;
     private float timer;
-    public GameObject itemButton;
-    private GameObject dropButton;
     public Transform cube;
     public Transform cubeLarge;
     public Transform capsule;
@@ -50,9 +44,6 @@ public class ClickObject : MonoBehaviour {
             if (!Physics.Raycast(ray, out hit)) return;
             SetFocus(hit.collider.GetComponent<Interactable>());
             
-            InventoryItem newItem = new InventoryItem(focus.GetId(), focus.GetItemType(), 1);
-
-            int nextSlot = inventory.GetNextFreeSlot(newItem);
             float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
             if (focus != null && dist < maxDistance) {
@@ -60,30 +51,7 @@ public class ClickObject : MonoBehaviour {
                 Highlight hi = hit.collider.GetComponent<Highlight>();
                 rend.material.color = hi.tempColor;
 
-                // Add to inventory object
-                inventory.AddItem(newItem);
-                // Set to make access unique
-                itemButton.name = inventory.GetNameForSlot(nextSlot);
-                itemButton.GetComponent<Text>().text = newItem.GetItemType();
-
-                // Make game world object invisible and collider inactive
-                Destroy(hit.transform.gameObject);
-
-                // Create a slot with text in inventory window, or update quantity bracket
-                if (inventory.GetUISlots()[nextSlot].transform.childCount < 2) {
-                    Instantiate(itemButton, inventory.GetUISlots()[nextSlot].transform, false);
-                }
-                else {
-                    GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
-                        newItem.GetItemType() + " (" + inventory.GetItems()[nextSlot].GetQuantity() + ")";
-                }
-
-                // Change load order or UI elements within world hierarchy. This prevents the
-                // item slot hitbox overlapping the button hitbox and preventing press
-                index = "Button" + (nextSlot + 1);
-                dropButton = GameObject.Find(index);
-                itemButton.transform.SetSiblingIndex(0);
-                dropButton.transform.SetSiblingIndex(1);
+                inventory.CollectItem(focus, hit.transform.gameObject);
             }
             else {
                 Debug.Log("No inventory items hit");
@@ -109,7 +77,6 @@ public class ClickObject : MonoBehaviour {
 
             // If a GameObject is hit
             if (!Physics.Raycast(ray, out hit)) return;
-            Debug.Log("Hit location: " + hit.transform.position.x + ", " + hit.transform.position.z);
             SetFocus(hit.collider.GetComponent<Interactable>());
             generateHex.hexmap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
             Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
