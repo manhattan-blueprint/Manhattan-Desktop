@@ -199,6 +199,34 @@ public class RestHandlerTests {
     }
 
     [Test]
+    public void TestRefreshTokens() {
+        var blueprintApi = new BlueprintAPI(baseUrl);      
+        UserCredentials user = null;
+        
+        // Authenticate user to gain tokens
+        Task.Run(async () => {             
+            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+        }).GetAwaiter().GetResult();
+        
+        // Refresh tokens
+        Task.Run(async () => {
+            try {
+                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user.getRefreshToken());
+
+                Assert.IsNotNull(response.refresh);
+                Assert.IsNotNull(response.access);
+            }
+            catch (WebException e) {
+                // Exception thrown, failure case
+                Debug.Log(e.Message);
+                Assert.Fail();
+            }
+        }).GetAwaiter().GetResult();
+    }
+
+    // Obtains an access token, adds an item to the inventory, then retrieves the inventory
+    // Asserts contains are as expected
+    [Test]
     public void TestGetInventory() {
         var blueprintApi = new BlueprintAPI(baseUrl);
         UserCredentials user = null;
@@ -228,6 +256,8 @@ public class RestHandlerTests {
         Assert.That(finalInventory.items[0].item_id, Is.GreaterThanOrEqualTo(1));
     }
 
+    // Obtains an access token, adds item to user inventory
+    // Fails in the case of an exception
     [Test]
     public void TestAddInventoryItem() {
         var blueprintApi = new BlueprintAPI(baseUrl);
@@ -254,11 +284,10 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
     }
 
+    // Obtains an access token, adds item to inventory, deletes inventory contents
+    // Fails in the case of an exception
     [Test]
     public void TestDeleteInventory() {
-        // Run add item test to populate inventory
-        TestAddInventoryItem();
-        
         var blueprintApi = new BlueprintAPI(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;

@@ -7,8 +7,9 @@ public class BlueprintAPI {
     private RestHandler rs;
 
     // Const
-    private const string authenticateEndpoint = ":8000/api/v1/authenticate";
-    private const string registerEndpoint     = ":8000/api/v1/authenticate/register";
+    private const string authenticateEndpoint  = ":8000/api/v1/authenticate";
+    private const string registerEndpoint      = ":8000/api/v1/authenticate/register";
+    private const string refreshEndpoint       = ":8000/api/v1/authenticate/refresh";
     private const string inventoryEndpoint     = ":8001/api/v1/inventory";
     
     // Enum
@@ -57,7 +58,6 @@ public class BlueprintAPI {
         return new UserCredentials(user.getUsername(), user.getPassword(), tokens.access, tokens.refresh);
     }
     
-    
     public async Task<UserCredentials> AsyncRegisterUser(string username, string password) {
         validateUsernamePassword(username, password);
         
@@ -72,6 +72,20 @@ public class BlueprintAPI {
         
         // Form and return UserCredentials object
         return new UserCredentials(username, password, tokens.access, tokens.refresh);
+    }
+
+    public async Task<ResponseAuthenticate> AsyncRefreshTokens(string refreshToken) {
+        // Prepare JSON payload & local variables
+        string json = "{\"refresh\": \"" + refreshToken + "\"}";
+        Debug.Log(json);
+        
+        // Fetch
+        string response = await rs.PerformAsyncPost(refreshEndpoint, json);
+        
+        // Extract tokens from JSON
+        ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+        
+        return tokens;
     }
     
     public async Task<ResponseGetInventory> AsyncGetInventory(string accessToken) {
@@ -100,8 +114,5 @@ public class BlueprintAPI {
 
         return response;
     }
-    
-    //TODO: Resources, Get
-    //^ Probably not necessary
     
 }
