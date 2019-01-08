@@ -1,5 +1,4 @@
 namespace Model.Action {
-    public interface Action {
-        // Intentionally left empty 
-    }
+    // Intentionally left empty 
+    public interface Action { }
 }

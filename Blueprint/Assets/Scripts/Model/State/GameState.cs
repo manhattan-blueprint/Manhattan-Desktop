@@ -1,9 +1,11 @@
-namespace Model {
+namespace Model.State {
     public class GameState {
         public InventoryState inventoryState;
-
+        public MapState mapState;
+        
         public GameState() {
-            this.inventoryState = new InventoryState();
+            inventoryState = new InventoryState();
+            mapState = new MapState();
         }
     }
 }

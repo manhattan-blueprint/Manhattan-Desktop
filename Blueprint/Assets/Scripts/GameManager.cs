@@ -2,19 +2,24 @@
 using Model.Action;
 using Model.Reducer;
 using Model.Redux;
+using Model.State;
 
 public class GameManager {
     private class GameStateReducer : Reducer<GameState, Action> {
-        private InventoryReducer inventoryReducer;
+        private readonly InventoryReducer inventoryReducer;
+        private readonly MapReducer mapReducer;
 
         public GameStateReducer() {
-            this.inventoryReducer = new InventoryReducer();
+            inventoryReducer = new InventoryReducer();
+            mapReducer = new MapReducer();
         }
        
         // Dispatch to appropriate handler
         public GameState Reduce(GameState current, Action action) {
             if (action is InventoryAction){
                 current.inventoryState = inventoryReducer.Reduce(current.inventoryState, (InventoryAction) action);
+            } else if (action is MapAction) {
+                current.mapState = mapReducer.Reduce(current.mapState, (MapAction) action);
             }
             return current;
         }
