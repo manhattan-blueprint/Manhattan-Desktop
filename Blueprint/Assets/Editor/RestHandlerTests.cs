@@ -1,10 +1,13 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading.Tasks;
 using UnityEngine;
 using NUnit.Framework;
+using Unity.Collections.LowLevel.Unsafe;
 using Random = System.Random;
 
 public class RestHandlerTests {
@@ -194,7 +197,63 @@ public class RestHandlerTests {
 
         }).GetAwaiter().GetResult();
     }
-    
+
+    [Test]
+    public void TestGetInventory() {
+        var blueprintApi = new BlueprintAPI(baseUrl);
+        UserCredentials user = null;
+        ResponseGetInventory finalInventory = null;
+        
+        // Authenticate user to gain access token
+        Task.Run(async () => {             
+            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+        }).GetAwaiter().GetResult();
+
+        // Add item to test user inventory
+        Task.Run(async () => {
+            List<InventoryEntry> entries = new List<InventoryEntry>();
+            entries.Add(new InventoryEntry(1, 1));
+            ResponseGetInventory inventory = new ResponseGetInventory(entries);
+
+            string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+        }).GetAwaiter().GetResult();
+
+        // Retrieve inventory of new user
+        Task.Run(async () => {
+            
+            finalInventory = await blueprintApi.AsyncGetInventory(user.getAccessToken());
+        }).GetAwaiter().GetResult();
+        
+        Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
+        Assert.That(finalInventory.items[0].item_id, Is.GreaterThanOrEqualTo(1));
+    }
+
+    [Test]
+    public void TestAddInventoryItem() {
+        var blueprintApi = new BlueprintAPI(baseUrl);
+        UserCredentials user = null;
+
+        // Authenticate user to gain access token
+        Task.Run(async () => {
+            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+        }).GetAwaiter().GetResult();
+
+        // Add item to test user inventory
+        Task.Run(async () => {
+            try {
+                List<InventoryEntry> entries = new List<InventoryEntry>();
+                entries.Add(new InventoryEntry(1, 1));
+                ResponseGetInventory inventory = new ResponseGetInventory(entries);
+
+                string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+            }
+            catch (WebException e) {
+                // Exception throw, failure case
+                Assert.Fail();
+            }
+        }).GetAwaiter().GetResult();
+    }
+
     // Blocked by user removal functionality
     /*[Test]
     public void TestRegisterUser_1() {
