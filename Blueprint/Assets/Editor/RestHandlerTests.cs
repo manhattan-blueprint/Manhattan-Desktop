@@ -342,5 +342,3 @@ public class RestHandlerTests {
         public string value;
     }
 }
-
-

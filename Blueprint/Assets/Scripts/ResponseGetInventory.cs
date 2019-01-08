@@ -9,4 +9,3 @@ public class ResponseGetInventory {
         this.items = items;
     }
 }
-

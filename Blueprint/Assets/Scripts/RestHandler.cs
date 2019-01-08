@@ -118,5 +118,4 @@ public class RestHandler {
 
         return Encoding.Default.GetString(content.ToArray());  
     }
-
 }
