@@ -254,6 +254,43 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
     }
 
+    [Test]
+    public void TestDeleteInventory() {
+        // Run add item test to populate inventory
+        TestAddInventoryItem();
+        
+        var blueprintApi = new BlueprintAPI(baseUrl);
+        UserCredentials user = null;
+        ResponseGetInventory finalInventory = null;
+        
+        // Authenticate user to gain access token
+        Task.Run(async () => {             
+            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+        }).GetAwaiter().GetResult();
+
+        // Add item to test user inventory
+        Task.Run(async () => {
+            List<InventoryEntry> entries = new List<InventoryEntry>();
+            entries.Add(new InventoryEntry(1, 1));
+            ResponseGetInventory inventory = new ResponseGetInventory(entries);
+
+            string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+        }).GetAwaiter().GetResult();
+        
+        // Delete inventory and assert on response
+        Task.Run(async () => {
+            try {
+                string response = await blueprintApi.AsyncDeleteInventory(user.getAccessToken());
+                
+                // Success case
+            }
+            catch (WebException e) {
+                // Failure case
+                Assert.Fail();
+            }    
+        }).GetAwaiter().GetResult();
+    }
+
     // Blocked by user removal functionality
     /*[Test]
     public void TestRegisterUser_1() {
