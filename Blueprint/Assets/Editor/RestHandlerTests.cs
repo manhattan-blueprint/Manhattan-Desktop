@@ -8,6 +8,7 @@ using Random = System.Random;
 
 public class RestHandlerTests {
     private string baseUrl = "http://smithwjv.ddns.net";
+    private UserCredentials validUser = new UserCredentials("adam1", "Test123");
     
     // GETs data from jsonplaceholder, asserts it is correct
     [Test]
@@ -52,7 +53,7 @@ public class RestHandlerTests {
     [Test]
     public void TestValidAuthenticateUser() {
         var blueprintApi = new BlueprintAPI(baseUrl);
-        UserCredentials user = new UserCredentials("adam1", "Test123");
+        UserCredentials user = validUser;
         UserCredentials returnUser = null;
         
         Task.Run(async () => {
@@ -201,7 +202,7 @@ public class RestHandlerTests {
         
         // Authenticate user to gain tokens
         Task.Run(async () => {             
-            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+            user = await blueprintApi.AsyncAuthenticateUser(validUser);
         }).GetAwaiter().GetResult();
         
         // Refresh tokens
@@ -230,7 +231,7 @@ public class RestHandlerTests {
         
         // Authenticate user to gain access token
         Task.Run(async () => {             
-            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+            user = await blueprintApi.AsyncAuthenticateUser(validUser);
         }).GetAwaiter().GetResult();
 
         // Add item to test user inventory
@@ -261,7 +262,7 @@ public class RestHandlerTests {
 
         // Authenticate user to gain access token
         Task.Run(async () => {
-            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+            user = await blueprintApi.AsyncAuthenticateUser(validUser);
         }).GetAwaiter().GetResult();
 
         // Add item to test user inventory
@@ -290,7 +291,7 @@ public class RestHandlerTests {
         
         // Authenticate user to gain access token
         Task.Run(async () => {             
-            user = await blueprintApi.AsyncAuthenticateUser(new UserCredentials("adam1", "Test123"));
+            user = await blueprintApi.AsyncAuthenticateUser(validUser);
         }).GetAwaiter().GetResult();
 
         // Add item to test user inventory

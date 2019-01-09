@@ -76,8 +76,7 @@ public class BlueprintAPI {
 
     public async Task<ResponseAuthenticate> AsyncRefreshTokens(string refreshToken) {
         // Prepare JSON payload & local variables
-        string json = "{\"refresh\": \"" + refreshToken + "\"}";
-        Debug.Log(json);
+        string json = JsonUtility.ToJson(new RefreshPayload(refreshToken));
         
         // Fetch
         string response = await rs.PerformAsyncPost(refreshEndpoint, json);
@@ -113,5 +112,13 @@ public class BlueprintAPI {
         string response = await rs.PerformAsyncDelete(inventoryEndpoint, accessToken);
 
         return response;
+    }
+
+    private class RefreshPayload {
+        public string refresh;
+
+        public RefreshPayload(string refresh) {
+            this.refresh = refresh;
+        }
     }
 }
