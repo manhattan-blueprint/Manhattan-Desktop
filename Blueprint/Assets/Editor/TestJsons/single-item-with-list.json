@@ -1,0 +1,17 @@
+{
+  "item_id":8,
+  "name":"steel",
+  "type":4,
+  "blueprint":[],
+  "machine_id":7,
+  "recipe":[
+      {
+          "item_id":4,
+          "quantity":1
+      },
+      {
+          "item_id":5,
+          "quantity":1
+      }
+  ]
+}
