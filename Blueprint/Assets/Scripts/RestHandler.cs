@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Security.Authentication;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Boo.Lang;
-using UnityEngine;
 
 public class RestHandler {
     private string baseUrl;
@@ -14,6 +11,8 @@ public class RestHandler {
 
     // Const
     private const string httpPost = "POST";
+    private const string httpGet = "GET";
+    private const string httpDelete = "DELETE";
     private const string JsonContentType = "application/json";
     
     // Constructor
@@ -41,6 +40,23 @@ public class RestHandler {
         return strResponse;
     }
 
+    public async Task<string> PerformAsyncGet(string endpoint, string accessToken) {
+        var content = new MemoryStream();
+        var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+
+        webReq.Method = httpGet;
+        webReq.ContentType = JsonContentType;
+        webReq.Headers.Add("Authorization", "Bearer " + accessToken);
+
+        using (WebResponse response = await webReq.GetResponseAsync()) {
+            using (Stream responseStream = response.GetResponseStream()) {
+                await responseStream.CopyToAsync(content);
+            }
+        }
+
+        return Encoding.Default.GetString(content.ToArray());  
+    }
+
     public async Task<string> PerformAsyncPost(string endpoint, string postData) {
         var content = new MemoryStream();
         var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
@@ -63,5 +79,43 @@ public class RestHandler {
         return Encoding.Default.GetString(content.ToArray());
     }
 
+    public async Task<string> PerformAsyncPost(string endpoint, string postData, string accessToken) {
+        var content = new MemoryStream();
+        var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+        byte[] payload = Encoding.ASCII.GetBytes(postData);
 
+        webReq.Method = httpPost;
+        webReq.ContentType = JsonContentType;
+        webReq.ContentLength = payload.Length;
+        webReq.Headers.Add("Authorization", "Bearer " + accessToken);
+
+        using (var stream = webReq.GetRequestStream()) {
+            stream.Write(payload, 0, payload.Length);
+        }
+
+        using (WebResponse response = await webReq.GetResponseAsync()) {
+            using (Stream responseStream = response.GetResponseStream()) {
+                await responseStream.CopyToAsync(content);
+            }
+        }
+
+        return Encoding.Default.GetString(content.ToArray());
+    }
+
+    public async Task<string> PerformAsyncDelete(string endpoint, string accessToken) {
+        var content = new MemoryStream();
+        var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+
+        webReq.Method = httpDelete;
+        webReq.ContentType = JsonContentType;
+        webReq.Headers.Add("Authorization", "Bearer " + accessToken);
+
+        using (WebResponse response = await webReq.GetResponseAsync()) {
+            using (Stream responseStream = response.GetResponseStream()) {
+                await responseStream.CopyToAsync(content);
+            }
+        }
+
+        return Encoding.Default.GetString(content.ToArray());  
+    }
 }
