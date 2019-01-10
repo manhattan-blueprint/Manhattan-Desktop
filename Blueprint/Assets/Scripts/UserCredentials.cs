@@ -12,8 +12,7 @@ public class UserCredentials {
     private string access;
     private string refresh;
 
-    public UserCredentials(string username, string password)
-    {
+    public UserCredentials(string username, string password) {
         this.username = username;
         this.password = password;
     }
