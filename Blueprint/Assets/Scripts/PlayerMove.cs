@@ -53,7 +53,7 @@ public class PlayerMove : MonoBehaviour {
             charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
             timeInAir += Time.deltaTime;
             yield return null;
-        } while(!charController.isGrounded && 
+        } while (!charController.isGrounded && 
             charController.collisionFlags != CollisionFlags.Above);
 
         charController.slopeLimit = 45.0f;
