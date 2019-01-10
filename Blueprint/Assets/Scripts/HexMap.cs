@@ -106,6 +106,19 @@ public class HexMap
         objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
     }
 
+    // Removes an object on the grid using floats
+    public void RemoveFromGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
+    {
+        int xCo = XToCo(fxCo, fyCo);
+        int yCo = YToCo(fxCo, fyCo);
+        GameObject.Destroy(objectGrid[xCo,yCo]);
+    }
+
+    public void RetrieveGrid()
+    {
+        return objectGrid;
+    }
+
     // Converts in game coordinates to nearest x grid coordinate.
     private int XToCo(float xPos, float yPos)
     {
