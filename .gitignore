@@ -4,6 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+Blueprint/Assets/Plugins/AsyncAwaitUtil/
 
 # Mac directory info file
 .DS_Store
