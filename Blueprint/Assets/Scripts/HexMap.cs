@@ -94,7 +94,7 @@ public class HexMap
     // Removes an object from the grid according to placement system of ints and map
     public void RemoveFromGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
     {
-        Destroy(objectGrid[xCo,yCo]);
+        GameObject.Destroy(objectGrid[xCo,yCo]);
     }
 
     // Places an object on the grid using floats
