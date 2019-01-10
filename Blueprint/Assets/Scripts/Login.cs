@@ -36,9 +36,6 @@ public class Login : MonoBehaviour {
     }
 
     public void onLoginClick() {
-        SceneManager.LoadScene("World");
-        return;
-
         usernameText = usernameInput.text;
         passwordText = passwordInput.text;
 
@@ -57,17 +54,17 @@ public class Login : MonoBehaviour {
         UserCredentials userCredentials = new UserCredentials(usernameText, passwordText);
         UserCredentials returnUser;
 
-        Task.Run(async () => {
+        Task.Run( async () => {
             Task<UserCredentials> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
 
             try {
                 returnUser = await fetchingResponse;
+                // Launch Blueprint
                 SceneManager.LoadScene("World");
-                Debug.Log("Login Success");
             } catch (Exception e) {
                 EditorUtility.DisplayDialog("Login failed!", e.ToString(), "OK");
             }
         }).GetAwaiter().GetResult();
     }
-
+        
 }
