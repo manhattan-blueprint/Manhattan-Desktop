@@ -824,7 +824,7 @@ MonoBehaviour:
   loginButton: {fileID: 0}
   usernameText: 
   passwordText: 
-  maxUsernameLength: 0
+  maxUsernameLength: 20
 --- !u!1 &1437164645
 GameObject:
   m_ObjectHideFlags: 0
