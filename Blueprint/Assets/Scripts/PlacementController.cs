@@ -14,6 +14,12 @@ public class PlacementController : MonoBehaviour {
         item.GetComponent<Rigidbody>().useGravity = true;
     }
 
+    // Notify object that is has been dropped from inventory
+    
+    // Notify holding object that this object has been dropped
+    
+    // Notify holding object that object has been placed
+    
     void OnMouseDown() {
         float dist = Vector3.Distance(item.transform.position, guide.transform.position);
         if (dist < 2) {
