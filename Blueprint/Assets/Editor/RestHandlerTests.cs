@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 using NUnit.Framework;
 using Random = System.Random;
+using Service;
+using Service.Response;
 
 public class RestHandlerTests {
     private string baseUrl = "http://smithwjv.ddns.net";
-    private UserCredentials validUser = new UserCredentials("adam1", "Test123");
+    // This user should already exist on the server
+    private UserCredentials validUser = new UserCredentials("test", "Test123");
     
     // GETs data from jsonplaceholder, asserts it is correct
     [Test]
@@ -80,8 +83,8 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
         
         // Check returned user is correct and contains access tokens
-        Assert.That(returnUser.getUsername(), Is.EqualTo("adam1"));
-        Assert.That(returnUser.getPassword(), Is.EqualTo("Test123"));    
+        Assert.That(returnUser.getUsername(), Is.EqualTo(validUser.getUsername()));
+        Assert.That(returnUser.getPassword(), Is.EqualTo(validUser.getPassword()));    
         Assert.IsNotNull(returnUser.getAccessToken());
         Assert.IsNotNull(returnUser.getRefreshToken());
     }
@@ -234,6 +237,7 @@ public class RestHandlerTests {
             user = await blueprintApi.AsyncAuthenticateUser(validUser);
         }).GetAwaiter().GetResult();
 
+
         // Add item to test user inventory
         Task.Run(async () => {
             List<InventoryEntry> entries = new List<InventoryEntry>();
@@ -249,8 +253,8 @@ public class RestHandlerTests {
             finalInventory = await blueprintApi.AsyncGetInventory(user.getAccessToken());
         }).GetAwaiter().GetResult();
         
-        Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
-        Assert.That(finalInventory.items[0].item_id, Is.GreaterThanOrEqualTo(1));
+        Assert.That(finalInventory.items[0].itemId, Is.EqualTo(1));
+        Assert.That(finalInventory.items[0].itemId, Is.GreaterThanOrEqualTo(1));
     }
 
     // Obtains an access token, adds item to user inventory
