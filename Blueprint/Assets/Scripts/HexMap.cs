@@ -70,13 +70,13 @@ public class HexMap
         // Place some random machinery just to make it feel more dynamic; can
         // remove this bit if deemed unnecessary.
         int numOfMachines = 20;
-        Debug.Log(bumpyWidth);
-        Debug.Log(mapSize-bumpyWidth);
+        //Debug.Log(bumpyWidth);
+        //Debug.Log(mapSize-bumpyWidth);
         for (int i = 0; i < numOfMachines; i++)
         {
             PlaceOnGrid(UnityEngine.Random.Range(10, 40),
-              UnityEngine.Random.Range(10, 40),
-              Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
+            UnityEngine.Random.Range(10, 40),
+            Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
         }
         // End MVP only area
         ////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ public class HexMap
     // Converts in game coordinates to nearest x grid coordinate.
     private int XToCo(float xPos, float yPos)
     {
-        return (int)Math.Round(xPos / (hexH * 2) - ((Math.Round(yPos) % 2) * hexH));
+        return (int)Math.Round((xPos - (YToCo(xPos, yPos) % 2) * hexH)/ (hexH * 2));
     }
 
     // Converts in game coordinates to nearest y grid coordinate.

@@ -8,23 +8,23 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1058848286454568}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1058848286454568
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4178118753178404}
   - component: {fileID: 33954860185415990}
   - component: {fileID: 65945796727645862}
   - component: {fileID: 23623330603633106}
+  - component: {fileID: 114396823416858094}
   - component: {fileID: 54520596172014648}
   - component: {fileID: 114288308107481152}
-  - component: {fileID: 114964794031087804}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -35,7 +35,7 @@ GameObject:
 --- !u!4 &4178118753178404
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -48,15 +48,17 @@ Transform:
 --- !u!23 &23623330603633106
 MeshRenderer:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 084910c1f00fa4e7c99ae3b59c4fa1e5, type: 2}
   m_StaticBatchInfo:
@@ -69,6 +71,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -80,14 +83,14 @@ MeshRenderer:
 --- !u!33 &33954860185415990
 MeshFilter:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &54520596172014648
 Rigidbody:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   serializedVersion: 2
@@ -102,7 +105,7 @@ Rigidbody:
 --- !u!65 &65945796727645862
 BoxCollider:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   m_Material: {fileID: 0}
@@ -114,7 +117,7 @@ BoxCollider:
 --- !u!114 &114288308107481152
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   m_Enabled: 1
@@ -125,17 +128,17 @@ MonoBehaviour:
   item: {fileID: 1058848286454568}
   tempParent: {fileID: 1021377530112246, guid: bd0456c57ed3844f1a717a970acaa962, type: 2}
   guide: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 2}
---- !u!114 &114964794031087804
+--- !u!114 &114396823416858094
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058848286454568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b53edb6fed047e5b780f1fe47b891b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  quantity: 1
-  icon: {fileID: 0}
+  tempColor: {r: 0, g: 0, b: 0, a: 0}
+  highlightColor: {r: 1, g: 0, b: 0, a: 0}
+  Holdable: 1

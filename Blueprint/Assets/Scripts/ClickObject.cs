@@ -1,6 +1,3 @@
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,51 +7,79 @@ public class ClickObject : MonoBehaviour {
     private RaycastHit hit;
     private Text txt;
     private Inventory inventory;
-    private InventoryItem focus;
-    private const int LeftButton = 1;
+    private Interactable focus;
+    private const int RightButton = 1;
+    private const int LeftButton = 0;
 
     public float maxDistance;
-    public GameObject itemButton;
-    public GameObject dropButton;
+    private float timer;
     public Transform cube;
     public Transform cubeLarge;
     public Transform capsule;
     public Transform machinery;
     private string index;
+    private GenerateHex generateHex;
+    private GameObject drop;
+    private bool holdInitiated;
+    private const float holdLength = 1.0f;
 
-    // Use this for initialization
     void Start() {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+        generateHex = GameObject.FindGameObjectWithTag("Map").GetComponent<GenerateHex>();
+        timer = 0.0f;
+        holdInitiated = false;
     }
 
-    void SetFocus(InventoryItem newFocus) {
+    private void SetFocus(Interactable newFocus) {
         focus = newFocus;
     }
     
-    // Update is called once per frame
     void Update() {
-        if (!Input.GetMouseButtonDown(LeftButton)) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        hit = new RaycastHit();
+        if (Input.GetMouseButton(LeftButton) && timer > holdLength && holdInitiated) {
+            // Cast ray from the cursor through the centre of the viewport (what's the mouse hovering over?)
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            hit = new RaycastHit();
 
-        if (Physics.Raycast(ray, out hit)){
-            SetFocus(hit.collider.GetComponent<InventoryItem>());
-            int nextSlot = inventory.GetNextFreeSlot();
+            // If a GameObject is hit
+            if (!Physics.Raycast(ray, out hit)) return;
+            SetFocus(hit.collider.GetComponent<Interactable>());
+            
             float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
             if (focus != null && dist < maxDistance) {
-                inventory.AddItem(focus);
-                txt = itemButton.GetComponent<Text>();
-                txt.text = hit.transform.gameObject.name;
-                hit.transform.gameObject.SetActive(false);
-                Instantiate(itemButton, inventory.itemSlots[nextSlot].transform, false);
-                index = "Button" + (nextSlot + 1);
-                dropButton = GameObject.Find(index);
-                itemButton.transform.SetSiblingIndex(0);
-                dropButton.transform.SetSiblingIndex(1);
-            } else {
+                Renderer rend = hit.collider.GetComponent<Renderer>();
+                Highlight hi = hit.collider.GetComponent<Highlight>();
+                rend.material.color = hi.tempColor;
+
+                inventory.CollectItem(focus, hit.transform.gameObject);
+            }
+            else {
                 Debug.Log("No inventory items hit");
             }
-        }   
+            holdInitiated = false;
+        }
+        
+        if (Input.GetMouseButtonDown(LeftButton)) {
+            holdInitiated = true;
+        }
+
+        if (Input.GetMouseButton(LeftButton)) {
+            timer += Time.deltaTime;
+        }
+
+        if (Input.GetMouseButtonUp(LeftButton)) {
+            timer = 0.0f;
+        }
+        
+        if (Input.GetMouseButtonDown(RightButton)) {
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            hit = new RaycastHit();
+
+            // If a GameObject is hit
+            if (!Physics.Raycast(ray, out hit)) return;
+            SetFocus(hit.collider.GetComponent<Interactable>());
+            generateHex.hexmap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
+            Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
+        }
     }
 }

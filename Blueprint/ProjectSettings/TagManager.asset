@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Inventory
   - Placed
+  - Map
   layers:
   - Default
   - TransparentFX
