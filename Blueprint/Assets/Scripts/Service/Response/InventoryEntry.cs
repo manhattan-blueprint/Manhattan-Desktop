@@ -3,11 +3,12 @@
 namespace Service.Response {
 	[Serializable]
 	public class InventoryEntry {
-		public int itemId;
+		// TODO: Remove the underscore and tell the serializer how to decode
+		public int item_id;
 		public int quantity;
 
 		public InventoryEntry(int itemId, int quantity) {
-			this.itemId = itemId;
+			this.item_id = itemId;
 			this.quantity = quantity;
 		}
 	}

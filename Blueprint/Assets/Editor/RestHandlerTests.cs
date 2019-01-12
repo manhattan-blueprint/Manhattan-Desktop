@@ -253,8 +253,8 @@ public class RestHandlerTests {
             finalInventory = await blueprintApi.AsyncGetInventory(user.getAccessToken());
         }).GetAwaiter().GetResult();
         
-        Assert.That(finalInventory.items[0].itemId, Is.EqualTo(1));
-        Assert.That(finalInventory.items[0].itemId, Is.GreaterThanOrEqualTo(1));
+        Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
+        Assert.That(finalInventory.items[0].item_id, Is.GreaterThanOrEqualTo(1));
     }
 
     // Obtains an access token, adds item to user inventory
