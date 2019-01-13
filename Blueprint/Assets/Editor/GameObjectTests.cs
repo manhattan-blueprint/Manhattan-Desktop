@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using UnityEngine;
 
 public class GameObjectTests {
     private string testJsonsLocation = "Assets/Editor/TestJsons/";
+    private string singleItemJson = "single-item.json";
+    private string singleItemListJson = "single-item-with-list.json";
+    private string itemSchemaV1 = "item-schema-v1.json";
 
     private string getFilepath(string filename) {
         return string.Concat(testJsonsLocation, filename);
@@ -13,7 +17,7 @@ public class GameObjectTests {
     // Serializes a single GameObjectEntry
     [Test]
     public void TestSerializeSingleItem() {
-        using (StreamReader r = new StreamReader(getFilepath("single-item.json"))) {
+        using (StreamReader r = new StreamReader(getFilepath(singleItemJson))) {
             string json = r.ReadToEnd();
 
             GameObjectEntry entry = JsonUtility.FromJson<GameObjectEntry>(json);
@@ -28,7 +32,7 @@ public class GameObjectTests {
     // Serializes a single GameObjectEntry containing a recipe list
     [Test]
     public void TestSerializeSingleItemWithList() {
-        using (StreamReader r = new StreamReader(getFilepath("single-item-with-list.json"))) {
+        using (StreamReader r = new StreamReader(getFilepath(singleItemListJson))) {
             string json = r.ReadToEnd();
 
             GameObjectEntry entry = JsonUtility.FromJson<GameObjectEntry>(json);
@@ -47,7 +51,7 @@ public class GameObjectTests {
     // Serializes the whole item schema using GameObjectsHandler
     [Test]
     public void TestInitialiseGameObjectsHandler() {
-        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));     
         
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(16));
@@ -65,10 +69,32 @@ public class GameObjectTests {
         Assert.That(goh.GameObjs.items[15].blueprint[1].quantity, Is.EqualTo(1));
     }
 
+    // Serializes item schema from default remote url
+    [Test]
+    public void TestInitialiseGameObjectsHandlerRemote() {
+        GameObjectsHandler goh = GameObjectsHandler.WithHosted();
+        
+        //Assert fields are correct
+        Assert.That(goh.GameObjs.items.Count, Is.EqualTo(16));
+        
+        Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
+        Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("wood"));
+        Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(1));
+        
+        Assert.That(goh.GameObjs.items[15].item_id, Is.EqualTo(16));
+        Assert.That(goh.GameObjs.items[15].name, Is.EqualTo("dune buggy"));
+        Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(5));
+        Assert.That(goh.GameObjs.items[15].blueprint[0].item_id, Is.EqualTo(9));
+        Assert.That(goh.GameObjs.items[15].blueprint[0].quantity, Is.EqualTo(4));
+        Assert.That(goh.GameObjs.items[15].blueprint[1].item_id, Is.EqualTo(10));
+        Assert.That(goh.GameObjs.items[15].blueprint[1].quantity, Is.EqualTo(1));
+    }
+
+    // Asserts that a blueprint is retrieved without exception
     [Test]
     public void TestGetSingleElementBlueprintPass() {
         // Serialize schema
-        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
 
         // Create list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
@@ -86,10 +112,11 @@ public class GameObjectTests {
         } 
     }
     
+    // Asserts that correct exception is thrown for invalid blueprint retrieval
     [Test]
     public void TestGetSingleElementBlueprintFail() {
         // Serialize schema
-        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
 
         // Create list of available objects, with too few values
         List<RecipeElement> availables = new List<RecipeElement>();
@@ -106,10 +133,11 @@ public class GameObjectTests {
         } 
     }
 
+    // Asserts that a recipe is correctly returned
     [Test]
     public void TestGetRecipePass() {
         // Serialize schema
-        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
         
         // Create valid list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
@@ -123,10 +151,11 @@ public class GameObjectTests {
         Assert.That(goe.name, Is.EqualTo("steel"));
     }
 
+    // Asserts that a null value is correctly returned where no recipe is valid
     [Test]
     public void TestGetRecipeFail() {
         // Serialize schema
-        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
         
         // Create valid list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();

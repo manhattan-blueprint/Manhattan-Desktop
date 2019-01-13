@@ -1,16 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameObjectsHandler {
     public GameObjects GameObjs;
 
-    public GameObjectsHandler(string filepath) {
-        this.GameObjs = parseJsonSchema(filepath);
+    private GameObjectsHandler() {}
+
+    public static GameObjectsHandler WithFilepath(string filepath) {
+        GameObjectsHandler goh = new GameObjectsHandler();
+        goh.GameObjs = parseJsonSchemaFromFile(filepath);
+
+        return goh;
     }
 
-    private GameObjects parseJsonSchema(string filepath) { 
+    public static GameObjectsHandler WithHosted() {
+        GameObjectsHandler goh = new GameObjectsHandler();
+        
+        // Get schema
+        // TODO: Change when altered BlueprintAPI is available
+        BlueprintAPI api = new BlueprintAPI("http://smithwjv.ddns.net");
+        
+        Task.Run(async () => {
+            String json = await api.AsyncGetItemSchema();
+            
+            // Populate GameObjs
+            goh.GameObjs = JsonUtility.FromJson<GameObjects>(json);
+        }).GetAwaiter().GetResult();
+
+        return goh;
+    }
+
+    private static GameObjects parseJsonSchemaFromFile(string filepath) { 
         using (StreamReader r = new StreamReader(filepath)) {
             string json = r.ReadToEnd();
             
