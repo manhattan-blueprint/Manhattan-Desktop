@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -62,5 +63,63 @@ public class GameObjectTests {
         Assert.That(goh.GameObjs.items[15].blueprint[0].quantity, Is.EqualTo(4));
         Assert.That(goh.GameObjs.items[15].blueprint[1].item_id, Is.EqualTo(10));
         Assert.That(goh.GameObjs.items[15].blueprint[1].quantity, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void TestGetSingleElementBlueprintPass() {
+        // Serialize schema
+        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+
+        // Create list of available objects
+        List<RecipeElement> availables = new List<RecipeElement>();
+        availables.Add(new RecipeElement(2, 8));
+
+        try {
+            GameObjectEntry goe = goh.GetBlueprint(availables, 7);
+            
+            //Assert values are correct
+            Assert.That(goe.name, Is.EqualTo("furnace"));
+        }
+        catch (InvalidDataException e) {
+            // Exception thrown, failure case
+            Assert.Fail();
+        } 
+    }
+    
+    [Test]
+    public void TestGetSingleElementBlueprintFail() {
+        // Serialize schema
+        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+
+        // Create list of available objects, with too few values
+        List<RecipeElement> availables = new List<RecipeElement>();
+        availables.Add(new RecipeElement(2, 6));
+
+        try {
+            GameObjectEntry goe = goh.GetBlueprint(availables, 7);
+            
+            // Exception now thrown, failure case
+            Assert.Fail();
+        }
+        catch (InvalidDataException e) {
+            // Exception thrown, success case
+        } 
+    }
+
+    [Test]
+    public void TestGetRecipePass() {
+        // Serialize schema
+        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        
+        // Create valid list of available objects
+        List<RecipeElement> availables = new List<RecipeElement>();
+        availables.Add(new RecipeElement(4, 1));
+        availables.Add(new RecipeElement(5, 1));
+
+        // Obtain valid output
+        GameObjectEntry goe = goh.GetRecipe(availables, 7);
+        
+        // Asserts
+        Assert.That(goe.name, Is.EqualTo("steel"));
     }
 }
