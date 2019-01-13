@@ -122,4 +122,23 @@ public class GameObjectTests {
         // Asserts
         Assert.That(goe.name, Is.EqualTo("steel"));
     }
+
+    [Test]
+    public void TestGetRecipeFail() {
+        // Serialize schema
+        GameObjectsHandler goh = new GameObjectsHandler(getFilepath("item-schema-v1.json"));
+        
+        // Create valid list of available objects
+        List<RecipeElement> availables = new List<RecipeElement>();
+        availables.Add(new RecipeElement(5, 1));
+
+        // Obtain valid output
+        GameObjectEntry goe = goh.GetRecipe(availables, 7);
+        
+        // Asserts
+        if (goe != null) {
+            // Failure case, no objects are valid. Hence goe should be null
+            Assert.Fail();
+        }
+    }
 }

@@ -58,10 +58,10 @@ public class GameObjectsHandler {
         
         // Find the correct output item for given input items
         foreach (GameObjectEntry obj in objects) {
+            Boolean correctItem = true;
+            
             // For each item in the object's recipe
             foreach (RecipeElement recipeItem in obj.recipe) {
-                Boolean correctItem = true;
-                
                 // Is the required item present?
                 RecipeElement available = inputItems.Find(itemToFind => itemToFind.item_id == recipeItem.item_id);
                 
@@ -80,11 +80,12 @@ public class GameObjectsHandler {
                 else {
                     correctItem = false;
                 }
-
-                // Success case
-                if (correctItem) {
-                    return obj;
-                }
+                
+            }
+            
+            // Success case
+            if (correctItem) {
+                return obj;
             }
         }
 
