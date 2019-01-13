@@ -3473,7 +3473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c9f2c9cb67e48619f3bb28136f7c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemsParent: {fileID: 1443108866}
+  itemButton: {fileID: 1188492057334766, guid: e24afbe408f679946b70962ac5e8f83f, type: 3}
   inventorySlots:
   - {fileID: 1127871252}
   - {fileID: 870900731}
@@ -3484,8 +3484,6 @@ MonoBehaviour:
   - {fileID: 733734560}
   - {fileID: 599758537}
   - {fileID: 916237489}
-  Size: 9
-  itemButton: {fileID: 1188492057334766, guid: e24afbe408f679946b70962ac5e8f83f, type: 3}
 --- !u!1 &1912696110
 GameObject:
   m_ObjectHideFlags: 0
@@ -3763,7 +3761,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab9ad3676ea5e43358bf77dda0ad1648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistance: 10
   cube: {fileID: 4178118753178404, guid: 3b40ceb137fe54b9c9c286cbf68279ee, type: 3}
   cubeLarge: {fileID: 4860563762599424, guid: 6dc5f2df4889e4ff49d078c16bae0217, type: 3}
   capsule: {fileID: 4341569406944394, guid: baf27c7d89b914e96ab73de5358017fc, type: 3}
