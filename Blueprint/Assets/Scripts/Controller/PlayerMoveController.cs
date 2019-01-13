@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Attached to player and controls movement around map */
 namespace Controller {
     public class PlayerMoveController : MonoBehaviour {
         [SerializeField] private AnimationCurve jumpFalloff;
-        private string horizontalInputName = "Horizontal";
-        private string verticalInputName = "Vertical";
-        private float movementSpeed = 6.0f;
+        private const string horizontalInputName = "Horizontal";
+        private const string verticalInputName = "Vertical";
+        private const float movementSpeed = 6.0f;
+        private const float jumpMultiplier = 6.0f;
+        
         private CharacterController charController;
-        private float jumpMultiplier = 6;
         private bool isJumping;
 
         private void Awake() {

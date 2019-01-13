@@ -48,7 +48,7 @@ namespace Service {
         }
         
         public async Task<UserCredentials> AsyncAuthenticateUser(UserCredentials user) {
-            validateUsernamePassword(user.getUsername(), user.getPassword());
+            validateUsernamePassword(user.GetUsername(), user.GetPassword());
             
             // Prepare JSON payload & local variables
             string json = JsonUtility.ToJson(new PayloadAuthenticate(user));
@@ -60,7 +60,7 @@ namespace Service {
             ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
             
             // Form and return UserCredentials object
-            return new UserCredentials(user.getUsername(), user.getPassword(), tokens.access, tokens.refresh);
+            return new UserCredentials(user.GetUsername(), user.GetPassword(), tokens.access, tokens.refresh);
         }
         
         public async Task<UserCredentials> AsyncRegisterUser(string username, string password) {

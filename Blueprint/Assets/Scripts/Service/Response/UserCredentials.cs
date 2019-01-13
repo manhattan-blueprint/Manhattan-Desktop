@@ -13,8 +13,7 @@ namespace Service.Response {
         private string access;
         private string refresh;
 
-        public UserCredentials(string username, string password)
-        {
+        public UserCredentials(string username, string password) {
             this.username = username;
             this.password = password;
         }
@@ -27,23 +26,19 @@ namespace Service.Response {
         }
         
         // Getters
-        public string getUsername()
-        {
+        public string GetUsername() {
             return username;
         }
         
-        public string getPassword()
-        {
+        public string GetPassword() {
             return password;
         }
         
-        public string getAccessToken()
-        {
+        public string GetAccessToken() {
             return access;
         }
         
-        public string getRefreshToken()
-        {
+        public string GetRefreshToken() {
             return refresh;
         }
         

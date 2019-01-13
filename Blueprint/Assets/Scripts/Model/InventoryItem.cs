@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Object = UnityEngine.Object;
-
 namespace Model {
     public class InventoryItem {
         private int id;
-        private int quantity;
         private string type;
+        public int quantity;
 
         public InventoryItem(int id, string type, int quantity) {
             this.id = id;
@@ -17,20 +11,11 @@ namespace Model {
         }
 
         public int GetId() {
-            return this.id;
+            return id;
         }
 
         public string GetItemType() {
-            return this.type;
+            return type;
         }
-
-        public int GetQuantity() {
-            return quantity;
-        }
-        
-        public void SetQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-
     }
 }

@@ -32,15 +32,14 @@ namespace Controller {
                     
                     // Get ID and quantity of item to be dropped
                     itemId = inventory.GetItems()[id].GetId();
-                    int quantity = inventory.GetItems()[id].GetQuantity();
-                    inventory.GetItems()[id].SetQuantity(quantity - 1);
+                    inventory.GetItems()[id].quantity -= 1;
                     
-                    if (inventory.GetItems()[id].GetQuantity() == 0) {
+                    if (inventory.GetItems()[id].quantity == 0) {
                         Destroy(child.gameObject);
                         empty = true;
                     } else {
                         GameObject.Find("InventoryItemSlot " + id + "(Clone)").GetComponentInChildren<Text>().text = 
-                        inventory.GetItems()[id].GetItemType() + " (" + inventory.GetItems()[id].GetQuantity() + ")";
+                        inventory.GetItems()[id].GetItemType() + " (" + inventory.GetItems()[id].quantity + ")";
                         empty = false;
                     }
                 

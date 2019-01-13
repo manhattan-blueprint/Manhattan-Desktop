@@ -83,10 +83,10 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
         
         // Check returned user is correct and contains access tokens
-        Assert.That(returnUser.getUsername(), Is.EqualTo(validUser.getUsername()));
-        Assert.That(returnUser.getPassword(), Is.EqualTo(validUser.getPassword()));    
-        Assert.IsNotNull(returnUser.getAccessToken());
-        Assert.IsNotNull(returnUser.getRefreshToken());
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(validUser.GetUsername()));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
     }
     
     // Attempts to authenticate user with invalid password
@@ -165,10 +165,10 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
         
         // Check returned user is correct and contains access tokens
-        Assert.That(returnUser.getUsername(), Is.EqualTo(username));
-        Assert.That(returnUser.getPassword(), Is.EqualTo("Failure123"));    
-        Assert.IsNotNull(returnUser.getAccessToken());
-        Assert.IsNotNull(returnUser.getRefreshToken());
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(username));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo("Failure123"));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
     }
     
     // Attempts to register user with invalid password
@@ -211,7 +211,7 @@ public class RestHandlerTests {
         // Refresh tokens
         Task.Run(async () => {
             try {
-                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user.getRefreshToken());
+                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user.GetRefreshToken());
 
                 Assert.IsNotNull(response.refresh);
                 Assert.IsNotNull(response.access);
@@ -244,13 +244,13 @@ public class RestHandlerTests {
             entries.Add(new InventoryEntry(1, 1));
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-            string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+            string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
         }).GetAwaiter().GetResult();
 
         // Retrieve inventory of new user
         Task.Run(async () => {
             
-            finalInventory = await blueprintApi.AsyncGetInventory(user.getAccessToken());
+            finalInventory = await blueprintApi.AsyncGetInventory(user.GetAccessToken());
         }).GetAwaiter().GetResult();
         
         Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
@@ -276,7 +276,7 @@ public class RestHandlerTests {
                 entries.Add(new InventoryEntry(1, 1));
                 ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-                string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+                string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
             }
             catch (WebException e) {
                 // Exception throw, failure case
@@ -304,13 +304,13 @@ public class RestHandlerTests {
             entries.Add(new InventoryEntry(1, 1));
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-            string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+            string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
         }).GetAwaiter().GetResult();
         
         // Delete inventory and assert on response
         Task.Run(async () => {
             try {
-                string response = await blueprintApi.AsyncDeleteInventory(user.getAccessToken());
+                string response = await blueprintApi.AsyncDeleteInventory(user.GetAccessToken());
                 
                 // Success case
             }

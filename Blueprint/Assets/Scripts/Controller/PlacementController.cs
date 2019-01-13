@@ -4,24 +4,19 @@ using UnityEngine;
 
 namespace Controller {
     public class PlacementController : MonoBehaviour {
-
-        public GameObject item;
-        public GameObject tempParent;
-        public Transform guide;
+        [SerializeField] private GameObject item;
+        [SerializeField] private GameObject tempParent;
+        [SerializeField] private Transform guide;
         private bool moved;
 
-
-        void Start() {
+        private void Start() {
             item.GetComponent<Rigidbody>().useGravity = true;
         }
 
-        // Notify object that is has been dropped from inventory
-        
-        // Notify holding object that this object has been dropped
-        
-        // Notify holding object that object has been placed
-        
-        void OnMouseDown() {
+        // TODO: Notify object that is has been dropped from inventory
+        // TODO: Notify holding object that this object has been dropped
+        // TODO: Notify holding object that object has been placed
+        private void OnMouseDown() {
             float dist = Vector3.Distance(item.transform.position, guide.transform.position);
             if (dist < 2) {
                 moved = true;
@@ -32,7 +27,7 @@ namespace Controller {
             }
         }
 
-        void OnMouseUp() {
+        private void OnMouseUp() {
             if (moved) {
                 item.GetComponent<Rigidbody>().useGravity = true;
                 item.GetComponent<Rigidbody>().isKinematic = false;
