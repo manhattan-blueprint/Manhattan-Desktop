@@ -211,7 +211,7 @@ public class RestHandlerTests {
         // Refresh tokens
         Task.Run(async () => {
             try {
-                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user.GetRefreshToken());
+                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user);
 
                 Assert.IsNotNull(response.refresh);
                 Assert.IsNotNull(response.access);
@@ -244,13 +244,12 @@ public class RestHandlerTests {
             entries.Add(new InventoryEntry(1, 1));
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-            string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
+            string response = await blueprintApi.AsyncAddToInventory(user, inventory);
         }).GetAwaiter().GetResult();
 
         // Retrieve inventory of new user
         Task.Run(async () => {
-            
-            finalInventory = await blueprintApi.AsyncGetInventory(user.GetAccessToken());
+            finalInventory = await blueprintApi.AsyncGetInventory(user);
         }).GetAwaiter().GetResult();
         
         Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
@@ -275,8 +274,7 @@ public class RestHandlerTests {
                 List<InventoryEntry> entries = new List<InventoryEntry>();
                 entries.Add(new InventoryEntry(1, 1));
                 ResponseGetInventory inventory = new ResponseGetInventory(entries);
-
-                string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
+                string response = await blueprintApi.AsyncAddToInventory(user, inventory);
             }
             catch (WebException e) {
                 // Exception throw, failure case
@@ -303,14 +301,14 @@ public class RestHandlerTests {
             List<InventoryEntry> entries = new List<InventoryEntry>();
             entries.Add(new InventoryEntry(1, 1));
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
-
-            string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
+            string response = await blueprintApi.AsyncAddToInventory(user, inventory);
         }).GetAwaiter().GetResult();
         
         // Delete inventory and assert on response
         Task.Run(async () => {
             try {
                 string response = await blueprintApi.AsyncDeleteInventory(user.GetAccessToken());
+                string response = await blueprintApi.AsyncDeleteInventory(user);
                 
                 // Success case
             }

@@ -82,9 +82,9 @@ public class BlueprintAPI {
         return new UserCredentials(username, password, tokens.access, tokens.refresh);
     }
 
-    public async Task<ResponseAuthenticate> AsyncRefreshTokens(string refreshToken) {
+    public async Task<ResponseAuthenticate> AsyncRefreshTokens(UserCredentials user) {
         // Prepare JSON payload & local variables
-        string json = JsonUtility.ToJson(new RefreshPayload(refreshToken));
+        string json = JsonUtility.ToJson(new RefreshPayload(user.getRefreshToken()));
         
         // Fetch
         string response = await rs.PerformAsyncPost(refreshEndpoint, json);
@@ -95,9 +95,9 @@ public class BlueprintAPI {
         return tokens;
     }
     
-    public async Task<ResponseGetInventory> AsyncGetInventory(string accessToken) {
+    public async Task<ResponseGetInventory> AsyncGetInventory(UserCredentials user) {
         // Fetch
-        string response = await rs.PerformAsyncGet(inventoryEndpoint, accessToken);
+        string response = await rs.PerformAsyncGet(inventoryEndpoint, user.getAccessToken());
 
         // Serialize JSON
         ResponseGetInventory inventory = JsonUtility.FromJson<ResponseGetInventory>(response);
@@ -105,19 +105,19 @@ public class BlueprintAPI {
         return inventory;
     }
     
-    public async Task<string> AsyncAddToInventory(string accessToken, ResponseGetInventory items) {
+    public async Task<string> AsyncAddToInventory(UserCredentials user, ResponseGetInventory items) {
         // Prepare JSON payload
         string json = JsonUtility.ToJson(items);
         
         // Send payload
-        string response = await rs.PerformAsyncPost(inventoryEndpoint, json, accessToken);
+        string response = await rs.PerformAsyncPost(inventoryEndpoint, json, user.getAccessToken());
 
         return json;
     }
     
-    public async Task<string> AsyncDeleteInventory(string accessToken) {
+    public async Task<string> AsyncDeleteInventory(UserCredentials user) {
         // Perform request
-        string response = await rs.PerformAsyncDelete(inventoryEndpoint, accessToken);
+        string response = await rs.PerformAsyncDelete(inventoryEndpoint, user.getAccessToken());
 
         return response;
     }
