@@ -102,7 +102,7 @@ public class BlueprintAPI {
         try {
             response = await rs.PerformAsyncGet(inventoryEndpoint, user.getAccessToken());
         }
-        catch (WebException e) when (RetrieveHTTPCode(e) == (int)httpResponseCode.unauthorised) {
+        catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
             // if access token doesn't match a user, refresh tokens and retry
             ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
 
@@ -142,7 +142,7 @@ public class BlueprintAPI {
         try {
             response = await rs.PerformAsyncDelete(inventoryEndpoint, user.getAccessToken());
         }
-        catch (WebException e) when (RetrieveHTTPCode(e) == (int)httpResponseCode.unauthorised) {
+        catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
             // if access token doesn't match a user, refresh tokens and retry
             ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
             
