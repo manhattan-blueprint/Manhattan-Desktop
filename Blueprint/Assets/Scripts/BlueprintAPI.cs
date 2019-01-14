@@ -96,8 +96,18 @@ public class BlueprintAPI {
     }
     
     public async Task<ResponseGetInventory> AsyncGetInventory(UserCredentials user) {
+        string response = null;
+        
         // Fetch
-        string response = await rs.PerformAsyncGet(inventoryEndpoint, user.getAccessToken());
+        try {
+            response = await rs.PerformAsyncGet(inventoryEndpoint, user.getAccessToken());
+        }
+        catch (WebException e) when (RetrieveHTTPCode(e) == (int)httpResponseCode.unauthorised) {
+            // if access token doesn't match a user, refresh tokens and retry
+            ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
+
+            response = await rs.PerformAsyncGet(inventoryEndpoint, refreshedTokens.access);
+        }
 
         // Serialize JSON
         ResponseGetInventory inventory = JsonUtility.FromJson<ResponseGetInventory>(response);
@@ -106,18 +116,38 @@ public class BlueprintAPI {
     }
     
     public async Task<string> AsyncAddToInventory(UserCredentials user, ResponseGetInventory items) {
+        string response = null;
+        
         // Prepare JSON payload
         string json = JsonUtility.ToJson(items);
         
         // Send payload
-        string response = await rs.PerformAsyncPost(inventoryEndpoint, json, user.getAccessToken());
+        try {
+            response = await rs.PerformAsyncPost(inventoryEndpoint, json, user.getAccessToken());
+        }
+        catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
+            // if access token doesn't match a user, refresh tokens and retry
+            ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
+            
+            response = await rs.PerformAsyncPost(inventoryEndpoint, json, refreshedTokens.access);
+        }
 
         return json;
     }
     
     public async Task<string> AsyncDeleteInventory(UserCredentials user) {
+        string response = null;
+        
         // Perform request
-        string response = await rs.PerformAsyncDelete(inventoryEndpoint, user.getAccessToken());
+        try {
+            response = await rs.PerformAsyncDelete(inventoryEndpoint, user.getAccessToken());
+        }
+        catch (WebException e) when (RetrieveHTTPCode(e) == (int)httpResponseCode.unauthorised) {
+            // if access token doesn't match a user, refresh tokens and retry
+            ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
+            
+            response = await rs.PerformAsyncDelete(inventoryEndpoint, refreshedTokens.access);
+        }
 
         return response;
     }
