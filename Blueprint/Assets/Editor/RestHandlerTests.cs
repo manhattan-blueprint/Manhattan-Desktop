@@ -55,7 +55,7 @@ public class RestHandlerTests {
     // Is an example of HTTP error handling
     [Test]
     public void TestValidAuthenticateUser() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = validUser;
         UserCredentials returnUser = null;
         
@@ -93,7 +93,7 @@ public class RestHandlerTests {
     // Will catch InvalidCredentialException thrown by AsyncAuthenticateUser
     [Test]
     public void TestInvalidAuthenticateUser() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = new UserCredentials("adam", "test123");
         UserCredentials returnUser = null;
         
@@ -119,7 +119,7 @@ public class RestHandlerTests {
     // Will catch InvalidCredentialException thrown by AsyncRegisterUser
     [Test]
     public void TestRegisterUserLowercaseOnlyPassword() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
 
         Task.Run(async () => {
@@ -145,7 +145,7 @@ public class RestHandlerTests {
     // Asserts return values are correct
     [Test]
     public void TestRegisterUserValidPassword() {       
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
         UserCredentials returnUser = null;
         string username = "adam" + random.Next(10000);
@@ -175,7 +175,7 @@ public class RestHandlerTests {
     // Will catch InvalidCredentialException thrown by AsyncRegisterUser
     [Test]
     public void TestRegisterUserNoLowercasePassword() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
         string username = "adam" + random.Next(10000);
         
@@ -200,7 +200,7 @@ public class RestHandlerTests {
 
     [Test]
     public void TestRefreshTokens() {
-        var blueprintApi = new BlueprintAPI(baseUrl);      
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);      
         UserCredentials user = null;
         
         // Authenticate user to gain tokens
@@ -228,7 +228,7 @@ public class RestHandlerTests {
     // Asserts contains are as expected
     [Test]
     public void TestGetInventory() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;
         
@@ -261,7 +261,7 @@ public class RestHandlerTests {
     // Fails in the case of an exception
     [Test]
     public void TestAddInventoryItem() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
 
         // Authenticate user to gain access token
@@ -289,7 +289,7 @@ public class RestHandlerTests {
     // Fails in the case of an exception
     [Test]
     public void TestDeleteInventory() {
-        var blueprintApi = new BlueprintAPI(baseUrl);
+        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;
         
@@ -319,6 +319,19 @@ public class RestHandlerTests {
                 Assert.Fail();
             }    
         }).GetAwaiter().GetResult();
+    }
+
+    [Test]
+    public void TestBlueprintApiDefaultCredentialsConstructor() {
+        var blueprintApi = BlueprintAPI.DefaultCredentials();
+        UserCredentials user = null;
+        
+        // Authenticate user
+        Task.Run(async () => {             
+            user = await blueprintApi.AsyncAuthenticateUser(validUser);
+        }).GetAwaiter().GetResult();
+        
+        Assert.That(user.getUsername(), Is.EqualTo(validUser.getUsername()));
     }
 
     // Blocked by user removal functionality
