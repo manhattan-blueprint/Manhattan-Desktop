@@ -46,10 +46,10 @@ public class MainMenu : MonoBehaviour {
         // Validate user input
         if (string.IsNullOrWhiteSpace(usernameLoginText) ||
             usernameLoginText.Length > maxUsernameLength) {
-            setError("Invalid username, it must have between 1 and 16 charactes.");
+            setError("Invalid username, it must have between 1 and 16 characters.");
             return;
         } else if (string.IsNullOrWhiteSpace(passwordLoginText))  {
-            setError("Please enter a non empty password.");
+            setError("Please enter a non-empty password.");
             return;
         }
 
@@ -77,10 +77,10 @@ public class MainMenu : MonoBehaviour {
         // Validate user input
         if (string.IsNullOrWhiteSpace(usernameSignupText) ||
             usernameSignupText.Length > maxUsernameLength) {
-            setError("Invalid username, it must have between 1 and 16 charactes.");
+            setError("Invalid username, it must have between 1 and 16 characters.");
             return;
         } else if (string.IsNullOrWhiteSpace(passwordSignupText)) {
-            setError("Please enter a non empty password.");
+            setError("Please enter a non-empty password.");
             return;
         }
 
