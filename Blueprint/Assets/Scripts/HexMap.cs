@@ -8,7 +8,7 @@ public class HexMap
     // This class holds the map that is used across the whole world.
 
     // Objects used in map
-    private Dictionary<GenerateHex.Resource, GameObject> objects;
+    private Dictionary<MapResource, GameObject> objects;
 
     // Needs to be static as used in array creation.
     private static int mapSize = 50;
@@ -31,15 +31,13 @@ public class HexMap
     private GameObject[,] hexGrid;
 
     // Grid containing objects placed on hexagon map.
-    private GameObject[,] objectGrid;
+    private MapObject[,] objectGrid;
 
-    public void Create(Dictionary<GenerateHex.Resource, GameObject> resourceToObjectMap)
+    public void Create(Dictionary<MapResource, GameObject> resourceToObjectMap)
     {
         objects = resourceToObjectMap;
 
         hexGrid = new GameObject[mapSize, mapSize];
-
-        objectGrid = new GameObject[mapSize, mapSize];
 
         mapGrid = CreateGrid();
 
@@ -56,13 +54,13 @@ public class HexMap
                 if (i > bumpyWidth && i < mapSize - bumpyWidth && j > bumpyWidth && j < mapSize - bumpyWidth)
                 {
                     mapGrid[i, j].y = UnityEngine.Random.Range(-1.1f, -1.0f);
-                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects[GenerateHex.Resource.Grass], mapGrid[i, j], rotation);
+                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects[MapResource.Grass], mapGrid[i, j], rotation);
                 }
                 else
                 {
                     // Bumpy outer grass on the edges of the map.
                     mapGrid[i, j].y = UnityEngine.Random.Range(-5.0f, .0f);
-                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects[GenerateHex.Resource.Rock], mapGrid[i, j], rotation);
+                    hexGrid[i, j] = MonoBehaviour.Instantiate(objects[MapResource.Rock], mapGrid[i, j], rotation);
                 }
             }
         }
@@ -70,51 +68,56 @@ public class HexMap
         // Place some random machinery just to make it feel more dynamic; can
         // remove this bit if deemed unnecessary.
         int numOfMachines = 20;
-        Debug.Log(bumpyWidth);
-        Debug.Log(mapSize-bumpyWidth);
         for (int i = 0; i < numOfMachines; i++)
         {
             PlaceOnGrid(UnityEngine.Random.Range(10, 40),
               UnityEngine.Random.Range(10, 40),
-              Quaternion.Euler(0, 0, 0), GenerateHex.Resource.Machinery);
+              Quaternion.Euler(0, 0, 0), MapResource.Machinery);
         }
         // End MVP only area
         ////////////////////////////////////////////////////////////////////////
-
-        Debug.Log(objectGrid[0,0]);
     }
 
-    // Places an object on the grid according to placement system of ints and map
-    public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
+    // Places an object on the grid according to placement system of ints and
+    // map
+    public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, MapResource objectCode)
     {
         Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
-        objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
-    }
-
-    // Removes an object from the grid according to placement system of ints and map
-    public void RemoveFromGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
-    {
-        GameObject.Destroy(objectGrid[xCo,yCo]);
+        objectGrid[xCo, yCo] = new MapObject(objectCode, objPos, rot);
     }
 
     // Places an object on the grid using floats
-    public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, GenerateHex.Resource objectCode)
+    public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode)
     {
         int xCo = XToCo(fxCo, fyCo);
         int yCo = YToCo(fxCo, fyCo);
         Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
-        objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
+        objectGrid[xCo, yCo] = new MapObject(objectCode, objPos, rot);
+    }
+
+    // Removes an object from the grid according to placement system of ints and
+    // map
+    public void RemoveFromGrid(int xCo, int yCo)
+    {
+        objectGrid[xCo, yCo].Remove();
     }
 
     // Removes an object on the grid using floats
-    public void RemoveFromGrid(int xCo, int yCo, Quaternion rot, GenerateHex.Resource objectCode)
+    public void RemoveFromGrid(float fxCo, float fyCo)
     {
         int xCo = XToCo(fxCo, fyCo);
         int yCo = YToCo(fxCo, fyCo);
-        GameObject.Destroy(objectGrid[xCo,yCo]);
+            objectGrid[xCo, yCo].Remove();
     }
 
-    public void RetrieveGrid()
+    // Returns true if an object already exists on the map at coordinate input
+    // location
+    public bool objectPresent(int xCo, int yCo)
+    {
+        return objectGrid[xCo, yCo].instantiated;
+    }
+
+    public MapObject[,] RetrieveGrid()
     {
         return objectGrid;
     }

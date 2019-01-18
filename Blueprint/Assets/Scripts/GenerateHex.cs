@@ -5,31 +5,29 @@ using System;
 
 
 public class GenerateHex : MonoBehaviour {
+    // This class instantiates the HexMap class
 
-  public HexMap hexmap;
+    public HexMap hexmap;
 
-  public enum Resource { Grass, Machinery, Rock };
+    public static Dictionary<MapResource, GameObject> resourceDict  = new Dictionary<MapResource, GameObject>();
 
-  private Dictionary<Resource, GameObject> resourceMap;
+    void Start ()
+    {
+        resourceDict[MapResource.Grass] = Resources.Load("Hex_Tile") as GameObject;
+        resourceDict[MapResource.Machinery] = Resources.Load("Machinery") as GameObject;
+        resourceDict[MapResource.Rock] = Resources.Load("Rock") as GameObject;
 
-  void Start ()
-  {
-      hexmap = new HexMap();
+        hexmap = new HexMap();
 
-      resourceMap = new Dictionary<Resource, GameObject>();
+        hexmap.Create(resourceDict);
+    }
 
-      resourceMap[Resource.Grass] = Resources.Load("Hex_Tile") as GameObject;
-      resourceMap[Resource.Machinery] = Resources.Load("Machinery") as GameObject;
-      resourceMap[Resource.Rock] = Resources.Load("Rock") as GameObject;
-      hexmap.Create(resourceMap);
-  }
-
-  // Update is called once per frame
-  void Update ()
-  {
-      if (Input.GetKeyDown("'"))
-      {
-          hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), Resource.Machinery);
-      }
-  }
+    // Update is called once per frame
+    void Update ()
+    {
+        if (Input.GetKeyDown("'"))
+        {
+            hexmap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), MapResource.Machinery);
+        }
+    }
 }
