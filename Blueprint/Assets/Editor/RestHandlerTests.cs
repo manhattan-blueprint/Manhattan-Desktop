@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 using NUnit.Framework;
 using Random = System.Random;
+using Service;
+using Service.Response;
 
 public class RestHandlerTests {
     private string baseUrl = "http://smithwjv.ddns.net";
-    private UserCredentials validUser = new UserCredentials("adam1", "Test123");
+    // This user should already exist on the server
+    private UserCredentials validUser = new UserCredentials("test", "Test123");
     
     // GETs data from jsonplaceholder, asserts it is correct
     [Test]
@@ -80,10 +83,10 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
         
         // Check returned user is correct and contains access tokens
-        Assert.That(returnUser.getUsername(), Is.EqualTo("adam1"));
-        Assert.That(returnUser.getPassword(), Is.EqualTo("Test123"));    
-        Assert.IsNotNull(returnUser.getAccessToken());
-        Assert.IsNotNull(returnUser.getRefreshToken());
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(validUser.GetUsername()));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
     }
     
     // Attempts to authenticate user with invalid password
@@ -162,10 +165,10 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
         
         // Check returned user is correct and contains access tokens
-        Assert.That(returnUser.getUsername(), Is.EqualTo(username));
-        Assert.That(returnUser.getPassword(), Is.EqualTo("Failure123"));    
-        Assert.IsNotNull(returnUser.getAccessToken());
-        Assert.IsNotNull(returnUser.getRefreshToken());
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(username));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo("Failure123"));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
     }
     
     // Attempts to register user with invalid password
@@ -208,7 +211,7 @@ public class RestHandlerTests {
         // Refresh tokens
         Task.Run(async () => {
             try {
-                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user.getRefreshToken());
+                ResponseAuthenticate response = await blueprintApi.AsyncRefreshTokens(user.GetRefreshToken());
 
                 Assert.IsNotNull(response.refresh);
                 Assert.IsNotNull(response.access);
@@ -234,19 +237,20 @@ public class RestHandlerTests {
             user = await blueprintApi.AsyncAuthenticateUser(validUser);
         }).GetAwaiter().GetResult();
 
+
         // Add item to test user inventory
         Task.Run(async () => {
             List<InventoryEntry> entries = new List<InventoryEntry>();
             entries.Add(new InventoryEntry(1, 1));
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-            string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+            string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
         }).GetAwaiter().GetResult();
 
         // Retrieve inventory of new user
         Task.Run(async () => {
             
-            finalInventory = await blueprintApi.AsyncGetInventory(user.getAccessToken());
+            finalInventory = await blueprintApi.AsyncGetInventory(user.GetAccessToken());
         }).GetAwaiter().GetResult();
         
         Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
@@ -272,7 +276,7 @@ public class RestHandlerTests {
                 entries.Add(new InventoryEntry(1, 1));
                 ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-                string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+                string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
             }
             catch (WebException e) {
                 // Exception throw, failure case
@@ -300,13 +304,13 @@ public class RestHandlerTests {
             entries.Add(new InventoryEntry(1, 1));
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
-            string response = await blueprintApi.AsyncAddToInventory(user.getAccessToken(), inventory);
+            string response = await blueprintApi.AsyncAddToInventory(user.GetAccessToken(), inventory);
         }).GetAwaiter().GetResult();
         
         // Delete inventory and assert on response
         Task.Run(async () => {
             try {
-                string response = await blueprintApi.AsyncDeleteInventory(user.getAccessToken());
+                string response = await blueprintApi.AsyncDeleteInventory(user.GetAccessToken());
                 
                 // Success case
             }
