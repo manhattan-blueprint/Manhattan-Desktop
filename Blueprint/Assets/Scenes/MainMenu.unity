@@ -1320,17 +1320,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c816dec35084e08baa54d725149342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usernameLoginInput: {fileID: 0}
-  passwordLoginInput: {fileID: 0}
-  usernameSignupInput: {fileID: 0}
-  passwordSignupInput: {fileID: 0}
-  loginButton: {fileID: 0}
-  signupButton: {fileID: 0}
-  usernameLoginText: 
-  passwordLoginText: 
-  usernameSignupText: 
-  passwordSignupText: 
-  maxUsernameLength: 0
+  usernameLoginInput: {fileID: 2067206536}
+  passwordLoginInput: {fileID: 1729541628}
+  usernameSignupInput: {fileID: 1839443631}
+  passwordSignupInput: {fileID: 1356241362}
+  loginButton: {fileID: 755326906}
+  signupButton: {fileID: 1320491340}
+  errorMsg: {fileID: 0}
 --- !u!1 &1320491337
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,11 +2930,7 @@ MonoBehaviour:
   passwordSignupInput: {fileID: 1356241362}
   loginButton: {fileID: 755326906}
   signupButton: {fileID: 1320491340}
-  usernameLoginText: 
-  passwordLoginText: 
-  usernameSignupText: 
-  passwordSignupText: 
-  maxUsernameLength: 0
+  errorMsg: {fileID: 0}
 --- !u!1 &2101636555
 GameObject:
   m_ObjectHideFlags: 0

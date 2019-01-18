@@ -8,47 +8,59 @@ using UnityEditor;
 using System.Threading.Tasks;
 
 public class MainMenu : MonoBehaviour {
-    public InputField usernameLoginInput;
-    public InputField passwordLoginInput;
-    public InputField usernameSignupInput;
-    public InputField passwordSignupInput;
-    public Button loginButton;
-    public Button signupButton;
-    public string usernameLoginText;
-    public string passwordLoginText;
-    public string usernameSignupText;
-    public string passwordSignupText;
-    public int maxUsernameLength;
-    public BlueprintAPI api;
-    Text errorMsg;
+    [SerializeField] private InputField usernameLoginInput;
+    [SerializeField] private InputField passwordLoginInput;
+    [SerializeField] private InputField usernameSignupInput;
+    [SerializeField] private InputField passwordSignupInput;
+    [SerializeField] private Button loginButton;
+    [SerializeField] private Button signupButton;
+    [SerializeField] private Text   infoMessage;
+    private int maxUsernameLength;
+    private BlueprintAPI api;
 
     void Start() {
         maxUsernameLength = 16;
         api = new BlueprintAPI("http://smithwjv.ddns.net");
 
-        GameObject errorObject = GameObject.Find("ErrorMsg");
-        errorMsg = errorObject.GetComponent<Text>();
-        errorMsg.text = "";
+        GameObject errorObject = GameObject.Find("InfoMessage");
+        infoMessage = errorObject.GetComponent<Text>();
+        infoMessage.color = Color.blue;
+        infoMessage.text = "";
+        usernameLoginInput.Select();
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            onLoginClick();
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            if        (usernameLoginInput.isFocused) {
+                passwordLoginInput.Select();
+            } else if (passwordLoginInput.isFocused) {
+                loginButton.Select();
+            } else if (usernameSignupInput.isFocused) {
+                passwordSignupInput.Select();
+            } else if (passwordSignupInput.isFocused) {
+                signupButton.Select();
+            } else {
+                if (usernameLoginInput.IsActive()) {
+                    usernameLoginInput.Select();
+                } else if (usernameSignupInput.IsActive()) {
+                    usernameSignupInput.Select();
+                }
+            }
         }
     }
 
     public void onLoginClick() {
-        setError("");
-        usernameLoginText = usernameLoginInput.text;
-        passwordLoginText = passwordLoginInput.text;
+        setInfoMessage("");
+        string usernameLoginText = usernameLoginInput.text;
+        string passwordLoginText = passwordLoginInput.text;
 
         // Validate user input
         if (string.IsNullOrWhiteSpace(usernameLoginText) ||
             usernameLoginText.Length > maxUsernameLength) {
-            setError("Invalid username, it must have between 1 and 16 characters.");
+            setErrorMessage("Invalid username, it must have between 1 and 16 characters.");
             return;
         } else if (string.IsNullOrWhiteSpace(passwordLoginText))  {
-            setError("Please enter a non-empty password.");
+            setErrorMessage("Please enter a non-empty password.");
             return;
         }
 
@@ -57,29 +69,32 @@ public class MainMenu : MonoBehaviour {
 
         Task.Run( async () => {
             Task<UserCredentials> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
                 returnUser = await fetchingResponse;
+                setInfoMessage("Login Successful!");
                 // Launch Blueprint
                 SceneManager.LoadScene("World");
             } catch (Exception e) {
-                setError(e.Message);
+                setErrorMessage(e.Message);
             }
         }).GetAwaiter().GetResult();
     }
 
     public void onRegisterClick() {
-        setError("");
-        usernameSignupText = usernameSignupInput.text;
-        passwordSignupText = passwordSignupInput.text;
+        setInfoMessage("");
+        string usernameSignupText = usernameSignupInput.text;
+        string passwordSignupText = passwordSignupInput.text;
 
         // Validate user input
         if (string.IsNullOrWhiteSpace(usernameSignupText) ||
             usernameSignupText.Length > maxUsernameLength) {
-            setError("Invalid username, it must have between 1 and 16 characters.");
+            setErrorMessage("Invalid username, it must have between 1 and 16 characters.");
             return;
         } else if (string.IsNullOrWhiteSpace(passwordSignupText)) {
-            setError("Please enter a non-empty password.");
+            setErrorMessage("Please enter a non-empty password.");
             return;
         }
 
@@ -87,24 +102,36 @@ public class MainMenu : MonoBehaviour {
 
         Task.Run(async () => {
             Task<UserCredentials> fetchingResponse = api.AsyncRegisterUser(usernameSignupText, passwordSignupText);
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
                 returnUser = await fetchingResponse;
+                setInfoMessage("Registration Successful!");
             }
             catch (Exception e) {
-                setError(e.Message);
+                setErrorMessage(e.Message);
             }
         }).GetAwaiter().GetResult();
     }
 
     public void onSignupClick() {
-        setError("");
+        setInfoMessage("");
+        usernameSignupInput.Select();
     }
 
     public void onBackClick() {
-        setError("");
+        setInfoMessage("");
+        usernameLoginInput.Select();
     }
-    private void setError(string error) {
-        errorMsg.text = error;
+
+    private void setErrorMessage(string msg) {
+        this.infoMessage.color = Color.red;
+        this.infoMessage.text = msg;
+    }
+
+    private void setInfoMessage(string msg) {
+        this.infoMessage.color = Color.blue;
+        this.infoMessage.text = msg;
     }
 }
