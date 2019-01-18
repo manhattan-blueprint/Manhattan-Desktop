@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using UnityEditor;
 using System.Threading.Tasks;
 
-
 public class MainMenu : MonoBehaviour {
     public InputField usernameLoginInput;
     public InputField passwordLoginInput;
