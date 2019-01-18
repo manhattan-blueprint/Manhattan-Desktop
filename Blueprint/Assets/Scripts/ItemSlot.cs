@@ -22,6 +22,10 @@ public class ItemSlot : MonoBehaviour {
         cameraTransform = Camera.main.gameObject.transform;
     }
 
+    public void SetId(int id) {
+        this.id = id;
+    }
+
     // Loops through the child elements of the item slot to find the associated text/sprite and delete it from the menu 
     public void DropItem() {
         foreach (Transform child in transform) {

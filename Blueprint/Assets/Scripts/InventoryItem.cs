@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class InventoryItem {
+public class InventoryItem : ScriptableObject {
 
     private int id;
     private int quantity;

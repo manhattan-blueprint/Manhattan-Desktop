@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
 
-    // Seperate data from UI
     [SerializeField] InventoryItem[] items;
-    [SerializeField] Transform itemsParent;
     [SerializeField] List<ItemSlot> itemSlots;
-    [SerializeField] int Size = 9;
+    private int Size;
     [SerializeField] GameObject itemButton;
     private GameObject dropButton;
 
     public void Start() {
+        Size = 16;
         items = new InventoryItem[Size];
+        itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<ItemSlot>().ToList(); 
     }
 
     public InventoryItem[] GetItems() {
@@ -25,41 +26,44 @@ public class Inventory : MonoBehaviour {
 
     public void AddItem(InventoryItem item) {
         if (IsSpace()) {
-            InventoryItem slotItem = this.items[this.GetNextFreeSlot(item)];
+            InventoryItem slotItem = items[GetNextFreeSlot(item)];
             if (slotItem != null) {
-                this.items[this.GetNextFreeSlot(item)].SetQuantity(slotItem.GetQuantity()+1);
+                items[GetNextFreeSlot(item)].SetQuantity(slotItem.GetQuantity()+1);
             } else {
                 item.SetQuantity(1);
-                this.items[this.GetNextFreeSlot(item)] = item;
+                items[GetNextFreeSlot(item)] = item;
             }
         } else {
             Debug.Log("No space in inventory");
         }
     }
+
+    public void AddSlot(ItemSlot slot) {
+        itemSlots.Add(slot);
+    }
     
     public int CollectItem(Interactable focus, GameObject pickup) {
         
-        InventoryItem newItem = new InventoryItem(focus.GetId(), focus.GetItemType(), 1);
+        InventoryItem newItem = ScriptableObject.CreateInstance<InventoryItem>();
 
         int nextSlot = GetNextFreeSlot(newItem);
-
         // Add to inventory object
         AddItem(newItem);
 
         // Set to make access unique
         itemButton.name = GetNameForSlot(nextSlot);
-        itemButton.GetComponent<Text>().text = newItem.GetItemType();
         
         // Make game world object invisible and collider inactive
         Destroy(pickup);
-        
         // Create a slot with text in inventory window, or update quantity bracket
         if (GetUISlots()[nextSlot].transform.childCount < 2) {
             Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
+            GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponent<Text>().text =
+                focus.GetItemType();
         }
         else {
             GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
-                newItem.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
+                focus.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
         }
 
         // Change load order or UI elements for accessible hit-box
@@ -80,8 +84,8 @@ public class Inventory : MonoBehaviour {
     }
 
     public int GetNextFreeSlot(InventoryItem item) {
-        int firstNull = this.Size+1;
-        for (int i=0; i < this.Size; i++) {
+        int firstNull = Size+1;
+        for (int i=0; i < Size; i++) {
             if (items[i] == null) {
                 if (i < firstNull) {
                     firstNull = i;
@@ -94,11 +98,11 @@ public class Inventory : MonoBehaviour {
     }
 
     public List<ItemSlot> GetUISlots() {
-        return this.itemSlots;
+        return itemSlots;
     }
 
     private bool IsSpace(){
-        return items.Length <= 9;
+        return items.Count(s => s != null) <= Size;
     }
 
     public bool Equals(Object obj) {
