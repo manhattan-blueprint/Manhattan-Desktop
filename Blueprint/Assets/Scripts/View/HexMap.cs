@@ -14,7 +14,10 @@ namespace View {
         // to each corner is one. This is equivalent to sqrt(3)/2.
         private const float hexH = 0.86602540378f;
 
-        //Height of the block of grass from the midpoint
+        // This is the height of the block of grass from the midpoint, which
+        // currently depends on the height of the prefab used for grass. Past
+        // the MVP this will likely be made taller but can probably remain
+        // hardcoded, depending on the direction we go with the terrain.
         private const float grassTopHeight = 1.5f;
 
         // Grid containing coordinates of hexagon map.
@@ -24,16 +27,16 @@ namespace View {
         private GameObject[,] hexGrid;
 
         // Grid containing objects placed on hexagon map.
-        private GameObject[,] objectGrid;
+        private MapObject[,] objectGrid;
 
         public HexMap(Dictionary<MapResource, GameObject> resourceToObjectMap) {
             objects = resourceToObjectMap;
             hexGrid = new GameObject[mapSize, mapSize];
-            objectGrid = new GameObject[mapSize, mapSize];
+            objectGrid = new MapObject[mapSize, mapSize];
             mapGrid = CreateGrid();
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
-            // Generate Construction Area 
+            // Generate Construction Area
             int bumpyWidth = 10;
             for (int i = 0; i < mapSize; i++) {
                 for (int j = 0; j < mapSize; j++) {
@@ -67,19 +70,6 @@ namespace View {
             }
             return newMapGrid;
         }
-        // Places an object on the grid according to placement system of ints and map
-        public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, MapResource objectCode) {
-            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
-            objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
-        }
-
-        // Places an object on the grid using floats
-        public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
-            int xCo = XToCo(fxCo, fyCo);
-            int yCo = YToCo(fxCo, fyCo);
-            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
-            objectGrid[xCo, yCo] = GameObject.Instantiate(objects[objectCode], objPos, rot);
-        }
 
         // Converts in game coordinates to nearest x grid coordinate.
         private int XToCo(float xPos, float yPos) {
@@ -89,6 +79,47 @@ namespace View {
         // Converts in game coordinates to nearest y grid coordinate.
         private int YToCo(float xPos, float yPos) {
             return (int)Math.Round(yPos / 1.5f);
+        }
+
+        // Places an object on the grid according to placement system of ints and map
+        public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, MapResource objectCode) {
+            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
+            objectGrid[xCo, yCo] = new MapObject(objectCode, objPos, rot);
+        }
+
+        // Places an object on the grid using floats
+        public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
+            int xCo = XToCo(fxCo, fyCo);
+            int yCo = YToCo(fxCo, fyCo);
+            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
+            objectGrid[xCo, yCo] = new MapObject(objectCode, objPos, rot);
+        }
+
+        // Removes an object from the grid according to placement system of ints
+        // and map
+        public void RemoveFromGrid(int xCo, int yCo) {
+            objectGrid[xCo, yCo].Remove();
+        }
+
+        // Removes an object on the grid using floats
+        public void RemoveFromGrid(float fxCo, float fyCo) {
+            int xCo = XToCo(fxCo, fyCo);
+            int yCo = YToCo(fxCo, fyCo);
+            objectGrid[xCo, yCo].Remove();
+        }
+
+        // Returns all of the objects and their associated attributes.
+        // TODO: Check that this should is not editable once passed to other
+        // classes
+        public MapObject[,] RetrieveGrid() {
+            return objectGrid;
+        }
+
+        // Returns true if an object already exists on the map at coordinate
+        // input location
+        public bool objectPresent(int xCo, int yCo)
+        {
+            return objectGrid[xCo, yCo].instantiated;
         }
     }
 
