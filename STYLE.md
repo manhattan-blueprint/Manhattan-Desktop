@@ -27,7 +27,7 @@ _Updated 18-01-2019_
 - Do not set values in the editor unless necessary - if this is needed keep them private and use:
 
   ```csharp
-  [SerializedField] private GameObject myObject;
+  [SerializeField] private GameObject myObject;
   ```
 
 - Bracing is always on the same line
