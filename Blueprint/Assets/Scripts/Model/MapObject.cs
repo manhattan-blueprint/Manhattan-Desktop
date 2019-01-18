@@ -5,36 +5,27 @@ using System;
 using Controller;
 using Model;
 
+/* Contans all useful data for the state store
+
+   If you want to retrieve all info on the GameObject then use:
+   MapObject mapObject = objectGrid[xCo, yCo].GetComponent(typeof(MapObject)) as MapObject;
+
+   For lightweight uses, for example seeing what type of object are adjacent
+   then you should be able to do:
+   MapResource mapResource = objectGrid[xCo, yCo].GetComponent(typeof(MapResource)) as MapResource;
+
+   for example */
 namespace Model {
-    public class MapObject {
-        // This class holds info on a specific object, such as string ID, whether
-        // it has any things inside etc
-
-        public bool instantiated;
-
+    public class MapObject : MonoBehaviour {
         public MapResource mapResource;
 
-        public GameObject gameObject;
-
-        public Quaternion rotation;
-
-        public Vector3 position;
-
-        // Whenever the holder is freshly created
-        public MapObject(MapResource inpResourceType, Vector3 inpPosition, Quaternion inpRotation) {
-            this.instantiated = true;
-            this.mapResource = inpResourceType;
-            this.position = inpPosition;
-            this.rotation = inpRotation;
-
-            this.gameObject = MonoBehaviour.Instantiate(HexMapController.resourceMap[inpResourceType],
-                                                        inpPosition,
-                                                        inpRotation);
+        // Whenever the holder is freshly created, as defined by MonoBehaviour
+        void Start() {
         }
 
-        // TODO: needs some way of deleting the instance of this class too
-        public void Remove() {
-            MonoBehaviour.Destroy(this.gameObject);
+        // Attach useful info, such as unique behaviours for this object. May be
+        // useful later, so good to have here
+        void attach() {
         }
     }
 }

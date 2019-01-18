@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -487,7 +487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: 0
 --- !u!114 &298745065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,7 +1244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 7
+  id: 0
 --- !u!114 &599758539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1376,7 +1376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 6
+  id: 0
 --- !u!114 &733734562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,7 +1618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 0
 --- !u!114 &870900733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1915,7 +1915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 8
+  id: 0
 --- !u!114 &916237491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2272,7 +2272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 4
+  id: 0
 --- !u!114 &987978242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
+  id: 0
 --- !u!114 &1698032079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3222,7 +3222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 5
+  id: 0
 --- !u!114 &1774811584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3406,28 +3406,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpFalloff:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.020832062
-      value: 1.3875122
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.70040894
-      value: 0.0017623901
-      inSlope: -0.35866794
-      outSlope: -0.35866794
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 0
+    m_RotationOrder: 4
 --- !u!143 &1912050191
 CharacterController:
   m_ObjectHideFlags: 0

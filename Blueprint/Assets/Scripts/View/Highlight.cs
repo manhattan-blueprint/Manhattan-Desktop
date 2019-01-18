@@ -8,7 +8,7 @@ namespace View {
 		[SerializeField] private bool holdable;
 		[SerializeField] public Color tempColor;
 		private Renderer rend;
-		
+
 		void Start () {
 			rend = GetComponent<Renderer>();
 		}

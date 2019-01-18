@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using Model;
+using Controller;
 
 namespace View {
     public class HexMap {
@@ -27,12 +28,12 @@ namespace View {
         private GameObject[,] hexGrid;
 
         // Grid containing objects placed on hexagon map.
-        private MapObject[,] objectGrid;
+        private GameObject[,] objectGrid;
 
         public HexMap(Dictionary<MapResource, GameObject> resourceToObjectMap) {
             objects = resourceToObjectMap;
             hexGrid = new GameObject[mapSize, mapSize];
-            objectGrid = new MapObject[mapSize, mapSize];
+            objectGrid = new GameObject[mapSize, mapSize];
             mapGrid = CreateGrid();
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
@@ -83,43 +84,46 @@ namespace View {
 
         // Places an object on the grid according to placement system of ints and map
         public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, MapResource objectCode) {
-            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
-            objectGrid[xCo, yCo] = new MapObject(objectCode, objPos, rot);
+            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0],
+                                         mapGrid[xCo, yCo][1] + grassTopHeight,
+                                         mapGrid[xCo, yCo][2]);
+
+            objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(HexMapController.resourceMap[objectCode],
+                                                             objPos,
+                                                             rot);
         }
 
         // Places an object on the grid using floats
         public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
-            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0], mapGrid[xCo, yCo][1] + grassTopHeight, mapGrid[xCo, yCo][2]);
-            objectGrid[xCo, yCo] = new MapObject(objectCode, objPos, rot);
+            PlaceOnGrid(xCo, yCo, rot, objectCode);
         }
 
         // Removes an object from the grid according to placement system of ints
         // and map
         public void RemoveFromGrid(int xCo, int yCo) {
-            objectGrid[xCo, yCo].Remove();
+            MonoBehaviour.Destroy(objectGrid[xCo, yCo]);
         }
 
         // Removes an object on the grid using floats
         public void RemoveFromGrid(float fxCo, float fyCo) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
-            objectGrid[xCo, yCo].Remove();
+            RemoveFromGrid(xCo, yCo);
         }
 
         // Returns all of the objects and their associated attributes.
-        // TODO: Check that this should is not editable once passed to other
-        // classes
-        public MapObject[,] RetrieveGrid() {
+        // TODO: Check that this is not editable once passed to other classes
+        public GameObject[,] RetrieveGrid() {
             return objectGrid;
         }
 
         // Returns true if an object already exists on the map at coordinate
         // input location
-        public bool objectPresent(int xCo, int yCo)
-        {
-            return objectGrid[xCo, yCo].instantiated;
+        public bool objectPresent(int xCo, int yCo) {
+            if (objectGrid[xCo, yCo] != null) { return true; }
+            return false;
         }
     }
 
