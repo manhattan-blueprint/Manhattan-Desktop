@@ -1125,7 +1125,7 @@ GameObject:
   - component: {fileID: 853815247}
   - component: {fileID: 853815246}
   m_Layer: 5
-  m_Name: ErrorMsg
+  m_Name: InfoMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1326,7 +1326,7 @@ MonoBehaviour:
   passwordSignupInput: {fileID: 1356241362}
   loginButton: {fileID: 755326906}
   signupButton: {fileID: 1320491340}
-  errorMsg: {fileID: 0}
+  infoMessage: {fileID: 0}
 --- !u!1 &1320491337
 GameObject:
   m_ObjectHideFlags: 0
@@ -2930,7 +2930,7 @@ MonoBehaviour:
   passwordSignupInput: {fileID: 1356241362}
   loginButton: {fileID: 755326906}
   signupButton: {fileID: 1320491340}
-  errorMsg: {fileID: 0}
+  infoMessage: {fileID: 0}
 --- !u!1 &2101636555
 GameObject:
   m_ObjectHideFlags: 0

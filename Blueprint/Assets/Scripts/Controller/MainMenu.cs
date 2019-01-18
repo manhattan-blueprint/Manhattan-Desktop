@@ -6,6 +6,8 @@ using System;
 using UnityEngine.UI;
 using UnityEditor;
 using System.Threading.Tasks;
+using Service;
+using Service.Response;
 
 public class MainMenu : MonoBehaviour {
     [SerializeField] private InputField usernameLoginInput;
