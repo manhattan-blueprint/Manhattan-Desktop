@@ -1,5 +1,5 @@
 namespace Model {
-    public enum MapResource { 
-        Grass, Machinery, Rock 
+    public enum MapResource {
+        Grass, Machinery, Rock
     }
 }
