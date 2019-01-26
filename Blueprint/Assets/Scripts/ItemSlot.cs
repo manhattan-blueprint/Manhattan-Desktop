@@ -37,6 +37,7 @@ public class ItemSlot : MonoBehaviour {
                 // Get ID and quantity of item to be dropped
                 itemId = inventory.GetItems()[id].GetId();
                 int quantity = inventory.GetItems()[id].GetQuantity();
+                Debug.Log(quantity);
                 inventory.GetItems()[id].SetQuantity(quantity - 1);
                 
                 if (inventory.GetItems()[id].GetQuantity() == 0) {

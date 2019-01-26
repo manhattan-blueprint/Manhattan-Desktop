@@ -45,6 +45,7 @@ public class Inventory : MonoBehaviour {
     public int CollectItem(Interactable focus, GameObject pickup) {
         
         InventoryItem newItem = ScriptableObject.CreateInstance<InventoryItem>();
+        newItem.SetItemType(focus.GetItemType());
 
         int nextSlot = GetNextFreeSlot(newItem);
         // Add to inventory object
@@ -57,7 +58,7 @@ public class Inventory : MonoBehaviour {
         Destroy(pickup);
         // Create a slot with text in inventory window, or update quantity bracket
         if (GetUISlots()[nextSlot].transform.childCount < 2) {
-            Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
+            Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);    
             GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponent<Text>().text =
                 focus.GetItemType();
         }

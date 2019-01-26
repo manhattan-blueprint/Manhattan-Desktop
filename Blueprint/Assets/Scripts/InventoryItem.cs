@@ -24,6 +24,10 @@ public class InventoryItem : ScriptableObject {
         return this.type;
     }
 
+    public void SetItemType(String type) {
+        this.type = type;
+    }
+
     public int GetQuantity() {
         return quantity;
     }
