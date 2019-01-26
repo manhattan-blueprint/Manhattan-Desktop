@@ -38,7 +38,7 @@ namespace Controller {
                 Debug.Log("No space in inventory");
             }
         }
-        
+
         public int CollectItem(Interactable focus, GameObject pickup) {
             InventoryItem newItem = new InventoryItem(focus.GetId(), focus.GetItemType(), 1);
             int nextSlot = getNextFreeSlot(newItem);
@@ -47,10 +47,10 @@ namespace Controller {
             // Set to make access unique
             itemButton.name = getNameForSlot(nextSlot);
             itemButton.GetComponent<Text>().text = newItem.GetItemType();
-            
+
             // Make game world object invisible and collider inactive
             Destroy(pickup);
-            
+
             // Create a slot with text in inventory window, or update quantity bracket
             if (inventorySlots[nextSlot].transform.childCount < 2) {
                 Instantiate(itemButton, inventorySlots[nextSlot].transform, false);

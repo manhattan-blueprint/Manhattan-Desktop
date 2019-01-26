@@ -15,7 +15,7 @@ namespace Controller {
         private const float holdLength = 1.0f;
         private const int rightButton = 1;
         private const int leftButton = 0;
-        
+
         private RaycastHit hit;
         private Text txt;
         private InventoryController inventory;
@@ -36,7 +36,7 @@ namespace Controller {
         private void SetFocus(Interactable newFocus) {
             focus = newFocus;
         }
-        
+
         void Update() {
             if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
                 collectItem();
@@ -47,7 +47,7 @@ namespace Controller {
             } else if (Input.GetMouseButtonUp(leftButton)) {
                 timer = 0.0f;
             }
-            
+
             if (Input.GetMouseButtonDown(rightButton)) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
@@ -68,7 +68,7 @@ namespace Controller {
             // If a GameObject is hit
             if (!Physics.Raycast(ray, out hit)) return;
             SetFocus(hit.collider.GetComponent<Interactable>());
-            
+
             float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
 
             if (focus != null && dist < maxDistance) {
