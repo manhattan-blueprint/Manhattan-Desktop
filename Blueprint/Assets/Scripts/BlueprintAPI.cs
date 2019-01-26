@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.IO;
+using System.Net;
 using System.Security.Authentication;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -49,107 +51,193 @@ public class BlueprintAPI {
             throw new InvalidCredentialException("Username invalid, must have less than 16 characters");
         }
     }
+
+    private string retrieveErrorJson(WebException e) {
+        using (var stream = e.Response.GetResponseStream())
+        using (var reader = new StreamReader(stream)) {
+            return reader.ReadToEnd();
+        }
+    }
     
-    public async Task<UserCredentials> AsyncAuthenticateUser(UserCredentials user) {
+    public async Task<APIResult<UserCredentials, JsonError>> AsyncAuthenticateUser(UserCredentials user) {
         validateUsernamePassword(user.getUsername(), user.getPassword());
         
         // Prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new PayloadAuthenticate(user));
+
+        try {
+            string response = await rs.PerformAsyncPost(authenticateEndpoint, json);
+
+            ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+
+            // Return APIResult:UserCredentials in success case
+            return new APIResult<UserCredentials, JsonError>(
+                new UserCredentials(user.getUsername(), user.getPassword(), tokens.access, tokens.refresh)
+            );
+        }
+        catch (WebException e) {
+            // Retrieve error payload from WebException
+            JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
         
-        // Fetch
-        string response = await rs.PerformAsyncPost(authenticateEndpoint, json);
-        
-        // Extract tokens from JSON
-        ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
-        
-        // Form and return UserCredentials object
-        return new UserCredentials(user.getUsername(), user.getPassword(), tokens.access, tokens.refresh);
+            // Return APIResult:JsonError in error case
+            return new APIResult<UserCredentials, JsonError>(error);
+        }
     }
     
-    public async Task<UserCredentials> AsyncRegisterUser(string username, string password) {
+    public async Task<APIResult<UserCredentials, JsonError>> AsyncRegisterUser(string username, string password) {
         validateUsernamePassword(username, password);
         
         // Prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new PayloadAuthenticate(username, password));
+
+        try {
+            string response = await rs.PerformAsyncPost(registerEndpoint, json);
+
+            ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+
+            // Return APIResult:UserCredentials in success case
+            return new APIResult<UserCredentials, JsonError>(
+                new UserCredentials(username, password, tokens.access, tokens.refresh)
+            );
+        }
+        catch (WebException e) {
+            // Retrieve error payload from WebException
+            JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
         
-        // Fetch
-        string response = await rs.PerformAsyncPost(registerEndpoint, json);
-        
-        // Extract tokens from JSON
-        ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
-        
-        // Form and return UserCredentials object
-        return new UserCredentials(username, password, tokens.access, tokens.refresh);
+            // Return APIResult:JsonError in error case
+            return new APIResult<UserCredentials, JsonError>(error);
+        }
     }
 
-    public async Task<ResponseAuthenticate> AsyncRefreshTokens(UserCredentials user) {
+    public async Task<APIResult<ResponseAuthenticate, JsonError>> AsyncRefreshTokens(UserCredentials user) {
         // Prepare JSON payload & local variables
         string json = JsonUtility.ToJson(new RefreshPayload(user.getRefreshToken()));
         
-        // Fetch
-        string response = await rs.PerformAsyncPost(refreshEndpoint, json);
-        
-        // Extract tokens from JSON
-        ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
-        
-        return tokens;
+        try {
+            string response = await rs.PerformAsyncPost(refreshEndpoint, json);
+
+            ResponseAuthenticate tokens = JsonUtility.FromJson<ResponseAuthenticate>(response);
+
+            // Return APIResult:ResponseAuthenticate in success case
+            return new APIResult<ResponseAuthenticate, JsonError>(tokens);
+        }
+        catch (WebException e) {
+            // Retrieve error payload from WebException
+            JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+            
+            // Return APIResult:JsonError in error case
+            return new APIResult<ResponseAuthenticate, JsonError>(error);
+        }
     }
     
-    public async Task<ResponseGetInventory> AsyncGetInventory(UserCredentials user) {
-        string response = null;
-        
-        // Fetch
+    public async Task<APIResult<ResponseGetInventory, JsonError>> AsyncGetInventory(UserCredentials user) {
         try {
-            response = await rs.PerformAsyncGet(inventoryEndpoint, user.getAccessToken());
+            string response = await rs.PerformAsyncGet(inventoryEndpoint, user.getAccessToken());
+
+            ResponseGetInventory inventory = JsonUtility.FromJson<ResponseGetInventory>(response);
+
+            // Return APIResult:ResponseGetInventory in success case
+            return new APIResult<ResponseGetInventory, JsonError>(inventory);
         }
         catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
-            // if access token doesn't match a user, refresh tokens and retry
-            ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
+            // If access token doesn't match a user, refresh tokens and retry
+            APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
 
-            response = await rs.PerformAsyncGet(inventoryEndpoint, refreshedTokens.access);
+            try {
+                string response = await rs.PerformAsyncGet(inventoryEndpoint, refreshedTokens.GetSuccess().access);
+
+                ResponseGetInventory inventory = JsonUtility.FromJson<ResponseGetInventory>(response);
+
+                // Return APIResult:ResponseGetInventory in success case
+                return new APIResult<ResponseGetInventory, JsonError>(inventory);
+            }
+            catch (WebException f) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+            
+                // Return APIResult:JsonError in error case
+                return new APIResult<ResponseGetInventory, JsonError>(error);
+            }
         }
-
-        // Serialize JSON
-        ResponseGetInventory inventory = JsonUtility.FromJson<ResponseGetInventory>(response);
-
-        return inventory;
+        catch (WebException e) {
+            // Retrieve error payload from WebException
+            JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+            
+            // Return APIResult:JsonError in error case
+            return new APIResult<ResponseGetInventory, JsonError>(error);
+        }
     }
     
-    public async Task<string> AsyncAddToInventory(UserCredentials user, ResponseGetInventory items) {
-        string response = null;
-        
+    public async Task<APIResult<Boolean, JsonError>> AsyncAddToInventory(UserCredentials user, ResponseGetInventory items) {
         // Prepare JSON payload
         string json = JsonUtility.ToJson(items);
-        
-        // Send payload
+
         try {
-            response = await rs.PerformAsyncPost(inventoryEndpoint, json, user.getAccessToken());
+            string response = await rs.PerformAsyncPost(inventoryEndpoint, json, user.getAccessToken());
+
+            // Return APIResult:Boolean in success case
+            return new APIResult<Boolean, JsonError>(true);
         }
         catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
-            // if access token doesn't match a user, refresh tokens and retry
-            ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
-            
-            response = await rs.PerformAsyncPost(inventoryEndpoint, json, refreshedTokens.access);
-        }
+            // If access token doesn't match a user, refresh tokens and retry
+            APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
 
-        return json;
+            try {
+                string response = await rs.PerformAsyncPost(inventoryEndpoint, json, refreshedTokens.GetSuccess().access);
+
+                // Return APIResult:Boolean in success case
+                return new APIResult<Boolean, JsonError>(true);
+            }
+            catch (WebException f) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+            
+                // Return APIResult:JsonError in error case
+                return new APIResult<Boolean, JsonError>(error);
+            }
+        }
+        catch (WebException e) {
+            // Retrieve error payload from WebException
+            JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+            
+            // Return APIResult:JsonError in error case
+            return new APIResult<Boolean, JsonError>(error);
+        }
+        
     }
     
-    public async Task<string> AsyncDeleteInventory(UserCredentials user) {
-        string response = null;
-        
-        // Perform request
+    public async Task<APIResult<Boolean, JsonError>> AsyncDeleteInventory(UserCredentials user) {
         try {
-            response = await rs.PerformAsyncDelete(inventoryEndpoint, user.getAccessToken());
+            string response = await rs.PerformAsyncDelete(inventoryEndpoint, user.getAccessToken());
+
+            // Return APIResult:Boolean in success case
+            return new APIResult<Boolean, JsonError>(true);
         }
         catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
-            // if access token doesn't match a user, refresh tokens and retry
-            ResponseAuthenticate refreshedTokens = await AsyncRefreshTokens(user);
-            
-            response = await rs.PerformAsyncDelete(inventoryEndpoint, refreshedTokens.access);
-        }
+            // If access token doesn't match a user, refresh tokens and retry
+            APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
 
-        return response;
+            try {
+                string response = await rs.PerformAsyncDelete(inventoryEndpoint, refreshedTokens.GetSuccess().access);
+
+                // Return APIResult:Boolean in success case
+                return new APIResult<Boolean, JsonError>(true);
+            }
+            catch (WebException f) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+            
+                // Return APIResult:JsonError in error case
+                return new APIResult<Boolean, JsonError>(error);
+            }
+        }
+        catch (WebException e) {
+            // Retrieve error payload from WebException
+            JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+            
+            // Return APIResult:JsonError in error case
+            return new APIResult<Boolean, JsonError>(error);
+        }
     }
 
     private class RefreshPayload {
