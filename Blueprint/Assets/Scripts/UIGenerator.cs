@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIGenerator : MonoBehaviour {
-	[SerializeField] GameObject canvas;
 	[SerializeField] GameObject panel;
 	[SerializeField] int numSlots;
 	[SerializeField] int numRows;
@@ -15,14 +14,12 @@ public class UIGenerator : MonoBehaviour {
 	[SerializeField] Font buttonFont;
 	private Vector2 cellSize;
 	private GridLayoutGroup slotGrid;
-	private Inventory inventory;
 
 
 	// Use this for initialization
 	void Start () {
 		cellSize = new Vector2(panel.GetComponent<RectTransform>().rect.width / (numRows), panel.GetComponent<RectTransform>().rect.height / (numRows));
 		slotGrid = SetUpSlotGrid(panel);
-		inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
 
 		for (var i = 0; i < numSlots; i++) {
 			var gridChild = SetUpGridChild(i);
