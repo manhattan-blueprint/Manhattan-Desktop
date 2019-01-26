@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JsonError {
-    public string error;
+namespace Service {
+    public class JsonError {
+        public string error;
+    }
 }

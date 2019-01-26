@@ -181,8 +181,7 @@ public class RestHandlerTests {
                 // Failure case
                 // If here, exception has not been thrown
                 Assert.Fail();
-            }
-            catch (InvalidCredentialException e) {
+            } catch (InvalidCredentialException e) {
                 // Pass case
                 // Exception correctly thrown
             }
@@ -330,7 +329,7 @@ public class RestHandlerTests {
             user = response.GetSuccess();
         }).GetAwaiter().GetResult();
         
-        Assert.That(user.getUsername(), Is.EqualTo(validUser.getUsername()));
+        Assert.That(user.GetUsername(), Is.EqualTo(validUser.GetUsername()));
     }
 
     // Blocked by user removal functionality
