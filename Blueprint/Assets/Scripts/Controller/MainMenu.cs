@@ -6,6 +6,7 @@ using System;
 using UnityEngine.UI;
 using UnityEditor;
 using System.Threading.Tasks;
+using Controller;
 using Service;
 using Service.Response;
 
@@ -33,7 +34,7 @@ public class MainMenu : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Tab)) {
-            if        (usernameLoginInput.isFocused) {
+            if (usernameLoginInput.isFocused) {
                 passwordLoginInput.Select();
             } else if (passwordLoginInput.isFocused) {
                 loginButton.Select();
@@ -41,12 +42,10 @@ public class MainMenu : MonoBehaviour {
                 passwordSignupInput.Select();
             } else if (passwordSignupInput.isFocused) {
                 signupButton.Select();
-            } else {
-                if (usernameLoginInput.IsActive()) {
-                    usernameLoginInput.Select();
-                } else if (usernameSignupInput.IsActive()) {
+            } else if (usernameLoginInput.IsActive()) {
+                usernameLoginInput.Select();
+            } else if (usernameSignupInput.IsActive()) {
                     usernameSignupInput.Select();
-                }
             }
         }
     }
@@ -78,7 +77,7 @@ public class MainMenu : MonoBehaviour {
                 returnUser = await fetchingResponse;
                 setInfoMessage("Login Successful!");
                 // Launch Blueprint
-                SceneManager.LoadScene("World");
+                SceneManager.LoadScene(SceneMapping.World);
             } catch (Exception e) {
                 setErrorMessage(e.Message);
             }
