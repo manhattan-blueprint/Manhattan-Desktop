@@ -40,3 +40,6 @@ sysinfo.txt
 
 *.idea
 *.vscode
+
+# Plugins directory
+Plugins/*
