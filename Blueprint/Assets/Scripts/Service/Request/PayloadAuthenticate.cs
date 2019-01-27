@@ -3,8 +3,8 @@ using Service.Response;
 
 namespace Service.Request {
 	public class PayloadAuthenticate {
-		private string username;
-		private string password;
+		public string username;
+		public string password;
 
 		public PayloadAuthenticate(UserCredentials user) {
 			this.username = user.GetUsername();
