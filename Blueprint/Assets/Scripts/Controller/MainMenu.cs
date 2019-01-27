@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour {
 
     void Start() {
         maxUsernameLength = 16;
-        api = new BlueprintAPI("http://smithwjv.ddns.net");
+        api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
         GameObject errorObject = GameObject.Find("InfoMessage");
         infoMessage = errorObject.GetComponent<Text>();
@@ -69,12 +69,14 @@ public class MainMenu : MonoBehaviour {
         UserCredentials returnUser;
 
         Task.Run( async () => {
-            Task<UserCredentials> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
             // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
             //      to indicate to the user that the app is waiting on a response form the server.
 
+            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+
             try {
-                returnUser = await fetchingResponse;
+                returnUser = response.GetSuccess();
                 setInfoMessage("Login Successful!");
                 // Launch Blueprint
                 SceneManager.LoadScene(SceneMapping.World);
@@ -102,12 +104,14 @@ public class MainMenu : MonoBehaviour {
         UserCredentials returnUser;
 
         Task.Run(async () => {
-            Task<UserCredentials> fetchingResponse = api.AsyncRegisterUser(usernameSignupText, passwordSignupText);
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(usernameSignupText, passwordSignupText);
             // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
             //      to indicate to the user that the app is waiting on a response form the server.
 
+            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+
             try {
-                returnUser = await fetchingResponse;
+                returnUser = response.GetSuccess();
                 setInfoMessage("Registration Successful!");
             }
             catch (Exception e) {
