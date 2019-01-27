@@ -73,13 +73,15 @@ public class MainMenu : MonoBehaviour {
             // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
             //      to indicate to the user that the app is waiting on a response form the server.
 
-            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
-
             try {
+                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
                 returnUser = response.GetSuccess();
-                setInfoMessage("Login Successful!");
-                // Launch Blueprint
-                SceneManager.LoadScene(SceneMapping.World);
+                if (response.isSuccess()) {
+                    // Launch Blueprint
+                    SceneManager.LoadScene(SceneMapping.World);
+                } else {
+                    setErrorMessage(response.GetError().error);
+                }
             } catch (Exception e) {
                 setErrorMessage(e.Message);
             }
@@ -108,11 +110,15 @@ public class MainMenu : MonoBehaviour {
             // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
             //      to indicate to the user that the app is waiting on a response form the server.
 
-            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
-
             try {
+                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
                 returnUser = response.GetSuccess();
-                setInfoMessage("Registration Successful!");
+                if (response.isSuccess()) {
+                    // Launch Blueprint
+                    SceneManager.LoadScene(SceneMapping.World);
+                } else {
+                    setErrorMessage(response.GetError().error);
+                }
             }
             catch (Exception e) {
                 setErrorMessage(e.Message);
