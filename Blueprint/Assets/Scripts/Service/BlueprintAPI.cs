@@ -77,8 +77,7 @@ namespace Service {
                 return new APIResult<UserCredentials, JsonError>(
                     new UserCredentials(user.GetUsername(), user.GetPassword(), tokens.access, tokens.refresh)
                 );
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
             
@@ -150,8 +149,7 @@ namespace Service {
 
                     // Return APIResult:ResponseGetInventory in success case
                     return new APIResult<ResponseGetInventory, JsonError>(inventory);
-                }
-                catch (WebException f) {
+                } catch (WebException f) {
                     // Retrieve error payload from WebException
                     JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
                 
