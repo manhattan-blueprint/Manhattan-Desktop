@@ -67,8 +67,7 @@ public class RestHandlerTests {
             if (response.isSuccess()) {
                 // Success case
                 returnUser = response.GetSuccess();
-            }
-            else {
+            } else {
                 //error case
             }
 
@@ -98,8 +97,7 @@ public class RestHandlerTests {
                 JsonError error = response.GetError();
                 
                 Assert.That(error.error, Is.EqualTo("The credentials provided do not match any user"));
-            }
-            else {
+            } else {
                 Assert.Fail();
             }
 
@@ -124,8 +122,7 @@ public class RestHandlerTests {
                 // Failure case
                 // If here, exception has not been thrown
                 Assert.Fail();
-            }
-            catch (InvalidCredentialException e) {
+            } catch (InvalidCredentialException e) {
                 // Pass case
                 // Exception correctly thrown
             }
@@ -149,8 +146,7 @@ public class RestHandlerTests {
             if (response.isSuccess()) {
                 // Success case
                 returnUser = response.GetSuccess();
-            }
-            else {
+            } else {
                 // Failure case
                 Assert.Fail();
             }
@@ -210,8 +206,7 @@ public class RestHandlerTests {
                 // Success case
                 Assert.IsNotNull(response.GetSuccess().refresh);
                 Assert.IsNotNull(response.GetSuccess().access);
-            }
-            else {
+            } else {
                 // Failure case
                 Assert.Fail();
             }
@@ -273,8 +268,7 @@ public class RestHandlerTests {
                 ResponseGetInventory inventory = new ResponseGetInventory(entries);
 
                 APIResult<Boolean, JsonError> response = await blueprintApi.AsyncAddToInventory(user, inventory);
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Exception throw, failure case
                 Assert.Fail();
             }
@@ -310,8 +304,7 @@ public class RestHandlerTests {
                 APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
                 
                 // Success case
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Failure case
                 Assert.Fail();
             }    

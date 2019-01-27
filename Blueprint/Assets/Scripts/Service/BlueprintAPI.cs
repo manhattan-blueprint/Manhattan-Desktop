@@ -102,8 +102,7 @@ namespace Service {
                 return new APIResult<UserCredentials, JsonError>(
                     new UserCredentials(username, password, tokens.access, tokens.refresh)
                 );
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
             
@@ -123,8 +122,7 @@ namespace Service {
 
                 // Return APIResult:ResponseAuthenticate in success case
                 return new APIResult<ResponseAuthenticate, JsonError>(tokens);
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
                 
@@ -141,8 +139,7 @@ namespace Service {
 
                 // Return APIResult:ResponseGetInventory in success case
                 return new APIResult<ResponseGetInventory, JsonError>(inventory);
-            }
-            catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
+            } catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
                 // If access token doesn't match a user, refresh tokens and retry
                 APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
 
@@ -161,8 +158,7 @@ namespace Service {
                     // Return APIResult:JsonError in error case
                     return new APIResult<ResponseGetInventory, JsonError>(error);
                 }
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
                 
@@ -180,8 +176,7 @@ namespace Service {
 
                 // Return APIResult:Boolean in success case
                 return new APIResult<Boolean, JsonError>(true);
-            }
-            catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
+            } catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
                 // If access token doesn't match a user, refresh tokens and retry
                 APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
 
@@ -190,16 +185,14 @@ namespace Service {
 
                     // Return APIResult:Boolean in success case
                     return new APIResult<Boolean, JsonError>(true);
-                }
-                catch (WebException f) {
+                } catch (WebException f) {
                     // Retrieve error payload from WebException
                     JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
                 
                     // Return APIResult:JsonError in error case
                     return new APIResult<Boolean, JsonError>(error);
                 }
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
                 
@@ -215,8 +208,7 @@ namespace Service {
 
                 // Return APIResult:Boolean in success case
                 return new APIResult<Boolean, JsonError>(true);
-            }
-            catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
+            } catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
                 // If access token doesn't match a user, refresh tokens and retry
                 APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
 
@@ -225,16 +217,14 @@ namespace Service {
 
                     // Return APIResult:Boolean in success case
                     return new APIResult<Boolean, JsonError>(true);
-                }
-                catch (WebException f) {
+                } catch (WebException f) {
                     // Retrieve error payload from WebException
                     JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
                 
                     // Return APIResult:JsonError in error case
                     return new APIResult<Boolean, JsonError>(error);
                 }
-            }
-            catch (WebException e) {
+            } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
                 
