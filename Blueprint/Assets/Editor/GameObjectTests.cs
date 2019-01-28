@@ -120,14 +120,13 @@ public class GameObjectTests {
         // Create list of available objects, with too few values
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(2, 6));
+        
+        GameObjectEntry goe = goh.GetBlueprint(availables, 7);
 
-        try {
-            GameObjectEntry goe = goh.GetBlueprint(availables, 7);
-            
-            // Exception now thrown, failure case
+        if (goe != null) {
+            // Failure case
+            // GetBlueprint returns non-null object where null expected
             Assert.Fail();
-        } catch (InvalidDataException e) {
-            // Exception thrown, success case
         } 
     }
 
