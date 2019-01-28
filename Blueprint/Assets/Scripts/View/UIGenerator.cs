@@ -6,12 +6,12 @@ using UnityEngine.UI;
 using Controller;
 
 public class UIGenerator : MonoBehaviour {
-    [SerializeField] GameObject panel;
-    [SerializeField] int numSlots;
-    [SerializeField] int numRows;
-    [SerializeField] Sprite sprite;
-    [SerializeField] string buttonText;
-    [SerializeField] Font buttonFont;
+    [SerializeField] private GameObject panel;
+    [SerializeField] private  int numSlots;
+    [SerializeField] private int numRows;
+    [SerializeField] private Sprite sprite;
+    [SerializeField] private string buttonText;
+    [SerializeField] private Font buttonFont;
     private Vector2 cellSize;
     private GridLayoutGroup slotGrid;
 
@@ -71,6 +71,7 @@ public class UIGenerator : MonoBehaviour {
         var slotImg = slot.AddComponent<Image>();
         var script = slot.AddComponent<InventorySlotController>();
         script.SetId(i);
+		// This will be used in future to scale UI to resolution
         //var fitter = slot.AddComponent<AspectRatioFitter>();
         //fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
         //fitter.aspectRatio = 1;

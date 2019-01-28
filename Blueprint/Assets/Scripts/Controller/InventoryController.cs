@@ -60,10 +60,10 @@ namespace Controller {
             // Create a slot with text in inventory window, or update quantity bracket
             if (GetUISlots()[nextSlot].transform.childCount < 2) {
                 Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
-                GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponent<Text>().text =
+                GameObject.Find(GetSlotCloneName(nextSlot)).GetComponent<Text>().text =
                     focus.GetItemType();
             } else {
-                GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
+                GameObject.Find(GetSlotCloneName(nextSlot)).GetComponentInChildren<Text>().text =
                     focus.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
             }
 
@@ -74,6 +74,10 @@ namespace Controller {
             dropButton.transform.SetSiblingIndex(1);
 
             return nextSlot;
+        }
+
+        public string GetSlotCloneName(int id) {
+            return "InventoryItemSlot " + id + "(Clone)";
         }
 
         public string GetNameForSlot(int id) {

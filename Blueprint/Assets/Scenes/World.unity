@@ -889,10 +889,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c9f2c9cb67e48619f3bb28136f7c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
-  itemSlots: []
-  itemButton: {fileID: 4429903910265034944, guid: f1d164d940fccb24d8d8964d804b3436,
-    type: 3}
 --- !u!143 &1912050191
 CharacterController:
   m_ObjectHideFlags: 0
