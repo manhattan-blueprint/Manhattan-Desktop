@@ -12,7 +12,7 @@ namespace Controller {
     public class InventoryController : MonoBehaviour {
         [SerializeField] InventoryItem[] items;
         [SerializeField] List<InventorySlotController> itemSlots;
-        private int Size;
+        private int size;
         [SerializeField] GameObject itemButton;
         private GameObject dropButton;
 
