@@ -10,57 +10,69 @@ using View;
 /* Attached to the player and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour {
-        [SerializeField] private GameObject itemButton;
-        [SerializeField] private List<InventorySlotController> inventorySlots;
-        private const int size = 9;
-        private InventoryItem[] items;
-        private Transform itemsParent;
+        [SerializeField] InventoryItem[] items;
+        [SerializeField] List<InventorySlotController> itemSlots;
+        private int Size;
+        [SerializeField] GameObject itemButton;
         private GameObject dropButton;
 
         public void Start() {
-            items = new InventoryItem[size];
+            Size = 16;
+            items = new InventoryItem[Size];
+            itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
         }
 
         public InventoryItem[] GetItems() {
             return items;
         }
 
-        private void AddItem(InventoryItem item) {
-            if (items.Length <= size) {
-                InventoryItem slotItem = items[getNextFreeSlot(item)];
+        public void AddItem(InventoryItem item) {
+            if (IsSpace()) {
+                InventoryItem slotItem = items[GetNextFreeSlot(item)];
                 if (slotItem != null) {
-                    items[getNextFreeSlot(item)].quantity += 1;
-                } else {
-                    item.quantity = 1;
-                    items[getNextFreeSlot(item)] = item;
+                    items[GetNextFreeSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
                 }
-            } else {
+                else {
+                    item.SetQuantity(1);
+                    items[GetNextFreeSlot(item)] = item;
+                }
+            }
+            else {
                 Debug.Log("No space in inventory");
             }
         }
 
+        public void AddSlot(InventorySlotController slot) {
+            itemSlots.Add(slot);
+        }
+
         public int CollectItem(Interactable focus, GameObject pickup) {
-            InventoryItem newItem = new InventoryItem(focus.GetId(), focus.GetItemType(), 1);
-            int nextSlot = getNextFreeSlot(newItem);
+
+            InventoryItem newItem = ScriptableObject.CreateInstance<InventoryItem>();
+            newItem.SetItemType(focus.GetItemType());
+
+            int nextSlot = GetNextFreeSlot(newItem);
+            // Add to inventory object
             AddItem(newItem);
 
             // Set to make access unique
-            itemButton.name = getNameForSlot(nextSlot);
-            itemButton.GetComponent<Text>().text = newItem.GetItemType();
+            itemButton.name = GetNameForSlot(nextSlot);
 
             // Make game world object invisible and collider inactive
             Destroy(pickup);
-
             // Create a slot with text in inventory window, or update quantity bracket
-            if (inventorySlots[nextSlot].transform.childCount < 2) {
-                Instantiate(itemButton, inventorySlots[nextSlot].transform, false);
-            } else {
+            if (GetUISlots()[nextSlot].transform.childCount < 2) {
+                Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
+                GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponent<Text>().text =
+                    focus.GetItemType();
+            }
+            else {
                 GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
-                    newItem.GetItemType() + " (" + GetItems()[nextSlot].quantity+ ")";
+                    focus.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
             }
 
             // Change load order or UI elements for accessible hit-box
-            string index = getNameForButton(nextSlot);
+            string index = GetNameForButton(nextSlot);
             dropButton = GameObject.Find(index);
             itemButton.transform.SetSiblingIndex(0);
             dropButton.transform.SetSiblingIndex(1);
@@ -68,34 +80,46 @@ namespace Controller {
             return nextSlot;
         }
 
-        private string getNameForSlot(int id) {
+        public string GetNameForSlot(int id) {
             return "InventoryItemSlot " + id;
         }
 
-        private string getNameForButton(int id) {
-            return "Button" + (id + 1);;
+        public string GetNameForButton(int id) {
+            return "Button" + (id + 1);
+            ;
         }
 
-        private int getNextFreeSlot(InventoryItem item) {
-            int firstNull = size + 1;
-            for (int i = 0; i < size; i++) {
+        public int GetNextFreeSlot(InventoryItem item) {
+            int firstNull = Size + 1;
+            for (int i = 0; i < Size; i++) {
                 if (items[i] == null) {
                     if (i < firstNull) {
                         firstNull = i;
                     }
-                } else if (items[i].GetId() == item.GetId()) {
+                }
+                else if (items[i].GetId() == item.GetId()) {
                     return i;
                 }
             }
+
             return firstNull;
+        }
+
+        public List<InventorySlotController> GetUISlots() {
+            return itemSlots;
+        }
+
+        private bool IsSpace() {
+            return items.Count(s => s != null) <= Size;
         }
 
         public bool Equals(Object obj) {
             bool eq = false;
-            if (obj.GetType () == typeof(InventoryController)) {
+            if (obj.GetType() == typeof(InventoryController)) {
                 InventoryController other = (InventoryController) obj;
                 eq = other.GetItems().OrderBy(t => t).SequenceEqual(items.OrderBy(t => t));
             }
+
             return eq;
         }
     }

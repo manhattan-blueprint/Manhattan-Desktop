@@ -296,7 +296,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 623768139}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae83304f8cbb442cd99209d1a59b3ff3, type: 3}
+  m_Script: {fileID: 11500000, guid: 572df26db4e5244eea62960fa4844a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &623768141
@@ -738,8 +738,8 @@ GameObject:
   - component: {fileID: 1777913579}
   - component: {fileID: 1777913578}
   - component: {fileID: 1777913577}
-  - component: {fileID: 1777913581}
   - component: {fileID: 1777913582}
+  - component: {fileID: 1777913581}
   m_Layer: 5
   m_Name: InventoryUICanvas
   m_TagString: Untagged
@@ -837,7 +837,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1777913576}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33019906b0d102c4f9922e4a9f36ec79, type: 3}
+  m_Script: {fileID: 11500000, guid: d1fa06b330dfc415bbbee2e18a963166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1777913582
@@ -852,7 +852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60fac6f49ef0b4d6ae3a0208362fc91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 1777913576}
   panel: {fileID: 1524273543}
   numSlots: 16
   numRows: 4
@@ -887,38 +886,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912050189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 562d1f9c1bac04836b2d866c2475d3a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 53c9f2c9cb67e48619f3bb28136f7c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalInputName: Horizontal
-  verticalInputName: Vertical
-  movementSpeed: 6
-  jumpFalloff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.020832062
-      value: 1.3875122
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.70040894
-      value: 0.0017623901
-      inSlope: -0.35866794
-      outSlope: -0.35866794
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  jumpMultiplier: 6
-  jumpKey: 32
+  items: []
+  itemSlots: []
+  itemButton: {fileID: 4429903910265034944, guid: f1d164d940fccb24d8d8964d804b3436,
+    type: 3}
 --- !u!143 &1912050191
 CharacterController:
   m_ObjectHideFlags: 0
@@ -961,13 +935,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912050189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41150f775b1a6452bad9c71587ade45d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6cbf3edc4de7c42ea80a1cdd30e8157a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
-  itemSlots: []
-  itemButton: {fileID: 4429903910265034944, guid: f1d164d940fccb24d8d8964d804b3436,
-    type: 3}
+  jumpFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.020832062
+      value: 1.0062561
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9874878
+      value: 0.012500763
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2127419265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,14 +1007,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2127419265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2d136ce975744183896b1535b998e70, type: 3}
+  m_Script: {fileID: 11500000, guid: def97d0cf602c469493fd4779689d9fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseXInputName: Mouse X
-  mouseYInputName: Mouse Y
-  mouseSensitivity: 150
   playerBody: {fileID: 1912050192}
-  paused: 0
 --- !u!81 &2127419268
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1088,10 +1078,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2127419265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17fd2ca136b7d495ab2e8b17f6be7352, type: 3}
+  m_Script: {fileID: 11500000, guid: ab9ad3676ea5e43358bf77dda0ad1648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistance: 10
   cube: {fileID: 4178118753178404, guid: 3b40ceb137fe54b9c9c286cbf68279ee, type: 3}
   cubeLarge: {fileID: 4860563762599424, guid: 6dc5f2df4889e4ff49d078c16bae0217, type: 3}
   capsule: {fileID: 4341569406944394, guid: baf27c7d89b914e96ab73de5358017fc, type: 3}

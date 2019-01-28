@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.UI;
+using Controller;
 
 public class UIGenerator : MonoBehaviour {
 	[SerializeField] GameObject panel;
@@ -69,7 +70,7 @@ public class UIGenerator : MonoBehaviour {
 	private GameObject SetUpSlot(int i, GameObject gridChild) {	
 		var slot = new GameObject(GetSlotName(i), typeof(RectTransform));
 		var slotImg = slot.AddComponent<Image>();
-		var script = slot.AddComponent<ItemSlot>();
+		var script = slot.AddComponent<InventorySlotController>();
 		script.SetId(i);
 		//var fitter = slot.AddComponent<AspectRatioFitter>();
 		//fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
@@ -91,7 +92,7 @@ public class UIGenerator : MonoBehaviour {
 		buttonImg.type = Image.Type.Sliced;
 		buttonImg.fillCenter = true;
 		var press = button.AddComponent<Button>();
-		press.onClick.AddListener(() => slot.GetComponent<ItemSlot>().DropItem());
+		press.onClick.AddListener(() => slot.GetComponent<InventorySlotController>().DropItem());
 		return button;
 	}
 
