@@ -72,7 +72,7 @@ public class GameObjectTests {
     // Serializes item schema from default remote url
     [Test]
     public void TestInitialiseGameObjectsHandlerRemote() {
-        GameObjectsHandler goh = GameObjectsHandler.WithHosted();
+        GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
         
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(16));

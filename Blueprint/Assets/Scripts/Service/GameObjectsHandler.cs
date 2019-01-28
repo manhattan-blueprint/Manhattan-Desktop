@@ -17,7 +17,7 @@ public class GameObjectsHandler {
         return goh;
     }
 
-    public static GameObjectsHandler WithHosted() {
+    public static GameObjectsHandler WithRemoteSchema() {
         GameObjectsHandler goh = new GameObjectsHandler();
         
         // Get schema
