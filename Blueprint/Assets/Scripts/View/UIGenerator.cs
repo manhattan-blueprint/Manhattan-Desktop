@@ -71,7 +71,7 @@ public class UIGenerator : MonoBehaviour {
         var slotImg = slot.AddComponent<Image>();
         var script = slot.AddComponent<InventorySlotController>();
         script.SetId(i);
-		// This will be used in future to scale UI to resolution
+        // This will be used in future to scale UI to resolution
         //var fitter = slot.AddComponent<AspectRatioFitter>();
         //fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
         //fitter.aspectRatio = 1;
