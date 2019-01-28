@@ -244,8 +244,7 @@ namespace Service {
                 
                 // Return APIResult:JsonError in failure case
                 return new APIResult<string, JsonError>(error);  
-            }
-            
+            } 
         }
 
         private class RefreshPayload {
