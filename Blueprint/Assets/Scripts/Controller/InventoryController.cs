@@ -17,8 +17,8 @@ namespace Controller {
         private GameObject dropButton;
 
         public void Start() {
-            Size = 16;
-            items = new InventoryItem[Size];
+            size = 16;
+            items = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
         }
 
@@ -90,8 +90,8 @@ namespace Controller {
         }
 
         public int GetNextFreeSlot(InventoryItem item) {
-            int firstNull = Size + 1;
-            for (int i = 0; i < Size; i++) {
+            int firstNull = size + 1;
+            for (int i = 0; i < size; i++) {
                 if (items[i] == null) {
                     if (i < firstNull) {
                         firstNull = i;
@@ -110,7 +110,7 @@ namespace Controller {
         }
 
         private bool IsSpace() {
-            return items.Count(s => s != null) <= Size;
+            return items.Count(s => s != null) <= size;
         }
 
         public bool Equals(Object obj) {
