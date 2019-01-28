@@ -4,6 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+Assets/Plugins*
 
 # Mac directory info file
 .DS_Store
