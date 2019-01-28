@@ -7,6 +7,7 @@ TagManager:
   - Inventory
   - Placed
   - Map
+  - Cursor
   layers:
   - Default
   - TransparentFX

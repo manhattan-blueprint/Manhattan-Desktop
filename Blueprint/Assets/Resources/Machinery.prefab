@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 33886220602463356}
   - component: {fileID: 65122053991412904}
   - component: {fileID: 23236874180164012}
-  - component: {fileID: 114267030647136964}
   - component: {fileID: 54054499327318790}
   - component: {fileID: 114878444300581740}
   - component: {fileID: 8609363312237960795}
+  - component: {fileID: 114267030647136964}
   m_Layer: 0
   m_Name: Machinery
   m_TagString: Untagged
@@ -95,21 +95,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &114267030647136964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1461298687545314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 1, g: 0, b: 0, a: 0}
-  holdable: 0
-  tempColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!54 &54054499327318790
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -153,6 +138,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapResource: 1
-  gameObject: {fileID: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  position: {x: 0, y: 0, z: 0}
+--- !u!114 &114267030647136964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461298687545314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 1, g: 0, b: 0, a: 0}
+  holdable: 1
+  tempColor: {r: 0, g: 0, b: 0, a: 0}

@@ -21,7 +21,11 @@ namespace Controller {
             items = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MouseController>(); 
             cameraTransform = Camera.main.gameObject.transform;
         }
-
+    
+        public void SetId(int id) {
+            this.id = id;
+        }
+    
         // Loops through the child elements of the item slot to find the associated text/sprite and delete it from the menu 
         public void DropItem() {
             foreach (Transform child in transform) {
@@ -32,17 +36,18 @@ namespace Controller {
                     
                     // Get ID and quantity of item to be dropped
                     itemId = inventory.GetItems()[id].GetId();
-                    inventory.GetItems()[id].quantity -= 1;
+                    int quantity = inventory.GetItems()[id].GetQuantity();
+                    inventory.GetItems()[id].SetQuantity(quantity - 1);
                     
-                    if (inventory.GetItems()[id].quantity == 0) {
+                    if (inventory.GetItems()[id].GetQuantity() == 0) {
                         Destroy(child.gameObject);
                         empty = true;
                     } else {
                         GameObject.Find("InventoryItemSlot " + id + "(Clone)").GetComponentInChildren<Text>().text = 
-                        inventory.GetItems()[id].GetItemType() + " (" + inventory.GetItems()[id].quantity + ")";
+                        inventory.GetItems()[id].GetItemType() + " (" + inventory.GetItems()[id].GetQuantity() + ")";
                         empty = false;
                     }
-                
+                   
                     switch (itemId) {
                         case (0):
                             //Transform cube = Instantiate(items.cube, new Vector3(position.x + facing.x , position.y + facing.y, position.z + facing.z), Quaternion.identity);

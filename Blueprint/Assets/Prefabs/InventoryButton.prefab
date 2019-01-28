@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224721109441127304}
   - component: {fileID: 222262592785764904}
-  - component: {fileID: 114812766800620828}
-  - component: {fileID: 114159623413793046}
+  - component: {fileID: 3546209208213069322}
   m_Layer: 5
   m_Name: InventoryButton
   m_TagString: Inventory
@@ -122,3 +121,5 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+
+'
