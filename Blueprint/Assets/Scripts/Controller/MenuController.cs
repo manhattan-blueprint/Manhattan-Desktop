@@ -6,10 +6,12 @@ using UnityEngine;
 namespace Controller {
     public class MenuController : MonoBehaviour {
         private Canvas inventoryCanvas;
+        private Canvas cursorCanvas;
 
         void Start() {
             inventoryCanvas = GetComponent<Canvas> ();
             inventoryCanvas.enabled = false;
+            cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
         }
 
         void Update() {
@@ -27,6 +29,7 @@ namespace Controller {
             inventoryCanvas.enabled = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            cursorCanvas.enabled = false;
         }
 
         private void ContinueGame() {
@@ -34,6 +37,7 @@ namespace Controller {
             inventoryCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            cursorCanvas.enabled = true;
         }
     }
 }

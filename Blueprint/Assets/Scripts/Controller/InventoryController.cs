@@ -13,7 +13,7 @@ namespace Controller {
         private InventoryItem[] items;
         private List<InventorySlotController> itemSlots;
         private const int size = 16;
-        private GameObject itemButton;
+        [SerializeField] private GameObject itemButton;
         private GameObject dropButton;
 
         public void Start() {
@@ -100,7 +100,6 @@ namespace Controller {
                     return i;
                 }
             }
-
             return firstNull;
         }
 
