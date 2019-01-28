@@ -10,14 +10,13 @@ using View;
 /* Attached to the player and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour {
-        [SerializeField] InventoryItem[] items;
-        [SerializeField] List<InventorySlotController> itemSlots;
-        private int size;
-        [SerializeField] GameObject itemButton;
+        private InventoryItem[] items;
+        private List<InventorySlotController> itemSlots;
+        private const int size = 16;
+        private GameObject itemButton;
         private GameObject dropButton;
 
         public void Start() {
-            size = 16;
             items = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
         }
@@ -28,17 +27,15 @@ namespace Controller {
 
         public void AddItem(InventoryItem item) {
             if (IsSpace()) {
-                InventoryItem slotItem = items[GetNextFreeSlot(item)];
+                InventoryItem slotItem = items[GetSlot(item)];
                 if (slotItem != null) {
-                    items[GetNextFreeSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
-                }
-                else {
+                    items[GetSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
+                } else {
                     item.SetQuantity(1);
-                    items[GetNextFreeSlot(item)] = item;
+                    items[GetSlot(item)] = item;
                 }
-            }
-            else {
-                Debug.Log("No space in inventory");
+            } else {
+                throw new System.Exception("No space in inventory.");
             }
         }
 
@@ -51,7 +48,7 @@ namespace Controller {
             InventoryItem newItem = ScriptableObject.CreateInstance<InventoryItem>();
             newItem.SetItemType(focus.GetItemType());
 
-            int nextSlot = GetNextFreeSlot(newItem);
+            int nextSlot = GetSlot(newItem);
             // Add to inventory object
             AddItem(newItem);
 
@@ -65,8 +62,7 @@ namespace Controller {
                 Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
                 GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponent<Text>().text =
                     focus.GetItemType();
-            }
-            else {
+            } else {
                 GameObject.Find("InventoryItemSlot " + nextSlot + "(Clone)").GetComponentInChildren<Text>().text =
                     focus.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
             }
@@ -89,15 +85,14 @@ namespace Controller {
             ;
         }
 
-        public int GetNextFreeSlot(InventoryItem item) {
+        public int GetSlot(InventoryItem item) {
             int firstNull = size + 1;
             for (int i = 0; i < size; i++) {
                 if (items[i] == null) {
                     if (i < firstNull) {
                         firstNull = i;
                     }
-                }
-                else if (items[i].GetId() == item.GetId()) {
+                } else if (items[i].GetId() == item.GetId()) {
                     return i;
                 }
             }

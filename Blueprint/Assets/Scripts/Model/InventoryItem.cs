@@ -34,5 +34,5 @@ namespace Model {
         public void SetQuantity(int quantity) {
             this.quantity = quantity;
         }
-	}
+    }
 }
