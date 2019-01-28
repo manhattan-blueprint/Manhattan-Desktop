@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Service;
 using UnityEngine;
 
 public class GameObjectsHandler {
@@ -20,14 +21,18 @@ public class GameObjectsHandler {
         GameObjectsHandler goh = new GameObjectsHandler();
         
         // Get schema
-        // TODO: Change when altered BlueprintAPI is available
-        BlueprintAPI api = new BlueprintAPI("http://smithwjv.ddns.net");
+        BlueprintAPI api = BlueprintAPI.DefaultCredentials();
         
         Task.Run(async () => {
-            String json = await api.AsyncGetItemSchema();
+            APIResult<string, JsonError> response = await api.AsyncGetItemSchema();
+
+            if (response.isSuccess()) {
+                // Populate GameObjs
+                goh.GameObjs = JsonUtility.FromJson<GameObjects>(response.GetSuccess());
+            } else {
+                throw new InvalidDataException(response.GetError().error);
+            }
             
-            // Populate GameObjs
-            goh.GameObjs = JsonUtility.FromJson<GameObjects>(json);
         }).GetAwaiter().GetResult();
 
         return goh;
