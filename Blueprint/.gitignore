@@ -42,4 +42,4 @@ sysinfo.txt
 *.vscode
 
 # Plugins directory
-Blueprint/Assets/Plugins/*
+Assets/Plugins
