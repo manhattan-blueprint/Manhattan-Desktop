@@ -105,8 +105,7 @@ public class GameObjectTests {
             
             //Assert values are correct
             Assert.That(goe.name, Is.EqualTo("furnace"));
-        }
-        catch (InvalidDataException e) {
+        } catch (InvalidDataException e) {
             // Exception thrown, failure case
             Assert.Fail();
         } 
@@ -127,8 +126,7 @@ public class GameObjectTests {
             
             // Exception now thrown, failure case
             Assert.Fail();
-        }
-        catch (InvalidDataException e) {
+        } catch (InvalidDataException e) {
             // Exception thrown, success case
         } 
     }

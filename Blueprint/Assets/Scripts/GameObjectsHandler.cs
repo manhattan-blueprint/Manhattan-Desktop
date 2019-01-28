@@ -59,13 +59,11 @@ public class GameObjectsHandler {
                 // Is the required quantity available?
                 if (available.quantity >= item.quantity) {
                     
-                }
-                else {
+                } else {
                     throw new InvalidDataException("Not enough of item " + item.item_id + " available.");
                 }
-            }
-            // If item is not present
-            else {
+            } else {
+                // If item is not present
                 throw new InvalidDataException("No item " + item.item_id + " present.");
             }
         }      
@@ -93,17 +91,14 @@ public class GameObjectsHandler {
                     // Is the required quantity available?
                     if (available.quantity >= recipeItem.quantity) {
                         // Enough item present for output item
-                    }
-                    else {
+                    } else {
                         // Not enough item available
                         correctItem = false;
                     }
-                }
-                // If item is not present
-                else {
+                } else {
+                    // If item is not present
                     correctItem = false;
                 }
-                
             }
             
             // Success case
