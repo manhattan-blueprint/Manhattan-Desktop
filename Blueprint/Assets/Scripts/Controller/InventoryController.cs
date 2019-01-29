@@ -14,58 +14,64 @@ using View;
 /* Attached to the player and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<GameState> {
-        private InventoryItem[] items;
+        private InventoryItem[] inventoryContents;
         private List<InventorySlotController> itemSlots;
         private const int size = 16;
         [SerializeField] private GameObject itemButton;
         private GameObject dropButton;
-        private const string[] itemNames = { "wood", "stone", "sand", "iron ore", "coal", "rubber", "furnace", "steel", 
-            "wheel", "chair", "glass", "wire", "welder", "generator", "frame", "dune buggy"};
 
         public void Start() {
-            items = new InventoryItem[size];
+            inventoryContents = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             GameManager.Instance().store.Subscribe(this);
         }
 
         public InventoryItem[] GetItems() {
-            return items;
-            // return GameManager.Instance().store.GetState();
-        }
-
-        public string GetItemName(int id) {
-            return this.itemNames[id - 1];
+            return inventoryContents;
         }
 
         public void AddItem(InventoryItem item) {
             if (IsSpace()) {
-                InventoryItem slotItem = items[GetSlot(item)];
-                if (slotItem != null) {
-                    // GameManager.Instance().store.Dispatch(new AddItemToInventory(item.GetId(), 1));
-                    items[GetSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
-                } else {
-                    item.SetQuantity(1);
-                    items[GetSlot(item)] = item;
-                }
+                 GameManager.Instance().store.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity()));
             } else {
                 throw new System.Exception("No space in inventory.");
             }
         }
 
         public void StateDidUpdate(GameState state) {
-            // UPDATE STATE
+            this.inventoryContents = state.inventoryState.inventoryContents;
+            Debug.Log("Inventory changed somehow");
         }
 
         public void AddSlot(InventorySlotController slot) {
             itemSlots.Add(slot);
         }
 
+        public string GetItemName(int id) {
+            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+            return goh.GameObjs.items[id + 1].name;
+        }
+        
+        
+        // Returns a slot for
+        public int GetSlot(int id) {
+            int firstNull = size + 1;
+            for (int i = 0; i < size; i++) {
+                if (inventoryContents[i] == null) {
+                    if (i < firstNull) {
+                        firstNull = i;
+                    }
+                } else if (inventoryContents[i].GetId() == id) {
+                    return i;
+                }
+            }
+            return firstNull;
+        }
+    
+        
         public int CollectItem(Interactable focus, GameObject pickup) {
-
-            InventoryItem newItem = ScriptableObject.CreateInstance<InventoryItem>();
-            newItem.SetItemType(focus.GetItemType());
-
-            int nextSlot = GetSlot(newItem);
+            InventoryItem newItem = new InventoryItem(focus.GetId(), 1);
+            int nextSlot = GetSlot(newItem.GetId());
             // Add to inventory object
             AddItem(newItem);
 
@@ -106,33 +112,19 @@ namespace Controller {
             ;
         }
 
-        public int GetSlot(InventoryItem item) {
-            int firstNull = size + 1;
-            for (int i = 0; i < size; i++) {
-                if (items[i] == null) {
-                    if (i < firstNull) {
-                        firstNull = i;
-                    }
-                } else if (items[i].GetId() == item.GetId()) {
-                    return i;
-                }
-            }
-            return firstNull;
-        }
-
         public List<InventorySlotController> GetUISlots() {
             return itemSlots;
         }
 
         private bool IsSpace() {
-            return items.Count(s => s != null) <= size;
+            return inventoryContents.Count(s => s != null) <= size;
         }
 
         public bool Equals(Object obj) {
             bool eq = false;
             if (obj.GetType() == typeof(InventoryController)) {
                 InventoryController other = (InventoryController) obj;
-                eq = other.GetItems().OrderBy(t => t).SequenceEqual(items.OrderBy(t => t));
+                eq = other.GetItems().OrderBy(t => t).SequenceEqual(inventoryContents.OrderBy(t => t));
             }
 
             return eq;

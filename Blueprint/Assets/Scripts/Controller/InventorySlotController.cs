@@ -44,7 +44,7 @@ namespace Controller {
                         empty = true;
                     } else {
                         GameObject.Find("InventoryItemSlot " + id + "(Clone)").GetComponentInChildren<Text>().text = 
-                        inventory.GetItems()[id].GetItemType() + " (" + inventory.GetItems()[id].GetQuantity() + ")";
+                        inventory.GetItemName(inventory.GetItems()[id].GetId() - 1) + " (" + inventory.GetItems()[id].GetQuantity() + ")";
                         empty = false;
                     }
                    
