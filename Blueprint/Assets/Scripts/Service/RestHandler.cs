@@ -57,6 +57,22 @@ namespace Service {
 
             return Encoding.Default.GetString(content.ToArray());  
         }
+        
+        public async Task<string> PerformAsyncGet(string endpoint) {
+            var content = new MemoryStream();
+            var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+
+            webReq.Method = httpGet;
+            webReq.ContentType = JsonContentType;
+
+            using (WebResponse response = await webReq.GetResponseAsync()) {
+                using (Stream responseStream = response.GetResponseStream()) {
+                    await responseStream.CopyToAsync(content);
+                }
+            }
+
+            return Encoding.Default.GetString(content.ToArray());  
+        }
 
         public async Task<string> PerformAsyncPost(string endpoint, string postData) {
             var content = new MemoryStream();

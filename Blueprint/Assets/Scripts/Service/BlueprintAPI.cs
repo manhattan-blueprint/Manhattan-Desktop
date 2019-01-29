@@ -16,6 +16,7 @@ namespace Service {
         private const string registerEndpoint      = ":8000/api/v1/authenticate/register";
         private const string refreshEndpoint       = ":8000/api/v1/authenticate/refresh";
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
+        private const string itemSchemaEndpoint    = ":8000/api/v1/item-schema";
         private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
         
         // Enum
@@ -229,6 +230,21 @@ namespace Service {
                 // Return APIResult:JsonError in error case
                 return new APIResult<Boolean, JsonError>(error);
             }
+        }
+        
+        public async Task<APIResult<string, JsonError>> AsyncGetItemSchema() {
+            try {
+                string response = await rs.PerformAsyncGet(itemSchemaEndpoint);
+    
+                // Return APIResult:string in success case
+                return new APIResult<string, JsonError>(response);
+            } catch (WebException e) {
+                JsonError error = new JsonError();
+                error.error = e.Message;
+                
+                // Return APIResult:JsonError in failure case
+                return new APIResult<string, JsonError>(error);  
+            } 
         }
 
         private class RefreshPayload {
