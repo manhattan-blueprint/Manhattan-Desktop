@@ -31,16 +31,11 @@ namespace Controller {
         }
 
         public void AddItem(InventoryItem item) {
-            if (IsSpace()) {
-                 GameManager.Instance().store.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity()));
-            } else {
-                throw new System.Exception("No space in inventory.");
-            }
+             GameManager.Instance().store.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity()));
         }
 
         public void StateDidUpdate(GameState state) {
             this.inventoryContents = state.inventoryState.inventoryContents;
-            Debug.Log("Inventory changed somehow");
         }
 
         public void AddSlot(InventorySlotController slot) {
@@ -53,7 +48,7 @@ namespace Controller {
         }
         
         
-        // Returns a slot for
+        // Returns a slot for the InventoryItem to be placed in
         public int GetSlot(int id) {
             int firstNull = size + 1;
             for (int i = 0; i < size; i++) {
@@ -67,7 +62,6 @@ namespace Controller {
             }
             return firstNull;
         }
-    
         
         public int CollectItem(Interactable focus, GameObject pickup) {
             InventoryItem newItem = new InventoryItem(focus.GetId(), 1);
@@ -78,8 +72,9 @@ namespace Controller {
             // Set to make access unique
             itemButton.name = GetNameForSlot(nextSlot);
 
-            // Make game world object invisible and collider inactive
+            // Destroy GameObject
             Destroy(pickup);
+            
             // Create a slot with text in inventory window, or update quantity bracket
             if (GetUISlots()[nextSlot].transform.childCount < 2) {
                 Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);

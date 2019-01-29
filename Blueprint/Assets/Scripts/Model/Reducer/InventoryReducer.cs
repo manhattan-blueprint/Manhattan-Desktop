@@ -28,14 +28,14 @@ namespace Model.Reducer {
         }
 
         public void visit(AddItemToInventory addItemToInventoryAction) {
-			int id = addItemToInventoryAction.item;
-			int quantity = addItemToInventoryAction.count;
-			int size = state.inventoryContents.Length;
+            int id = addItemToInventoryAction.item;
+            int quantity = addItemToInventoryAction.count;
+            int size = state.inventoryContents.Length;
 
-			InventoryItem item = new InventoryItem(id, quantity);
+            InventoryItem item = new InventoryItem(id, quantity);
             InventoryItem slotItem = state.inventoryContents[GetSlot(id, size, state.inventoryContents)];
 
-			// If there is a slot already containign
+            // If there is a slot already containign
             if (slotItem != null) {
                 state.inventoryContents[GetSlot(id, size, state.inventoryContents)].AddQuantity(quantity);
             } else {
@@ -44,9 +44,9 @@ namespace Model.Reducer {
         }
 
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
-			int id = removeItemFromInventory.item;
-			int quantity = removeItemFromInventory.count;
-			int size = state.inventoryContents.Length;
+            int id = removeItemFromInventory.item;
+            int quantity = removeItemFromInventory.count;
+            int size = state.inventoryContents.Length;
             InventoryItem slotItem = state.inventoryContents[GetSlot(id, size, state.inventoryContents)];
 
             if (slotItem != null) {

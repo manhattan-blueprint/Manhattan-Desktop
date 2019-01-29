@@ -44,3 +44,4 @@ sysinfo.txt
 # Plugins directory
 Assets/Plugins
 Game_Data
+*.x86_64

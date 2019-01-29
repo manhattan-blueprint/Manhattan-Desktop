@@ -21,8 +21,7 @@ namespace Tests {
         [Test]
         public void TestAddToInventory() {
             // Assert empty to begin with
-            //Assert.False(this.gameManager.store.GetState().inventoryState.inventoryContents.ContainsKey(1));
-            
+                        
             // Add an item and validate it updates the state
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1));
 
@@ -34,9 +33,6 @@ namespace Tests {
                 }
             }
             Assert.Fail();
-
-            // Assert.True(this.gameManager.store.GetState().inventoryState.inventoryContents.ContainsKey(1));
-            // Assert.AreEqual(1, this.gameManager.store.GetState().inventoryState.inventoryContents[1]);
         }
 
         [Test]
@@ -45,7 +41,6 @@ namespace Tests {
             if (this.gameManager.store.GetState().inventoryState.inventoryContents == null || this.gameManager.store.GetState().inventoryState.inventoryContents.Length == 0) {
                 Assert.Fail();
             }
-            //Assert.False(this.gameManager.store.GetState().inventoryState.inventoryContents.ContainsKey(1));
             
             // Add an item and validate it updates the state
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1));
