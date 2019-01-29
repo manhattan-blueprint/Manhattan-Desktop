@@ -30,6 +30,7 @@ namespace Controller {
 
         public InventoryItem[] GetItems() {
             return items;
+            // return GameManager.Instance().store.GetState();
         }
 
         public string GetItemName(int id) {
