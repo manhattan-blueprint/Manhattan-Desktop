@@ -5,30 +5,42 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Model;
+using Model.Action;
+using Model.Reducer;
+using Model.Redux;
+using Model.State;
 using View;
 
 /* Attached to the player and controls inventory collection */
 namespace Controller {
-    public class InventoryController : MonoBehaviour {
+    public class InventoryController : MonoBehaviour, Subscriber<GameState> {
         private InventoryItem[] items;
         private List<InventorySlotController> itemSlots;
         private const int size = 16;
         [SerializeField] private GameObject itemButton;
         private GameObject dropButton;
+        private const string[] itemNames = { "wood", "stone", "sand", "iron ore", "coal", "rubber", "furnace", "steel", 
+            "wheel", "chair", "glass", "wire", "welder", "generator", "frame", "dune buggy"};
 
         public void Start() {
             items = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
+            GameManager.Instance().store.Subscribe(this);
         }
 
         public InventoryItem[] GetItems() {
             return items;
         }
 
+        public string GetItemName(int id) {
+            return this.itemNames[id - 1];
+        }
+
         public void AddItem(InventoryItem item) {
             if (IsSpace()) {
                 InventoryItem slotItem = items[GetSlot(item)];
                 if (slotItem != null) {
+                    // GameManager.Instance().store.Dispatch(new AddItemToInventory(item.GetId(), 1));
                     items[GetSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
                 } else {
                     item.SetQuantity(1);
@@ -37,6 +49,10 @@ namespace Controller {
             } else {
                 throw new System.Exception("No space in inventory.");
             }
+        }
+
+        public void StateDidUpdate(GameState state) {
+            // UPDATE STATE
         }
 
         public void AddSlot(InventorySlotController slot) {
