@@ -49,7 +49,7 @@ namespace Controller {
 
         public string GetItemName(int id) {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id + 1].name;
+            return goh.GameObjs.items[id - 1].name;
         }
         
         

@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Model;
+using Model.Action;
+using Model.Reducer;
+using Model.Redux;
+using Model.State;
 
 /* Attached to each slot in the inventory grid */
 namespace Controller {
@@ -34,17 +39,21 @@ namespace Controller {
                     position = cameraTransform.position;
                     facing = cameraTransform.forward * 2;
                     
-                    // Get ID and quantity of item to be dropped
+                    // Get ID and quantity of item to be dropped    
                     itemId = inventory.GetItems()[id].GetId();
-                    int quantity = inventory.GetItems()[id].GetQuantity();
-                    inventory.GetItems()[id].SetQuantity(quantity - 1);
+                    
+                    //int quantity = inventory.GetItems()[id].GetQuantity();
+                    //inventory.GetItems()[id].SetQuantity(quantity - 1);
+                    
+                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(itemId, 1));
                     
                     if (inventory.GetItems()[id].GetQuantity() == 0) {
                         Destroy(child.gameObject);
                         empty = true;
                     } else {
+                        Debug.Log(itemId);
                         GameObject.Find("InventoryItemSlot " + id + "(Clone)").GetComponentInChildren<Text>().text = 
-                        inventory.GetItemName(inventory.GetItems()[id].GetId() - 1) + " (" + inventory.GetItems()[id].GetQuantity() + ")";
+                        inventory.GetItemName(itemId) + " (" + inventory.GetItems()[id].GetQuantity() + ")";
                         empty = false;
                     }
                    

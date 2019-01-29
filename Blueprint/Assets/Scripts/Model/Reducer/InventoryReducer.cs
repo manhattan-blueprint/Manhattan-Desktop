@@ -44,10 +44,17 @@ namespace Model.Reducer {
         }
 
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
-          /*  if (state.inventoryContents.ContainsKey(removeItemFromInventory.item)) {
-                var newValue = Math.Max(0,  state.inventoryContents[removeItemFromInventory.item] - removeItemFromInventory.count);
-                state.inventoryContents[removeItemFromInventory.item] = newValue;
-            } */
+			int id = removeItemFromInventory.item;
+			int quantity = removeItemFromInventory.count;
+			int size = state.inventoryContents.Length;
+            InventoryItem slotItem = state.inventoryContents[GetSlot(id, size, state.inventoryContents)];
+
+            if (slotItem != null) {
+                var newValue = Math.Max(0,  slotItem.GetQuantity() - quantity);
+                slotItem.SetQuantity(newValue);
+            } else {
+                throw new System.Exception("This id does not exist in inventory.");
+            }
         }
     }
 }
