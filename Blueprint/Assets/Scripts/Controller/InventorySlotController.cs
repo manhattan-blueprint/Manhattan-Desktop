@@ -43,15 +43,6 @@ namespace Controller {
                     itemId = inventory.GetItems()[id].GetId();
                     
                     GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(itemId, 1));
-                    
-                    if (inventory.GetItems()[id].GetQuantity() == 0) {
-                        Destroy(child.gameObject);
-                        empty = true;
-                    } else {
-                        GameObject.Find("InventoryItemSlot " + id + "(Clone)").GetComponentInChildren<Text>().text = 
-                        inventory.GetItemName(itemId) + " (" + inventory.GetItems()[id].GetQuantity() + ")";
-                        empty = false;
-                    }
                    
                     switch (itemId) {
                         case (0):
@@ -70,6 +61,7 @@ namespace Controller {
                             Debug.Log("Item ID does not exist.");
                             break;
                     }
+                    
                     if (empty) {
                         inventory.GetItems()[id] = null;
                     }

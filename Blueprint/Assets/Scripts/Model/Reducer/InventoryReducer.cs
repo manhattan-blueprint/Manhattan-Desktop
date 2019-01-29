@@ -1,5 +1,7 @@
 using System;
 using Model.Action;
+using UnityEngine;
+using Utils;
 
 namespace Model.Reducer {
     public class InventoryReducer : Reducer<InventoryState, InventoryAction>, InventoryVisitor {
@@ -12,42 +14,31 @@ namespace Model.Reducer {
             return this.state;
         }
 
-        // Returns a slot for
-        public int GetSlot(int id, int size, InventoryItem[] items) {
-            int firstNull = size + 1;
-            for (int i = 0; i < size; i++) {
-                if (items[i] == null) {
-                    if (i < firstNull) {
-                        firstNull = i;
-                    }
-                } else if (items[i].GetId() == id) {
+        // Returns a slot for a resource id
+        private int getSlot(int id) {
+            for (int i = 0; i < state.inventoryContents.Length; i++) {
+                if (state.inventoryContents[i] == null || state.inventoryContents[i].GetId() == id) {
                     return i;
                 }
             }
-            return firstNull;
+            return -1;
         }
 
         public void visit(AddItemToInventory addItemToInventoryAction) {
-            int id = addItemToInventoryAction.item;
-            int quantity = addItemToInventoryAction.count;
-            int size = state.inventoryContents.Length;
-
-            InventoryItem item = new InventoryItem(id, quantity);
-            InventoryItem slotItem = state.inventoryContents[GetSlot(id, size, state.inventoryContents)];
-
-            // If there is a slot already containign
-            if (slotItem != null) {
-                state.inventoryContents[GetSlot(id, size, state.inventoryContents)].AddQuantity(quantity);
+            int slot = getSlot(addItemToInventoryAction.item);
+            
+            // Update if exists or add new
+            if (state.inventoryContents[slot] != null) {
+                state.inventoryContents[slot].AddQuantity(addItemToInventoryAction.count);
             } else {
-                state.inventoryContents[GetSlot(id, size, state.inventoryContents)] = item;
+                state.inventoryContents[slot] = new InventoryItem(addItemToInventoryAction.name, addItemToInventoryAction.item,addItemToInventoryAction.count);
             }
         }
 
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
             int id = removeItemFromInventory.item;
             int quantity = removeItemFromInventory.count;
-            int size = state.inventoryContents.Length;
-            InventoryItem slotItem = state.inventoryContents[GetSlot(id, size, state.inventoryContents)];
+            InventoryItem slotItem = state.inventoryContents[getSlot(id)];
 
             if (slotItem != null) {
                 var newValue = Math.Max(0,  slotItem.GetQuantity() - quantity);

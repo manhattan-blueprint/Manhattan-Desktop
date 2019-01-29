@@ -23,7 +23,7 @@ namespace Tests {
             // Assert empty to begin with
                         
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 1));
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "steel"));
 
             foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
@@ -43,8 +43,8 @@ namespace Tests {
             }
             
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 1));
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10));
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "coal"));
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "iron"));
 
             foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
@@ -64,7 +64,7 @@ namespace Tests {
             }
             
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10));
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "blueprints"));
             this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 4));
 
             foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
@@ -84,7 +84,7 @@ namespace Tests {
             }
             
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10));
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "chocolate"));
             this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 11));
 
             foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
