@@ -15,10 +15,14 @@ namespace Controller {
         private const int size = 16;
         [SerializeField] private GameObject itemButton;
         private GameObject dropButton;
+        private GameObject heldItem;
+        private int currentHeld;
 
         public void Start() {
             items = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
+            heldItem = GameObject.Find("HeldItem");
+            currentHeld = 1;
         }
 
         public InventoryItem[] GetItems() {
@@ -74,6 +78,25 @@ namespace Controller {
             dropButton.transform.SetSiblingIndex(1);
 
             return nextSlot;
+        }
+
+        void Update() {
+            if (Input.GetKeyDown(KeyCode.Equals)) {
+                if (currentHeld == 16) currentHeld = 0;
+                heldItem.GetComponentInChildren<Text>().text = GetItemName(++currentHeld);
+            } else if (Input.GetKeyDown(KeyCode.Minus)) {
+                if (currentHeld == 1) currentHeld = 17;
+                heldItem.GetComponentInChildren<Text>().text = GetItemName(--currentHeld);
+            }
+        }
+
+        public int GetCurrentHeld() {
+            return currentHeld;
+        }
+
+        public string GetItemName(int id) {
+            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+            return goh.GameObjs.items[id - 1].name;
         }
 
         public string GetSlotCloneName(int id) {

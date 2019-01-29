@@ -92,6 +92,17 @@ namespace View {
                                                              objPos,
                                                              rot);
         }
+        
+        // Places an object on the grid according to placement system of ints and map
+        public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GameObject item) {
+            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0],
+                mapGrid[xCo, yCo][1] + grassTopHeight,
+                mapGrid[xCo, yCo][2]);
+
+            objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(item,
+                objPos,
+                rot);
+        }
 
         // Places an object on the grid using floats
         public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
