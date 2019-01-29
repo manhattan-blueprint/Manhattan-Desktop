@@ -56,7 +56,7 @@ namespace Controller {
                 if (!Physics.Raycast(ray, out hit)) return;
                 SetFocus(hit.collider.GetComponent<Interactable>());
                 hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-                Quaternion.Euler(0, 0, 0), MapResource.Machinery);
+                Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetCurrentHeld())) as GameObject);
             }
         }
 

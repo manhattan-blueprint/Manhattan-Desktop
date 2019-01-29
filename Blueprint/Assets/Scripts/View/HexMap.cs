@@ -92,6 +92,13 @@ namespace View {
                                                              objPos,
                                                              rot);
         }
+
+        // Places an object on the grid using floats
+        public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
+            int xCo = XToCo(fxCo, fyCo);
+            int yCo = YToCo(fxCo, fyCo);
+            PlaceOnGrid(xCo, yCo, rot, objectCode);
+        }
         
         // Places an object on the grid according to placement system of ints and map
         public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GameObject item) {
@@ -103,13 +110,14 @@ namespace View {
                 objPos,
                 rot);
         }
-
+        
         // Places an object on the grid using floats
-        public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
+        public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, GameObject item) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
-            PlaceOnGrid(xCo, yCo, rot, objectCode);
+            PlaceOnGrid(xCo, yCo, rot, item);
         }
+        
 
         // Removes an object from the grid according to placement system of ints
         // and map
