@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,8 +43,18 @@ namespace Controller {
                 GameManager.Instance().store.Dispatch(
                     new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
             }
-
-        }
+/*            
+            Task.Run(async () => {
+                try {
+                    APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
+                
+                    // Success case
+                } catch (WebException e) {
+                    // Failure case
+                    throw new System.Exception("Did not delete inventory.");
+                }    
+            }).GetAwaiter().GetResult();
+        }*/
 
         public InventoryItem[] GetItems() {
             return inventoryContents;
