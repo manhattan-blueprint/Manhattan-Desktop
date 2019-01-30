@@ -75,7 +75,7 @@ namespace Controller {
         public void StateDidUpdate(GameState state) {
             int length = 0;
             inventoryContents = state.inventoryState.inventoryContents;
-            
+
             // Update UI based on new state
             inventoryContents.Where(x => x != null).Each((element, i) => {
                 length++;
@@ -83,9 +83,19 @@ namespace Controller {
                     GameObject label = Instantiate(itemLabel, itemSlots[i].transform, false);
                     label.name = getSlotName(i);
                     label.GetComponent<Text>().text = $"{element.GetName()} ({element.GetQuantity()})";
-                } else if (element.GetQuantity() > 0){
+                }
+                else if (element.GetQuantity() > 0) {
                     GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text =
                         $"{element.GetName()} ({element.GetQuantity()})";
+                }
+            });
+        }
+
+        public void AddItem(InventoryItem item) {
+            if (IsSpace()) {
+                InventoryItem slotItem = items[GetSlot(item)];
+                if (slotItem != null) {
+                    items[GetSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
                 } else {
                     GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text = "";
                 }
@@ -94,7 +104,7 @@ namespace Controller {
                 GameObject dropButton = GameObject.Find(getButtonName(i));
                 itemLabel.transform.SetSiblingIndex(0);
                 dropButton.transform.SetSiblingIndex(1);
-            });
+            }
             if (length > 0) {
                 foreach (Transform child in heldItem.transform) {
                     if (child.gameObject.CompareTag("Held")) {
