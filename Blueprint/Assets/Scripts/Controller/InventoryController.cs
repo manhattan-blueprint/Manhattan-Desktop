@@ -23,6 +23,11 @@ namespace Controller {
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             heldItem = GameObject.Find("HeldItem");
             currentHeld = 1;
+            foreach (Transform child in heldItem.transform) {
+                if (child.gameObject.CompareTag("Held")) {
+                    child.gameObject.GetComponent<Text>().text = GetItemName(currentHeld);
+                }
+            }
         }
 
         public InventoryItem[] GetItems() {
@@ -82,11 +87,24 @@ namespace Controller {
 
         void Update() {
             if (Input.GetKeyDown(KeyCode.Equals)) {
-                if (currentHeld == 16) currentHeld = 0;
-                heldItem.GetComponentInChildren<Text>().text = GetItemName(++currentHeld);
+                SwitchHeld(1);
             } else if (Input.GetKeyDown(KeyCode.Minus)) {
-                if (currentHeld == 1) currentHeld = 17;
-                heldItem.GetComponentInChildren<Text>().text = GetItemName(--currentHeld);
+                SwitchHeld(0);
+            }
+        }
+
+        void SwitchHeld(int i) {
+            foreach (Transform child in heldItem.transform) {
+                if (child.gameObject.name == "held") {
+                    if (i > 0) {
+                        if (currentHeld == 16) currentHeld = 0;
+                        child.gameObject.GetComponent<Text>().text = GetItemName(++currentHeld);
+                    }
+                    else {
+                        if (currentHeld == 1) currentHeld = 17;
+                        child.gameObject.GetComponent<Text>().text = GetItemName(--currentHeld);
+                    }
+                }
             }
         }
 
