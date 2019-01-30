@@ -38,6 +38,7 @@ namespace Controller {
         }
 
         void Update() {
+            // Pick up an object
             if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
                 collectItem();
             } else if (Input.GetMouseButtonDown(leftButton)) {
@@ -48,6 +49,7 @@ namespace Controller {
                 timer = 0.0f;
             }
 
+            // Place an object
             if (Input.GetMouseButtonDown(rightButton)) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();

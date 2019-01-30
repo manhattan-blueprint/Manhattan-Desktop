@@ -86,9 +86,9 @@ namespace Controller {
         }
 
         void Update() {
-            if (Input.GetKeyDown(KeyCode.Equals)) {
+            if (Input.GetKeyDown(KeyMapping.Increment)) {
                 SwitchHeld(1);
-            } else if (Input.GetKeyDown(KeyCode.Minus)) {
+            } else if (Input.GetKeyDown(KeyMapping.Decrement)) {
                 SwitchHeld(0);
             }
         }

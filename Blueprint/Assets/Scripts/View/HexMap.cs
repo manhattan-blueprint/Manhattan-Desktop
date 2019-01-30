@@ -51,14 +51,6 @@ namespace View {
                     }
                 }
             }
-
-            // Randomly generate machinery
-            int numOfMachines = 20;
-            for (int i = 0; i < numOfMachines; i++) {
-                PlaceOnGrid(UnityEngine.Random.Range(10, 40),
-                UnityEngine.Random.Range(10, 40),
-                Quaternion.Euler(0, 0, 0), MapResource.Machinery);
-            }
         }
 
         // Creates a grid of number coordinates, same reference as to the hexgrid of objects.

@@ -5,5 +5,7 @@ namespace Controller {
         public const KeyCode Inventory = KeyCode.E;
         public const KeyCode Jump = KeyCode.Space;
         public const KeyCode PlaceRandom = KeyCode.Quote;
+        public const KeyCode Increment = KeyCode.Equals;
+        public const KeyCode Decrement = KeyCode.Minus;
     }
 }
