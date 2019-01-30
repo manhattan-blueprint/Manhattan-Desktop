@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Controller;
 using Model;
+using Model.Action;
+using Model.Redux;
+using Model.State;
 using View;
 
 /* Attached to PlayerCamera and controls mouse actions */
@@ -59,6 +62,7 @@ namespace Controller {
                 SetFocus(hit.collider.GetComponent<Interactable>());
                 hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
                 Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetCurrentHeld())) as GameObject);
+                GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetCurrentHeld(), 1));
             }
         }
 

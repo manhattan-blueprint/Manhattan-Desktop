@@ -100,11 +100,7 @@ namespace Controller {
             return goh.GameObjs.items[id - 1].name;
         }
 
-        public string GetSlotCloneName(int id) {
-            return "InventoryItemSlot " + id + "(Clone)";
-        }
-
-        public string GetNameForSlot(int id) {
+        private string getSlotName(int id) {
             return "InventoryItemSlot " + id;
         }
 
