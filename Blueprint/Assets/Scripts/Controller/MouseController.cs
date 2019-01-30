@@ -60,9 +60,12 @@ namespace Controller {
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
                 SetFocus(hit.collider.GetComponent<Interactable>());
-                hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-                Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetCurrentHeld())) as GameObject);
-                GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetCurrentHeld(), 1));
+                if (inventory.GetItemType(inventory.GetCurrentHeld()) == 2) {
+                    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
+                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetCurrentHeld())) as GameObject);
+                
+                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetCurrentHeld(), 1));
+                }
             }
         }
 

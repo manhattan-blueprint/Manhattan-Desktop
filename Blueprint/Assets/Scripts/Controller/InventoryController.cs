@@ -29,6 +29,8 @@ namespace Controller {
         private int currentHeld;
 
         public void Start() {
+            heldItem = GameObject.Find("HeldItem");
+            currentHeld = 0;
             inventoryContents = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
@@ -59,11 +61,11 @@ namespace Controller {
                                 throw new System.Exception("Did not delete inventory.");
                             }    
                         }).GetAwaiter().GetResult();*/
-            heldItem = GameObject.Find("HeldItem");
-            currentHeld = 0;
+            Debug.Log("Hello");
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.CompareTag("Held")) {
                     child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
+                    Debug.Log("Name is: " + GetItemName(inventoryContents[currentHeld].GetId()));
                 }
             }
         }
@@ -73,10 +75,12 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
+            int length = 0;
             inventoryContents = state.inventoryState.inventoryContents;
             
             // Update UI based on new state
             inventoryContents.Where(x => x != null).Each((element, i) => {
+                length++;
                 if (itemSlots[i].transform.childCount < 2) {
                     GameObject label = Instantiate(itemLabel, itemSlots[i].transform, false);
                     label.name = getSlotName(i);
@@ -93,11 +97,13 @@ namespace Controller {
                 itemLabel.transform.SetSiblingIndex(0);
                 dropButton.transform.SetSiblingIndex(1);
             });
-        }
-        
-        public string GetItemName(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].name;
+            if (length > 0) {
+                foreach (Transform child in heldItem.transform) {
+                    if (child.gameObject.CompareTag("Held")) {
+                        child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
+                    }
+                }
+            }
         }
 
         public void CollectItem(Interactable focus, GameObject pickup) {
@@ -116,15 +122,25 @@ namespace Controller {
         }
 
         void SwitchHeld(int i) {
+            int length = 0;
+            inventoryContents.Where(x => x != null).Each((element, x) => { length++;});
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.name == "held") {
                     if (i > 0) {
-                        if (currentHeld == inventoryContents.count - 1) currentHeld = 0;
-                        child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[++currentHeld].GetId());
+                        if (currentHeld == length - 1) {
+                            currentHeld = 0;
+                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
+                        } else {
+                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[++currentHeld].GetId());
+                        }
                     }
                     else {
-                        if (currentHeld == 1) currentHeld = inventoryContents.count - 1;
-                        child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[--currentHeld].GetId());
+                        if (currentHeld == 0) {
+                            currentHeld = length - 1;
+                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
+                        } else {
+                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[--currentHeld].GetId());
+                        }
                     }
                 }
             }
@@ -137,6 +153,11 @@ namespace Controller {
         public string GetItemName(int id) {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
             return goh.GameObjs.items[id - 1].name;
+        }
+        
+        public int GetItemType(int id) {
+            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+            return goh.GameObjs.items[id - 1].type;
         }
 
         private string getSlotName(int id) {

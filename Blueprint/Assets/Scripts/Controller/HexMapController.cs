@@ -13,7 +13,7 @@ namespace Controller {
 
         private void Start() {
             resourceMap[MapResource.Grass] = Resources.Load("Hex_Tile") as GameObject;
-            resourceMap[MapResource.Machinery] = Resources.Load("Machinery") as GameObject;
+            resourceMap[MapResource.Machinery] = Resources.Load("stone") as GameObject;
             resourceMap[MapResource.Rock] = Resources.Load("Rock") as GameObject;
             this.hexMap = new HexMap(resourceMap);
             Cursor.visible = false;
