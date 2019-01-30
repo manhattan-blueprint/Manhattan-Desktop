@@ -16,6 +16,7 @@ namespace Controller {
         private Image checkImage;
 
         void Start() {
+            // TODO: Change finding game objects by name
             blueprintButton = GameObject.Find("BlueprintButton").GetComponent<Button>();
             blueprintButton.onClick.AddListener(OnButtonClick);
             checkImage = GameObject.Find("CheckImage").GetComponent<Image>();
@@ -23,9 +24,9 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
-            // TODO: Replace all of this after the demo, hardcoded to build furnaces
             InventoryItem[] inventoryContents = state.inventoryState.inventoryContents;
-
+            
+            // TODO: Replace all of this after the demo, hardcoded to make furnaces
             checkImage.sprite = Resources.Load<Sprite>("Cross");
             blueprintButton.interactable = false;
             
