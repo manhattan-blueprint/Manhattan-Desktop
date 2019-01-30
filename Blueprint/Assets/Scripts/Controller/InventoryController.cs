@@ -61,7 +61,6 @@ namespace Controller {
             return inventoryContents;
         }
 
-<<<<<<< HEAD
         public void StateDidUpdate(GameState state) {
             inventoryContents = state.inventoryState.inventoryContents;
             
@@ -74,17 +73,6 @@ namespace Controller {
                 } else if (element.GetQuantity() > 0){
                     GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text =
                         $"{element.GetName()} ({element.GetQuantity()})";
-=======
-        public int GetInventorySize() {
-            return size;
-        }
-
-        public void AddItem(InventoryItem item) {
-            if (IsSpace()) {
-                InventoryItem slotItem = items[GetSlot(item)];
-                if (slotItem != null) {
-                    items[GetSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
->>>>>>> Add initial Machine Interaction classes
                 } else {
                     GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text = "";
                 }

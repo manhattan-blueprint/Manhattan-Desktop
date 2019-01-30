@@ -5,41 +5,46 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Model;
+using Model.Action;
+using Model.Redux;
+using Model.State;
 using UnityEditor;
+using UnityEngine.EventSystems;
 using UnityEngine.Experimental.Rendering;
 using View;
 
 namespace Controller {
-//    public class MachineryController : MonoBehaviour, Subscriber<> {
-    public class MachineryController : MonoBehaviour {
-        private Canvas machineryCanvas;
-        private RaycastHit hit;
-        private InventoryController inventory;
+    public class MachineryController : MonoBehaviour { 
         private const int leftButton = 0;
         private const int rightButton = 1;
-        private MenuController menu;
-        private Canvas cursorCanvas;
-        private List<InventorySlotController> itemSlots;
+        private List<OnDragHandler> itemSlots;
         private List<OnDropHandler> inputSlots;
-        public List<InventoryItem> inputs;
-        private InventorySlotController outputSlot;
+        private List<RecipeElement> inputs;
+        private OnDragHandler outputSlot;
+        //TODO: below are bodged for demo, need better solution
+        private int inventorySize = 16;
+        private bool beenChecked;
+        private List<InventorySlotController> inventorySlotsControllers;
             
-        // Start is called before the first frame update
-        void Start() {
-            machineryCanvas = GetComponent<Canvas>();
-            machineryCanvas.enabled = false;
-            inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
-            cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
-            itemSlots = GameObject.Find("InventoryGrid").GetComponentsInChildren<InventorySlotController>().ToList();
+        void Start() {                     
+            itemSlots = GameObject.Find("InventoryGrid").GetComponentsInChildren<OnDragHandler>().ToList();
+            inventorySlotsControllers = GameObject.Find("InventoryGrid").GetComponentsInChildren<InventorySlotController>().ToList();
             inputSlots = GameObject.Find("MachineryInputGrid").GetComponentsInChildren<OnDropHandler>().ToList();
-            outputSlot = GameObject.Find("MachineryOutput").GetComponent<InventorySlotController>();
+            outputSlot = GameObject.Find("MachineryOutput").GetComponent<OnDragHandler>();
+            inputs = new List<RecipeElement>();
+            beenChecked = false;
            
-            //add text fields
-            for (int i = 0; i < inventory.GetInventorySize(); i++) {
+            // TODO: Neaten the dynamic generation of text fields
+            // Add text fields
+            for (int i = 0; i < inventorySize; i++) {
                 GameObject newGO = new GameObject("Text"+i);
                 newGO.transform.SetParent(itemSlots[i].transform);
                 Text text = newGO.AddComponent<Text>();
                 newGO.AddComponent<OnDragHandler>();
+                
+                // TODO: InventorySlotController is overkill for machinery, design new type to combine with OnDragHandler
+                // Set InventorySlotController IDs
+                inventorySlotsControllers[i].SetId(i);
             }
 
             for (int i = 0; i < 2; i++) {
@@ -55,70 +60,56 @@ namespace Controller {
             newGO2.AddComponent<OnDragHandler>();
         }
 
-        // Update is called once per frame
         void Update() {
-            if (Input.GetKeyDown(KeyCode.Q)) {
-                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-                hit = new RaycastHit();
+            if (inputs.Count > 1 && !beenChecked) {
+                beenChecked = true;
+                GameObjectEntry goe = checkOutput();
 
-                // If a GameObject is hit
-                if (!Physics.Raycast(ray, out hit)) return;
-                if (hit.collider.GetComponent<Interactable>().GetItemType() == "Machinery") {
-                    if (machineryCanvas.enabled) {
-                        ContinueGame();
-                    } else {
-                        PauseGame();
-                        LoadInventory();
+                if (goe != null) {
+                    clearInputFields();
+                    setOutputField(goe.name);
+                    // TODO: Should go to the output slot, rather than directly into the inventory
+                    GameManager.Instance().store.Dispatch(new AddItemToInventory(goe.item_id, 1, goe.name));
+
+                    foreach (RecipeElement input in inputs) {
+                        GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(input.item_id, 1));
                     }
-                }
-            }
-        }
-        
-        private void PauseGame() {
-            Time.timeScale = 0;
-            machineryCanvas.enabled = true;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            cursorCanvas.enabled = false;
-        }
-
-        private void ContinueGame() {
-            Time.timeScale = 1;
-            machineryCanvas.enabled = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            cursorCanvas.enabled = true;
-        }
-
-        private void LoadInventory() {
-            for (int i = 0; i < inventory.GetInventorySize(); i++) {
-                Text text = GameObject.Find("Text" + i).GetComponent<Text>();
-                InventoryItem item = inventory.GetItems()[i];
-                
-                Font ArialFont = (Font) Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-                text.font = ArialFont;
-                text.material = ArialFont.material;
-                text.transform.localPosition = new Vector3(0,0,0);
-                text.color = Color.black;
-                text.alignment = TextAnchor.MiddleCenter;
-
-                if (item != null) {
-                    text.text = item.GetItemType();
+                    
+                    inputs = new List<RecipeElement>();
+                    beenChecked = false;
                 } else {
-                    text.text = "";
+                    clearInputFields();
+                    inputs = new List<RecipeElement>();
+                    beenChecked = false;
                 }
             }
         }
 
-        private void checkOutput() {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            List<RecipeElement> inputItems = null;
+        // TODO: Move to MachineryUIController when UI State is implemented (e.g. new FailureToCreateObject)
+        private void clearInputFields() {
+            List<Text> texts = GameObject.Find("MachineryInputGrid").GetComponentsInChildren<Text>().ToList();
 
-            foreach (InventoryItem item in inputs) {
-                inputItems.Add(new RecipeElement(item.GetId(), item.GetQuantity()));
+            foreach (Text text in texts) {
+                text.text = "";
             }
+        }
+
+        // TODO: Move to MachineryUIController when UI State is implemented (e.g. new NewObjectCreated)
+        private void setOutputField(string name) {
+            Text outputFieldText = GameObject.Find("MachineryOutput").GetComponentInChildren<Text>();
+
+            outputFieldText.text = name;
+        }
+
+        public void AddInputItem(int itemID, int quantity) {
+            inputs.Add(new RecipeElement(itemID, quantity));
+        }
+
+        private GameObjectEntry checkOutput() {
+            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
             
-            GameObjectEntry goe = goh.GetRecipe(inputItems, 7);
+            // TODO: Globalise for all machine types
+            return goh.GetRecipe(inputs, 7);
         }
     }  
 
