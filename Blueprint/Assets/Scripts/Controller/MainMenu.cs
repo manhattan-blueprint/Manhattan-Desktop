@@ -76,6 +76,7 @@ public class MainMenu : MonoBehaviour {
             try {
                 APIResult<UserCredentials, JsonError> response = await fetchingResponse;
                 returnUser = response.GetSuccess();
+                GameManager.Instance().SetUserCredentials(returnUser);
                 if (response.isSuccess()) {
                     // Launch Blueprint
                     SceneManager.LoadScene(SceneMapping.World);
