@@ -61,11 +61,9 @@ namespace Controller {
                                 throw new System.Exception("Did not delete inventory.");
                             }    
                         }).GetAwaiter().GetResult();*/
-            Debug.Log("Hello");
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.CompareTag("Held")) {
                     child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
-                    Debug.Log("Name is: " + GetItemName(inventoryContents[currentHeld].GetId()));
                 }
             }
         }

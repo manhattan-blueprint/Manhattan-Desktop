@@ -15,7 +15,7 @@ namespace Controller {
         public Transform capsule;
         public Transform machinery;
         private const float maxDistance = 10;
-        private const float holdLength = 1.0f;
+        private const float holdLength = 0.5f;
         private const int rightButton = 1;
         private const int leftButton = 0;
 
@@ -60,11 +60,11 @@ namespace Controller {
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
                 SetFocus(hit.collider.GetComponent<Interactable>());
-                if (inventory.GetItemType(inventory.GetCurrentHeld()) == 2) {
+                if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
                     hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetCurrentHeld())) as GameObject);
+                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
                 
-                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetCurrentHeld(), 1));
+                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
                 }
             }
         }
