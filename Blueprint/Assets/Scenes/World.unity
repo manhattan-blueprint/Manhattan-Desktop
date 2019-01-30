@@ -1275,6 +1275,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+<<<<<<< HEAD
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -1393,17 +1394,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+=======
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1412,14 +1415,15 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!222 &890459672
+--- !u!222 &864330844
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 890459668}
+  m_GameObject: {fileID: 864330841}
   m_CullTransparentMesh: 0
+<<<<<<< HEAD
 --- !u!1001 &977518261
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1531,6 +1535,9 @@ Transform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1030574286
+=======
+--- !u!1 &890459668
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1538,26 +1545,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1030574287}
   - component: {fileID: 1030574288}
   m_Layer: 5
   m_Name: InventoryGrid
+=======
+  - component: {fileID: 890459669}
+  - component: {fileID: 890459672}
+  - component: {fileID: 890459671}
+  - component: {fileID: 890459670}
+  m_Layer: 5
+  m_Name: BlueprintButton
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1030574287
+=======
+--- !u!224 &890459669
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1030574286}
+=======
+  m_GameObject: {fileID: 890459668}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+<<<<<<< HEAD
   - {fileID: 1883949772}
   - {fileID: 1558945049}
   - {fileID: 2095761806}
@@ -1583,11 +1608,24 @@ RectTransform:
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1030574288
+=======
+  - {fileID: 1297797509}
+  m_Father: {fileID: 4748638}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 180, y: 180}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &890459670
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1030574286}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1652,11 +1690,51 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1259367266
+=======
+  m_GameObject: {fileID: 890459668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 0.5019608, g: 0.5019608, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.5019608, g: 0.7529412, b: 1, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 0
+  m_TargetGraphic: {fileID: 890459671}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &890459671
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1259367264}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1670,6 +1748,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259367264}
+=======
+  m_GameObject: {fileID: 890459668}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -1683,8 +1764,13 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+<<<<<<< HEAD
   m_Sprite: {fileID: 0}
   m_Type: 0
+=======
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1692,12 +1778,17 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
 --- !u!222 &1259367268
+=======
+--- !u!222 &890459672
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1259367264}
   m_CullTransparentMesh: 0
 --- !u!114 &1259367269
@@ -1714,6 +1805,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
 --- !u!1 &1297797508
+=======
+  m_GameObject: {fileID: 890459668}
+  m_CullTransparentMesh: 0
+--- !u!1001 &977518261
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2127419266}
+    m_Modifications:
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd0456c57ed3844f1a717a970acaa962, type: 3}
+--- !u!1 &1026174066
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1721,16 +1858,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1297797509}
   - component: {fileID: 1297797511}
   - component: {fileID: 1297797510}
   m_Layer: 5
   m_Name: BlueprintText
+=======
+  - component: {fileID: 1026174068}
+  - component: {fileID: 1026174067}
+  m_Layer: 0
+  m_Name: Directional Light
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1297797509
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1752,10 +1897,15 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1297797510
 MonoBehaviour:
+=======
+--- !u!108 &1026174067
+Light:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1297797508}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1786,13 +1936,61 @@ MonoBehaviour:
   m_Text: Furnace
 --- !u!222 &1297797511
 CanvasRenderer:
+=======
+  m_GameObject: {fileID: 1026174066}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 1
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1026174068
+Transform:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1297797508}
   m_CullTransparentMesh: 0
 --- !u!1 &1303485310
+=======
+  m_GameObject: {fileID: 1026174066}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalPosition: {x: 49.962833, y: 3.75, z: 56.95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1030574286
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1800,23 +1998,35 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1303485311}
   - component: {fileID: 1303485314}
   - component: {fileID: 1303485313}
   - component: {fileID: 1303485312}
   m_Layer: 5
   m_Name: MachineryOutput
+=======
+  - component: {fileID: 1030574287}
+  - component: {fileID: 1030574288}
+  m_Layer: 5
+  m_Name: InventoryGrid
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1303485311
+=======
+--- !u!224 &1030574287
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1303485310}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1843,17 +2053,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1303485313
+=======
+  m_GameObject: {fileID: 1030574286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1883949772}
+  - {fileID: 1558945049}
+  - {fileID: 2095761806}
+  - {fileID: 1660012327}
+  - {fileID: 1447098844}
+  - {fileID: 121004060}
+  - {fileID: 1826476419}
+  - {fileID: 2010597566}
+  - {fileID: 1259367265}
+  - {fileID: 1475149556}
+  - {fileID: 172050503}
+  - {fileID: 531851283}
+  - {fileID: 1304006014}
+  - {fileID: 837240521}
+  - {fileID: 1908924492}
+  - {fileID: 1336677784}
+  m_Father: {fileID: 1941638093}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 82, y: 131}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1030574288
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1303485310}
+=======
+  m_GameObject: {fileID: 1030574286}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -1880,6 +2127,27 @@ CanvasRenderer:
   m_GameObject: {fileID: 1303485310}
   m_CullTransparentMesh: 0
 --- !u!1 &1304006013
+=======
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 60, y: 60}
+  m_Spacing: {x: 40, y: 40}
+  m_Constraint: 2
+  m_ConstraintCount: 4
+--- !u!4 &1251652869 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4447418965701710, guid: bd0456c57ed3844f1a717a970acaa962,
+    type: 3}
+  m_PrefabInstance: {fileID: 977518261}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1259367264
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1887,6 +2155,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1304006014}
   - component: {fileID: 1304006017}
   - component: {fileID: 1304006016}
@@ -1894,49 +2163,86 @@ GameObject:
   - component: {fileID: 1304006018}
   m_Layer: 5
   m_Name: Slot13
+=======
+  - component: {fileID: 1259367265}
+  - component: {fileID: 1259367268}
+  - component: {fileID: 1259367267}
+  - component: {fileID: 1259367266}
+  - component: {fileID: 1259367269}
+  m_Layer: 5
+  m_Name: Slot9
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1304006014
+=======
+--- !u!224 &1259367265
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1304006013}
+=======
+  m_GameObject: {fileID: 1259367264}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
   m_RootOrder: 12
+=======
+  m_RootOrder: 8
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &1304006015
+=======
+--- !u!114 &1259367266
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1304006013}
+=======
+  m_GameObject: {fileID: 1259367264}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!114 &1304006016
+=======
+--- !u!114 &1259367267
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1304006013}
+=======
+  m_GameObject: {fileID: 1259367264}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -1959,28 +2265,46 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
 --- !u!222 &1304006017
+=======
+--- !u!222 &1259367268
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1304006013}
   m_CullTransparentMesh: 0
 --- !u!114 &1304006018
+=======
+  m_GameObject: {fileID: 1259367264}
+  m_CullTransparentMesh: 0
+--- !u!114 &1259367269
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1304006013}
+=======
+  m_GameObject: {fileID: 1259367264}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+<<<<<<< HEAD
 --- !u!1 &1336677783
+=======
+--- !u!1 &1297797508
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1988,6 +2312,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1336677784}
   - component: {fileID: 1336677787}
   - component: {fileID: 1336677786}
@@ -1995,17 +2320,29 @@ GameObject:
   - component: {fileID: 1336677788}
   m_Layer: 5
   m_Name: Slot16
+=======
+  - component: {fileID: 1297797509}
+  - component: {fileID: 1297797511}
+  - component: {fileID: 1297797510}
+  m_Layer: 5
+  m_Name: BlueprintText
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1336677784
+=======
+--- !u!224 &1297797509
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1336677783}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -2013,12 +2350,22 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1030574287}
   m_RootOrder: 15
+=======
+  m_GameObject: {fileID: 1297797508}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 890459669}
+  m_RootOrder: 0
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &1336677785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2032,15 +2379,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1336677786
+=======
+--- !u!114 &1297797510
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1336677783}
+=======
+  m_GameObject: {fileID: 1297797508}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -2051,6 +2405,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+<<<<<<< HEAD
   m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -2061,11 +2416,29 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
 --- !u!222 &1336677787
+=======
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 24
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Furnace
+--- !u!222 &1297797511
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1336677783}
   m_CullTransparentMesh: 0
 --- !u!114 &1336677788
@@ -2082,6 +2455,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
 --- !u!1 &1417344209
+=======
+  m_GameObject: {fileID: 1297797508}
+  m_CullTransparentMesh: 0
+--- !u!1 &1303485310
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2089,22 +2467,36 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1417344210}
   - component: {fileID: 1417344212}
   - component: {fileID: 1417344211}
   m_Layer: 5
   m_Name: IngredientPanel
+=======
+  - component: {fileID: 1303485311}
+  - component: {fileID: 1303485314}
+  - component: {fileID: 1303485313}
+  - component: {fileID: 1303485312}
+  m_Layer: 5
+  m_Name: MachineryOutput
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1417344210
+=======
+--- !u!224 &1303485311
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1417344209}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -2121,100 +2513,44 @@ RectTransform:
   m_SizeDelta: {x: 180, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1417344211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417344209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
---- !u!222 &1417344212
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417344209}
-  m_CullTransparentMesh: 0
---- !u!1 &1447098843
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1447098844}
-  - component: {fileID: 1447098847}
-  - component: {fileID: 1447098846}
-  - component: {fileID: 1447098845}
-  - component: {fileID: 1447098848}
-  m_Layer: 5
-  m_Name: Slot5
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1447098844
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447098843}
+=======
+  m_GameObject: {fileID: 1303485310}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1030574287}
-  m_RootOrder: 4
+  m_Father: {fileID: 1941638093}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 370, y: -459}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1447098845
+--- !u!114 &1303485312
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447098843}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1417344209}
+=======
+  m_GameObject: {fileID: 1303485310}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1447098846
+--- !u!114 &1303485313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447098843}
+  m_GameObject: {fileID: 1303485310}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -2237,28 +2573,25 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!222 &1447098847
+<<<<<<< HEAD
+--- !u!222 &1417344212
+=======
+--- !u!222 &1303485314
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447098843}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1417344209}
   m_CullTransparentMesh: 0
---- !u!114 &1447098848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447098843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
---- !u!1 &1457501638
+--- !u!1 &1447098843
+=======
+  m_GameObject: {fileID: 1303485310}
+  m_CullTransparentMesh: 0
+--- !u!1 &1304006013
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2266,8 +2599,171 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1447098844}
+  - component: {fileID: 1447098847}
+  - component: {fileID: 1447098846}
+  - component: {fileID: 1447098845}
+  - component: {fileID: 1447098848}
+=======
+  - component: {fileID: 1304006014}
+  - component: {fileID: 1304006017}
+  - component: {fileID: 1304006016}
+  - component: {fileID: 1304006015}
+  - component: {fileID: 1304006018}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Layer: 5
+  m_Name: Slot5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1447098844
+=======
+--- !u!224 &1304006014
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1447098843}
+=======
+  m_GameObject: {fileID: 1304006013}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
+  m_RootOrder: 4
+=======
+  m_RootOrder: 12
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
+--- !u!114 &1447098845
+=======
+--- !u!114 &1304006015
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1447098843}
+=======
+  m_GameObject: {fileID: 1304006013}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+<<<<<<< HEAD
+--- !u!114 &1447098846
+=======
+--- !u!114 &1304006016
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1447098843}
+=======
+  m_GameObject: {fileID: 1304006013}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+<<<<<<< HEAD
+--- !u!222 &1447098847
+=======
+--- !u!222 &1304006017
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1447098843}
+  m_CullTransparentMesh: 0
+--- !u!114 &1447098848
+=======
+  m_GameObject: {fileID: 1304006013}
+  m_CullTransparentMesh: 0
+--- !u!114 &1304006018
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1447098843}
+=======
+  m_GameObject: {fileID: 1304006013}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+<<<<<<< HEAD
+--- !u!1 &1457501638
+=======
+--- !u!1 &1336677783
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1457501639}
   - component: {fileID: 1457501640}
+=======
+  - component: {fileID: 1336677784}
+  - component: {fileID: 1336677787}
+  - component: {fileID: 1336677786}
+  - component: {fileID: 1336677785}
+  - component: {fileID: 1336677788}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Layer: 5
   m_Name: MachineryInputGrid
   m_TagString: Untagged
@@ -2340,44 +2836,72 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1475149556
+=======
+--- !u!224 &1336677784
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1475149555}
+=======
+  m_GameObject: {fileID: 1336677783}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
   m_RootOrder: 9
+=======
+  m_RootOrder: 15
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &1475149557
+=======
+--- !u!114 &1336677785
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1475149555}
+=======
+  m_GameObject: {fileID: 1336677783}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!114 &1475149558
+=======
+--- !u!114 &1336677786
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1475149555}
+=======
+  m_GameObject: {fileID: 1336677783}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -2400,12 +2924,516 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
 --- !u!222 &1475149559
+=======
+--- !u!222 &1336677787
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1475149555}
+  m_CullTransparentMesh: 0
+--- !u!114 &1475149560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475149555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+--- !u!1 &1524273543
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1524273545}
+  - component: {fileID: 1524273544}
+  m_Layer: 0
+  m_Name: GridPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1524273544
+=======
+  m_GameObject: {fileID: 1336677783}
+  m_CullTransparentMesh: 0
+--- !u!114 &1336677788
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1524273543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1254083943, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 3
+  m_AspectRatio: 1
+--- !u!224 &1524273545
+=======
+  m_GameObject: {fileID: 1336677783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+--- !u!1 &1417344209
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1417344210}
+  - component: {fileID: 1417344212}
+  - component: {fileID: 1417344211}
+  m_Layer: 5
+  m_Name: IngredientPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1417344210
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1524273543}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1777913580}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1558945048
+=======
+  m_GameObject: {fileID: 1417344209}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1857982429}
+  - {fileID: 708531633}
+  m_Father: {fileID: 4748638}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -95}
+  m_SizeDelta: {x: 180, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1417344211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417344209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &1417344212
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417344209}
+  m_CullTransparentMesh: 0
+--- !u!1 &1447098843
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1558945049}
+  - component: {fileID: 1558945052}
+  - component: {fileID: 1558945051}
+  - component: {fileID: 1558945050}
+  - component: {fileID: 1558945053}
+  m_Layer: 5
+  m_Name: Slot2
+=======
+  - component: {fileID: 1447098844}
+  - component: {fileID: 1447098847}
+  - component: {fileID: 1447098846}
+  - component: {fileID: 1447098845}
+  - component: {fileID: 1447098848}
+  m_Layer: 5
+  m_Name: Slot5
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1558945049
+=======
+--- !u!224 &1447098844
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1558945048}
+=======
+  m_GameObject: {fileID: 1447098843}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
+  m_RootOrder: 1
+=======
+  m_RootOrder: 4
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
+--- !u!114 &1558945050
+=======
+--- !u!114 &1447098845
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1558945048}
+=======
+  m_GameObject: {fileID: 1447098843}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+<<<<<<< HEAD
+--- !u!114 &1558945051
+=======
+--- !u!114 &1447098846
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1558945048}
+=======
+  m_GameObject: {fileID: 1447098843}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+<<<<<<< HEAD
+--- !u!222 &1558945052
+=======
+--- !u!222 &1447098847
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1558945048}
+  m_CullTransparentMesh: 0
+--- !u!114 &1558945053
+=======
+  m_GameObject: {fileID: 1447098843}
+  m_CullTransparentMesh: 0
+--- !u!114 &1447098848
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1558945048}
+=======
+  m_GameObject: {fileID: 1447098843}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+<<<<<<< HEAD
+--- !u!1 &1582219104
+=======
+--- !u!1 &1457501638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1457501639}
+  - component: {fileID: 1457501640}
+  m_Layer: 5
+  m_Name: MachineryInputGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1457501639
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457501638}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 138446510}
+  - {fileID: 282243602}
+  m_Father: {fileID: 1941638093}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -248, y: 142}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1457501640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457501638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 80, y: 80}
+  m_Spacing: {x: 40, y: 40}
+  m_Constraint: 0
+  m_ConstraintCount: 2
+--- !u!1 &1475149555
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1582219105}
+  - component: {fileID: 1582219107}
+  - component: {fileID: 1582219106}
+  m_Layer: 5
+  m_Name: Image
+=======
+  - component: {fileID: 1475149556}
+  - component: {fileID: 1475149559}
+  - component: {fileID: 1475149558}
+  - component: {fileID: 1475149557}
+  - component: {fileID: 1475149560}
+  m_Layer: 5
+  m_Name: Slot10
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1582219105
+=======
+--- !u!224 &1475149556
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1582219104}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.41875, y: 1.41875, z: 1.41875}
+  m_Children: []
+  m_Father: {fileID: 1766258141}
+  m_RootOrder: 0
+=======
+  m_GameObject: {fileID: 1475149555}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+  m_RootOrder: 9
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
+--- !u!114 &1582219106
+=======
+--- !u!114 &1475149557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475149555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1475149558
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1582219104}
+=======
+  m_GameObject: {fileID: 1475149555}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+<<<<<<< HEAD
+--- !u!222 &1582219107
+=======
+--- !u!222 &1475149559
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1582219104}
+  m_CullTransparentMesh: 0
+--- !u!1 &1660012326
+=======
   m_GameObject: {fileID: 1475149555}
   m_CullTransparentMesh: 0
 --- !u!114 &1475149560
@@ -2472,6 +3500,7 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1558945048
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2479,181 +3508,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1558945049}
-  - component: {fileID: 1558945052}
-  - component: {fileID: 1558945051}
-  - component: {fileID: 1558945050}
-  - component: {fileID: 1558945053}
-  m_Layer: 5
-  m_Name: Slot2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1558945049
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558945048}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1030574287}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1558945050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558945048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1558945051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558945048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
---- !u!222 &1558945052
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558945048}
-  m_CullTransparentMesh: 0
---- !u!114 &1558945053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558945048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
---- !u!1 &1582219104
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1582219105}
-  - component: {fileID: 1582219107}
-  - component: {fileID: 1582219106}
-  m_Layer: 5
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1582219105
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582219104}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.41875, y: 1.41875, z: 1.41875}
-  m_Children: []
-  m_Father: {fileID: 1766258141}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1582219106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582219104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
---- !u!222 &1582219107
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582219104}
-  m_CullTransparentMesh: 0
---- !u!1 &1660012326
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1660012327}
   - component: {fileID: 1660012330}
   - component: {fileID: 1660012329}
@@ -2661,49 +3516,86 @@ GameObject:
   - component: {fileID: 1660012331}
   m_Layer: 5
   m_Name: Slot4
+=======
+  - component: {fileID: 1558945049}
+  - component: {fileID: 1558945052}
+  - component: {fileID: 1558945051}
+  - component: {fileID: 1558945050}
+  - component: {fileID: 1558945053}
+  m_Layer: 5
+  m_Name: Slot2
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &1660012327
+=======
+--- !u!224 &1558945049
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1660012326}
+=======
+  m_GameObject: {fileID: 1558945048}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
   m_RootOrder: 3
+=======
+  m_RootOrder: 1
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &1660012328
+=======
+--- !u!114 &1558945050
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1660012326}
+=======
+  m_GameObject: {fileID: 1558945048}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!114 &1660012329
+=======
+--- !u!114 &1558945051
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1660012326}
+=======
+  m_GameObject: {fileID: 1558945048}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -2726,27 +3618,42 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
 --- !u!222 &1660012330
+=======
+--- !u!222 &1558945052
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1660012326}
   m_CullTransparentMesh: 0
 --- !u!114 &1660012331
+=======
+  m_GameObject: {fileID: 1558945048}
+  m_CullTransparentMesh: 0
+--- !u!114 &1558945053
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1660012326}
+=======
+  m_GameObject: {fileID: 1558945048}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+<<<<<<< HEAD
 --- !u!1 &1766258137
 GameObject:
   m_ObjectHideFlags: 0
@@ -2847,6 +3754,9 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &1777913576
+=======
+--- !u!1 &1582219104
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2854,6 +3764,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 1777913580}
   - component: {fileID: 1777913579}
   - component: {fileID: 1777913578}
@@ -2862,11 +3773,19 @@ GameObject:
   - component: {fileID: 1777913581}
   m_Layer: 5
   m_Name: InventoryUICanvas
+=======
+  - component: {fileID: 1582219105}
+  - component: {fileID: 1582219107}
+  - component: {fileID: 1582219106}
+  m_Layer: 5
+  m_Name: Image
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!114 &1777913577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2928,11 +3847,15 @@ Canvas:
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1777913580
+=======
+--- !u!224 &1582219105
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1777913576}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -2942,10 +3865,20 @@ RectTransform:
   - {fileID: 1524273545}
   m_Father: {fileID: 0}
   m_RootOrder: 1
+=======
+  m_GameObject: {fileID: 1582219104}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.41875, y: 1.41875, z: 1.41875}
+  m_Children: []
+  m_Father: {fileID: 1766258141}
+  m_RootOrder: 0
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
+<<<<<<< HEAD
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1777913581
@@ -2954,6 +3887,538 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777913576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1fa06b330dfc415bbbee2e18a963166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1777913582
+=======
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1582219106
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1777913576}
+=======
+  m_GameObject: {fileID: 1582219104}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e60fac6f49ef0b4d6ae3a0208362fc91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+<<<<<<< HEAD
+  panel: {fileID: 1524273543}
+  numSlots: 16
+  numRows: 4
+  sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  buttonText: Drop
+  buttonFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1826476418
+=======
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &1582219107
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1582219104}
+  m_CullTransparentMesh: 0
+--- !u!1 &1660012326
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1826476419}
+  - component: {fileID: 1826476422}
+  - component: {fileID: 1826476421}
+  - component: {fileID: 1826476420}
+  - component: {fileID: 1826476423}
+=======
+  - component: {fileID: 1660012327}
+  - component: {fileID: 1660012330}
+  - component: {fileID: 1660012329}
+  - component: {fileID: 1660012328}
+  - component: {fileID: 1660012331}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Layer: 5
+  m_Name: Slot7
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1826476419
+=======
+--- !u!224 &1660012327
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1826476418}
+=======
+  m_GameObject: {fileID: 1660012326}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
+  m_RootOrder: 6
+=======
+  m_RootOrder: 3
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
+--- !u!114 &1826476420
+=======
+--- !u!114 &1660012328
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1826476418}
+=======
+  m_GameObject: {fileID: 1660012326}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+<<<<<<< HEAD
+--- !u!114 &1826476421
+=======
+--- !u!114 &1660012329
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1826476418}
+=======
+  m_GameObject: {fileID: 1660012326}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+<<<<<<< HEAD
+--- !u!222 &1826476422
+=======
+--- !u!222 &1660012330
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1826476418}
+  m_CullTransparentMesh: 0
+--- !u!114 &1826476423
+=======
+  m_GameObject: {fileID: 1660012326}
+  m_CullTransparentMesh: 0
+--- !u!114 &1660012331
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1826476418}
+=======
+  m_GameObject: {fileID: 1660012326}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+<<<<<<< HEAD
+--- !u!1 &1857982428
+=======
+--- !u!1 &1766258137
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1857982429}
+  - component: {fileID: 1857982431}
+  - component: {fileID: 1857982430}
+  m_Layer: 5
+  m_Name: IngredientText
+  m_TagString: Untagged
+=======
+  - component: {fileID: 1766258141}
+  - component: {fileID: 1766258140}
+  - component: {fileID: 1766258139}
+  - component: {fileID: 1766258138}
+  m_Layer: 5
+  m_Name: Canvas
+  m_TagString: Cursor
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1857982429
+RectTransform:
+=======
+--- !u!114 &1766258138
+MonoBehaviour:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1857982428}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1417344210}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1857982430
+=======
+  m_GameObject: {fileID: 1766258137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1766258139
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1857982428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 3
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 8 Stone
+--- !u!222 &1857982431
+CanvasRenderer:
+=======
+  m_GameObject: {fileID: 1766258137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+--- !u!223 &1766258140
+Canvas:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1857982428}
+  m_CullTransparentMesh: 0
+--- !u!1 &1883949771
+=======
+  m_GameObject: {fileID: 1766258137}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &1766258141
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766258137}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 1582219105}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!1 &1777913576
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1883949772}
+  - component: {fileID: 1883949775}
+  - component: {fileID: 1883949774}
+  - component: {fileID: 1883949773}
+  - component: {fileID: 1883949776}
+  m_Layer: 5
+  m_Name: Slot1
+=======
+  - component: {fileID: 1777913580}
+  - component: {fileID: 1777913579}
+  - component: {fileID: 1777913578}
+  - component: {fileID: 1777913577}
+  - component: {fileID: 1777913582}
+  - component: {fileID: 1777913581}
+  m_Layer: 5
+  m_Name: InventoryUICanvas
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1883949772
+=======
+--- !u!114 &1777913577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777913576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1777913578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777913576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+--- !u!223 &1777913579
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777913576}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &1777913580
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1883949771}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+  m_RootOrder: 0
+=======
+  m_GameObject: {fileID: 1777913576}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 864330842}
+  - {fileID: 1524273545}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+<<<<<<< HEAD
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1883949773
+=======
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &1777913581
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1883949771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1883949774
+=======
   m_GameObject: {fileID: 1777913576}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -3030,12 +4495,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1826476421
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1883949771}
+=======
   m_GameObject: {fileID: 1826476418}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -3058,28 +4528,46 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
+--- !u!222 &1883949775
+=======
 --- !u!222 &1826476422
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1883949771}
+  m_CullTransparentMesh: 0
+--- !u!114 &1883949776
+=======
   m_GameObject: {fileID: 1826476418}
   m_CullTransparentMesh: 0
 --- !u!114 &1826476423
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1883949771}
+=======
   m_GameObject: {fileID: 1826476418}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+<<<<<<< HEAD
+--- !u!1 &1908924491
+=======
 --- !u!1 &1857982428
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3087,22 +4575,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1908924492}
+  - component: {fileID: 1908924495}
+  - component: {fileID: 1908924494}
+  - component: {fileID: 1908924493}
+  - component: {fileID: 1908924496}
+  m_Layer: 5
+  m_Name: Slot15
+=======
   - component: {fileID: 1857982429}
   - component: {fileID: 1857982431}
   - component: {fileID: 1857982430}
   m_Layer: 5
   m_Name: IngredientText
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
+--- !u!224 &1908924492
+=======
 --- !u!224 &1857982429
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1908924491}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+  m_RootOrder: 14
+=======
   m_GameObject: {fileID: 1857982428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -3110,18 +4621,28 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1417344210}
   m_RootOrder: 0
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
+<<<<<<< HEAD
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1908924493
+=======
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1857982430
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1908924491}
+=======
   m_GameObject: {fileID: 1857982428}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -3204,18 +4725,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883949771}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+--- !u!114 &1908924494
+=======
 --- !u!114 &1883949774
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1908924491}
+=======
   m_GameObject: {fileID: 1883949771}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -3238,28 +4768,46 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
+--- !u!222 &1908924495
+=======
 --- !u!222 &1883949775
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1908924491}
+  m_CullTransparentMesh: 0
+--- !u!114 &1908924496
+=======
   m_GameObject: {fileID: 1883949771}
   m_CullTransparentMesh: 0
 --- !u!114 &1883949776
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1908924491}
+=======
   m_GameObject: {fileID: 1883949771}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+<<<<<<< HEAD
+--- !u!1 &1912050189
+=======
 --- !u!1 &1908924491
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3267,6 +4815,17 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1912050192}
+  - component: {fileID: 1912050191}
+  - component: {fileID: 1912050190}
+  - component: {fileID: 1912050193}
+  - component: {fileID: 1912050194}
+  - component: {fileID: 1912050195}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+=======
   - component: {fileID: 1908924492}
   - component: {fileID: 1908924495}
   - component: {fileID: 1908924494}
@@ -3275,10 +4834,14 @@ GameObject:
   m_Layer: 5
   m_Name: Slot15
   m_TagString: Untagged
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
+--- !u!114 &1912050190
+=======
 --- !u!224 &1908924492
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3299,11 +4862,25 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1908924493
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1912050189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53c9f2c9cb67e48619f3bb28136f7c13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemLabel: {fileID: 4429903910265034944, guid: f1d164d940fccb24d8d8964d804b3436,
+    type: 3}
+  itemButton: {fileID: 0}
+--- !u!143 &1912050191
+CharacterController:
+=======
   m_GameObject: {fileID: 1908924491}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -3312,10 +4889,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!114 &1908924494
 MonoBehaviour:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1912050189}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1912050192
+Transform:
+=======
   m_GameObject: {fileID: 1908924491}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -3362,10 +4956,23 @@ MonoBehaviour:
   id: 0
 --- !u!1 &1912050189
 GameObject:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1912050189}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.6, y: 0.3179162, z: 49.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2127419266}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1912050193
+=======
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1912050192}
@@ -3382,6 +4989,7 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!114 &1912050190
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3390,12 +4998,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912050189}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
+  m_Script: {fileID: 11500000, guid: 6cbf3edc4de7c42ea80a1cdd30e8157a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.020832062
+      value: 1.0062561
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9874878
+      value: 0.012500763
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1912050194
+=======
   m_Script: {fileID: 11500000, guid: 53c9f2c9cb67e48619f3bb28136f7c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemLabel: {fileID: 4429903910265034944, guid: f1d164d940fccb24d8d8964d804b3436,
     type: 3}
-  itemButton: {fileID: 0}
 --- !u!143 &1912050191
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3430,6 +5067,7 @@ Transform:
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1912050193
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3438,6 +5076,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912050189}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
+  m_Script: {fileID: 11500000, guid: bedde56a44543433c87f2fa5e78aaf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1912050195
+=======
   m_Script: {fileID: 11500000, guid: 6cbf3edc4de7c42ea80a1cdd30e8157a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -3466,6 +5110,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
 --- !u!114 &1912050194
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3474,6 +5119,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912050189}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
+=======
   m_Script: {fileID: 11500000, guid: bedde56a44543433c87f2fa5e78aaf74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -3486,6 +5133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912050189}
   m_Enabled: 1
   m_EditorHideFlags: 0
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Script: {fileID: 11500000, guid: 44e6ed7136dd8447b88d80072a17fdea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -3593,6 +5241,7 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1941638094
+<<<<<<< HEAD
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3642,17 +5291,24 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2001247767
+=======
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2001247765}
+=======
+  m_GameObject: {fileID: 1941638089}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 251b133cd3d664677b8c2b66780b6510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
@@ -3679,6 +5335,9 @@ CanvasRenderer:
   m_GameObject: {fileID: 2001247765}
   m_CullTransparentMesh: 0
 --- !u!1 &2010597565
+=======
+--- !u!1 &2001247765
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3686,6 +5345,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 2010597566}
   - component: {fileID: 2010597569}
   - component: {fileID: 2010597568}
@@ -3693,17 +5353,29 @@ GameObject:
   - component: {fileID: 2010597570}
   m_Layer: 5
   m_Name: Slot8
+=======
+  - component: {fileID: 2001247766}
+  - component: {fileID: 2001247768}
+  - component: {fileID: 2001247767}
+  m_Layer: 5
+  m_Name: Panel
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &2010597566
+=======
+--- !u!224 &2001247766
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2010597565}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -3711,12 +5383,22 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1030574287}
   m_RootOrder: 7
+=======
+  m_GameObject: {fileID: 2001247765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1941638093}
+  m_RootOrder: 0
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &2010597567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3730,27 +5412,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2010597568
+=======
+--- !u!114 &2001247767
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2010597565}
+=======
+  m_GameObject: {fileID: 2001247765}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3758,12 +5447,17 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+<<<<<<< HEAD
 --- !u!222 &2010597569
+=======
+--- !u!222 &2001247768
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2010597565}
   m_CullTransparentMesh: 0
 --- !u!114 &2010597570
@@ -3780,6 +5474,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
 --- !u!1 &2095761805
+=======
+  m_GameObject: {fileID: 2001247765}
+  m_CullTransparentMesh: 0
+--- !u!1 &2010597565
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3787,6 +5486,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 2095761806}
   - component: {fileID: 2095761809}
   - component: {fileID: 2095761808}
@@ -3794,30 +5494,52 @@ GameObject:
   - component: {fileID: 2095761810}
   m_Layer: 5
   m_Name: Slot3
+=======
+  - component: {fileID: 2010597566}
+  - component: {fileID: 2010597569}
+  - component: {fileID: 2010597568}
+  - component: {fileID: 2010597567}
+  - component: {fileID: 2010597570}
+  m_Layer: 5
+  m_Name: Slot8
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &2095761806
+=======
+--- !u!224 &2010597566
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2095761805}
+=======
+  m_GameObject: {fileID: 2010597565}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1030574287}
+<<<<<<< HEAD
   m_RootOrder: 2
+=======
+  m_RootOrder: 7
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &2095761807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3868,17 +5590,25 @@ CanvasRenderer:
   m_GameObject: {fileID: 2095761805}
   m_CullTransparentMesh: 0
 --- !u!114 &2095761810
+=======
+--- !u!114 &2010597567
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2095761805}
+=======
+  m_GameObject: {fileID: 2010597565}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   id: 0
 --- !u!1 &2127419265
 GameObject:
@@ -3917,17 +5647,25 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2127419267
+=======
+--- !u!114 &2010597568
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2127419265}
+=======
+  m_GameObject: {fileID: 2010597565}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def97d0cf602c469493fd4779689d9fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   playerBody: {fileID: 1912050192}
 --- !u!81 &2127419268
 AudioListener:
@@ -4054,12 +5792,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+=======
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+<<<<<<< HEAD
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
@@ -4075,11 +5818,24 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Currently Held:'
 --- !u!222 &55249475
+=======
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &2010597569
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 55249472}
   m_CullTransparentMesh: 0
 --- !u!1 &323944907
@@ -4163,10 +5919,17 @@ Canvas:
   m_TargetDisplay: 0
 --- !u!224 &323944911
 RectTransform:
+=======
+  m_GameObject: {fileID: 2010597565}
+  m_CullTransparentMesh: 0
+--- !u!114 &2010597570
+MonoBehaviour:
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 323944907}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -4182,6 +5945,16 @@ RectTransform:
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &2014569173
+=======
+  m_GameObject: {fileID: 2010597565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+--- !u!1 &2095761805
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4189,9 +5962,17 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 2014569174}
   - component: {fileID: 2014569176}
   - component: {fileID: 2014569175}
+=======
+  - component: {fileID: 2095761806}
+  - component: {fileID: 2095761809}
+  - component: {fileID: 2095761808}
+  - component: {fileID: 2095761807}
+  - component: {fileID: 2095761810}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Layer: 5
   m_Name: held
   m_TagString: Held
@@ -4199,12 +5980,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!224 &2014569174
+=======
+--- !u!224 &2095761806
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2014569173}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -4212,19 +5998,48 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2029463531}
   m_RootOrder: 1
+=======
+  m_GameObject: {fileID: 2095761805}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1030574287}
+  m_RootOrder: 2
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.00030517578}
   m_SizeDelta: {x: -1, y: -3.8820038}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!114 &2014569175
+=======
+--- !u!114 &2095761807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095761805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b3b6bf09cea4f18a42d625963edf23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2095761808
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2014569173}
+=======
+  m_GameObject: {fileID: 2095761805}
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -4238,6 +6053,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+<<<<<<< HEAD
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 16
@@ -4253,14 +6069,45 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 
 --- !u!222 &2014569176
+=======
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &2095761809
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 2014569173}
   m_CullTransparentMesh: 0
 --- !u!1 &2029463530
+=======
+  m_GameObject: {fileID: 2095761805}
+  m_CullTransparentMesh: 0
+--- !u!114 &2095761810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095761805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67fbabf7a435429f9b495dba013befd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+--- !u!1 &2127419265
+>>>>>>> Implement drag & drop Machinery Crafting view, specific to demo
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
