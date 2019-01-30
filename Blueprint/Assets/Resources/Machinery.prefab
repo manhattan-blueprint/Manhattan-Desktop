@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  type: Machinery
+  type: stone
 --- !u!114 &8609363312237960795
 MonoBehaviour:
   m_ObjectHideFlags: 0
