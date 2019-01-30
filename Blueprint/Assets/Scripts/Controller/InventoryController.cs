@@ -122,22 +122,30 @@ namespace Controller {
         void SwitchHeld(int i) {
             int length = 0;
             inventoryContents.Where(x => x != null).Each((element, x) => { length++;});
-            foreach (Transform child in heldItem.transform) {
-                if (child.gameObject.name == "held") {
-                    if (i > 0) {
-                        if (currentHeld == length - 1) {
-                            currentHeld = 0;
-                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
-                        } else {
-                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[++currentHeld].GetId());
+            if (length > 0) {
+                foreach (Transform child in heldItem.transform) {
+                    if (child.gameObject.name == "held") {
+                        if (i > 0) {
+                            if (currentHeld == length - 1) {
+                                currentHeld = 0;
+                                child.gameObject.GetComponent<Text>().text =
+                                    GetItemName(inventoryContents[currentHeld].GetId());
+                            }
+                            else {
+                                child.gameObject.GetComponent<Text>().text =
+                                    GetItemName(inventoryContents[++currentHeld].GetId());
+                            }
                         }
-                    }
-                    else {
-                        if (currentHeld == 0) {
-                            currentHeld = length - 1;
-                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
-                        } else {
-                            child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[--currentHeld].GetId());
+                        else {
+                            if (currentHeld == 0) {
+                                currentHeld = length - 1;
+                                child.gameObject.GetComponent<Text>().text =
+                                    GetItemName(inventoryContents[currentHeld].GetId());
+                            }
+                            else {
+                                child.gameObject.GetComponent<Text>().text =
+                                    GetItemName(inventoryContents[--currentHeld].GetId());
+                            }
                         }
                     }
                 }
