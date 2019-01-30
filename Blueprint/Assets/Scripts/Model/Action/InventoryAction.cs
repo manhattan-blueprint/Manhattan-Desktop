@@ -12,10 +12,12 @@ namespace Model.Action {
     public class AddItemToInventory : InventoryAction {
         public readonly int item;
         public readonly int count;
+        public readonly string name;
         
-        public AddItemToInventory(int item, int count) {
+        public AddItemToInventory(int item, int count, string name) {
             this.item = item;
             this.count = count;
+            this.name = name;
         }
 
         public override void Accept(InventoryVisitor visitor) {

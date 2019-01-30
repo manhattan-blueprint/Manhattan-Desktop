@@ -1,16 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Model;
+using Model.Action;
+using Model.Redux;
+using Model.State;
+using Utils;
 using View;
 
 /* Attached to the player and controls inventory collection */
 namespace Controller {
-    public class InventoryController : MonoBehaviour {
-        private InventoryItem[] items;
+    public class InventoryController : MonoBehaviour, Subscriber<GameState> {
+        [SerializeField] private GameObject itemLabel;
+        private InventoryItem[] inventoryContents;
         private List<InventorySlotController> itemSlots;
         private const int size = 16;
         [SerializeField] private GameObject itemButton;
@@ -19,7 +22,7 @@ namespace Controller {
         private int currentHeld;
 
         public void Start() {
-            items = new InventoryItem[size];
+            inventoryContents = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             heldItem = GameObject.Find("HeldItem");
             currentHeld = 1;
@@ -31,58 +34,38 @@ namespace Controller {
         }
 
         public InventoryItem[] GetItems() {
-            return items;
+            return inventoryContents;
         }
 
-        public void AddItem(InventoryItem item) {
-            if (IsSpace()) {
-                InventoryItem slotItem = items[GetSlot(item)];
-                if (slotItem != null) {
-                    items[GetSlot(item)].SetQuantity(slotItem.GetQuantity() + 1);
+        public void StateDidUpdate(GameState state) {
+            inventoryContents = state.inventoryState.inventoryContents;
+            
+            // Update UI based on new state
+            inventoryContents.Where(x => x != null).Each((element, i) => {
+                if (itemSlots[i].transform.childCount < 2) {
+                    GameObject label = Instantiate(itemLabel, itemSlots[i].transform, false);
+                    label.name = getSlotName(i);
+                    label.GetComponent<Text>().text = element.GetName();
+                } else if (element.GetQuantity() > 0){
+                    GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text =
+                        $"{element.GetName()} ({element.GetQuantity()})";
                 } else {
-                    item.SetQuantity(1);
-                    items[GetSlot(item)] = item;
+                    GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text = "";
                 }
-            } else {
-                throw new System.Exception("No space in inventory.");
-            }
+                
+                // Change load order or UI elements for accessible hit-box
+                GameObject dropButton = GameObject.Find(getButtonName(i));
+                itemLabel.transform.SetSiblingIndex(0);
+                dropButton.transform.SetSiblingIndex(1);
+                    
+            });
         }
 
-        public void AddSlot(InventorySlotController slot) {
-            itemSlots.Add(slot);
-        }
-
-        public int CollectItem(Interactable focus, GameObject pickup) {
-
-            InventoryItem newItem = ScriptableObject.CreateInstance<InventoryItem>();
-            newItem.SetItemType(focus.GetItemType());
-
-            int nextSlot = GetSlot(newItem);
-            // Add to inventory object
-            AddItem(newItem);
-
-            // Set to make access unique
-            itemButton.name = GetNameForSlot(nextSlot);
-
-            // Make game world object invisible and collider inactive
+        public void CollectItem(Interactable focus, GameObject pickup) {
+            // TODO: This destroy should be the role of the map state
             Destroy(pickup);
-            // Create a slot with text in inventory window, or update quantity bracket
-            if (GetUISlots()[nextSlot].transform.childCount < 2) {
-                Instantiate(itemButton, GetUISlots()[nextSlot].transform, false);
-                GameObject.Find(GetSlotCloneName(nextSlot)).GetComponent<Text>().text =
-                    focus.GetItemType();
-            } else {
-                GameObject.Find(GetSlotCloneName(nextSlot)).GetComponentInChildren<Text>().text =
-                    focus.GetItemType() + " (" + GetItems()[nextSlot].GetQuantity() + ")";
-            }
-
-            // Change load order or UI elements for accessible hit-box
-            string index = GetNameForButton(nextSlot);
-            dropButton = GameObject.Find(index);
-            itemButton.transform.SetSiblingIndex(0);
-            dropButton.transform.SetSiblingIndex(1);
-
-            return nextSlot;
+            GameManager.Instance().store.Dispatch(
+                new AddItemToInventory(focus.GetId(), 1, focus.GetItemType()));
         }
 
         void Update() {
@@ -125,41 +108,8 @@ namespace Controller {
             return "InventoryItemSlot " + id;
         }
 
-        public string GetNameForButton(int id) {
+        private string getButtonName(int id) {
             return "Button" + (id + 1);
-            ;
-        }
-
-        public int GetSlot(InventoryItem item) {
-            int firstNull = size + 1;
-            for (int i = 0; i < size; i++) {
-                if (items[i] == null) {
-                    if (i < firstNull) {
-                        firstNull = i;
-                    }
-                } else if (items[i].GetId() == item.GetId()) {
-                    return i;
-                }
-            }
-            return firstNull;
-        }
-
-        public List<InventorySlotController> GetUISlots() {
-            return itemSlots;
-        }
-
-        private bool IsSpace() {
-            return items.Count(s => s != null) <= size;
-        }
-
-        public bool Equals(Object obj) {
-            bool eq = false;
-            if (obj.GetType() == typeof(InventoryController)) {
-                InventoryController other = (InventoryController) obj;
-                eq = other.GetItems().OrderBy(t => t).SequenceEqual(items.OrderBy(t => t));
-            }
-
-            return eq;
         }
     }
 }

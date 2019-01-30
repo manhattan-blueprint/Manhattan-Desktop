@@ -77,7 +77,7 @@ namespace Controller {
                 Renderer rend = hit.collider.GetComponent<Renderer>();
                 Highlight hi = hit.collider.GetComponent<Highlight>();
                 rend.material.color = hi.tempColor;
-
+                
                 inventory.CollectItem(focus, hit.transform.gameObject);
             } else {
                 Debug.Log("No inventory items hit");
