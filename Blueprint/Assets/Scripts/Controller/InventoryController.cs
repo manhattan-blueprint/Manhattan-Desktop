@@ -24,28 +24,23 @@ namespace Controller {
         private const int size = 16;
         private ResponseGetInventory remoteInv;
 
-        public void Start()
-        {
+        public void Start() {
             inventoryContents = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
             GameManager.Instance().store.Subscribe(this);
             var blueprintApi = BlueprintAPI.DefaultCredentials();
 
-            Task.Run(async () =>
-            {
+            Task.Run(async () => {
                 APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
-                if (finalInventoryResponse.isSuccess())
-                {
+                if (finalInventoryResponse.isSuccess()) {
                     remoteInv = finalInventoryResponse.GetSuccess();
-                }
-                else
-                {
+                } else {
                     JsonError error = finalInventoryResponse.GetError();
                 }
             }).GetAwaiter().GetResult();
-            foreach (InventoryEntry entry in remoteInv.items)
-            {
+            
+            foreach (InventoryEntry entry in remoteInv.items) {
                 GameManager.Instance().store.Dispatch(
                     new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
             }
@@ -86,7 +81,6 @@ namespace Controller {
                 GameObject dropButton = GameObject.Find(getButtonName(i));
                 itemLabel.transform.SetSiblingIndex(0);
                 dropButton.transform.SetSiblingIndex(1);
-                    
             });
         }
         
