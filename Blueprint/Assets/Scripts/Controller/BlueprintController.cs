@@ -31,7 +31,7 @@ namespace Controller {
             blueprintButton.interactable = false;
             
             inventoryContents.Where(x => x != null).Each((element, i) => {
-                if (element.GetId() == 3 && element.GetQuantity() >= 8) {
+                if (element.GetId() == 2 && element.GetQuantity() >= 8) {
                     checkImage.sprite = Resources.Load<Sprite>("Tick");
                     blueprintButton.interactable = true;
                 }
@@ -40,7 +40,7 @@ namespace Controller {
 
         public void OnButtonClick() {
             GameManager.Instance().store.Dispatch(new AddItemToInventory(7, 1, "furnace"));
-            GameManager.Instance().store.Dispatch((new RemoveItemFromInventory(3, 8)));
+            GameManager.Instance().store.Dispatch((new RemoveItemFromInventory(2, 8)));
         }
     }
 }
