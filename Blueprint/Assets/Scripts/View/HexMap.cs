@@ -51,14 +51,6 @@ namespace View {
                     }
                 }
             }
-
-            // Randomly generate machinery
-            int numOfMachines = 20;
-            for (int i = 0; i < numOfMachines; i++) {
-                PlaceOnGrid(UnityEngine.Random.Range(10, 40),
-                UnityEngine.Random.Range(10, 40),
-                Quaternion.Euler(0, 0, 0), MapResource.Machinery);
-            }
         }
 
         // Creates a grid of number coordinates, same reference as to the hexgrid of objects.
@@ -99,6 +91,25 @@ namespace View {
             int yCo = YToCo(fxCo, fyCo);
             PlaceOnGrid(xCo, yCo, rot, objectCode);
         }
+        
+        // Places an object on the grid according to placement system of ints and map
+        public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GameObject item) {
+            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0],
+                mapGrid[xCo, yCo][1] + grassTopHeight,
+                mapGrid[xCo, yCo][2]);
+
+            objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(item,
+                objPos,
+                rot);
+        }
+        
+        // Places an object on the grid using floats
+        public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, GameObject item) {
+            int xCo = XToCo(fxCo, fyCo);
+            int yCo = YToCo(fxCo, fyCo);
+            PlaceOnGrid(xCo, yCo, rot, item);
+        }
+        
 
         // Removes an object from the grid according to placement system of ints
         // and map

@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Controller;
 using Model;
+using Model.Action;
+using Model.Redux;
+using Model.State;
 using View;
 
 /* Attached to PlayerCamera and controls mouse actions */
@@ -12,7 +15,7 @@ namespace Controller {
         public Transform capsule;
         public Transform machinery;
         private const float maxDistance = 10;
-        private const float holdLength = 1.0f;
+        private const float holdLength = 0.5f;
         private const int rightButton = 1;
         private const int leftButton = 0;
 
@@ -38,6 +41,7 @@ namespace Controller {
         }
 
         void Update() {
+            // Pick up an object
             if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
                 collectItem();
             } else if (Input.GetMouseButtonDown(leftButton)) {
@@ -48,6 +52,7 @@ namespace Controller {
                 timer = 0.0f;
             }
 
+            // Place an object
             if (Input.GetMouseButtonDown(rightButton)) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
@@ -55,8 +60,12 @@ namespace Controller {
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
                 SetFocus(hit.collider.GetComponent<Interactable>());
-                hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-                Quaternion.Euler(0, 0, 0), MapResource.Machinery);
+                if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
+                    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
+                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
+                
+                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
+                }
             }
         }
 
