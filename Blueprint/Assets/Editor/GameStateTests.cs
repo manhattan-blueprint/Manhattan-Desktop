@@ -19,9 +19,7 @@ namespace Tests {
         
         // Inventory Actions
         [Test]
-        public void TestAddToInventory() {
-            // Assert empty to begin with
-                        
+        public void TestAddToInventory() {                        
             // Add an item and validate it updates the state
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
 
