@@ -36,7 +36,6 @@ namespace Model.Action {
         }
 
         public override void Accept(InventoryVisitor visitor) {
-            
             visitor.visit(this);
         }
     }

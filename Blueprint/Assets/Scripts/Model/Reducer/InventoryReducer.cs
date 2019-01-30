@@ -31,7 +31,8 @@ namespace Model.Reducer {
             if (state.inventoryContents[slot] != null) {
                 state.inventoryContents[slot].AddQuantity(addItemToInventoryAction.count);
             } else {
-                state.inventoryContents[slot] = new InventoryItem(addItemToInventoryAction.name, addItemToInventoryAction.item,addItemToInventoryAction.count);
+                state.inventoryContents[slot] = new InventoryItem(addItemToInventoryAction.name, 
+                                                    addItemToInventoryAction.item, addItemToInventoryAction.count);
             }
         }
 
