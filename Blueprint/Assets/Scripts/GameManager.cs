@@ -3,6 +3,8 @@ using Model.Action;
 using Model.Reducer;
 using Model.Redux;
 using Model.State;
+using Service;
+using Service.Response;
 
 public class GameManager {
     private class GameStateReducer : Reducer<GameState, Action> {
@@ -26,8 +28,17 @@ public class GameManager {
     }
     
     private static GameManager manager;
-    public readonly StateStore<GameState, Action> store; 
+    public readonly StateStore<GameState, Action> store;
+    private UserCredentials credentials;
 
+    public UserCredentials GetUserCredentials() {
+        return this.credentials;
+    }
+    
+    public void SetUserCredentials(UserCredentials credentials) {
+        this.credentials = credentials;
+    }
+    
     private GameManager() {
         this.store = new StateStore<GameState, Action>(new GameStateReducer(), new GameState());
     }
