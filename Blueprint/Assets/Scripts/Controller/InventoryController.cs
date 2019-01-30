@@ -25,10 +25,10 @@ namespace Controller {
             inventoryContents = new InventoryItem[size];
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             heldItem = GameObject.Find("HeldItem");
-            currentHeld = 1;
+            currentHeld = 0;
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.CompareTag("Held")) {
-                    child.gameObject.GetComponent<Text>().text = GetItemName(currentHeld);
+                    child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
                 }
             }
         }
@@ -80,12 +80,12 @@ namespace Controller {
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.name == "held") {
                     if (i > 0) {
-                        if (currentHeld == 16) currentHeld = 0;
-                        child.gameObject.GetComponent<Text>().text = GetItemName(++currentHeld);
+                        if (currentHeld == inventoryContents.count - 1) currentHeld = 0;
+                        child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[++currentHeld].GetId());
                     }
                     else {
-                        if (currentHeld == 1) currentHeld = 17;
-                        child.gameObject.GetComponent<Text>().text = GetItemName(--currentHeld);
+                        if (currentHeld == 1) currentHeld = inventoryContents.count - 1;
+                        child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[--currentHeld].GetId());
                     }
                 }
             }
