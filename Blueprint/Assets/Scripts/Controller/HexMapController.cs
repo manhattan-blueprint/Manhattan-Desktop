@@ -19,7 +19,7 @@ namespace Controller {
             Cursor.visible = false;
         }
 
-/*        private void Update() {
+        /*private void Update() {
             if (Input.GetKeyDown(KeyMapping.PlaceRandom)) {
                 hexMap.PlaceOnGrid(UnityEngine.Random.Range(10, 40), UnityEngine.Random.Range(10, 40), Quaternion.Euler(0, 0, 0), MapResource.Machinery);
             }

@@ -32,7 +32,7 @@ namespace Controller {
 
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
-                if (hit.collider.GetComponent<Interactable>().GetItemType() == "stone") {
+                if (hit.collider.GetComponent<Interactable>().GetItemType() == "Stone") {
                     if (machineryCanvas.enabled) {
                         ContinueGame();
                     } else {
