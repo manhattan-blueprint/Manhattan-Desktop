@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Model;
 using Model.Redux;
 using Model.State;
-using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UI;
