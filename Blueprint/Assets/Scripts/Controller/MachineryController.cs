@@ -30,7 +30,7 @@ namespace Controller {
             itemSlots = GameObject.Find("InventoryGrid").GetComponentsInChildren<OnDragHandler>().ToList();
             inventorySlotsControllers = GameObject.Find("InventoryGrid").GetComponentsInChildren<InventorySlotController>().ToList();
             inputSlots = GameObject.Find("MachineryInputGrid").GetComponentsInChildren<OnDropHandler>().ToList();
-            outputSlot = GameObject.Find("MachineryOutput").GetComponent<OnDragHandler>();
+            //outputSlot = GameObject.Find("MachineryOutput").GetComponent<OnDragHandler>();
             inputs = new List<RecipeElement>();
             beenChecked = false;
            
@@ -54,10 +54,10 @@ namespace Controller {
                 newGO1.AddComponent<OnDragHandler>();
             }
             
-            GameObject newGO2 = new GameObject("Text0");
+            /*GameObject newGO2 = new GameObject("Text0");
             newGO2.transform.SetParent(outputSlot.transform);
             Text text2 = newGO2.AddComponent<Text>();
-            newGO2.AddComponent<OnDragHandler>();
+            newGO2.AddComponent<OnDragHandler>();*/
         }
 
         void Update() {
@@ -67,7 +67,7 @@ namespace Controller {
 
                 if (goe != null) {
                     clearInputFields();
-                    setOutputField(goe.name);
+                    // setOutputField(goe.name);
                     // TODO: Should go to the output slot, rather than directly into the inventory
                     GameManager.Instance().store.Dispatch(new AddItemToInventory(goe.item_id, 1, goe.name));
 
