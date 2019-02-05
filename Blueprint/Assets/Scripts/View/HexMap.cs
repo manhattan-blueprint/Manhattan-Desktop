@@ -125,7 +125,7 @@ namespace View {
 
         // Returns all of the objects and their associated attributes.
         // TODO: Check that this is not editable once passed to other classes
-        public GameObject[,] RetrieveGrid() {
+        public GameObject[,] RetrieveObjects() {
             return objectGrid;
         }
 
