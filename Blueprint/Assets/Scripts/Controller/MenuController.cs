@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Model;
+using Model.Action;
+using Model.Redux;
+using Model.State;
 using UnityEngine;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
-    public class MenuController : MonoBehaviour {
+    public class MenuController : MonoBehaviour, Subscriber<GameState> {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
 
@@ -12,14 +16,15 @@ namespace Controller {
             inventoryCanvas = GetComponent<Canvas> ();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
+            GameManager.Instance().store.Subscribe(this);
         }
 
         void Update() {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
-                    PauseGame();
+                    GameManager.Instance().store.Dispatch(new OpenInventoryUI());
                 } else {
-                    ContinueGame();
+                    GameManager.Instance().store.Dispatch(new CloseUI());
                 }
             }
         }
@@ -40,6 +45,14 @@ namespace Controller {
             Cursor.visible = false;
             cursorCanvas.enabled = true;
             GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("HeldItemCanvas").transform);
+        }
+
+        public void StateDidUpdate(GameState state) {
+            if (state.uiState.selected == UIState.OpenUI.Inventory) {
+                PauseGame();
+            } else if (state.uiState.selected == UIState.OpenUI.Playing) {
+                ContinueGame();
+            }
         }
     }
 }

@@ -60,7 +60,8 @@ namespace Controller {
                                 // Failure case
                                 throw new System.Exception("Did not delete inventory.");
                             }    
-                        }).GetAwaiter().GetResult();*/
+                        }).GetAwaiter().GetResult();
+            */
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.CompareTag("Held")) {
                     child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
