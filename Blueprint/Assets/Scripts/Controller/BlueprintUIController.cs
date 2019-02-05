@@ -47,9 +47,9 @@ namespace Controller {
         }
         
         public void StateDidUpdate(GameState state) {
-            if (state.uiState.selected == UIState.OpenUI.Blueprint) {
+            if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
                 PauseGame();
-            } else if (state.uiState.selected == UIState.OpenUI.Playing) {
+            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
                 ContinueGame();
             }
         }

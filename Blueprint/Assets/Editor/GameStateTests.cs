@@ -1,6 +1,7 @@
 ﻿using Model;
 using Model.Action;
 using NUnit.Framework;
+using UnityEditor.VersionControl;
 
 namespace Tests {
     public class GameStateTests {
@@ -10,6 +11,136 @@ namespace Tests {
         public void Setup() {
             this.gameManager = GameManager.Instance();
             gameManager.ResetGame();
+        }
+
+        [Test]
+        public void TestGameStartsInCorrectUIState() {
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Login));
+        }
+        
+        [Test]
+        public void TestOpenPlayingUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+        
+        [Test]
+        public void TestOpenInventoryUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenInventoryUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Inventory));
+        }
+                
+        [Test]
+        public void TestCloseInventoryUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenInventoryUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+                
+        [Test]
+        public void TestOpenBlueprintUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenBlueprintUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
+        }
+                
+        [Test]
+        public void TestCloseBlueprintUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenBlueprintUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+        
+        [Test]
+        public void TestOpenMachineUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenMachineUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Machine));
+        }
+                
+        [Test]
+        public void TestCloseMachineUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenMachineUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+        
+        [Test]
+        public void TestOpenPlaySettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.PlaySettings));
+        }
+                
+        [Test]
+        public void TestClosePlaySettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+        
+        [Test]
+        public void TestOpenInvSettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenInventoryUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.InvSettings));
+        }
+                
+        [Test]
+        public void TestCloseInvSettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenInventoryUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Inventory));
+        }
+        
+        [Test]
+        public void TestOpenBlueSettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenBlueprintUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.BlueSettings));
+        }
+                
+        [Test]
+        public void TestCloseBlueSettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenBlueprintUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
+        }
+        
+        [Test]
+        public void TestOpenMachSettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenMachineUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.MachSettings));
+        }
+                
+        [Test]
+        public void TestCloseMachSettingsUI() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenMachineUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            gameManager.store.Dispatch(new CloseUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Machine));
+        }
+        
+        [Test]
+        public void TestLogout() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            gameManager.store.Dispatch(new Logout());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Welcome));
         }
         
         [Test]

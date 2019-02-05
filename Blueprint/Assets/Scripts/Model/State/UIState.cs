@@ -13,10 +13,10 @@ namespace Model {
             MachSettings
         };
 
-        public OpenUI selected;
+        public OpenUI Selected;
 
         public UIState() {
-            this.selected = OpenUI.Welcome;
+            this.Selected = OpenUI.Login;
         }
     }
 }

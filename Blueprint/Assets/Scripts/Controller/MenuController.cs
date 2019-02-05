@@ -48,10 +48,12 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
-            if (state.uiState.selected == UIState.OpenUI.Inventory) {
+            if (state.uiState.Selected == UIState.OpenUI.Inventory) {
                 PauseGame();
-            } else if (state.uiState.selected == UIState.OpenUI.Playing) {
+            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
                 ContinueGame();
+            } else {
+                throw new System.Exception("Not in expected state.");
             }
         }
     }
