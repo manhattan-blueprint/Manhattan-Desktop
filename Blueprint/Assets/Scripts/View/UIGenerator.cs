@@ -21,11 +21,11 @@ public class UIGenerator : MonoBehaviour {
         cellSize = new Vector2(panel.GetComponent<RectTransform>().rect.width / (numRows), panel.GetComponent<RectTransform>().rect.height / (numRows));
         slotGrid = SetUpSlotGrid(panel);
 
-        for (var i = 0; i < numSlots; i++) {
-            var gridChild = SetUpGridChild(i);
-            var slot = SetUpSlot(i, gridChild);
-            var button = SetUpButton(slot, i);
-            var text = SetUpText(button);
+        for (int i = 0; i < numSlots; i++) {
+            GameObject gridChild = SetUpGridChild(i);
+            GameObject slot = SetUpSlot(i, gridChild);
+            GameObject button = SetUpButton(slot, i);
+            GameObject text = SetUpText(button);
 
             gridChild.SetActive(true);
             slot.SetActive(true);
@@ -61,15 +61,15 @@ public class UIGenerator : MonoBehaviour {
     }
 
     private GameObject SetUpGridChild(int i) {	
-        var gridChild = new GameObject(GetGridChildName(i), typeof(RectTransform));
+        GameObject gridChild = new GameObject(GetGridChildName(i), typeof(RectTransform));
         gridChild.GetComponent<RectTransform>().SetParent(slotGrid.transform);
         return gridChild;
     }
     
     private GameObject SetUpSlot(int i, GameObject gridChild) {	
-        var slot = new GameObject(GetSlotName(i), typeof(RectTransform));
-        var slotImg = slot.AddComponent<Image>();
-        var script = slot.AddComponent<InventorySlotController>();
+        GameObject slot = new GameObject(GetSlotName(i), typeof(RectTransform));
+        Image slotImg = slot.AddComponent<Image>();
+        InventorySlotController script = slot.AddComponent<InventorySlotController>();
         script.SetId(i);
         // This will be used in future to scale UI to resolution
         //var fitter = slot.AddComponent<AspectRatioFitter>();
@@ -81,24 +81,24 @@ public class UIGenerator : MonoBehaviour {
     }
 
     private GameObject SetUpButton(GameObject slot, int i) {
-        var button = new GameObject(GetButtonName(i), typeof(RectTransform));
+        GameObject button = new GameObject(GetButtonName(i), typeof(RectTransform));
         button.GetComponent<RectTransform>().sizeDelta = new Vector2(slot.GetComponent<RectTransform>().sizeDelta.x, slot.GetComponent<RectTransform>().sizeDelta.y/4);
         button.GetComponent<RectTransform>().position = new Vector2(0, slot.GetComponent<RectTransform>().sizeDelta.y/3);
         button.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
         button.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
         button.GetComponent<RectTransform>().SetParent(slot.transform);
-        var buttonImg = button.AddComponent<Image>();
+        Image buttonImg = button.AddComponent<Image>();
         buttonImg.sprite = sprite;
         buttonImg.type = Image.Type.Sliced;
         buttonImg.fillCenter = true;
-        var press = button.AddComponent<Button>();
+        Button press = button.AddComponent<Button>();
         press.onClick.AddListener(() => slot.GetComponent<InventorySlotController>().DropItem());
         return button;
     }
 
     private GameObject SetUpText(GameObject button) {
-        var text = new GameObject(GetTextName(), typeof(RectTransform));
-        var btnTxt = text.AddComponent<Text>();
+        GameObject text = new GameObject(GetTextName(), typeof(RectTransform));
+        Text btnTxt = text.AddComponent<Text>();
         btnTxt.font = buttonFont;
         btnTxt.text = buttonText;
         btnTxt.fontSize = 18;

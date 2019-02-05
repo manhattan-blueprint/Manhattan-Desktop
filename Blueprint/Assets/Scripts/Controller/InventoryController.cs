@@ -35,7 +35,7 @@ namespace Controller {
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
             GameManager.Instance().store.Subscribe(this);
-            var blueprintApi = BlueprintAPI.DefaultCredentials();
+            BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
             Task.Run(async () => {
                 APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);

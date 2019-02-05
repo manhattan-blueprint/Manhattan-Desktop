@@ -39,7 +39,7 @@ namespace Service {
         }
 
         public int RetrieveHTTPCode(WebException e) {
-            var responseDetailed = e.Response as HttpWebResponse;
+            HttpWebResponse responseDetailed = e.Response as HttpWebResponse;
             int httpStatus = (int)responseDetailed.StatusCode;
             return httpStatus;
         }
@@ -57,8 +57,8 @@ namespace Service {
         }
 
         private string retrieveErrorJson(WebException e) {
-            using (var stream = e.Response.GetResponseStream())
-            using (var reader = new StreamReader(stream)) {
+            using (Stream stream = e.Response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream)) {
                 return reader.ReadToEnd();
             }
         }

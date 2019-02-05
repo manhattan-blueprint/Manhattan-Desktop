@@ -42,7 +42,7 @@ namespace Model.Reducer {
             InventoryItem slotItem = state.inventoryContents[getSlot(id)];
 
             if (slotItem != null) {
-                var newValue = Math.Max(0,  slotItem.GetQuantity() - quantity);
+                int newValue = Math.Max(0,  slotItem.GetQuantity() - quantity);
                 slotItem.SetQuantity(newValue);
             } else {
                 throw new System.Exception("This id does not exist in inventory.");
