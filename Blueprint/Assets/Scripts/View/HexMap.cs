@@ -8,7 +8,7 @@ using Controller;
 namespace View {
     public class HexMap {
         private Dictionary<MapResource, GameObject> objects;
-        private static int mapSize = 50;
+        private static int mapSize = 65;
 
         // Value of the distance from the origin of a hexmap to centre point
         // of each edge, given a hexagon where the distance of the origin
@@ -20,6 +20,14 @@ namespace View {
         // the MVP this will likely be made taller but can probably remain
         // hardcoded, depending on the direction we go with the terrain.
         private const float grassTopHeight = 1.5f;
+
+        // Encapsulates the general randomness created in the procedurally
+        // generated map.
+        private const float randomness = 0.0f;
+
+        // Default rotation due to desire for squares to fit nicer in the
+        // hexagons
+        Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
         // Grid containing coordinates of hexagon map.
         private Vector3[,] mapGrid;
@@ -35,22 +43,134 @@ namespace View {
             hexGrid = new GameObject[mapSize, mapSize];
             objectGrid = new GameObject[mapSize, mapSize];
             mapGrid = CreateGrid();
-            Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
-            // Generate Construction Area
-            int bumpyWidth = 10;
-            for (int i = 0; i < mapSize; i++) {
-                for (int j = 0; j < mapSize; j++) {
-                    if (i > bumpyWidth && i < mapSize - bumpyWidth && j > bumpyWidth && j < mapSize - bumpyWidth) {
-                        mapGrid[i, j].y = UnityEngine.Random.Range(-1.1f, -1.0f);
-                        hexGrid[i, j] = MonoBehaviour.Instantiate(objects[MapResource.Grass], mapGrid[i, j], rotation);
-                    } else {
-                        // Bumpy outer grass on the edges of the map.
-                        mapGrid[i, j].y = UnityEngine.Random.Range(-5.0f, .0f);
-                        hexGrid[i, j] = MonoBehaviour.Instantiate(objects[MapResource.Rock], mapGrid[i, j], rotation);
+            GenerateMap();
+        }
+
+        // Generates a map based off of the Diamond-Square algorithm.
+        private void GenerateMap() {
+            // TODO: Make this seed off of username
+            UnityEngine.Random.seed = 42;
+            float bump = randomness;
+
+            // Seed the four corners
+            SetAndInstantiate(0, 0, UnityEngine.Random.Range(-bump, bump));
+            SetAndInstantiate(0, mapSize-1, UnityEngine.Random.Range(-bump, bump));
+            SetAndInstantiate(mapSize-1, 0, UnityEngine.Random.Range(-bump, bump));
+            SetAndInstantiate(mapSize-1, mapSize-1, UnityEngine.Random.Range(-bump, bump));
+
+            int size = mapSize - 1;
+            while(size > 1) {
+                for (int i = 0; i < mapSize - 1; i += size) {
+                    for (int j = 0; j < mapSize - 1; j += size) {
+                        SquareStep(i, j, size, bump);
                     }
                 }
+
+                // Same as SquareStep but shifted up one step
+                for (int i = 0; i < mapSize - 1; i += size) {
+                    for (int j = -size/2; j < mapSize - 1; j += size) {
+                        DiamondStep(i, j, size, bump);
+                    }
+                }
+
+                // Same as SquareStep but shifted left one step
+                for (int i = -size/2; i < mapSize - 1; i += size) {
+                    for (int j = 0; j < mapSize - 1; j += size) {
+                        DiamondStep(i, j, size, bump);
+                    }
+                }
+
+                bump /= 2;
+                size /= 2;
             }
+        }
+
+        // Performs the square step of the Diamond-Square algorithm.
+        private void SquareStep(int x, int y, int size, float bump) {
+            // Debug.Log("Performing SquareStep on X: " + x + " Y: " + y + " size: " + size);
+
+            // Need to find the average height of available coordinates first.
+            float count = 0.0f;
+            float sum = 0.0f;
+            int ms = mapSize - 1;
+            if (0 <= x && x <= ms) {
+                if (0 <= y && y <= ms) {
+                    sum += mapGrid[x, y].y;
+                    count += 1.0f;
+                }
+                if (0 <= y + size && y + size <= ms) {
+                    sum += mapGrid[x, y + size].y;
+                    count += 1.0f;
+                }
+            }
+            if (0 <= x + size && x + size <= ms) {
+                if (0 <= y && y <= ms) {
+                    sum += mapGrid[x + size, y].y;
+                    count += 1.0f;
+                }
+                if (0 <= y + size && y + size <= ms) {
+                    sum += mapGrid[x + size, y + size].y;
+                    count += 1.0f;
+                }
+            }
+
+            float height = (sum/count) + UnityEngine.Random.Range(-bump, bump);
+            SetAndInstantiate(x + size/2, y + size/2, height);
+        }
+
+        // Performs the diamond step of the Diamond-Square algorithm.
+        private void DiamondStep(int x, int y, int size, float bump) {
+            // Debug.Log("Performing DiamondStep on X: " + x + " Y: " + y + " size: " + size);
+
+            // Find the average height of available coordinates.
+            float count = 0.0f;
+            float sum = 0.0f;
+            int ms = mapSize - 1;
+            if (0 <= x + size/2 && x + size/2 <= ms) {
+                if (0 <= y + size/2 && y + size/2 <= ms) {
+                    sum += mapGrid[x + size/2, y + size/2].y;
+                    count += 1.0f;
+                }
+                if (0 <= y + size && y + size <= ms) {
+                    sum += mapGrid[x + size/2, y + size].y;
+                    count += 1.0f;
+                }
+            }
+            if (0 <= x + size && x + size <= ms) {
+                if (0 <= y + size/2 && y + size/2 <= ms) {
+                    sum += mapGrid[x + size, y + size/2].y;
+                    count += 1.0f;
+                }
+                if (0 <= y + size && y + size <= ms) {
+                    sum += mapGrid[x + size, y + size].y;
+                    count += 1.0f;
+                }
+            }
+
+            float height = (sum/count) + UnityEngine.Random.Range(-bump, bump);
+            SetAndInstantiate(x + size/2, y + size/2, height);
+        }
+
+        // Get the distance from the centre (coordinate based rather than actual)
+        private float DistFromCentre(int xCo, int yCo) {
+            return (float)Math.Sqrt(Math.Pow(xCo - mapSize/2, 2) + Math.Pow(yCo - mapSize/2, 2));
+        }
+
+        // Sets the height in the grid and instantiates
+        private void SetAndInstantiate(int xCo, int yCo, float height) {
+            // Debug.Log("Creating block at xCo: " + xCo + " yCo: " + yCo);
+            mapGrid[xCo, yCo].y = height - 10.0f;
+            // mapGrid[xCo, yCo].y = -10.0f;
+
+            // Make things near the edges succeptible to additional heigh modifiers
+            // float dist = DistFromCentre(xCo, yCo);
+            // if (dist >= mapSize/2) {
+            //     mapGrid[xCo, yCo].y += UnityEngine.Random.Range(0, (dist * dist) / (mapSize * mapSize));
+            // }
+
+            hexGrid[xCo, yCo] = MonoBehaviour.Instantiate(objects[MapResource.Grass], mapGrid[xCo, yCo], rotation);
+
         }
 
         // Creates a grid of number coordinates, same reference as to the hexgrid of objects.
