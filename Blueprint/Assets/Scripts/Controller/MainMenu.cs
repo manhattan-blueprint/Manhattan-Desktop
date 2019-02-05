@@ -45,7 +45,13 @@ public class MainMenu : MonoBehaviour {
             } else if (usernameLoginInput.IsActive()) {
                 usernameLoginInput.Select();
             } else if (usernameSignupInput.IsActive()) {
-                    usernameSignupInput.Select();
+                usernameSignupInput.Select();
+            }
+        } else if (Input.GetKeyDown(KeyCode.Return)) {
+            if (passwordLoginInput.IsActive()) {
+                onLoginClick();
+            } else if (passwordSignupInput.IsActive()) {
+                onRegisterClick();
             }
         }
     }
