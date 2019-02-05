@@ -91,7 +91,7 @@ namespace View {
             int yCo = YToCo(fxCo, fyCo);
             PlaceOnGrid(xCo, yCo, rot, objectCode);
         }
-        
+
         // Places an object on the grid according to placement system of ints and map
         public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GameObject item) {
             Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0],
@@ -102,14 +102,13 @@ namespace View {
                 objPos,
                 rot);
         }
-        
+
         // Places an object on the grid using floats
         public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, GameObject item) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
             PlaceOnGrid(xCo, yCo, rot, item);
         }
-        
 
         // Removes an object from the grid according to placement system of ints
         // and map
@@ -132,10 +131,14 @@ namespace View {
 
         // Returns true if an object already exists on the map at coordinate
         // input location
-        public bool objectPresent(int xCo, int yCo) {
+        public bool ObjectPresent(int xCo, int yCo) {
             if (objectGrid[xCo, yCo] != null) { return true; }
             return false;
         }
-    }
 
+        // Returns the entire object representation (as a pointer)
+        public GameObject[,] GetObjectMap() {
+            return objectGrid;
+        }
+    }
 }
