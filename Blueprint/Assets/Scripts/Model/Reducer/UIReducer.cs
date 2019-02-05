@@ -12,7 +12,7 @@ namespace Model.Reducer {
         }
 
         public void visit(CloseUI closeUI) {
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Inventory:
                     state.Selected = UIState.OpenUI.Playing;
@@ -42,7 +42,7 @@ namespace Model.Reducer {
         
         public void visit(OpenLoginUI login) {
             // Update if exists or add new
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Welcome) {
                 state.Selected = UIState.OpenUI.Login;
             }
@@ -50,7 +50,7 @@ namespace Model.Reducer {
         
         public void visit(OpenPlayingUI playing) {
             // Update if exists or add new
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Login) {
                 state.Selected = UIState.OpenUI.Playing;
             }
@@ -58,7 +58,7 @@ namespace Model.Reducer {
         
         public void visit(OpenInventoryUI inventory) {
             // Update if exists or add new
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Playing) {
                 state.Selected = UIState.OpenUI.Inventory;
             }
@@ -66,7 +66,7 @@ namespace Model.Reducer {
         
         public void visit(OpenBlueprintUI blueprint) {
             // Update if exists or add new
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Playing) {
                 state.Selected = UIState.OpenUI.Blueprint;
             }
@@ -74,7 +74,7 @@ namespace Model.Reducer {
                 
         public void visit(OpenMachineUI machine) {
             // Update if exists or add new
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Playing) {
                 state.Selected = UIState.OpenUI.Machine;
             }
@@ -82,7 +82,7 @@ namespace Model.Reducer {
         
         public void visit(OpenSettingsUI settings) {
             // Update if exists or add new
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
                     state.Selected = UIState.OpenUI.PlaySettings;
@@ -100,7 +100,7 @@ namespace Model.Reducer {
         }
 
         public void visit(Logout logout) {
-            var current = state.Selected;
+            UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.PlaySettings || current == UIState.OpenUI.InvSettings ||
                 current == UIState.OpenUI.BlueSettings || current == UIState.OpenUI.MachSettings) {
                 state.Selected = UIState.OpenUI.Welcome;
