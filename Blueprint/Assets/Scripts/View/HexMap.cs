@@ -135,10 +135,5 @@ namespace View {
             if (objectGrid[xCo, yCo] != null) { return true; }
             return false;
         }
-
-        // Returns the entire object representation (as a pointer)
-        public GameObject[,] GetObjectMap() {
-            return objectGrid;
-        }
     }
 }
