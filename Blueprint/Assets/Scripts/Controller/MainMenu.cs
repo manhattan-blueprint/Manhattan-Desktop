@@ -32,29 +32,29 @@ public class MainMenu : MonoBehaviour {
         usernameLoginInput.Select();
     }
 
-	void Update() {
-		if (Input.GetKeyDown(KeyCode.Tab)) {
-			if (usernameLoginInput.isFocused) {
-				passwordLoginInput.Select();
-			} else if (passwordLoginInput.isFocused) {
-				loginButton.Select();
-			} else if (usernameSignupInput.isFocused) {
-				passwordSignupInput.Select();
-			} else if (passwordSignupInput.isFocused) {
-				signupButton.Select();
-			} else if (usernameLoginInput.IsActive()) {
-				usernameLoginInput.Select();
-			} else if (usernameSignupInput.IsActive()) {
-				usernameSignupInput.Select();
-			}
-		} else if (Input.GetKeyDown(KeyCode.Return)) {
-			if (passwordLoginInput.IsActive()) {
-				onLoginClick();
-			} else if (passwordSignupInput.IsActive()) {
-				onRegisterClick();
-			}
-		}
-	}
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            if (usernameLoginInput.isFocused) {
+                passwordLoginInput.Select();
+            } else if (passwordLoginInput.isFocused) {
+                loginButton.Select();
+            } else if (usernameSignupInput.isFocused) {
+                passwordSignupInput.Select();
+            } else if (passwordSignupInput.isFocused) {
+                signupButton.Select();
+            } else if (usernameLoginInput.IsActive()) {
+                usernameLoginInput.Select();
+            } else if (usernameSignupInput.IsActive()) {
+                usernameSignupInput.Select();
+            }
+        } else if (Input.GetKeyDown(KeyCode.Return)) {
+            if (passwordLoginInput.IsActive()) {
+                onLoginClick();
+            } else if (passwordSignupInput.IsActive()) {
+                onRegisterClick();
+            }
+        }
+    }
 
     public void onLoginClick() {
         setInfoMessage("");
