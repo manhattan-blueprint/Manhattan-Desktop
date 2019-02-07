@@ -1,5 +1,8 @@
 # Manhattan-Desktop
 
+## Design Scheme
+ * Use of colours comes from the 600 row of https://material.io/design/color/the-color-system.html
+
 ## In order to add new game objects:
  * Add prefab to Resources folder
  * Add new enum to MapResource.cs
