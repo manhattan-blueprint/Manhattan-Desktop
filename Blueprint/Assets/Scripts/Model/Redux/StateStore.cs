@@ -23,6 +23,10 @@ namespace Model.Redux {
             // Notify subscriber of current state
             subscriber.StateDidUpdate(state);
         }
+        
+        public void Unsubscribe(Subscriber<S> subscriber) {
+            this.subscribers.Remove(subscriber);
+        }
 
         public S GetState() {
             return state;

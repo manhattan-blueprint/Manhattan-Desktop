@@ -96,6 +96,7 @@ namespace Controller {
                 itemLabel.transform.SetSiblingIndex(0);
                 dropButton.transform.SetSiblingIndex(1);
             });
+
             if (length > 0) {
                 foreach (Transform child in heldItem.transform) {
                     if (child.gameObject.CompareTag("Held")) {

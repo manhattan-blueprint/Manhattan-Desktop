@@ -36,6 +36,8 @@ namespace Tests {
             gameManager.store.Dispatch(new OpenPlayingUI());
             gameManager.store.Dispatch(new OpenInventoryUI());
             gameManager.store.Dispatch(new CloseUI());
+            gameManager.store.Dispatch(new OpenInventoryUI());
+            gameManager.store.Dispatch(new CloseUI());
             Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
                 

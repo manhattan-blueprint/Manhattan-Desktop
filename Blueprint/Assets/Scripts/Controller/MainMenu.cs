@@ -41,6 +41,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     public void StateDidUpdate(GameState state) {
         if (state.uiState.Selected == UIState.OpenUI.Playing) {
             SceneManager.LoadScene(SceneMapping.World);
+            GameManager.Instance().store.Unsubscribe(this);
         }
     }
 
