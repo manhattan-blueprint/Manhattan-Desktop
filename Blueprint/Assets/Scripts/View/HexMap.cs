@@ -15,10 +15,8 @@ namespace View {
         // to each corner is one. This is equivalent to sqrt(3)/2.
         private const float hexH = 0.86602540378f;
 
-        // This is the height of the block of grass from the midpoint, which
-        // currently depends on the height of the prefab used for grass. Past
-        // the MVP this will likely be made taller but can probably remain
-        // hardcoded, depending on the direction we go with the terrain.
+        // This is the height of the block of floor tiles from the midpoint,
+        // which is half the height of the prefab used for floor tiles.
         private const float grassTopHeight = 10.0f;
 
         // Encapsulates the general randomness created in the procedurally
@@ -45,19 +43,17 @@ namespace View {
             mapGrid = CreateGrid();
 
             GenerateMap();
-            // Debug.Log(DistFromCentre(0, 0));
-            // Debug.Log(DistFromCentre(mapSize/2, mapSize/2));
         }
 
         // Generates a map based off of the Diamond-Square algorithm.
         private void GenerateMap() {
-            // TODO: Make this seed off of usernasme
-            UnityEngine.Random.seed = 42;
             float bump = randomness;
-
             float mounBorder = mapSize/2.0f;  // Radius of most steep outside area
             float hillBorder = mapSize/2.6f;  // Radius of hill slope area
             float grassBorder = mapSize/3.4f; // Radius of grass area
+
+            // TODO: Make this seed off of usernasme
+            UnityEngine.Random.seed = 42;
 
             for (int i = 0; i < mapSize; i++) {
                 for (int j = 0; j < mapSize; j++) {
@@ -68,6 +64,7 @@ namespace View {
                     MapResource wildlife = MapResource.Tree1;
 
                     if (dist < grassBorder) {
+                        // Rather flat grassy area with a little bit of mud.
                         height = UnityEngine.Random.Range(-bump, bump) - grassTopHeight;
 
                         if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.95f) {
@@ -75,6 +72,8 @@ namespace View {
                         }
                     }
                     else if (dist < hillBorder) {
+                        // The base of the hill, a bit rocky but still with
+                        // some grass. Some trees.
                         height = (dist - grassBorder) + UnityEngine.Random.Range(-bump*5, bump*20) - grassTopHeight;
 
                         if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f) {
@@ -86,6 +85,9 @@ namespace View {
                         }
                     }
                     else if (dist < mounBorder) {
+                        // Steeper more dense terain, very rocky. Intended to
+                        // fully block the player from getting through through
+                        // use of trees.
                         height = (dist - grassBorder) + UnityEngine.Random.Range(0.0f, bump*50) - grassTopHeight;
 
                         if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.05f) {
@@ -108,68 +110,29 @@ namespace View {
                     }
                 }
             }
-
-            // Experimental ideas, not working currently
-
-            // // Raise the height of some peaks
-            // for (int y = 0; y < 10; y ++) {
-            //     double randAngle = UnityEngine.Random.Range(0, 2.0f * (float)Math.PI);
-            //     int i = (int)(mounBorder + mounBorder * 0.9f * Math.Sin(randAngle));
-            //     int j = (int)(mounBorder + mounBorder * 0.9f * Math.Cos(randAngle));
-            //     // Debug.Log("Angle of " + randAngle + "giving sin of " + Math.Sin(randAngle) + " and cos of " + Math.Cos(randAngle));
-            //     // Debug.Log("Updating height at i " + i + " j " + j);
-            //     UpdateHeight(i, j, UnityEngine.Random.Range(5, 10));
-            // }
-
-            // Smooth the ground by averaging the height of each hexagon
-            // for (int q = 0; q < 2; q++) {
-            //     for (int i = 1; i < mapSize - 1; i++) {
-            //         for (int j = 1; j < mapSize - 1; j++) {
-            //             Debug.Log("Attemoting to average height at " + i + " " + j);
-            //             AverageHeight(i, j);
-            //         }
-            //     }
-            // }
         }
 
-        private void AverageHeight(int xCo, int yCo) {
-            if (hexGrid[xCo, yCo] != null) {
-                float sum = 0.0f;
-                float count = 0.0f;
-                for (int i = -1; i < 2; i ++) {
-                    for (int j = -1; j < 2; j ++) {
-                        if (hexGrid[xCo + i, yCo + j] != null) {
-                            sum += mapGrid[xCo + i, yCo + j].y;
-                            count += 1.0f;
-                        }
-                    }
-                }
-                Debug.Log("Sum: " + sum + " Count: " + count);
-                if (count > 0) {
-                    Debug.Log("Updating the height of " + xCo + " " + yCo + " to " + sum/count);
-                    UpdateHeight(xCo, yCo, sum/count);
-                }
-            }
-        }
-
-        // Get the distance from the centre (coordinate based rather than actual)
+        // Get the distance from the centre (coordinate based rather than
+        // actual).
         private float DistFromCentre(int xCo, int yCo) {
             return (float)Math.Sqrt(Math.Pow(xCo - mapSize/2, 2) + Math.Pow(yCo - mapSize/2, 2));
         }
 
-        // Sets the height in the grid and instantiates
+        // Sets the height of a floor tile in the grid and instantiates.
         private void SetAndInstantiate(int xCo, int yCo, float height, MapResource type) {
             mapGrid[xCo, yCo].y = height;
             hexGrid[xCo, yCo] = MonoBehaviour.Instantiate(objects[type], mapGrid[xCo, yCo], rotation);
         }
 
+        // Updates the current height of a floor tile in the grid.
         private void UpdateHeight(int xCo, int yCo, float height) {
             mapGrid[xCo, yCo].y = height;
             Vector3 temp = new Vector3(0, height, 0);
             hexGrid[xCo, yCo].transform.position += temp;
         }
 
-        // Creates a grid of number coordinates, same reference as to the hexgrid of objects.
+        // Creates a grid of number coordinates, same reference as to the
+        // hexgrid of objects.
         private Vector3[,] CreateGrid() {
             Vector3[,] newMapGrid = new Vector3[mapSize, mapSize];
             for (int i = 0; i < mapSize; i++) {
@@ -190,7 +153,8 @@ namespace View {
             return (int)Math.Round(yPos / 1.5f);
         }
 
-        // Places an object on the grid according to placement system of ints and map
+        // Places an object on the grid according to placement system of ints
+        // and map.
         public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, MapResource objectCode) {
             float radius = 1.0f;
 
@@ -208,14 +172,14 @@ namespace View {
             objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(gameObject, objPos, rot);
         }
 
-        // Places an object on the grid using floats
+        // Places an object on the grid using floats.
         public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, MapResource objectCode) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
             PlaceOnGrid(xCo, yCo, rot, objectCode);
         }
 
-        // Places an object on the grid using floats
+        // Places an object on the grid using floats.
         public void PlaceOnGrid(float fxCo, float fyCo, Quaternion rot, GameObject item) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
@@ -223,12 +187,12 @@ namespace View {
         }
 
         // Removes an object from the grid according to placement system of ints
-        // and map
+        // and map.
         public void RemoveFromGrid(int xCo, int yCo) {
             MonoBehaviour.Destroy(objectGrid[xCo, yCo]);
         }
 
-        // Removes an object on the grid using floats
+        // Removes an object on the grid using floats.
         public void RemoveFromGrid(float fxCo, float fyCo) {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
@@ -236,13 +200,13 @@ namespace View {
         }
 
         // Returns all of the objects and their associated attributes.
-        // TODO: Check that this is not editable once passed to other classes
+        // TODO: Check that this is not editable once passed to other classes.
         public GameObject[,] RetrieveObjects() {
             return objectGrid;
         }
 
         // Returns true if an object already exists on the map at coordinate
-        // input location
+        // input location.
         public bool ObjectPresent(int xCo, int yCo) {
             if (objectGrid[xCo, yCo] != null) { return true; }
             return false;
