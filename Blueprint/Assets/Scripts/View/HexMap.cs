@@ -45,6 +45,8 @@ namespace View {
             mapGrid = CreateGrid();
 
             GenerateMap();
+            // Debug.Log(DistFromCentre(0, 0));
+            // Debug.Log(DistFromCentre(mapSize/2, mapSize/2));
         }
 
         // Generates a map based off of the Diamond-Square algorithm.
@@ -160,7 +162,7 @@ namespace View {
         // Sets the height in the grid and instantiates
         private void SetAndInstantiate(int xCo, int yCo, float height) {
             // Debug.Log("Creating block at xCo: " + xCo + " yCo: " + yCo);
-            mapGrid[xCo, yCo].y = height - 10.0f;
+            mapGrid[xCo, yCo].y = (height/50.0f)-10.0f;
             // mapGrid[xCo, yCo].y = -10.0f;
 
             // Make things near the edges succeptible to additional heigh modifiers
