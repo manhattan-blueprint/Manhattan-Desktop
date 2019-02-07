@@ -8,7 +8,7 @@ using Controller;
 namespace View {
     public class HexMap {
         private Dictionary<MapResource, GameObject> objects;
-        private static int mapSize = 48;
+        private static int mapSize = 64;
 
         // Value of the distance from the origin of a hexmap to centre point
         // of each edge, given a hexagon where the distance of the origin
@@ -55,7 +55,7 @@ namespace View {
             UnityEngine.Random.seed = 42;
             float bump = randomness;
 
-            float mounBorder = mapSize/2.0f;  // Radius of
+            float mounBorder = mapSize/2.0f;  // Radius of most steep outside area
             float hillBorder = mapSize/2.6f;  // Radius of hill slope area
             float grassBorder = mapSize/3.4f; // Radius of grass area
 
