@@ -8,6 +8,9 @@
     * Set type of object to correct type
     * Set object height as total height of the prefab
 
+## Attributes
+ * Skybox images obtained from http://www.custommapmakers.org/skyboxes/zips/hw_alps.zip
+
 ## Fixing the Async Error
 Note, in the case of the following error:
 
