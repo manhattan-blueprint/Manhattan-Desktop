@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23514921277429858}
   - component: {fileID: 65270800533232150}
   m_Layer: 0
-  m_Name: Hex_Tile
+  m_Name: Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 085d26c7efb7de34fa392a1d429be1ae, type: 3}
+  - {fileID: 2100000, guid: 084910c1f00fa4e7c99ae3b59c4fa1e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

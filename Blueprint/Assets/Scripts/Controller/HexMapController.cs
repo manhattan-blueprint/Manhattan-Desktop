@@ -12,9 +12,11 @@ namespace Controller {
         public static Dictionary<MapResource, GameObject> resourceMap = new Dictionary<MapResource, GameObject>();
 
         private void Start() {
-            resourceMap[MapResource.Grass] = Resources.Load("Hex_Tile") as GameObject;
-            resourceMap[MapResource.Machinery] = Resources.Load("stone") as GameObject;
+            resourceMap[MapResource.Grass] = Resources.Load("Grass") as GameObject;
+            resourceMap[MapResource.Mud] = Resources.Load("Mud") as GameObject;
             resourceMap[MapResource.Rock] = Resources.Load("Rock") as GameObject;
+            resourceMap[MapResource.Machinery] = Resources.Load("Stone") as GameObject;
+            resourceMap[MapResource.Tree1] = Resources.Load("Tree1") as GameObject;
             this.hexMap = new HexMap(resourceMap);
             Cursor.visible = false;
         }

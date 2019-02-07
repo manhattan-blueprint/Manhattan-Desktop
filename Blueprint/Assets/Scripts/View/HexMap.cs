@@ -8,7 +8,7 @@ using Controller;
 namespace View {
     public class HexMap {
         private Dictionary<MapResource, GameObject> objects;
-        private static int mapSize = 65;
+        private static int mapSize = 48;
 
         // Value of the distance from the origin of a hexmap to centre point
         // of each edge, given a hexagon where the distance of the origin
@@ -19,11 +19,11 @@ namespace View {
         // currently depends on the height of the prefab used for grass. Past
         // the MVP this will likely be made taller but can probably remain
         // hardcoded, depending on the direction we go with the terrain.
-        private const float grassTopHeight = 1.5f;
+        private const float grassTopHeight = 10.0f;
 
         // Encapsulates the general randomness created in the procedurally
         // generated map.
-        private const float randomness = 0.0f;
+        private const float randomness = 0.05f;
 
         // Default rotation due to desire for squares to fit nicer in the
         // hexagons
@@ -51,107 +51,105 @@ namespace View {
 
         // Generates a map based off of the Diamond-Square algorithm.
         private void GenerateMap() {
-            // TODO: Make this seed off of username
+            // TODO: Make this seed off of usernasme
             UnityEngine.Random.seed = 42;
             float bump = randomness;
 
-            // Seed the four corners
-            SetAndInstantiate(0, 0, UnityEngine.Random.Range(-bump, bump));
-            SetAndInstantiate(0, mapSize-1, UnityEngine.Random.Range(-bump, bump));
-            SetAndInstantiate(mapSize-1, 0, UnityEngine.Random.Range(-bump, bump));
-            SetAndInstantiate(mapSize-1, mapSize-1, UnityEngine.Random.Range(-bump, bump));
+            float mounBorder = mapSize/2.0f;  // Radius of
+            float hillBorder = mapSize/2.6f;  // Radius of hill slope area
+            float grassBorder = mapSize/3.4f; // Radius of grass area
 
-            int size = mapSize - 1;
-            while(size > 1) {
-                for (int i = 0; i < mapSize - 1; i += size) {
-                    for (int j = 0; j < mapSize - 1; j += size) {
-                        SquareStep(i, j, size, bump);
+            for (int i = 0; i < mapSize; i++) {
+                for (int j = 0; j < mapSize; j++) {
+                    float dist = DistFromCentre(i, j);
+                    float height = 0;
+                    MapResource type = MapResource.Grass;
+                    bool spawnWildlife = false;
+                    MapResource wildlife = MapResource.Tree1;
+
+                    if (dist < grassBorder) {
+                        height = UnityEngine.Random.Range(-bump, bump) - grassTopHeight;
+
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.95f) {
+                            type = MapResource.Mud;
+                        }
+                    }
+                    else if (dist < hillBorder) {
+                        height = (dist - grassBorder) + UnityEngine.Random.Range(-bump*5, bump*20) - grassTopHeight;
+
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f) {
+                            type = MapResource.Rock;
+                        }
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.7f) {
+                            spawnWildlife = true;
+                            wildlife = MapResource.Tree1;
+                        }
+                    }
+                    else if (dist < mounBorder) {
+                        height = (dist - grassBorder) + UnityEngine.Random.Range(0.0f, bump*50) - grassTopHeight;
+
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.05f) {
+                            type = MapResource.Rock;
+                        }
+
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.1f) {
+                            spawnWildlife = true;
+                            wildlife = MapResource.Tree1;
+                        }
+                    }
+
+                    // Only want to spawn if inside outer circle
+                    if (dist < mounBorder) {
+                        SetAndInstantiate(i, j, height, type);
+                    }
+
+                    if (spawnWildlife == true) {
+                        PlaceOnGrid(i, j, Quaternion.Euler(0, 0, 0), wildlife);
                     }
                 }
-
-                // Same as SquareStep but shifted up one step
-                for (int i = 0; i < mapSize - 1; i += size) {
-                    for (int j = -size/2; j < mapSize - 1; j += size) {
-                        DiamondStep(i, j, size, bump);
-                    }
-                }
-
-                // Same as SquareStep but shifted left one step
-                for (int i = -size/2; i < mapSize - 1; i += size) {
-                    for (int j = 0; j < mapSize - 1; j += size) {
-                        DiamondStep(i, j, size, bump);
-                    }
-                }
-
-                bump /= 2;
-                size /= 2;
             }
+
+            // Experimental ideas, not working currently
+
+            // // Raise the height of some peaks
+            // for (int y = 0; y < 10; y ++) {
+            //     double randAngle = UnityEngine.Random.Range(0, 2.0f * (float)Math.PI);
+            //     int i = (int)(mounBorder + mounBorder * 0.9f * Math.Sin(randAngle));
+            //     int j = (int)(mounBorder + mounBorder * 0.9f * Math.Cos(randAngle));
+            //     // Debug.Log("Angle of " + randAngle + "giving sin of " + Math.Sin(randAngle) + " and cos of " + Math.Cos(randAngle));
+            //     // Debug.Log("Updating height at i " + i + " j " + j);
+            //     UpdateHeight(i, j, UnityEngine.Random.Range(5, 10));
+            // }
+
+            // Smooth the ground by averaging the height of each hexagon
+            // for (int q = 0; q < 2; q++) {
+            //     for (int i = 1; i < mapSize - 1; i++) {
+            //         for (int j = 1; j < mapSize - 1; j++) {
+            //             Debug.Log("Attemoting to average height at " + i + " " + j);
+            //             AverageHeight(i, j);
+            //         }
+            //     }
+            // }
         }
 
-        // Performs the square step of the Diamond-Square algorithm.
-        private void SquareStep(int x, int y, int size, float bump) {
-            // Debug.Log("Performing SquareStep on X: " + x + " Y: " + y + " size: " + size);
-
-            // Need to find the average height of available coordinates first.
-            float count = 0.0f;
-            float sum = 0.0f;
-            int ms = mapSize - 1;
-            if (0 <= x && x <= ms) {
-                if (0 <= y && y <= ms) {
-                    sum += mapGrid[x, y].y;
-                    count += 1.0f;
+        private void AverageHeight(int xCo, int yCo) {
+            if (hexGrid[xCo, yCo] != null) {
+                float sum = 0.0f;
+                float count = 0.0f;
+                for (int i = -1; i < 2; i ++) {
+                    for (int j = -1; j < 2; j ++) {
+                        if (hexGrid[xCo + i, yCo + j] != null) {
+                            sum += mapGrid[xCo + i, yCo + j].y;
+                            count += 1.0f;
+                        }
+                    }
                 }
-                if (0 <= y + size && y + size <= ms) {
-                    sum += mapGrid[x, y + size].y;
-                    count += 1.0f;
-                }
-            }
-            if (0 <= x + size && x + size <= ms) {
-                if (0 <= y && y <= ms) {
-                    sum += mapGrid[x + size, y].y;
-                    count += 1.0f;
-                }
-                if (0 <= y + size && y + size <= ms) {
-                    sum += mapGrid[x + size, y + size].y;
-                    count += 1.0f;
+                Debug.Log("Sum: " + sum + " Count: " + count);
+                if (count > 0) {
+                    Debug.Log("Updating the height of " + xCo + " " + yCo + " to " + sum/count);
+                    UpdateHeight(xCo, yCo, sum/count);
                 }
             }
-
-            float height = (sum/count) + UnityEngine.Random.Range(-bump, bump);
-            SetAndInstantiate(x + size/2, y + size/2, height);
-        }
-
-        // Performs the diamond step of the Diamond-Square algorithm.
-        private void DiamondStep(int x, int y, int size, float bump) {
-            // Debug.Log("Performing DiamondStep on X: " + x + " Y: " + y + " size: " + size);
-
-            // Find the average height of available coordinates.
-            float count = 0.0f;
-            float sum = 0.0f;
-            int ms = mapSize - 1;
-            if (0 <= x + size/2 && x + size/2 <= ms) {
-                if (0 <= y + size/2 && y + size/2 <= ms) {
-                    sum += mapGrid[x + size/2, y + size/2].y;
-                    count += 1.0f;
-                }
-                if (0 <= y + size && y + size <= ms) {
-                    sum += mapGrid[x + size/2, y + size].y;
-                    count += 1.0f;
-                }
-            }
-            if (0 <= x + size && x + size <= ms) {
-                if (0 <= y + size/2 && y + size/2 <= ms) {
-                    sum += mapGrid[x + size, y + size/2].y;
-                    count += 1.0f;
-                }
-                if (0 <= y + size && y + size <= ms) {
-                    sum += mapGrid[x + size, y + size].y;
-                    count += 1.0f;
-                }
-            }
-
-            float height = (sum/count) + UnityEngine.Random.Range(-bump, bump);
-            SetAndInstantiate(x + size/2, y + size/2, height);
         }
 
         // Get the distance from the centre (coordinate based rather than actual)
@@ -160,19 +158,15 @@ namespace View {
         }
 
         // Sets the height in the grid and instantiates
-        private void SetAndInstantiate(int xCo, int yCo, float height) {
-            // Debug.Log("Creating block at xCo: " + xCo + " yCo: " + yCo);
-            mapGrid[xCo, yCo].y = (height/50.0f)-10.0f;
-            // mapGrid[xCo, yCo].y = -10.0f;
+        private void SetAndInstantiate(int xCo, int yCo, float height, MapResource type) {
+            mapGrid[xCo, yCo].y = height;
+            hexGrid[xCo, yCo] = MonoBehaviour.Instantiate(objects[type], mapGrid[xCo, yCo], rotation);
+        }
 
-            // Make things near the edges succeptible to additional heigh modifiers
-            // float dist = DistFromCentre(xCo, yCo);
-            // if (dist >= mapSize/2) {
-            //     mapGrid[xCo, yCo].y += UnityEngine.Random.Range(0, (dist * dist) / (mapSize * mapSize));
-            // }
-
-            hexGrid[xCo, yCo] = MonoBehaviour.Instantiate(objects[MapResource.Grass], mapGrid[xCo, yCo], rotation);
-
+        private void UpdateHeight(int xCo, int yCo, float height) {
+            mapGrid[xCo, yCo].y = height;
+            Vector3 temp = new Vector3(0, height, 0);
+            hexGrid[xCo, yCo].transform.position += temp;
         }
 
         // Creates a grid of number coordinates, same reference as to the hexgrid of objects.
@@ -198,13 +192,20 @@ namespace View {
 
         // Places an object on the grid according to placement system of ints and map
         public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, MapResource objectCode) {
+            float radius = 1.0f;
+
+            GameObject gameObject = HexMapController.resourceMap[objectCode];
+
+            if (gameObject.GetComponent<MapObject>() != null) {
+                 radius = gameObject.GetComponent<MapObject>().modelHeight;
+            }
+            radius *= gameObject.transform.lossyScale.y;
+
             Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0],
-                                         mapGrid[xCo, yCo][1] + grassTopHeight,
+                                         mapGrid[xCo, yCo][1] + grassTopHeight + radius/2,
                                          mapGrid[xCo, yCo][2]);
 
-            objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(HexMapController.resourceMap[objectCode],
-                                                             objPos,
-                                                             rot);
+            objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(gameObject, objPos, rot);
         }
 
         // Places an object on the grid using floats
@@ -212,17 +213,6 @@ namespace View {
             int xCo = XToCo(fxCo, fyCo);
             int yCo = YToCo(fxCo, fyCo);
             PlaceOnGrid(xCo, yCo, rot, objectCode);
-        }
-
-        // Places an object on the grid according to placement system of ints and map
-        public void PlaceOnGrid(int xCo, int yCo, Quaternion rot, GameObject item) {
-            Vector3 objPos = new Vector3(mapGrid[xCo, yCo][0],
-                mapGrid[xCo, yCo][1] + grassTopHeight,
-                mapGrid[xCo, yCo][2]);
-
-            objectGrid[xCo, yCo] = MonoBehaviour.Instantiate(item,
-                objPos,
-                rot);
         }
 
         // Places an object on the grid using floats

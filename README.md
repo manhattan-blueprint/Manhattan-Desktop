@@ -1,6 +1,14 @@
 # Manhattan-Desktop
 
+## In order to add new game objects:
+ * Add prefab to Resources folder
+ * Add new enum to MapResource.cs
+ * Add info on location to HexMapController.cs
+ * Attach MapObject script
+    * Set type of object to correct type
+    * Set object height as total height of the prefab
 
+## Fixing the Async Error
 Note, in the case of the following error:
 
 ```

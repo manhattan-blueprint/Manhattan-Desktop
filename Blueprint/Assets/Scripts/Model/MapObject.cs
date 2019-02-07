@@ -18,6 +18,7 @@ using Model;
 namespace Model {
     public class MapObject : MonoBehaviour {
         public MapResource mapResource;
+        public float modelHeight;
 
         // Whenever the holder is freshly created, as defined by MonoBehaviour
         void Start() {
