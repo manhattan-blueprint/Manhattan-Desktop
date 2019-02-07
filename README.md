@@ -10,6 +10,7 @@
 
 ## Attributes
  * Skybox images obtained from http://www.custommapmakers.org/skyboxes/zips/hw_alps.zip
+ * Lens flare from https://www.freepik.com/free-vector/transparent-white-light-effect_1146116.htm
 
 ## Fixing the Async Error
 Note, in the case of the following error:

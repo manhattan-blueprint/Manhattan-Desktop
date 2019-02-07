@@ -8,7 +8,7 @@ using Controller;
 namespace View {
     public class HexMap {
         private Dictionary<MapResource, GameObject> objects;
-        private static int mapSize = 64;
+        private static int mapSize = 48;
 
         // Value of the distance from the origin of a hexmap to centre point
         // of each edge, given a hexagon where the distance of the origin
