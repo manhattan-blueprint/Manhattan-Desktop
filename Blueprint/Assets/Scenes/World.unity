@@ -1548,12 +1548,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60fac6f49ef0b4d6ae3a0208362fc91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 0}
-  numSlots: 0
-  numRows: 0
-  sprite: {fileID: 0}
-  buttonText: 
-  buttonFont: {fileID: 0}
+  panel: {fileID: 1524273543}
+  numSlots: 16
+  numRows: 4
+  sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  buttonText: Drop
+  buttonFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1857982428
 GameObject:
   m_ObjectHideFlags: 0
