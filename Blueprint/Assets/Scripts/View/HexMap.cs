@@ -61,7 +61,7 @@ namespace View {
                     float height = 0;
                     MapResource type = MapResource.Grass;
                     bool spawnWildlife = false;
-                    MapResource wildlife = MapResource.Tree1;
+                    MapResource wildlife = MapResource.TreeA;
 
                     if (dist < grassBorder) {
                         // Rather flat grassy area with a little bit of mud.
@@ -70,8 +70,7 @@ namespace View {
                         if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.95f) {
                             type = MapResource.Mud;
                         }
-                    }
-                    else if (dist < hillBorder) {
+                    } else if (dist < hillBorder) {
                         // The base of the hill, a bit rocky but still with
                         // some grass. Some trees.
                         height = (dist - grassBorder) + UnityEngine.Random.Range(-bump*5, bump*20) - grassTopHeight;
@@ -81,10 +80,9 @@ namespace View {
                         }
                         if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.7f) {
                             spawnWildlife = true;
-                            wildlife = MapResource.Tree1;
+                            wildlife = MapResource.TreeA;
                         }
-                    }
-                    else if (dist < mounBorder) {
+                    } else if (dist < mounBorder) {
                         // Steeper more dense terain, very rocky. Intended to
                         // fully block the player from getting through through
                         // use of trees.
@@ -96,7 +94,7 @@ namespace View {
 
                         if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.1f) {
                             spawnWildlife = true;
-                            wildlife = MapResource.Tree1;
+                            wildlife = MapResource.TreeA;
                         }
                     }
 
