@@ -8,7 +8,7 @@ using Controller;
 namespace View {
     public class HexMap {
         private Dictionary<MapResource, GameObject> objects;
-        private static int mapSize = 48;
+        private static int mapSize = 24;
 
         // Value of the distance from the origin of a hexmap to centre point
         // of each edge, given a hexagon where the distance of the origin
@@ -49,8 +49,8 @@ namespace View {
         private void GenerateMap() {
             float bump = randomness;
             float mounBorder = mapSize/2.0f;  // Radius of most steep outside area
-            float hillBorder = mapSize/2.6f;  // Radius of hill slope area
-            float grassBorder = mapSize/3.4f; // Radius of grass area
+            float hillBorder = mapSize/2.5f;  // Radius of hill slope area
+            float grassBorder = mapSize/3.0f; // Radius of grass area
 
             // TODO: Make this seed off of usernasme
             UnityEngine.Random.seed = 42;
@@ -64,47 +64,36 @@ namespace View {
                     MapResource wildlife = MapResource.TreeA;
 
                     if (dist < grassBorder) {
-                        // Rather flat grassy area with a little bit of mud.
-                        height = UnityEngine.Random.Range(-bump, bump) - grassTopHeight;
-
-                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.95f) {
-                            type = MapResource.Mud;
-                        }
+                        height = - grassTopHeight;
+                        type = MapResource.Rock;
                     } else if (dist < hillBorder) {
-                        // The base of the hill, a bit rocky but still with
-                        // some grass. Some trees.
-                        height = (dist - grassBorder) + UnityEngine.Random.Range(-bump*5, bump*20) - grassTopHeight;
-
-                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f) {
-                            type = MapResource.Rock;
-                        }
-                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.7f) {
-                            spawnWildlife = true;
-                            wildlife = MapResource.TreeA;
-                        }
+                        // Start of the hill
+                        height = (int)((dist - grassBorder) - grassTopHeight);
+                        type = MapResource.Grass;
+                        // if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.7f) {
+                        //     spawnWildlife = true;
+                        //     wildlife = MapResource.TreeA;
+                        // }
                     } else if (dist < mounBorder) {
-                        // Steeper more dense terain, very rocky. Intended to
-                        // fully block the player from getting through through
-                        // use of trees.
-                        height = (dist - grassBorder) + UnityEngine.Random.Range(0.0f, bump*50) - grassTopHeight;
+                        // Very outer edge
+                        height = (int)((dist - grassBorder) - grassTopHeight);
 
-                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.05f) {
-                            type = MapResource.Rock;
-                        }
+                        type = MapResource.Grass;
 
-                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.1f) {
-                            spawnWildlife = true;
-                            wildlife = MapResource.TreeA;
-                        }
+                        // if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.1f) {
+                        //     spawnWildlife = true;
+                        //     wildlife = MapResource.TreeA;
+                        // }
                     }
 
                     // Only want to spawn if inside outer circle
                     if (dist < mounBorder) {
                         SetAndInstantiate(i, j, height, type);
+                        // SetAndInstantiate(i, j, -grassTopHeight, MapResource.Grass);
                     }
 
                     if (spawnWildlife == true) {
-                        PlaceOnGrid(i, j, Quaternion.Euler(0, 0, 0), wildlife);
+                        // PlaceOnGrid(i, j, Quaternion.Euler(0, 0, 0), wildlife);
                     }
                 }
             }
@@ -135,7 +124,7 @@ namespace View {
             Vector3[,] newMapGrid = new Vector3[mapSize, mapSize];
             for (int i = 0; i < mapSize; i++) {
                 for (int j = 0; j < mapSize; j++) {
-                    newMapGrid[i, j] = new Vector3((float)(i * hexH * 2.0f + (hexH * (j % 2))), 0.0f, (float)(1.5f * j));
+                    newMapGrid[i, j] = new Vector3((float)(i * hexH * 2.0f + (hexH * (j % 2))) - (mapSize + 1) * hexH, 0.0f, (float)(1.5f * j) - mapSize * 0.75f);
                 }
             }
             return newMapGrid;
