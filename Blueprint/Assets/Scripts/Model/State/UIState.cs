@@ -10,8 +10,7 @@ namespace Model {
             Pause,
             InvPause,
             BluePause,
-            MachPause
-            
+            MachPause 
         };
 
         public OpenUI Selected;
