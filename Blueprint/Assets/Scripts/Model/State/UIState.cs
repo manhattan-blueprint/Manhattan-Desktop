@@ -7,10 +7,11 @@ namespace Model {
             Inventory,
             Blueprint,
             Machine,
-            PlaySettings,
-            InvSettings,
-            BlueSettings,
-            MachSettings
+            Pause,
+            InvPause,
+            BluePause,
+            MachPause
+            
         };
 
         public OpenUI Selected;

@@ -23,16 +23,16 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Machine:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
-                case UIState.OpenUI.PlaySettings:
+                case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
-                case UIState.OpenUI.InvSettings:
+                case UIState.OpenUI.InvPause:
                     state.Selected = UIState.OpenUI.Inventory;
                     break;
-                case UIState.OpenUI.BlueSettings:
+                case UIState.OpenUI.BluePause:
                     state.Selected = UIState.OpenUI.Blueprint;
                     break;
-                case UIState.OpenUI.MachSettings:
+                case UIState.OpenUI.MachPause:
                     state.Selected = UIState.OpenUI.Machine;
                     break;
                 default:
@@ -85,24 +85,24 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
-                    state.Selected = UIState.OpenUI.PlaySettings;
+                    state.Selected = UIState.OpenUI.Pause;
                     break;
                 case UIState.OpenUI.Inventory:
-                    state.Selected = UIState.OpenUI.InvSettings;
+                    state.Selected = UIState.OpenUI.InvPause;
                     break;
                 case UIState.OpenUI.Blueprint:
-                    state.Selected = UIState.OpenUI.BlueSettings;
+                    state.Selected = UIState.OpenUI.BluePause;
                     break;
                 case UIState.OpenUI.Machine:
-                    state.Selected = UIState.OpenUI.MachSettings;
+                    state.Selected = UIState.OpenUI.MachPause;
                     break;
             }
         }
 
         public void visit(Logout logout) {
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.PlaySettings || current == UIState.OpenUI.InvSettings ||
-                current == UIState.OpenUI.BlueSettings || current == UIState.OpenUI.MachSettings) {
+            if (current == UIState.OpenUI.Pause || current == UIState.OpenUI.InvPause ||
+                current == UIState.OpenUI.BluePause || current == UIState.OpenUI.MachPause) {
                 state.Selected = UIState.OpenUI.Welcome;
             }
         }

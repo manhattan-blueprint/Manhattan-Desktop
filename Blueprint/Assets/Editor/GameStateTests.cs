@@ -1,7 +1,6 @@
 ﻿using Model;
 using Model.Action;
 using NUnit.Framework;
-using UnityEditor.VersionControl;
 
 namespace Tests {
     public class GameStateTests {
@@ -75,7 +74,7 @@ namespace Tests {
         public void TestOpenPlaySettingsUI() {
             gameManager.store.Dispatch(new OpenPlayingUI());
             gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.PlaySettings));
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Pause));
         }
                 
         [Test]
@@ -91,7 +90,7 @@ namespace Tests {
             gameManager.store.Dispatch(new OpenPlayingUI());
             gameManager.store.Dispatch(new OpenInventoryUI());
             gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.InvSettings));
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.InvPause));
         }
                 
         [Test]
@@ -108,7 +107,7 @@ namespace Tests {
             gameManager.store.Dispatch(new OpenPlayingUI());
             gameManager.store.Dispatch(new OpenBlueprintUI());
             gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.BlueSettings));
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.BluePause));
         }
                 
         [Test]
@@ -125,7 +124,7 @@ namespace Tests {
             gameManager.store.Dispatch(new OpenPlayingUI());
             gameManager.store.Dispatch(new OpenMachineUI());
             gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.MachSettings));
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.MachPause));
         }
                 
         [Test]
