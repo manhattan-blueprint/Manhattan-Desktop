@@ -10,10 +10,12 @@ public class GameManager {
     private class GameStateReducer : Reducer<GameState, Action> {
         private readonly InventoryReducer inventoryReducer;
         private readonly MapReducer mapReducer;
+        private readonly UIReducer uiReducer;
 
         public GameStateReducer() {
             inventoryReducer = new InventoryReducer();
             mapReducer = new MapReducer();
+            uiReducer = new UIReducer();
         }
        
         // Dispatch to appropriate handler
@@ -22,6 +24,8 @@ public class GameManager {
                 current.inventoryState = inventoryReducer.Reduce(current.inventoryState, (InventoryAction) action);
             } else if (action is MapAction) {
                 current.mapState = mapReducer.Reduce(current.mapState, (MapAction) action);
+            } else if (action is UIAction) {
+                current.uiState = uiReducer.Reduce(current.uiState, (UIAction) action);
             }
             return current;
         }

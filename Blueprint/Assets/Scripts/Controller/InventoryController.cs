@@ -35,7 +35,7 @@ namespace Controller {
             itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
             GameManager.Instance().store.Subscribe(this);
-            var blueprintApi = BlueprintAPI.DefaultCredentials();
+            BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
             Task.Run(async () => {
                 APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
@@ -60,7 +60,8 @@ namespace Controller {
                                 // Failure case
                                 throw new System.Exception("Did not delete inventory.");
                             }    
-                        }).GetAwaiter().GetResult();*/
+                        }).GetAwaiter().GetResult();
+            */
             foreach (Transform child in heldItem.transform) {
                 if (child.gameObject.CompareTag("Held")) {
                     child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
@@ -95,6 +96,7 @@ namespace Controller {
                 itemLabel.transform.SetSiblingIndex(0);
                 dropButton.transform.SetSiblingIndex(1);
             });
+
             if (length > 0) {
                 foreach (Transform child in heldItem.transform) {
                     if (child.gameObject.CompareTag("Held")) {

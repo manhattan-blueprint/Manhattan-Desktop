@@ -42,8 +42,8 @@ namespace Service {
         }
 
         public async Task<string> PerformAsyncGet(string endpoint, string accessToken) {
-            var content = new MemoryStream();
-            var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+            MemoryStream content = new MemoryStream();
+            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
 
             webReq.Method = httpGet;
             webReq.ContentType = JsonContentType;
@@ -59,8 +59,8 @@ namespace Service {
         }
         
         public async Task<string> PerformAsyncGet(string endpoint) {
-            var content = new MemoryStream();
-            var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+            MemoryStream content = new MemoryStream();
+            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
 
             webReq.Method = httpGet;
             webReq.ContentType = JsonContentType;
@@ -75,15 +75,15 @@ namespace Service {
         }
 
         public async Task<string> PerformAsyncPost(string endpoint, string postData) {
-            var content = new MemoryStream();
-            var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+            MemoryStream content = new MemoryStream();
+            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
             byte[] payload = Encoding.ASCII.GetBytes(postData);
 
             webReq.Method = httpPost;
             webReq.ContentType = JsonContentType;
             webReq.ContentLength = payload.Length;
 
-            using (var stream = webReq.GetRequestStream()) {
+            using (Stream stream = webReq.GetRequestStream()) {
                 stream.Write(payload, 0, payload.Length);
             }
 
@@ -97,8 +97,8 @@ namespace Service {
         }
 
         public async Task<string> PerformAsyncPost(string endpoint, string postData, string accessToken) {
-            var content = new MemoryStream();
-            var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+            MemoryStream content = new MemoryStream();
+            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
             byte[] payload = Encoding.ASCII.GetBytes(postData);
 
             webReq.Method = httpPost;
@@ -106,7 +106,7 @@ namespace Service {
             webReq.ContentLength = payload.Length;
             webReq.Headers.Add("Authorization", "Bearer " + accessToken);
 
-            using (var stream = webReq.GetRequestStream()) {
+            using (Stream stream = webReq.GetRequestStream()) {
                 stream.Write(payload, 0, payload.Length);
             }
 
@@ -120,8 +120,8 @@ namespace Service {
         }
 
         public async Task<string> PerformAsyncDelete(string endpoint, string accessToken) {
-            var content = new MemoryStream();
-            var webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+            MemoryStream content = new MemoryStream();
+            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
 
             webReq.Method = httpDelete;
             webReq.ContentType = JsonContentType;

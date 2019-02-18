@@ -16,9 +16,9 @@ public class RestHandlerTests {
     // GETs data from jsonplaceholder, asserts it is correct
     [Test]
     public void TestPerformGET() {
-        var restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
+        RestHandler restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
 
-        var response = restHandler.PerformGET("/posts/1");
+        string response = restHandler.PerformGET("/posts/1");
 
         JsonPlaceholder inv = JsonUtility.FromJson<JsonPlaceholder>(response);
 
@@ -34,17 +34,17 @@ public class RestHandlerTests {
     // POSTs data to jsonplaceholder, checks that response is correct
     [Test]
     public void TestPerformAsyncPOST() {
-        var restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
+        RestHandler restHandler = new RestHandler("http://jsonplaceholder.typicode.com");
 
         // Setup
-        var data = new JsonPost();
+        JsonPost data = new JsonPost();
         data.value = "hello";
-        var payload = JsonUtility.ToJson(data);
-        var responseJson= new JsonPost();
+        string payload = JsonUtility.ToJson(data);
+        JsonPost responseJson= new JsonPost();
 
         // Response
         Task.Run(async () => {
-            var response = await restHandler.PerformAsyncPost("/posts", payload);
+            string response = await restHandler.PerformAsyncPost("/posts", payload);
             responseJson = JsonUtility.FromJson<JsonPost>(response);
         }).GetAwaiter().GetResult();
 
@@ -55,7 +55,7 @@ public class RestHandlerTests {
     // Is an example of HTTP error handling   
     [Test]
     public void TestValidAuthenticateUser() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = validUser;
         UserCredentials returnUser = null; 
         
@@ -84,7 +84,7 @@ public class RestHandlerTests {
     // Will catch InvalidCredentialException thrown by AsyncAuthenticateUser
     [Test]
     public void TestInvalidAuthenticateUser() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = new UserCredentials("test_invalid", "Invalid123");
         
         Task.Run(async () => {
@@ -108,7 +108,7 @@ public class RestHandlerTests {
     // Will catch InvalidCredentialException thrown by AsyncRegisterUser
     [Test]
     public void TestRegisterUserLowercaseOnlyPassword() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
 
         Task.Run(async () => {
@@ -134,7 +134,7 @@ public class RestHandlerTests {
     // Asserts return values are correct
     [Test]
     public void TestRegisterUserValidPassword() {       
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
         UserCredentials returnUser = null;
         string username = "adam" + random.Next(10000);
@@ -164,7 +164,7 @@ public class RestHandlerTests {
     // Will catch InvalidCredentialException thrown by AsyncRegisterUser
     [Test]
     public void TestRegisterUserNoLowercasePassword() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
         string username = "adam" + random.Next(10000);
         
@@ -189,7 +189,7 @@ public class RestHandlerTests {
     // Asserts returned tokens are not null
     [Test]
     public void TestRefreshTokens() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);      
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);      
         UserCredentials user = null;
         
         // Authenticate user to gain tokens
@@ -217,7 +217,7 @@ public class RestHandlerTests {
     // Asserts contains are as expected
     [Test]
     public void TestGetInventory() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;
         
@@ -251,7 +251,7 @@ public class RestHandlerTests {
     // Fails in the case of an exception
     [Test]
     public void TestAddInventoryItem() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
 
         // Authenticate user to gain access token
@@ -279,7 +279,7 @@ public class RestHandlerTests {
     // Fails in the case of an exception
     [Test]
     public void TestDeleteInventory() {
-        var blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;
         
@@ -313,7 +313,7 @@ public class RestHandlerTests {
   
     [Test]
     public void TestBlueprintApiDefaultCredentialsConstructor() {
-        var blueprintApi = BlueprintAPI.DefaultCredentials();
+        BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
         UserCredentials user = null;
         
         // Authenticate user
