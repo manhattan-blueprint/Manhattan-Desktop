@@ -67,10 +67,11 @@ public class UIGenerator : MonoBehaviour {
     }
     
     private GameObject SetUpSlot(int i, GameObject gridChild) {	
-        GameObject slot = new GameObject(GetSlotName(i), typeof(RectTransform));
-        Image slotImg = slot.AddComponent<Image>();
-        InventorySlotController script = slot.AddComponent<InventorySlotController>();
-        script.SetId(i);
+        var slot = new GameObject(GetSlotName(i), typeof(RectTransform));
+        var slotImg = slot.AddComponent<Image>();
+        var script = slot.AddComponent<InventorySlotController>();
+        //script.SetId(i);
+        
         // This will be used in future to scale UI to resolution
         //var fitter = slot.AddComponent<AspectRatioFitter>();
         //fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
@@ -91,8 +92,8 @@ public class UIGenerator : MonoBehaviour {
         buttonImg.sprite = sprite;
         buttonImg.type = Image.Type.Sliced;
         buttonImg.fillCenter = true;
-        Button press = button.AddComponent<Button>();
-        press.onClick.AddListener(() => slot.GetComponent<InventorySlotController>().DropItem());
+        var press = button.AddComponent<Button>();
+        //press.onClick.AddListener(() => slot.GetComponent<InventorySlotController>().DropItem());
         return button;
     }
 

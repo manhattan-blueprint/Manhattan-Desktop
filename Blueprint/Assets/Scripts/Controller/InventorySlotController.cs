@@ -8,61 +8,69 @@ using Model.Reducer;
 using Model.Redux;
 using Model.State;
 using UnityEditor;
-using UnityEditor.Experimental.UIElements;
 using UnityEngine.EventSystems;
 
 /* Attached to each slot in the inventory grid */
 namespace Controller {
     public class InventorySlotController : MonoBehaviour, IDropHandler {
-        private Sprite hexSprite;
-        private Sprite hexSpriteHighlighted;
+        private Sprite borderSprite;
+        private Sprite highlightSprite;
         private int id;
         private bool mouseOver = false;
-        private Image image;
+        private SVGImage border;
         private InventoryItem nullItem = new InventoryItem("", 0, 0);
         private InventoryItem storedItem;
-        
-        private void Start() {
-            image = GameObject.Find(this.transform.name).GetComponent<Image>();
-            var temp = image.color;
-            temp.a = 0.5f;
-            image.color = temp;
+        private GameObject highlightObject;
+        private float slotHeight;
+        private float slotWidth;
+
+    private void Start() {
+            //borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
+            borderSprite = GameObject.Find("Border" + id).GetComponent<SVGImage>().sprite;
+            highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
+            border = GameObject.Find("Border" + id).GetComponent<SVGImage>();
+            highlightObject = GameObject.Find("Highlight");
+            slotHeight = (transform as RectTransform).rect.height;
+            slotWidth = (transform as RectTransform).rect.width;
             
-            hexSprite = Resources.Load("InventoryHexagon", typeof(Sprite)) as Sprite;
-            hexSpriteHighlighted = Resources.Load("InventoryHexagonHighlighted", typeof(Sprite)) as Sprite;
             storedItem = nullItem;
             
             // Item image and quantity
-            // TODO: change to image when items complete
             GameObject newGO = new GameObject("Icon"+id);
             newGO.transform.SetParent(gameObject.transform);
             newGO.AddComponent<InventorySlotDragHandler>();
-            //newGO.AddComponent<InventorySlotDropHandler>();
 
             if (id == 0) {
                 storedItem = new InventoryItem("wood", 1, 1);
-                setupImage(newGO, storedItem.GetName());
+                setupImage(newGO, storedItem);
+                setupText(this.gameObject, storedItem.GetQuantity().ToString());
+                
             } 
             else {
-                setupImage(newGO, "");
+                setupImage(newGO, nullItem);
+                setupText(this.gameObject, nullItem.GetQuantity().ToString());
             }
             
         }
 
         private void Update() {
             RectTransform hex = transform as RectTransform;
+            SVGImage highlight = highlightObject.GetComponent<SVGImage>();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition) && !mouseOver) {
                 // Mouse entry
                 mouseOver = true;
-                image.sprite = hexSpriteHighlighted;
+                setHighlightLocation(transform.position.x, transform.position.y);
             }
 
             if (!RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition) && mouseOver) {
                 // Mouse exit 
                 mouseOver = false;
-                image.sprite = hexSprite;
             }
+        }
+
+        private void setHighlightLocation(float x, float y) {
+            highlightObject.transform.position = new Vector2(x, y); 
         }
 
         public void setId(int id) {
@@ -79,48 +87,55 @@ namespace Controller {
         }
 
         private Text setupText(GameObject obj, string initialText) {
-            Text text = obj.AddComponent<Text>();
+            GameObject textObj = new GameObject("Text" + id);
+            textObj.transform.parent = this.transform;
+            Text text = textObj.AddComponent<Text>();
             
-            Font ArialFont = (Font) Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-            text.font = ArialFont;
-            text.material = ArialFont.material;
-            text.transform.localPosition = new Vector3(0,0,0);
+            text.font = Resources.Load("helveticaneue_bold", typeof(Font)) as Font;
+            text.transform.localPosition = new Vector3(0,-slotHeight/6,0);
             text.color = Color.black;
             text.alignment = TextAnchor.MiddleCenter; 
             text.text = initialText;
+            text.raycastTarget = false;
+            text.fontSize = 12;
+
+            if (initialText == "0") text.enabled = false;
 
             return text;
         }
 
-        private Image setupImage(GameObject obj, string itemName) {
+        private Image setupImage(GameObject obj,  InventoryItem item) {
             Image image = obj.AddComponent<Image>();
-            image.transform.localPosition = new Vector3(0,0,0);
+            image.transform.localPosition = new Vector3(0,slotHeight/8,0);
 
-            float slotWidth = GetComponent<Image>().sprite.rect.width;
-            float slotHeight = GetComponent<Image>().sprite.rect.height;
-            
-            image.rectTransform.sizeDelta = new Vector2(slotWidth/8, slotHeight/8);
-
-            if (itemName != "") {
-                Sprite icon = Resources.Load("InventoryIcons/" + itemName, typeof(Sprite)) as Sprite;
+            if (item.GetId() != nullItem.GetId()){
+                Sprite icon = Resources.Load("InventoryIcons/" + item.GetName(), typeof(Sprite)) as Sprite;
                 image.sprite = icon;
                 image.enabled = true;
             }
             else {
                 image.enabled = false;
             }
+            
+            image.rectTransform.sizeDelta = new Vector2(slotWidth/3, slotHeight/3);
 
             return image;
         }
 
         private void updateFields(InventoryItem item) {
             Image image = GameObject.Find("Icon" + id).GetComponentInChildren<Image>();
+            Text text = transform.GetComponentInChildren<Text>();
 
             if (item.GetId() != nullItem.GetId()) {
                 image.sprite = Resources.Load("InventoryIcons/" + item.GetName(), typeof(Sprite)) as Sprite;
+                text.text = item.GetQuantity().ToString();
+                    
                 image.enabled = true;
+                text.enabled = true;
+                image.transform.localPosition = new Vector3(0,slotHeight/8,0);
             } else {
                 image.enabled = false;
+                text.enabled = false;
             }
         }
     
