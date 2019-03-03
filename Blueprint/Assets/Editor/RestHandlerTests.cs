@@ -11,7 +11,9 @@ using Service.Response;
 
 public class RestHandlerTests {
     private string baseUrl = "http://smithwjv.ddns.net";
-    private UserCredentials validUser = new UserCredentials("test", "Test123");
+    private UserCredentials validUser = new UserCredentials("testplayer", "Player123");
+    private UserCredentials validDev = new UserCredentials("testdev", "Dev123");
+    private UserCredentials validLec = new UserCredentials("testlecturer", "Lecturer123");
     
     // GETs data from jsonplaceholder, asserts it is correct
     [Test]
@@ -325,6 +327,93 @@ public class RestHandlerTests {
         Assert.That(user.GetUsername(), Is.EqualTo(validUser.GetUsername()));
     }
 
+    // Authenticates the test player account, asserts correct account_type returned
+    [Test]
+    public void TestAccountTypePlayer() {
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        UserCredentials user = validUser;
+        UserCredentials returnUser = null; 
+        
+        Task.Run(async () => {
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
+            
+            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+
+            if (response.isSuccess()) {
+                // Success case
+                returnUser = response.GetSuccess();
+            } else {
+                //error case
+            }
+
+        }).GetAwaiter().GetResult();
+        
+        // Check returned user is correct and contains access tokens
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(validUser.GetUsername()));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
+        Assert.That(returnUser.GetAccountType(), Is.EqualTo("player"));
+    }
+    
+    // Authenticates the test developer account, asserts correct account_type returned
+    [Test]
+    public void TestAccountTypeDeveloper() {
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        UserCredentials user = validDev;
+        UserCredentials returnUser = null; 
+        
+        Task.Run(async () => {
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
+            
+            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+
+            if (response.isSuccess()) {
+                // Success case
+                returnUser = response.GetSuccess();
+            } else {
+                //error case
+            }
+
+        }).GetAwaiter().GetResult();
+        
+        // Check returned user is correct and contains access tokens
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(validDev.GetUsername()));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validDev.GetPassword()));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
+        Assert.That(returnUser.GetAccountType(), Is.EqualTo("developer"));
+    }
+
+    // Authenticates the test lecturer account, asserts correct account_type returned
+    [Test]
+    public void TestAccountTypeLecturer() {
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        UserCredentials user = validLec;
+        UserCredentials returnUser = null; 
+        
+        Task.Run(async () => {
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
+            
+            APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+
+            if (response.isSuccess()) {
+                // Success case
+                returnUser = response.GetSuccess();
+            } else {
+                //error case
+            }
+
+        }).GetAwaiter().GetResult();
+        
+        // Check returned user is correct and contains access tokens
+        Assert.That(returnUser.GetUsername(), Is.EqualTo(validLec.GetUsername()));
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validLec.GetPassword()));    
+        Assert.IsNotNull(returnUser.GetAccessToken());
+        Assert.IsNotNull(returnUser.GetRefreshToken());
+        Assert.That(returnUser.GetAccountType(), Is.EqualTo("lecturer"));
+    }
+    
     // Blocked by user removal functionality
     /*[Test]
     public void TestRegisterUser_1() {
