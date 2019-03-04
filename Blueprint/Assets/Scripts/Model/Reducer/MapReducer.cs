@@ -14,7 +14,7 @@ namespace Model.Reducer {
             if (state.getObjects().ContainsKey(cellSelected.position)) {
                 state.removeObject(cellSelected.position);
             } else {
-                state.addObject(cellSelected.position);
+                state.addObject(cellSelected.position, cellSelected.id);
             }
         }
     }

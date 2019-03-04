@@ -60,7 +60,8 @@ namespace Controller {
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
                 Vector2 pos = hit.transform.gameObject.GetComponent<HexCell>().position;
-                GameManager.Instance().store.Dispatch(new CellSelected(pos));
+                // TODO: Get id of object from held item
+                GameManager.Instance().store.Dispatch(new CellSelected(pos, 1));
 
 //                SetFocus(hit.collider.GetComponent<Interactable>());
 //                if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {

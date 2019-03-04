@@ -13,9 +13,11 @@ namespace Model.Action {
     /* User did select a cell on the grid */
     public class CellSelected: MapAction {
         public readonly Vector2 position;
+        public readonly int id;
         
-        public CellSelected(Vector2 position) {
+        public CellSelected(Vector2 position, int id) {
             this.position = position;
+            this.id = id;
         }
 
         public override void Accept(MapVisitor visitor) {

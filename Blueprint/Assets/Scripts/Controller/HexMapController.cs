@@ -110,13 +110,19 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
-            Dictionary<Vector2, bool> newObjects = state.mapState.getObjects(); 
+            Dictionary<Vector2, MapObject> newObjects = state.mapState.getObjects(); 
             
             foreach (KeyValuePair<Vector2, GameObject> element in gridMap) {
                 if (newObjects.ContainsKey(element.Key)) {
-                    element.Value.GetComponentInChildren<Renderer>().material.color = Color.red;  
+                    MapObject mapObject = newObjects[element.Key];
+                    Vector3 position = element.Value.transform.position;
+                    // Add half height of hex tile
+                    position.y += 0.5f;
+                    GameObject tree = Instantiate(Resources.Load("rubber_tree"), position, Quaternion.identity) as GameObject;
+                    tree.transform.parent = element.Value.transform; 
                 } else {
-                    element.Value.GetComponentInChildren<Renderer>().material.color = Color.cyan;  
+                    //element.Value.transform.
+                    
                 }
             }
         }
