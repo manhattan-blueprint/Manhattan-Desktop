@@ -59,13 +59,16 @@ namespace Controller {
 
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
-                SetFocus(hit.collider.GetComponent<Interactable>());
-                if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
-                    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
-                
-                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
-                }
+                Vector2 pos = hit.transform.gameObject.GetComponent<HexCell>().position;
+                GameManager.Instance().store.Dispatch(new CellSelected(pos));
+
+//                SetFocus(hit.collider.GetComponent<Interactable>());
+//                if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
+////                    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
+////                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
+//                
+//                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
+//                }
             }
         }
 

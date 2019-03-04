@@ -33,7 +33,9 @@ public class GameManager {
     
     private static GameManager manager;
     public readonly StateStore<GameState, Action> store;
+    
     private UserCredentials credentials;
+    public readonly int gridSize = 16;
 
     public UserCredentials GetUserCredentials() {
         return this.credentials;
