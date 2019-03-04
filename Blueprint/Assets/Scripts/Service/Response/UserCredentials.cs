@@ -12,17 +12,19 @@ namespace Service.Response {
         // Server tokens
         private string access;
         private string refresh;
+        private string accountType;
 
         public UserCredentials(string username, string password) {
             this.username = username;
             this.password = password;
         }
 
-        public UserCredentials(string username, string password, string access, string refresh) {
+        public UserCredentials(string username, string password, string access, string refresh, string accountType) {
             this.username = username;
             this.password = password;
             this.access = access;
             this.refresh = refresh;
+            this.accountType = accountType;
         }
         
         // Getters
@@ -40,6 +42,10 @@ namespace Service.Response {
         
         public string GetRefreshToken() {
             return refresh;
+        }
+
+        public string GetAccountType() {
+            return accountType;
         }
         
     }

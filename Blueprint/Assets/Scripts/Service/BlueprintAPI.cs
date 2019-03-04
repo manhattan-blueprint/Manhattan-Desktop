@@ -76,7 +76,7 @@ namespace Service {
 
                 // Return APIResult:UserCredentials in success case
                 return new APIResult<UserCredentials, JsonError>(
-                    new UserCredentials(user.GetUsername(), user.GetPassword(), tokens.access, tokens.refresh)
+                    new UserCredentials(user.GetUsername(), user.GetPassword(), tokens.access, tokens.refresh, tokens.account_type)
                 );
             } catch (WebException e) {
                 // Retrieve error payload from WebException
@@ -100,7 +100,7 @@ namespace Service {
 
                 // Return APIResult:UserCredentials in success case
                 return new APIResult<UserCredentials, JsonError>(
-                    new UserCredentials(username, password, tokens.access, tokens.refresh)
+                    new UserCredentials(username, password, tokens.access, tokens.refresh, tokens.account_type)
                 );
             } catch (WebException e) {
                 // Retrieve error payload from WebException
