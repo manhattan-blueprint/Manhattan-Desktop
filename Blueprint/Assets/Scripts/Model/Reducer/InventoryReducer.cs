@@ -29,7 +29,6 @@ namespace Model.Reducer {
         private int getFirstEmptySlot() {
             List<int> occupiedSlots = new List<int>();
 
-
             for (int j = 0; j < getHighestItemID()+1; j++) {
                 if (state.inventoryContents.ContainsKey(j)) {
                     List<HexLocation> tempList = state.inventoryContents[j];
@@ -40,7 +39,6 @@ namespace Model.Reducer {
             }
 
             occupiedSlots.Sort();
-
             bool smallestSlot = false;
             int i = 0;
             while (!smallestSlot && i<state.inventorySize) {
@@ -76,7 +74,7 @@ namespace Model.Reducer {
             // If item is present in inventory
             if (state.inventoryContents.ContainsKey(removeItemFromInventory.item)) {
                 // Iterate backwards through the stacks
-                for (int i = state.inventoryContents[removeItemFromInventory.item].Count; i > 0; i--) {
+                for (int i = state.inventoryContents[removeItemFromInventory.item].Count-1; i >= 0; i--) {
                     // If stack quantity > removal quantity
                     if (state.inventoryContents[removeItemFromInventory.item][i].quantity > removeItemFromInventory.count) {
                         state.inventoryContents[removeItemFromInventory.item][i].quantity -= removeItemFromInventory.count;
@@ -91,7 +89,6 @@ namespace Model.Reducer {
         }
 
         public void visit(RemoveItemFromStackInventory removeItemFromStackInventory) {
-
             for (int i = 0; i < state.inventoryContents[removeItemFromStackInventory.item].Count; i++) {
                 if (i == removeItemFromStackInventory.hexId && 
                     state.inventoryContents[removeItemFromStackInventory.item][i].quantity <= removeItemFromStackInventory.count) {
@@ -100,5 +97,22 @@ namespace Model.Reducer {
                 }
             }
         }
+
+        public void visit(SwapItemLocations swapItemLocations) {
+           foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItemID]) {
+               if (hexLocation.hexID == swapItemLocations.sourceHexID) {
+                   hexLocation.hexID = swapItemLocations.destinationHexID;
+               }
+           }
+
+            if (swapItemLocations.destinationItemID != 0) {
+                foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItemID]) {
+                    if (hexLocation.hexID == swapItemLocations.destinationHexID) {
+                        hexLocation.hexID = swapItemLocations.sourceHexID;
+                    }
+                }
+            }
+        }
+        
     }
 }

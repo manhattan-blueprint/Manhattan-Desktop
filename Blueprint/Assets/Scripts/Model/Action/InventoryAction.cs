@@ -3,6 +3,7 @@ namespace Model.Action {
         void visit(AddItemToInventory addItemToInventoryAction);
         void visit(RemoveItemFromInventory anotherInventoryAction);
         void visit(RemoveItemFromStackInventory anotherInventoryAction);
+        void visit(SwapItemLocations anotherInventoryAction);
     }
 
     public abstract class InventoryAction : Action {
@@ -51,6 +52,25 @@ namespace Model.Action {
             this.item = item;
             this.count = count;
             this.hexId = hexId;
+        }
+
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+
+    public class SwapItemLocations : InventoryAction {
+        public readonly int sourceHexID;
+        public readonly int destinationHexID;
+        public readonly int sourceItemID;
+        public readonly int destinationItemID;
+
+        public SwapItemLocations(int sourceHexId, int destinationHexId, int sourceItemId, int destinationItemId) {
+            this.sourceHexID = sourceHexId;
+            this.destinationHexID = destinationHexId;
+            this.sourceItemID = sourceItemId;
+            this.destinationItemID = destinationItemId;
         }
 
         public override void Accept(InventoryVisitor visitor) {

@@ -23,6 +23,7 @@ namespace Controller {
         private GameObject highlightObject;
         private float slotHeight;
         private float slotWidth;
+        private GameManager gameManager;
 
     private void Start() {
         //borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
@@ -32,8 +33,8 @@ namespace Controller {
         highlightObject = GameObject.Find("Highlight");
         slotHeight = (transform as RectTransform).rect.height;
         slotWidth = (transform as RectTransform).rect.width;
-            
         storedItem = nullItem;
+        gameManager = GameManager.Instance();
             
         // Item image and quantity
         GameObject newGO = new GameObject("Icon"+id);
@@ -142,20 +143,21 @@ namespace Controller {
             if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
                 
                 if (destination.GetStoredItem().GetId() != nullItem.GetId()) {
+                    // Move to occupied slot
                     InventoryItem temp = destination.GetStoredItem();
                     
                     destination.SetStoredItem(source.GetStoredItem());
                     source.SetStoredItem(temp);
+                    
                 } else {
+                    // Move to empty slot
                     destination.SetStoredItem(source.GetStoredItem());
                     source.SetStoredItem(nullItem);
                 }
-                
+
+                this.gameManager.store.Dispatch(new SwapItemLocations(source.id, destination.id,
+                    destination.GetStoredItem().GetId(), source.GetStoredItem().GetId()));
             }
         } 
-       
-        
-        
-        
     }
 }    
