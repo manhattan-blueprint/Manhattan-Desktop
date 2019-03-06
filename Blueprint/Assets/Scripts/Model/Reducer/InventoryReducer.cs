@@ -2,6 +2,10 @@ using System;
 using Model.Action;
 using UnityEngine;
 using Utils;
+using System.Collections;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+using System.Linq;
 
 namespace Model.Reducer {
     public class InventoryReducer : Reducer<InventoryState, InventoryAction>, InventoryVisitor {
@@ -14,38 +18,86 @@ namespace Model.Reducer {
             return this.state;
         }
 
-        // Returns a slot for a resource id
-        private int getSlot(int id) {
-            for (int i = 0; i < state.inventoryContents.Length; i++) {
-                if (state.inventoryContents[i] == null || state.inventoryContents[i].GetId() == id) {
+        private int getHighestItemID() {
+            if (state.inventoryContents.Keys.Count > 0) {
+                return state.inventoryContents.Keys.Max();
+            } else {
+                return 0;
+            }
+        } 
+
+        private int getFirstEmptySlot() {
+            List<int> occupiedSlots = new List<int>();
+
+
+            for (int j = 0; j < getHighestItemID()+1; j++) {
+                if (state.inventoryContents.ContainsKey(j)) {
+                    List<HexLocation> tempList = state.inventoryContents[j];
+                    foreach (HexLocation loc in tempList) {
+                        occupiedSlots.Add(loc.hexID);
+                    }
+                }                
+            }
+
+            occupiedSlots.Sort();
+
+            bool smallestSlot = false;
+            int i = 0;
+            while (!smallestSlot && i<state.inventorySize) {
+                if (!occupiedSlots.Contains(i)) {
+                    smallestSlot = true;
                     return i;
+                } else {
+                    i++;
                 }
             }
-            return -1;
+
+            return 0;
         }
 
         public void visit(AddItemToInventory addItemToInventoryAction) {
-            int slot = getSlot(addItemToInventoryAction.item);
-            
-            // Update if exists or add new
-            if (state.inventoryContents[slot] != null) {
-                state.inventoryContents[slot].AddQuantity(addItemToInventoryAction.count);
+            // If item exists, increment quantity on first stack
+            // Else add item
+            if (state.inventoryContents.ContainsKey(addItemToInventoryAction.item)) {
+                state.inventoryContents[addItemToInventoryAction.item][0].quantity += addItemToInventoryAction.count;
             } else {
-                state.inventoryContents[slot] = new InventoryItem(addItemToInventoryAction.name, 
-                                                    addItemToInventoryAction.item, addItemToInventoryAction.count);
+                HexLocation item = new HexLocation(getFirstEmptySlot(), addItemToInventoryAction.count);
+                List<HexLocation> list = new List<HexLocation>();
+                list.Add(item);
+                
+                state.inventoryContents.Add(addItemToInventoryAction.item, list);
             }
+            
         }
 
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
-            int id = removeItemFromInventory.item;
-            int quantity = removeItemFromInventory.count;
-            InventoryItem slotItem = state.inventoryContents[getSlot(id)];
+            int leftToRemove = removeItemFromInventory.count; 
+            
+            // If item is present in inventory
+            if (state.inventoryContents.ContainsKey(removeItemFromInventory.item)) {
+                // Iterate backwards through the stacks
+                for (int i = state.inventoryContents[removeItemFromInventory.item].Count; i > 0; i--) {
+                    // If stack quantity > removal quantity
+                    if (state.inventoryContents[removeItemFromInventory.item][i].quantity > removeItemFromInventory.count) {
+                        state.inventoryContents[removeItemFromInventory.item][i].quantity -= removeItemFromInventory.count;
+                        leftToRemove = 0;
+                    } else {
+                        leftToRemove = leftToRemove - state.inventoryContents[removeItemFromInventory.item][i].quantity;
+                        state.inventoryContents[removeItemFromInventory.item].RemoveAt(i);
+                    }
+                    
+                } 
+            }
+        }
 
-            if (slotItem != null) {
-                int newValue = Math.Max(0,  slotItem.GetQuantity() - quantity);
-                slotItem.SetQuantity(newValue);
-            } else {
-                throw new System.Exception("This id does not exist in inventory.");
+        public void visit(RemoveItemFromStackInventory removeItemFromStackInventory) {
+
+            for (int i = 0; i < state.inventoryContents[removeItemFromStackInventory.item].Count; i++) {
+                if (i == removeItemFromStackInventory.hexId && 
+                    state.inventoryContents[removeItemFromStackInventory.item][i].quantity <= removeItemFromStackInventory.count) {
+
+                    state.inventoryContents[removeItemFromStackInventory.item][i].quantity -= removeItemFromStackInventory.count;
+                }
             }
         }
     }

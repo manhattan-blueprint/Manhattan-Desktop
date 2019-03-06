@@ -25,33 +25,24 @@ namespace Controller {
         private float slotWidth;
 
     private void Start() {
-            //borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
-            borderSprite = GameObject.Find("Border" + id).GetComponent<SVGImage>().sprite;
-            highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
-            border = GameObject.Find("Border" + id).GetComponent<SVGImage>();
-            highlightObject = GameObject.Find("Highlight");
-            slotHeight = (transform as RectTransform).rect.height;
-            slotWidth = (transform as RectTransform).rect.width;
+        //borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
+        borderSprite = GameObject.Find("Border" + id).GetComponent<SVGImage>().sprite;
+        highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
+        border = GameObject.Find("Border" + id).GetComponent<SVGImage>();
+        highlightObject = GameObject.Find("Highlight");
+        slotHeight = (transform as RectTransform).rect.height;
+        slotWidth = (transform as RectTransform).rect.width;
             
-            storedItem = nullItem;
+        storedItem = nullItem;
             
-            // Item image and quantity
-            GameObject newGO = new GameObject("Icon"+id);
-            newGO.transform.SetParent(gameObject.transform);
-            newGO.AddComponent<InventorySlotDragHandler>();
+        // Item image and quantity
+        GameObject newGO = new GameObject("Icon"+id);
+        newGO.transform.SetParent(gameObject.transform);
+        newGO.AddComponent<InventorySlotDragHandler>();
 
-            if (id == 0) {
-                storedItem = new InventoryItem("wood", 1, 1);
-                setupImage(newGO, storedItem);
-                setupText(this.gameObject, storedItem.GetQuantity().ToString());
-                
-            } 
-            else {
-                setupImage(newGO, nullItem);
-                setupText(this.gameObject, nullItem.GetQuantity().ToString());
-            }
-            
-        }
+        setupImage(newGO, nullItem);
+        setupText(this.gameObject, nullItem.GetQuantity().ToString());
+    }
 
         private void Update() {
             RectTransform hex = transform as RectTransform;

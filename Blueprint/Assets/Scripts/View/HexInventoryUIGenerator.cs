@@ -27,7 +27,6 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
 
         slotDimension = Screen.width / slotScale;
-        Debug.Log("slotDimension: " + slotDimension);
         
         int hexCount = 0;
         GameObject go = newSlot(ref hexCount, false);
