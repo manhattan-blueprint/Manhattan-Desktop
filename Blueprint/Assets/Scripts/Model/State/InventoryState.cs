@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Collections;
+using Controller;
 using Model.Action;
+using UnityEngine;
+using System.Linq;
 
 namespace Model {
     public class InventoryState {
         public Dictionary<int, List<HexLocation>> inventoryContents;
-        //TODO: fix to be dynamic
-        public int inventorySize = 18;
+        public int inventorySize = 0;
 
         public InventoryState() {
             inventoryContents = new Dictionary<int ,List<HexLocation>>(); 

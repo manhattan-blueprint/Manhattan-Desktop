@@ -139,7 +139,6 @@ namespace Controller {
                 GameObject.Find(transform.name).GetComponentInParent<InventorySlotController>();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
-                
                 if (destination.GetStoredItem().GetId() != nullItem.GetId()) {
                     // Move to occupied slot
                     InventoryItem temp = destination.GetStoredItem();

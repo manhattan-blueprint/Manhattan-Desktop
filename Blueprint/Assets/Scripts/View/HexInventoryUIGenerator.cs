@@ -115,6 +115,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         // Background Image
         SVGImage background = go.AddComponent<SVGImage>();
         background.sprite = HexTile;
+        background.color = new Color32((byte)(background.color.r*255), (byte)(background.color.g*255), 
+            (byte)(background.color.b*255), (byte)192);
         
         // Border
         GameObject svgChild = new GameObject("Border" + id);
@@ -132,6 +134,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         rt.sizeDelta = new Vector2(slotDimension, slotDimension);
 
         id++;
+        GameManager.Instance().store.GetState().inventoryState.inventorySize += 1;
         return go;
     }
 
@@ -141,7 +144,6 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         } else {
             return borderSprite;
         }
-        
     }
 
     private void setPreviousCoords(GameObject go) {

@@ -61,15 +61,15 @@ namespace Controller {
         
         public void StateDidUpdate(GameState state) {
             inventoryContents = state.inventoryState.inventoryContents;
-
+    
+            // Clear slots
             foreach (InventorySlotController slot in itemSlots) {
                 slot.SetStoredItem(nullItem);
             }
             
-            // Update UI based on new state
+            // Re-populate slots
             foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
                 foreach(HexLocation loc in element.Value) {
-                    
                     InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
                     itemSlots[loc.hexID].SetStoredItem(item);
                 } 
