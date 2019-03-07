@@ -14,16 +14,20 @@ using View;
 using Service;
 using Service.Response;
 using System.Threading.Tasks;
-using UnityEngine.Experimental.UIElements;
+using UnityEngine.Assertions.Must;
+using UnityEngine.Experimental.Rendering;
 
 /* Attached to the player and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<GameState> {
+        public Dictionary<int, List<HexLocation>> inventoryContents;
         private List<InventorySlotController> itemSlots;
         private ResponseGetInventory remoteInv;
+        private GameManager gameManager;
+        private InventoryItem nullItem = new InventoryItem("", 0, 0);
 
         public void Start() {
-            itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
+            itemSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
             GameManager.Instance().store.Subscribe(this);
             BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
@@ -55,7 +59,22 @@ namespace Controller {
             */
         }
         
-        public void StateDidUpdate(GameState state) {}
+        public void StateDidUpdate(GameState state) {
+            inventoryContents = state.inventoryState.inventoryContents;
+
+            foreach (InventorySlotController slot in itemSlots) {
+                slot.SetStoredItem(nullItem);
+            }
+            
+            // Update UI based on new state
+            foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
+                foreach(HexLocation loc in element.Value) {
+                    
+                    InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
+                    itemSlots[loc.hexID].SetStoredItem(item);
+                } 
+            }
+        }
 
         public string GetItemName(int id) {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();

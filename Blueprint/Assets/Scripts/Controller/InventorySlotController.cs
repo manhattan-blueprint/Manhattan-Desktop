@@ -21,6 +21,7 @@ namespace Controller {
         private float slotHeight;
         private float slotWidth;
         private GameManager gameManager;
+        private ModelManager modelManager;
         
         // EDITABLE
         private const int fontScaler = 50;
@@ -31,6 +32,7 @@ namespace Controller {
         slotWidth = (transform as RectTransform).rect.width;
         storedItem = nullItem;
         gameManager = GameManager.Instance();
+        modelManager = ModelManager.Instance();
             
         // Item image and quantity
         GameObject newGO = new GameObject("Icon"+id);
@@ -97,7 +99,7 @@ namespace Controller {
             image.transform.localPosition = new Vector3(0,slotHeight/8,0);
 
             if (item.GetId() != nullItem.GetId()){
-                Sprite icon = Resources.Load("InventoryIcons/" + item.GetName(), typeof(Sprite)) as Sprite;
+                Sprite icon = modelManager.GetItemSprite(item.GetId());
                 image.sprite = icon;
                 image.enabled = true;
             }
@@ -115,7 +117,7 @@ namespace Controller {
             Text text = transform.GetComponentInChildren<Text>();
 
             if (item.GetId() != nullItem.GetId()) {
-                image.sprite = Resources.Load("InventoryIcons/" + item.GetName(), typeof(Sprite)) as Sprite;
+                image.sprite = modelManager.GetItemSprite(item.GetId());
                 text.text = item.GetQuantity().ToString();
                     
                 image.enabled = true;

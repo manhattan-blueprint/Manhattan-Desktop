@@ -4,6 +4,7 @@ using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Model.Action;
 using UnityEngine;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
@@ -11,18 +12,21 @@ namespace Controller {
     public class MenuController : MonoBehaviour, Subscriber<GameState> {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
+        private GameManager gameManager;
 
         void Start() {
             inventoryCanvas = GetComponent<Canvas> ();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             GameManager.Instance().store.Subscribe(this);
+            gameManager = GameManager.Instance();
         }
 
         void Update() {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().store.Dispatch(new OpenInventoryUI());
+                    PauseGame();
                 } else {
                     GameManager.Instance().store.Dispatch(new CloseUI());
                 }
