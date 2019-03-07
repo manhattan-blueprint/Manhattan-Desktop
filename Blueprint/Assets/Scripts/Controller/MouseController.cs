@@ -63,7 +63,7 @@ namespace Controller {
                 if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
                     hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
                         Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
-                
+
                     GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
                 }
             }
@@ -83,8 +83,8 @@ namespace Controller {
             if (focus != null && dist < maxDistance) {
                 Renderer rend = hit.collider.GetComponent<Renderer>();
                 Highlight hi = hit.collider.GetComponent<Highlight>();
-                rend.material.color = hi.tempColor;
-                
+                rend.material.color = hi.GetColor();
+
                 inventory.CollectItem(focus, hit.transform.gameObject);
             } else {
                 Debug.Log("No inventory items hit");

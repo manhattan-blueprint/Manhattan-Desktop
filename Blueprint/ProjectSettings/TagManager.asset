@@ -9,6 +9,7 @@ TagManager:
   - Map
   - Cursor
   - Held
+  - Pause
   layers:
   - Default
   - TransparentFX

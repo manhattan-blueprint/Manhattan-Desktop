@@ -10,13 +10,13 @@ namespace Model {
             Pause,
             InvPause,
             BluePause,
-            MachPause 
+            MachPause
         };
 
         public OpenUI Selected;
 
         public UIState() {
-            this.Selected = OpenUI.Login;
+            this.Selected = OpenUI.Playing;
         }
     }
 }
