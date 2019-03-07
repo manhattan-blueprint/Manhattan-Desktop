@@ -12,14 +12,12 @@ namespace Controller {
     public class MenuController : MonoBehaviour, Subscriber<GameState> {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
-        private GameManager gameManager;
 
         void Start() {
             inventoryCanvas = GetComponent<Canvas> ();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             GameManager.Instance().store.Subscribe(this);
-            gameManager = GameManager.Instance();
         }
 
         void Update() {

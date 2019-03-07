@@ -33,7 +33,7 @@ namespace Model {
 
             // Load default if object sprite doesn't exist
             if (sprite == null) {
-                sprite = Resources.Load("sprite_default") as Sprite;
+                sprite = Resources.Load("sprite_default", typeof(Sprite)) as Sprite;
             }
 
             return sprite;
