@@ -13,23 +13,19 @@ using UnityEngine.EventSystems;
 /* Attached to each slot in the inventory grid */
 namespace Controller {
     public class InventorySlotController : MonoBehaviour, IDropHandler {
-        private Sprite borderSprite;
-        private Sprite highlightSprite;
         private int id;
         private bool mouseOver = false;
-        private SVGImage border;
         private InventoryItem nullItem = new InventoryItem("", 0, 0);
         private InventoryItem storedItem;
         private GameObject highlightObject;
         private float slotHeight;
         private float slotWidth;
         private GameManager gameManager;
+        
+        // EDITABLE
+        private const int fontScaler = 50;
 
     private void Start() {
-        //borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
-        borderSprite = GameObject.Find("Border" + id).GetComponent<SVGImage>().sprite;
-        highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
-        border = GameObject.Find("Border" + id).GetComponent<SVGImage>();
         highlightObject = GameObject.Find("Highlight");
         slotHeight = (transform as RectTransform).rect.height;
         slotWidth = (transform as RectTransform).rect.width;
@@ -85,11 +81,11 @@ namespace Controller {
             
             text.font = Resources.Load("helveticaneue_bold", typeof(Font)) as Font;
             text.transform.localPosition = new Vector3(0,-slotHeight/6,0);
-            text.color = Color.black;
+            text.color = new Color32(245, 245, 245, 255);
             text.alignment = TextAnchor.MiddleCenter; 
             text.text = initialText;
             text.raycastTarget = false;
-            text.fontSize = 12;
+            text.fontSize = (int) Mathf.Round(Screen.height/fontScaler);
 
             if (initialText == "0") text.enabled = false;
 

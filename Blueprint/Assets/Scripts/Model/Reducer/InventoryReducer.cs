@@ -99,12 +99,12 @@ namespace Model.Reducer {
         }
 
         public void visit(SwapItemLocations swapItemLocations) {
-           foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItemID]) {
-               if (hexLocation.hexID == swapItemLocations.sourceHexID) {
-                   hexLocation.hexID = swapItemLocations.destinationHexID;
-               }
-           }
-
+            foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItemID]) {
+                if (hexLocation.hexID == swapItemLocations.sourceHexID) {
+                    hexLocation.hexID = swapItemLocations.destinationHexID;
+                }
+            }
+            
             if (swapItemLocations.destinationItemID != 0) {
                 foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItemID]) {
                     if (hexLocation.hexID == swapItemLocations.destinationHexID) {

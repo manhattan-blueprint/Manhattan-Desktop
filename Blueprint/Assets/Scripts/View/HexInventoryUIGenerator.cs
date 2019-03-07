@@ -90,7 +90,6 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         SVGImage svg = highlight.AddComponent<SVGImage>();
         svg.sprite = highlightSprite;
         svg.raycastTarget = false;
-        svg.transform.localScale = new Vector3(0.9f, 0.9f, 1.0f);
         (svg.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
         
         // Temp drag object
@@ -102,34 +101,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
 
     // Create new slot, place in centre 
     private GameObject newSlot(ref int id, bool outerBorder) {
-        GameObject go = new GameObject("Slot" + id);
-        go.transform.SetParent(this.transform);
-        go.transform.position = new Vector2(Screen.width/2, Screen.height/2);
-
-        // Background Image
-        SVGImage background = go.AddComponent<SVGImage>();
-        background.sprite = HexTile;
-        
-        RectTransform rt = go.transform as RectTransform;
-        rt.sizeDelta = new Vector2(slotDimension, slotDimension);
-        
-        // Border
-        GameObject svgChild = new GameObject("Border" + id);
-        svgChild.transform.SetParent(go.transform);
-        svgChild.transform.position = new Vector2(Screen.width/2, Screen.height/2);
-        SVGImage border = svgChild.AddComponent<SVGImage>();
-        border.sprite = getBorder(outerBorder);
-        (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
-        
-        // Scale in outer case (removes gaps)
-        if(outerBorder) border.transform.localScale = new Vector3(1.1f, 1.1f, 1.0f);
-
-        InventorySlotController isc = go.AddComponent<InventorySlotController>();
-        isc.setId(id);
-        
-
-        id++;
-        return go;
+        return newSlot(ref id, Screen.width / 2, Screen.height / 2, outerBorder);
     }
     
     // Create new slot, place at specified coordinates
@@ -149,16 +121,13 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         SVGImage border = svgChild.AddComponent<SVGImage>();
         border.sprite = getBorder(outerBorder);
         (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
-        
-        // Scale in outer case (removes gaps)
-        if(outerBorder) border.transform.localScale = new Vector3(1.1f, 1.1f, 1.0f);
+        (svgChild.transform as RectTransform).localScale = new Vector3(1.05f, 1.05f, 0.0f);
         
         InventorySlotController isc = go.AddComponent<InventorySlotController>();
         isc.setId(id);
         
         RectTransform rt = go.transform as RectTransform;
         rt.sizeDelta = new Vector2(slotDimension, slotDimension);
-        
 
         id++;
         return go;
