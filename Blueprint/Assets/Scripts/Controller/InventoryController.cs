@@ -41,7 +41,6 @@ namespace Controller {
             }).GetAwaiter().GetResult();
             
             foreach (InventoryEntry entry in remoteInv.items) {
-                Debug.Log(entry.item_id);
                 GameManager.Instance().store.Dispatch(
                     new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
             }
