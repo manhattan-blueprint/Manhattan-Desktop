@@ -16,5 +16,9 @@ namespace Model {
             this.input = new List<int>();
             this.output = new List<int>();
         }
+
+        public int GetID() {
+            return id;
+        }
     }
 }

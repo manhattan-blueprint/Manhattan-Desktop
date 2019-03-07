@@ -11,6 +11,11 @@ namespace Model.Reducer {
         }
 
         public void visit(CellSelected cellSelected) {
+            // Height of model for that ID
+            
+            // 
+            
+            
             if (state.getObjects().ContainsKey(cellSelected.position)) {
                 state.removeObject(cellSelected.position);
             } else {

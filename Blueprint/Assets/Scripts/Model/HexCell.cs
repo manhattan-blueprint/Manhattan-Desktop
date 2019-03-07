@@ -1,19 +1,16 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Model {
     public class HexCell: MonoBehaviour {
-        public Vector2 position;
+        public Vector3 position;
 
-        public void setPosition(Vector2 position) {
+        public void setPosition(Vector3 position) {
             this.position = position;
         }
 
-        public Vector2 getPosition() {
+        public Vector3 getPosition() {
             return position;
         }
-
     }
 }

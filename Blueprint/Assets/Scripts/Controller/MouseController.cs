@@ -59,7 +59,7 @@ namespace Controller {
 
                 // If a GameObject is hit
                 if (!Physics.Raycast(ray, out hit)) return;
-                Vector2 pos = hit.transform.gameObject.GetComponent<HexCell>().position;
+                Vector3 pos = hit.transform.gameObject.GetComponent<HexCell>().position;
                 // TODO: Get id of object from held item
                 GameManager.Instance().store.Dispatch(new CellSelected(pos, 1));
 
