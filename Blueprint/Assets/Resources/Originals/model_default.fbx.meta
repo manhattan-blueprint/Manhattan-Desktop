@@ -1,37 +1,14 @@
 fileFormatVersion: 2
-guid: 8a44008cf6a4f414e9a911d240e8f322
+guid: 2a7af5b3e6b9b42a38b645f73e4ced9d
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: leaves
-    100002: leaves_2
-    100004: leaves_3
-    100006: leaves_4
-    100008: //RootNode
-    100010: trunk
-    400000: leaves
-    400002: leaves_2
-    400004: leaves_3
-    400006: leaves_4
-    400008: //RootNode
-    400010: trunk
-    2100000: pasted__lambert19
-    2100002: pasted__lambert20
-    2300000: leaves
-    2300002: leaves_2
-    2300004: leaves_3
-    2300006: leaves_4
-    2300008: trunk
-    3300000: leaves
-    3300002: leaves_2
-    3300004: leaves_3
-    3300006: leaves_4
-    3300008: trunk
-    4300000: leaves
-    4300002: trunk
-    4300004: leaves_2
-    4300006: leaves_3
-    4300008: leaves_4
+    100000: //RootNode
+    400000: //RootNode
+    2100000: lambert1
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: pCylinder1
   externalObjects: {}
   materials:
     importMaterials: 1

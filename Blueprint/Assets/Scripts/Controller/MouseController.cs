@@ -56,20 +56,12 @@ namespace Controller {
             if (Input.GetMouseButtonDown(rightButton)) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
-
-                // If a GameObject is hit
+                
+                // TODO: Calculate if we have hit a model to remove - blocked on models! 
                 if (!Physics.Raycast(ray, out hit)) return;
                 Vector2 pos = hit.transform.gameObject.GetComponent<HexCell>().position;
                 // TODO: Get id of object from held item
                 GameManager.Instance().store.Dispatch(new CellSelected(pos, 1));
-
-//                SetFocus(hit.collider.GetComponent<Interactable>());
-//                if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
-////                    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-////                        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
-//                
-//                    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
-//                }
             }
         }
 

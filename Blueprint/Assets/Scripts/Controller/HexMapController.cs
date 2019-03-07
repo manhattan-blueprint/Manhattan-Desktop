@@ -1,12 +1,10 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using Model;
 using Model.Redux;
 using Model.State;
-using UnityEngine.Analytics;
-using UnityEngine.Experimental.UIElements.StyleEnums;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -14,21 +12,19 @@ using Vector3 = UnityEngine.Vector3;
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
     public class HexMapController : MonoBehaviour, Subscriber<GameState> {
-        private float tileYOffset = 1.35f;
-        private float tileXOffset = 2.0f;
+        private int gridSize = 16;
         private float previousX = 0;
         private float previousZ = 0;
         
-        Dictionary<Vector2, GameObject> gridMap;
+        private Dictionary<Vector2, GameObject> grid;
+        private Dictionary<Vector2, GameObject> objectsPlaced;
         
         private void Start() {
-            this.gridMap = new Dictionary<Vector2, GameObject>();
-            drawMap(16);
+            this.grid = new Dictionary<Vector2, GameObject>();
+            this.objectsPlaced = new Dictionary<Vector2, GameObject>();
+            drawMap(gridSize);
             
             GameManager.Instance().store.Subscribe(this);
-
-
-            // Add items from state to grid
         }
         private void drawMap(int layers) {
             GameObject hexTile = Resources.Load("hex_cell") as GameObject;
@@ -38,14 +34,14 @@ namespace Controller {
             GameObject cell = Instantiate(hexTile, Vector3.zero, rotation);
             Vector2 position = new Vector2(0, 0);
             cell.AddComponent<HexCell>().setPosition(position);
-            gridMap.Add(position, cell);
+            grid.Add(position, cell);
            
             for (int l = 1; l < layers; l++) {
                 // Move to correct layer, top left of origin
                 cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, 0f, l * 1.5f), rotation);
                 position = new Vector2(-l, l);
                 cell.AddComponent<HexCell>().setPosition(position);
-                gridMap.Add(position, cell);
+                grid.Add(position, cell);
                 
                 setPreviousCoords(cell);
 
@@ -54,7 +50,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3), 0f, previousZ), rotation);
                     position = new Vector2(-l + i, l);
                     cell.AddComponent<HexCell>().setPosition(position);
-                    gridMap.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
 
@@ -63,7 +59,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, 0f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(i, l-i);
                     cell.AddComponent<HexCell>().setPosition(position);
-                    gridMap.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
 
@@ -72,7 +68,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, 0f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(l, -i);
                     cell.AddComponent<HexCell>().setPosition(position);
-                    gridMap.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
 
@@ -81,7 +77,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3), 0f, previousZ), rotation);
                     position = new Vector2(l-i, -l);
                     cell.AddComponent<HexCell>().setPosition(position);
-                    gridMap.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
                 
@@ -90,7 +86,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, 0f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-i, -l + i);
                     cell.AddComponent<HexCell>().setPosition(position);
-                    gridMap.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
                 
@@ -99,7 +95,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, 0f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-l, i);
                     cell.AddComponent<HexCell>().setPosition(position);
-                    gridMap.Add(position, cell);
+                    grid.Add(position, cell);
                 }
             } 
         }
@@ -111,19 +107,42 @@ namespace Controller {
 
         public void StateDidUpdate(GameState state) {
             Dictionary<Vector2, MapObject> newObjects = state.mapState.getObjects(); 
-            
-            foreach (KeyValuePair<Vector2, GameObject> element in gridMap) {
-                if (newObjects.ContainsKey(element.Key)) {
-                    MapObject mapObject = newObjects[element.Key];
-                    Vector3 position = element.Value.transform.position;
-                    // Add half height of hex tile
-                    position.y += 0.5f;
-                    GameObject tree = Instantiate(Resources.Load("rubber_tree"), position, Quaternion.identity) as GameObject;
-                    tree.transform.parent = element.Value.transform; 
-                } else {
-                    //element.Value.transform.
-                    
+            Dictionary<Vector2, MapObject>.KeyCollection newKeys = newObjects.Keys;
+            Dictionary<Vector2, GameObject>.KeyCollection oldKeys = objectsPlaced.Keys;
+	
+            List<Vector2> inNewNotInOld = new List<Vector2>();
+            List<Vector2> inOldNotInNew = new List<Vector2>();
+           
+            foreach (Vector2 oldKey in oldKeys) {
+                if (!newKeys.Contains(oldKey)) {
+                    inOldNotInNew.Add(oldKey);
                 }
+            }
+	
+            foreach (Vector2 newKey in newKeys) {
+                if (!oldKeys.Contains(newKey)) {
+                    inNewNotInOld.Add(newKey);
+                }
+            }
+	
+            // Draw things in new but not in old
+            foreach (Vector3 newObjectPosition in inNewNotInOld) {
+                MapObject mapObject = newObjects[newObjectPosition];
+                GameObject original = ModelManager.Instance().GetModel(mapObject.GetID());
+
+                GameObject parent = grid[newObjectPosition];
+                Vector3 pos = parent.transform.position;
+                pos.y += 0.5f;
+                
+                GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, 90, 0)); 
+                objectsPlaced.Add(newObjectPosition, obj);
+                obj.transform.parent = parent.transform;
+            }
+	
+            // Remove things in old but not in new
+            foreach (Vector3 oldObject in inOldNotInNew) {
+                Destroy(objectsPlaced[oldObject]);
+                objectsPlaced.Remove(oldObject);
             }
         }
     }
