@@ -16,7 +16,7 @@ namespace Model {
         public OpenUI Selected;
 
         public UIState() {
-            this.Selected = OpenUI.Playing;
+            this.Selected = OpenUI.Login;
         }
     }
 }
