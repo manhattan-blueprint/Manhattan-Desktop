@@ -27,7 +27,8 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
     }
 	
     public void OnEndDrag(PointerEventData eventData) {
-        transform.localPosition = Vector3.zero;
+        float slotHeight = (eventData.pointerEnter.transform.parent.transform as RectTransform).rect.height;
+        transform.localPosition = new Vector3(0, slotHeight/8, 0);
         foregroundImage.enabled = false;
     }
 }
