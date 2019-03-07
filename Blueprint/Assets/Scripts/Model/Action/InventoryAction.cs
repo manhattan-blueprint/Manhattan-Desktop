@@ -58,8 +58,8 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-
-
+    
+    // Swaps the locations (hexID) of two items in the inventory
     public class SwapItemLocations : InventoryAction {
         public readonly int sourceHexID;
         public readonly int destinationHexID;

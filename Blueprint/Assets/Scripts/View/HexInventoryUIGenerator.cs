@@ -97,6 +97,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         drag.transform.parent = transform;
         Image image = drag.AddComponent<Image>();
         image.raycastTarget = false;
+        // To initialise drag object off screen
+        drag.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
     }
 
     // Create new slot, place in centre 
