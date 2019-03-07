@@ -2900,6 +2900,7 @@ GameObject:
   - component: {fileID: 2127419268}
   - component: {fileID: 2127419267}
   - component: {fileID: 2127419271}
+  - component: {fileID: 2127419272}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: MainCamera
@@ -3009,3 +3010,20 @@ MonoBehaviour:
   cubeLarge: {fileID: 4860563762599424, guid: 6dc5f2df4889e4ff49d078c16bae0217, type: 3}
   capsule: {fileID: 4341569406944394, guid: baf27c7d89b914e96ab73de5358017fc, type: 3}
   machinery: {fileID: 4573807389177294, guid: e2032d64f6722460ca19b7a6adb03ae8, type: 3}
+--- !u!114 &2127419272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127419265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc6bde01469c7b4badee5362f191d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  downsample: 1
+  blurSize: 3
+  blurIterations: 2
+  blurType: 0
+  blurShader: {fileID: 4800000, guid: f9d5fa183cd6b45eeb1491f74863cd91, type: 3}
