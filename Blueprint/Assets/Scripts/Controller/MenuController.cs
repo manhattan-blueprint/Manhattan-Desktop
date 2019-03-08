@@ -40,11 +40,11 @@ namespace Controller {
         }
 
         private void BlurScreen() {
-          GameObject.Find("PlayerCamera").GetComponent<BlurOptimized>().enabled = true;
+          GameObject.Find("PlayerCamera").GetComponent<Blur>().enabled = true;
         }
 
         private void UnblurScreen() {
-          GameObject.Find("PlayerCamera").GetComponent<BlurOptimized>().enabled = false;
+          GameObject.Find("PlayerCamera").GetComponent<Blur>().enabled = false;
         }
 
         private void OpenInventory() {
