@@ -144,7 +144,6 @@ namespace Controller {
                     
                     destination.SetStoredItem(source.GetStoredItem());
                     source.SetStoredItem(temp);
-                    
                 } else {
                     // Move to empty slot
                     destination.SetStoredItem(source.GetStoredItem());

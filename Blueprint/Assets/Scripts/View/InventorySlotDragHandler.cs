@@ -13,6 +13,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
         transform.parent.SetSiblingIndex(1);
         transform.position = Input.mousePosition;
         Sprite originalImage = GameObject.Find(this.transform.name).GetComponent<Image>().sprite;
+        GameObject.Find(this.transform.parent.name).GetComponentInChildren<Text>().text = "";
 
         // Foreground object
         foregroundObject = GameObject.Find("drag");
