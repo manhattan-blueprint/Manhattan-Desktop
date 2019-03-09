@@ -44,14 +44,22 @@ namespace View {
             }
         }
 
+        void resetColor() {
+          paused = true;
+          rend.material.color = initialColor;
+        }
+
         public void StateDidUpdate(GameState state) {
             if (state.uiState.Selected == UIState.OpenUI.Inventory) {
-                paused = true;
+                resetColor();
             } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
                 paused = false;
             } else if (state.uiState.Selected == UIState.OpenUI.Pause) {
-                paused = true;
-                rend.material.color = initialColor;
+                resetColor();
+            } else if (state.uiState.Selected == UIState.OpenUI.Exit) {
+                resetColor();
+            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
+                GameManager.Instance().store.Unsubscribe(this);
             } else {
                 throw new System.Exception("I haven't handled this case yet.");
             }

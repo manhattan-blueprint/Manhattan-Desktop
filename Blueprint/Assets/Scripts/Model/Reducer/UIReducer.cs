@@ -39,7 +39,7 @@ namespace Model.Reducer {
                     break;
             }
         }
-        
+
         public void visit(OpenLoginUI login) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -47,7 +47,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Login;
             }
         }
-        
+
         public void visit(OpenPlayingUI playing) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -55,7 +55,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Playing;
             }
         }
-        
+
         public void visit(OpenInventoryUI inventory) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -63,7 +63,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Inventory;
             }
         }
-        
+
         public void visit(OpenBlueprintUI blueprint) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -71,7 +71,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Blueprint;
             }
         }
-                
+
         public void visit(OpenMachineUI machine) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -79,7 +79,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Machine;
             }
         }
-        
+
         public void visit(OpenSettingsUI settings) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -96,6 +96,18 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Machine:
                     state.Selected = UIState.OpenUI.MachPause;
                     break;
+                case UIState.OpenUI.Exit:
+                    state.Selected = UIState.OpenUI.Pause;
+                    break;
+                case UIState.OpenUI.InvExit:
+                    state.Selected = UIState.OpenUI.InvPause;
+                    break;
+                case UIState.OpenUI.BlueExit:
+                    state.Selected = UIState.OpenUI.BluePause;
+                    break;
+                case UIState.OpenUI.MachExit:
+                    state.Selected = UIState.OpenUI.MachPause;
+                    break;
             }
         }
 
@@ -103,7 +115,17 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Pause || current == UIState.OpenUI.InvPause ||
                 current == UIState.OpenUI.BluePause || current == UIState.OpenUI.MachPause) {
-                state.Selected = UIState.OpenUI.Welcome;
+                // Update when welcome screen is implemented
+                state.Selected = UIState.OpenUI.Login;
+            }
+        }
+
+        public void visit(Exit exit) {
+            UIState.OpenUI current = state.Selected;
+            if (current == UIState.OpenUI.Pause || current == UIState.OpenUI.InvPause ||
+                current == UIState.OpenUI.BluePause || current == UIState.OpenUI.MachPause) {
+                // Update when welcome screen is implemented
+                state.Selected = UIState.OpenUI.Exit;
             }
         }
     }

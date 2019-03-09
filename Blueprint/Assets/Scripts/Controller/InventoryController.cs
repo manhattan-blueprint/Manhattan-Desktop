@@ -45,12 +45,12 @@ namespace Controller {
                     JsonError error = finalInventoryResponse.GetError();
                 }
             }).GetAwaiter().GetResult();
-            
+
             foreach (InventoryEntry entry in remoteInv.items) {
                 GameManager.Instance().store.Dispatch(
                     new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
             }
-            /*            
+            /*
                         Task.Run(async () => {
                             try {
                                 APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
@@ -59,7 +59,7 @@ namespace Controller {
                             } catch (WebException e) {
                                 // Failure case
                                 throw new System.Exception("Did not delete inventory.");
-                            }    
+                            }
                         }).GetAwaiter().GetResult();
             */
             foreach (Transform child in heldItem.transform) {
@@ -74,9 +74,12 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
+            if (state.uiState.Selected == UIState.OpenUI.Login) {
+              GameManager.Instance().store.Unsubscribe(this);
+            }
             int length = 0;
             inventoryContents = state.inventoryState.inventoryContents;
-            
+
             // Update UI based on new state
             inventoryContents.Where(x => x != null).Each((element, i) => {
                 length++;
@@ -90,7 +93,7 @@ namespace Controller {
                 } else {
                     GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text = "";
                 }
-                
+
                 // Change load order or UI elements for accessible hit-box
                 GameObject dropButton = GameObject.Find(getButtonName(i));
                 itemLabel.transform.SetSiblingIndex(0);
@@ -162,7 +165,7 @@ namespace Controller {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
             return goh.GameObjs.items[id - 1].name;
         }
-        
+
         public int GetItemType(int id) {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
             return goh.GameObjs.items[id - 1].type;

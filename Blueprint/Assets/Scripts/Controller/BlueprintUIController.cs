@@ -45,10 +45,12 @@ namespace Controller {
             Cursor.visible = false;
             cursorCanvas.enabled = true;
         }
-        
+
         public void StateDidUpdate(GameState state) {
             if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
                 PauseGame();
+            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
+                GameManager.Instance().store.Unsubscribe(this);
             } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
                 ContinueGame();
             }

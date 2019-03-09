@@ -6,6 +6,7 @@ using Model.Redux;
 using Model.State;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
+using UnityEngine.SceneManagement;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
@@ -13,13 +14,16 @@ namespace Controller {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
         private Canvas pauseCanvas;
+        private Canvas exitCanvas;
 
         void Start() {
-            inventoryCanvas = GetComponent<Canvas> ();
+            inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             pauseCanvas = GameObject.FindGameObjectWithTag("Pause").GetComponent<Canvas>();
+            exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             pauseCanvas.enabled = false;
+            exitCanvas.enabled = false;
             GameManager.Instance().store.Subscribe(this);
         }
 
@@ -39,13 +43,6 @@ namespace Controller {
             }
         }
 
-        private void BlurScreen() {
-          GameObject.Find("PlayerCamera").GetComponent<Blur>().enabled = true;
-        }
-
-        private void UnblurScreen() {
-          GameObject.Find("PlayerCamera").GetComponent<Blur>().enabled = false;
-        }
 
         private void OpenInventory() {
             Time.timeScale = 0;
@@ -65,17 +62,37 @@ namespace Controller {
             cursorCanvas.enabled = true;
             GameObject.Find("HeldItemCanvas").GetComponent<Canvas>().enabled = true;
             GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("HeldItemCanvas").transform);
-            UnblurScreen();
+        }
+
+        public void Logout() {
+            GameManager.Instance().store.Dispatch(new Logout());
+        }
+
+        public void Exit() {
+            Application.Quit();
+        }
+
+        public void ExitButton() {
+            GameManager.Instance().store.Dispatch(new Exit());
+        }
+
+        private void ExitPrompt() {
+            pauseCanvas.enabled = false;
+            exitCanvas.enabled = true;
+        }
+
+        public void ExitCancel() {
+            GameManager.Instance().store.Dispatch(new OpenSettingsUI());
         }
 
         private void PauseGame() {
             Time.timeScale = 0;
             pauseCanvas.enabled = true;
+            exitCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             GameObject.Find("HeldItemCanvas").GetComponent<Canvas>().enabled = false;
-            BlurScreen();
         }
 
         public void StateDidUpdate(GameState state) {
@@ -85,6 +102,11 @@ namespace Controller {
                 ContinueGame();
             } else if (state.uiState.Selected == UIState.OpenUI.Pause) {
                 PauseGame();
+            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
+                SceneManager.LoadScene(SceneMapping.MainMenu);
+                GameManager.Instance().store.Unsubscribe(this);
+            } else if (state.uiState.Selected == UIState.OpenUI.Exit) {
+                ExitPrompt();
             } else {
                 throw new System.Exception("Not in expected state.");
             }
