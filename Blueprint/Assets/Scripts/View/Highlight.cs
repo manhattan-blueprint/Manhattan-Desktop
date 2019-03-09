@@ -54,9 +54,13 @@ namespace View {
                 resetColor();
             } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
                 paused = false;
-            } else if (state.uiState.Selected == UIState.OpenUI.Pause) {
+            } else if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
                 resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Exit) {
+            } else if (state.uiState.Selected == UIState.OpenUI.Pause || state.uiState.Selected == UIState.OpenUI.InvPause
+                       || state.uiState.Selected == UIState.OpenUI.BluePause || state.uiState.Selected == UIState.OpenUI.MachPause) {
+                resetColor();
+            } else if (state.uiState.Selected == UIState.OpenUI.Exit || state.uiState.Selected == UIState.OpenUI.InvExit
+                       || state.uiState.Selected == UIState.OpenUI.BlueExit || state.uiState.Selected == UIState.OpenUI.MachExit) {
                 resetColor();
             } else if (state.uiState.Selected == UIState.OpenUI.Login) {
                 GameManager.Instance().store.Unsubscribe(this);

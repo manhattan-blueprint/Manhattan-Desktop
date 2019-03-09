@@ -10,6 +10,9 @@ TagManager:
   - Cursor
   - Held
   - Pause
+  - MenuButton
+  - Exit
+  - Blueprint
   layers:
   - Default
   - TransparentFX
