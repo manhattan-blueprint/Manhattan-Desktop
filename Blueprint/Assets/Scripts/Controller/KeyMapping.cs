@@ -9,5 +9,7 @@ namespace Controller {
         public const KeyCode Increment = KeyCode.Equals;
         public const KeyCode Decrement = KeyCode.Minus;
         public const KeyCode Pause = KeyCode.Escape;
+        // For testing UI, skip typing details to log in
+        public const KeyCode Hack = KeyCode.F11;
     }
 }

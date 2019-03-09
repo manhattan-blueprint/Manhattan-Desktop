@@ -13,21 +13,27 @@ namespace Controller {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
         private Canvas pauseCanvas;
+        private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
         private bool multiCanvas;
 
         void Start() {
-            multiCanvas = false;
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
-            inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             pauseCanvas = GameObject.FindGameObjectWithTag("Pause").GetComponent<Canvas>();
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
+            logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+
+            inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             pauseCanvas.enabled = false;
+            logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
+
+            multiCanvas = false;
+
             GameManager.Instance().store.Subscribe(this);
         }
 
@@ -73,6 +79,7 @@ namespace Controller {
             GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("BlueprintUICanvas").transform);
         }
 
+        // Playing state
         private void ContinueGame() {
             Time.timeScale = 1;
             inventoryCanvas.enabled = false;
@@ -85,31 +92,49 @@ namespace Controller {
             GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("HeldItemCanvas").transform);
         }
 
-        public void Logout() {
+        // Logout button from the pause menu
+        public void LogoutButton() {
             GameManager.Instance().store.Dispatch(new Logout());
+        }
+
+        // Are you sure you would like to log out?
+        private void LogoutPrompt() {
+            pauseCanvas.enabled = false;
+            logoutCanvas.enabled = true;
+        }
+
+        public void Logout() {
+            GameManager.Instance().store.Dispatch(new OpenLoginUI());
+        }
+
+        public void LogoutCancel() {
+            GameManager.Instance().store.Dispatch(new CloseUI());
+        }
+
+        // Exit button from the pause menu
+        public void ExitButton() {
+            GameManager.Instance().store.Dispatch(new Exit());
+        }
+
+        // Are you sure you would like to quit?
+        private void ExitPrompt() {
+            pauseCanvas.enabled = false;
+            exitCanvas.enabled = true;
         }
 
         public void Exit() {
             Application.Quit();
         }
 
-        public void ExitButton() {
-            GameManager.Instance().store.Dispatch(new Exit());
-        }
-
-        private void ExitPrompt() {
-            pauseCanvas.enabled = false;
-            exitCanvas.enabled = true;
-        }
-
         public void ExitCancel() {
-            GameManager.Instance().store.Dispatch(new OpenSettingsUI());
+            GameManager.Instance().store.Dispatch(new CloseUI());
         }
 
         private void PauseGame() {
             Time.timeScale = 0;
             pauseCanvas.enabled = true;
             exitCanvas.enabled = false;
+            logoutCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
@@ -117,6 +142,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
+            Debug.Log(state.uiState.Selected);
             if (state.uiState.Selected == UIState.OpenUI.Inventory) {
                 multiCanvas = false;
                 OpenInventory();
@@ -133,6 +159,14 @@ namespace Controller {
                        || state.uiState.Selected == UIState.OpenUI.MachPause) {
                 multiCanvas = true;
                 PauseGame();
+            } else if (state.uiState.Selected == UIState.OpenUI.Logout) {
+                multiCanvas = false;
+                LogoutPrompt();
+            } else if (state.uiState.Selected == UIState.OpenUI.InvLogout
+                       || state.uiState.Selected == UIState.OpenUI.BlueLogout
+                       || state.uiState.Selected == UIState.OpenUI.MachLogout) {
+                multiCanvas = true;
+                LogoutPrompt();
             } else if (state.uiState.Selected == UIState.OpenUI.Login) {
                 SceneManager.LoadScene(SceneMapping.MainMenu);
                 GameManager.Instance().store.Unsubscribe(this);
@@ -142,8 +176,8 @@ namespace Controller {
             } else if (state.uiState.Selected == UIState.OpenUI.InvExit
                        || state.uiState.Selected == UIState.OpenUI.BlueExit
                        || state.uiState.Selected == UIState.OpenUI.MachExit) {
-                ExitPrompt();
                 multiCanvas = true;
+                ExitPrompt();
             } else {
                 throw new System.Exception("Not in expected state.");
             }

@@ -35,6 +35,30 @@ namespace Model.Reducer {
                 case UIState.OpenUI.MachPause:
                     state.Selected = UIState.OpenUI.Machine;
                     break;
+                case UIState.OpenUI.Logout:
+                    state.Selected = UIState.OpenUI.Pause;
+                    break;
+                case UIState.OpenUI.InvLogout:
+                    state.Selected = UIState.OpenUI.InvPause;
+                    break;
+                case UIState.OpenUI.BlueLogout:
+                    state.Selected = UIState.OpenUI.BluePause;
+                    break;
+                case UIState.OpenUI.MachLogout:
+                    state.Selected = UIState.OpenUI.MachPause;
+                    break;
+                case UIState.OpenUI.Exit:
+                    state.Selected = UIState.OpenUI.Pause;
+                    break;
+                case UIState.OpenUI.InvExit:
+                    state.Selected = UIState.OpenUI.InvPause;
+                    break;
+                case UIState.OpenUI.BlueExit:
+                    state.Selected = UIState.OpenUI.BluePause;
+                    break;
+                case UIState.OpenUI.MachExit:
+                    state.Selected = UIState.OpenUI.MachPause;
+                    break;
                 default:
                     break;
             }
@@ -43,7 +67,9 @@ namespace Model.Reducer {
         public void visit(OpenLoginUI login) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Welcome) {
+            if (current == UIState.OpenUI.Welcome || current == UIState.OpenUI.Logout
+                || current == UIState.OpenUI.InvLogout || current == UIState.OpenUI.BlueLogout
+                || current == UIState.OpenUI.MachLogout) {
                 state.Selected = UIState.OpenUI.Login;
             }
         }
@@ -108,24 +134,54 @@ namespace Model.Reducer {
                 case UIState.OpenUI.MachExit:
                     state.Selected = UIState.OpenUI.MachPause;
                     break;
+                case UIState.OpenUI.Logout:
+                    state.Selected = UIState.OpenUI.Pause;
+                    break;
+                case UIState.OpenUI.InvLogout:
+                    state.Selected = UIState.OpenUI.InvPause;
+                    break;
+                case UIState.OpenUI.BlueLogout:
+                    state.Selected = UIState.OpenUI.BluePause;
+                    break;
+                case UIState.OpenUI.MachLogout:
+                    state.Selected = UIState.OpenUI.MachPause;
+                    break;
             }
         }
 
         public void visit(Logout logout) {
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Pause || current == UIState.OpenUI.InvPause ||
-                current == UIState.OpenUI.BluePause || current == UIState.OpenUI.MachPause) {
-                // Update when welcome screen is implemented
-                state.Selected = UIState.OpenUI.Login;
+            switch (current) {
+                case UIState.OpenUI.Pause:
+                    state.Selected = UIState.OpenUI.Logout;
+                    break;
+                case UIState.OpenUI.InvPause:
+                    state.Selected = UIState.OpenUI.InvLogout;
+                    break;
+                case UIState.OpenUI.BluePause:
+                    state.Selected = UIState.OpenUI.BlueLogout;
+                    break;
+                case UIState.OpenUI.MachPause:
+                    state.Selected = UIState.OpenUI.MachLogout;
+                    break;
             }
         }
 
         public void visit(Exit exit) {
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Pause || current == UIState.OpenUI.InvPause ||
-                current == UIState.OpenUI.BluePause || current == UIState.OpenUI.MachPause) {
-                // Update when welcome screen is implemented
-                state.Selected = UIState.OpenUI.Exit;
+            switch (current) {
+                case UIState.OpenUI.Pause:
+                    state.Selected = UIState.OpenUI.Exit;
+                    break;
+                case UIState.OpenUI.InvPause:
+                    state.Selected = UIState.OpenUI.InvExit;
+                    break;
+                case UIState.OpenUI.BluePause:
+                    state.Selected = UIState.OpenUI.BlueExit;
+                    break;
+                case UIState.OpenUI.MachPause:
+                    state.Selected = UIState.OpenUI.MachExit;
+                    break;
             }
         }
     }

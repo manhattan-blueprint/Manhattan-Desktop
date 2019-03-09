@@ -14,13 +14,17 @@ namespace Model {
             Exit,
             InvExit,
             BlueExit,
-            MachExit
+            MachExit,
+            Logout,
+            InvLogout,
+            BlueLogout,
+            MachLogout,
         };
 
         public OpenUI Selected;
 
         public UIState() {
-            this.Selected = OpenUI.Playing;
+            this.Selected = OpenUI.Login;
         }
     }
 }

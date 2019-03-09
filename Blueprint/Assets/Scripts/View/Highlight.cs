@@ -62,6 +62,9 @@ namespace View {
             } else if (state.uiState.Selected == UIState.OpenUI.Exit || state.uiState.Selected == UIState.OpenUI.InvExit
                        || state.uiState.Selected == UIState.OpenUI.BlueExit || state.uiState.Selected == UIState.OpenUI.MachExit) {
                 resetColor();
+            } else if (state.uiState.Selected == UIState.OpenUI.Logout || state.uiState.Selected == UIState.OpenUI.InvLogout
+                           || state.uiState.Selected == UIState.OpenUI.BlueLogout || state.uiState.Selected == UIState.OpenUI.MachLogout) {
+                    resetColor();
             } else if (state.uiState.Selected == UIState.OpenUI.Login) {
                 GameManager.Instance().store.Unsubscribe(this);
             } else {

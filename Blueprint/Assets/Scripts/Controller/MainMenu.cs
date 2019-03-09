@@ -36,8 +36,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         usernameLoginInput.Select();
         GameManager.Instance().store.Subscribe(this);
     }
-    
-    
+
+
     public void StateDidUpdate(GameState state) {
         if (state.uiState.Selected == UIState.OpenUI.Playing) {
             SceneManager.LoadScene(SceneMapping.World);
@@ -60,6 +60,10 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
             } else if (usernameSignupInput.IsActive()) {
                 usernameSignupInput.Select();
             }
+        } else if (Input.GetKeyDown(KeyMapping.Hack)) {
+          // For UI testing purposes, skip typing details every time 
+          SceneManager.LoadScene(SceneMapping.World);
+          GameManager.Instance().store.Dispatch(new OpenPlayingUI());
         } else if (Input.GetKeyDown(KeyCode.Return)) {
             if (passwordLoginInput.IsActive()) {
                 onLoginClick();
@@ -89,7 +93,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         Task.Run( async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
-            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) )
             //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
@@ -98,7 +102,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                 GameManager.Instance().SetUserCredentials(returnUser);
                 if (response.isSuccess()) {
                     // Launch Blueprint
-                        GameManager.Instance().store.Dispatch(
+                    SceneManager.LoadScene(SceneMapping.World);
+                    GameManager.Instance().store.Dispatch(
                             new OpenPlayingUI());
                 } else {
                     setErrorMessage(response.GetError().error);
@@ -128,7 +133,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(usernameSignupText, passwordSignupText);
-            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) )
             //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
