@@ -35,7 +35,7 @@ namespace Controller {
             assetManager = AssetManager.Instance();
                 
             // Item image and quantity
-            GameObject newGO = new GameObject("Icon"+id);
+            GameObject newGO = new GameObject("Icon" + id);
             newGO.transform.SetParent(gameObject.transform);
             newGO.AddComponent<InventorySlotDragHandler>();
 
@@ -81,13 +81,13 @@ namespace Controller {
             textObj.transform.parent = this.transform;
             Text text = textObj.AddComponent<Text>();
 
-            text.font = assetManager.helveticaNeueBold;
-            text.transform.localPosition = new Vector3(0,-slotHeight/6,0);
-            text.color = new Color32(245, 245, 245, 255);
+            text.font = assetManager.FontHelveticaNeueBold;
+            text.transform.localPosition = new Vector3(0, -slotHeight/6, 0);
+            text.color = assetManager.ColourOffWhite;
             text.alignment = TextAnchor.MiddleCenter; 
             text.text = initialText;
             text.raycastTarget = false;
-            text.fontSize = (int) Mathf.Round(Screen.height/fontScaler);
+            text.fontSize = assetManager.QuantityFieldFontSize;
 
             if (initialText == "0") text.enabled = false;
 
@@ -96,14 +96,13 @@ namespace Controller {
 
         private Image setupImage(GameObject obj,  InventoryItem item) {
             Image image = obj.AddComponent<Image>();
-            image.transform.localPosition = new Vector3(0,slotHeight/8,0);
+            image.transform.localPosition = new Vector3(0, slotHeight/8, 0);
 
             if (item.GetId() != nullItem.GetId()){
                 Sprite icon = assetManager.GetItemSprite(item.GetId());
                 image.sprite = icon;
                 image.enabled = true;
-            }
-            else {
+            } else {
                 image.enabled = false;
             }
             
@@ -122,7 +121,7 @@ namespace Controller {
                     
                 image.enabled = true;
                 text.enabled = true;
-                image.transform.localPosition = new Vector3(0,slotHeight/8,0);
+                image.transform.localPosition = new Vector3(0, slotHeight/8, 0);
             } else {
                 image.enabled = false;
                 text.enabled = false;
