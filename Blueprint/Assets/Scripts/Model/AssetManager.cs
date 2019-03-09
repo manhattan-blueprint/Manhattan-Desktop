@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Model {
-    public class ModelManager {
-        private static ModelManager instance;
+    public class AssetManager {
+        private static AssetManager instance;
+        public readonly Font helveticaNeueBold = Resources.Load("helveticaneue_bold", typeof(Font)) as Font;
     
-        private ModelManager() { }
+        private AssetManager() { }
     
-        public static ModelManager Instance() {
+        public static AssetManager Instance() {
             if (instance == null) {
-                instance = new ModelManager();
+                instance = new AssetManager();
             }
-    
+            
             return instance;
         }
     

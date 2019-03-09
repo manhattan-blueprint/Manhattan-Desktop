@@ -1,6 +1,8 @@
-﻿using Model;
+﻿using System.Collections.Generic;
+using Model;
 using Model.Action;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using UnityEngine;
 
 namespace Tests {
@@ -156,7 +158,7 @@ namespace Tests {
             // Add an item and validate it updates the state
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
 
-            foreach (var item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(1, item.Value[0].quantity);
@@ -177,7 +179,7 @@ namespace Tests {
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
 
-            foreach (var item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(11, item.Value[0].quantity);
@@ -198,7 +200,7 @@ namespace Tests {
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
             this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 4));
 
-            foreach (var item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(6, item.Value[0].quantity);
@@ -220,7 +222,7 @@ namespace Tests {
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
             this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 11));
 
-            foreach (var item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(0, item.Value.Count);

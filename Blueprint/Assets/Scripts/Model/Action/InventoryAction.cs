@@ -66,11 +66,11 @@ namespace Model.Action {
         public readonly int sourceItemID;
         public readonly int destinationItemID;
 
-        public SwapItemLocations(int sourceHexId, int destinationHexId, int sourceItemId, int destinationItemId) {
-            this.sourceHexID = sourceHexId;
-            this.destinationHexID = destinationHexId;
-            this.sourceItemID = sourceItemId;
-            this.destinationItemID = destinationItemId;
+        public SwapItemLocations(int sourceHexID, int destinationHexID, int sourceItemID, int destinationItemID) {
+            this.sourceHexID = sourceHexID;
+            this.destinationHexID = destinationHexID;
+            this.sourceItemID = sourceItemID;
+            this.destinationItemID = destinationItemID;
         }
 
         public override void Accept(InventoryVisitor visitor) {

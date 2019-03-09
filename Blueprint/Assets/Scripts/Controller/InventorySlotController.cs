@@ -21,27 +21,27 @@ namespace Controller {
         private float slotHeight;
         private float slotWidth;
         private GameManager gameManager;
-        private ModelManager modelManager;
+        private AssetManager assetManager;
         
         // EDITABLE
         private const int fontScaler = 50;
 
-    private void Start() {
-        highlightObject = GameObject.Find("Highlight");
-        slotHeight = (transform as RectTransform).rect.height;
-        slotWidth = (transform as RectTransform).rect.width;
-        storedItem = nullItem;
-        gameManager = GameManager.Instance();
-        modelManager = ModelManager.Instance();
-            
-        // Item image and quantity
-        GameObject newGO = new GameObject("Icon"+id);
-        newGO.transform.SetParent(gameObject.transform);
-        newGO.AddComponent<InventorySlotDragHandler>();
+        private void Start() {
+            highlightObject = GameObject.Find("Highlight");
+            slotHeight = (transform as RectTransform).rect.height;
+            slotWidth = (transform as RectTransform).rect.width;
+            storedItem = nullItem;
+            gameManager = GameManager.Instance();
+            assetManager = AssetManager.Instance();
+                
+            // Item image and quantity
+            GameObject newGO = new GameObject("Icon"+id);
+            newGO.transform.SetParent(gameObject.transform);
+            newGO.AddComponent<InventorySlotDragHandler>();
 
-        setupImage(newGO, nullItem);
-        setupText(this.gameObject, nullItem.GetQuantity().ToString());
-    }
+            setupImage(newGO, nullItem);
+            setupText(this.gameObject, nullItem.GetQuantity().ToString());
+        }
 
         private void Update() {
             RectTransform hex = transform as RectTransform;
@@ -80,8 +80,8 @@ namespace Controller {
             GameObject textObj = new GameObject("Text" + id);
             textObj.transform.parent = this.transform;
             Text text = textObj.AddComponent<Text>();
-            
-            text.font = Resources.Load("helveticaneue_bold", typeof(Font)) as Font;
+
+            text.font = assetManager.helveticaNeueBold;
             text.transform.localPosition = new Vector3(0,-slotHeight/6,0);
             text.color = new Color32(245, 245, 245, 255);
             text.alignment = TextAnchor.MiddleCenter; 
@@ -99,7 +99,7 @@ namespace Controller {
             image.transform.localPosition = new Vector3(0,slotHeight/8,0);
 
             if (item.GetId() != nullItem.GetId()){
-                Sprite icon = modelManager.GetItemSprite(item.GetId());
+                Sprite icon = assetManager.GetItemSprite(item.GetId());
                 image.sprite = icon;
                 image.enabled = true;
             }
@@ -117,7 +117,7 @@ namespace Controller {
             Text text = transform.GetComponentInChildren<Text>();
 
             if (item.GetId() != nullItem.GetId()) {
-                image.sprite = modelManager.GetItemSprite(item.GetId());
+                image.sprite = assetManager.GetItemSprite(item.GetId());
                 text.text = item.GetQuantity().ToString();
                     
                 image.enabled = true;
