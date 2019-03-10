@@ -60,11 +60,12 @@ namespace Controller {
             SVGImage highlight = highlightObject.GetComponent<SVGImage>();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition)) {
+                setHighlightLocation(transform.position.x, transform.position.y);
+                
                 if (!mouseOver) {
                     // Mouse entry
                     mouseOver = true;
                     mouseEntryTime = Time.realtimeSinceStartup;
-                    setHighlightLocation(transform.position.x, transform.position.y);
                 } else {
                     // Rollover 
                     if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem != nullItem) {
