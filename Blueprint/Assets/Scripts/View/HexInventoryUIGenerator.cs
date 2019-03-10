@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Controller;
+using Model;
 using UnityEngine.UI;
 
 public class HexInventoryUIGenerator : MonoBehaviour {
@@ -99,6 +100,20 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         image.raycastTarget = false;
         // To initialise drag object off screen
         drag.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
+        
+        // Rollover text object
+        GameObject rollover = new GameObject("Rollover");
+        rollover.transform.parent = transform;
+        SVGImage backgroundImage = rollover.AddComponent<SVGImage>();
+        backgroundImage.sprite = Resources.Load("rolloverBox", typeof(Sprite)) as Sprite;
+        (rollover.transform as RectTransform).sizeDelta = new Vector2(slotDimension/2, slotDimension/6);
+        
+        GameObject text = new GameObject("Text");
+        text.transform.parent = rollover.transform; 
+        Text rolloverText = text.AddComponent<Text>();
+        rolloverText.raycastTarget = false;
+        //rolloverText.resizeTextForBestFit = true;
+        rolloverText.fontSize = AssetManager.Instance().QuantityFieldFontSize;
     }
 
     // Create new slot, place in centre 

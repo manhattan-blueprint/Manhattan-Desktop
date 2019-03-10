@@ -9,6 +9,8 @@ using Model.Redux;
 using Model.State;
 using UnityEditor;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.UIElements;
+using Image = UnityEngine.UI.Image;
 
 /* Attached to each slot in the inventory grid */
 namespace Controller {
@@ -22,12 +24,18 @@ namespace Controller {
         private float slotWidth;
         private GameManager gameManager;
         private AssetManager assetManager;
+        private float mouseEntryTime;
+        private GameObject rolloverObject;
+        private Vector3 rolloverPosition;
+        private bool rolloverState;
         
         // EDITABLE
-        private const int fontScaler = 50;
+        // Time before rollover text shows (secs)
+        private float rolloverTime = 2.0f;
 
         private void Start() {
             highlightObject = GameObject.Find("Highlight");
+            rolloverObject = GameObject.Find("Rollover");
             slotHeight = (transform as RectTransform).rect.height;
             slotWidth = (transform as RectTransform).rect.width;
             storedItem = nullItem;
@@ -41,23 +49,52 @@ namespace Controller {
 
             setupImage(newGO, nullItem);
             setupText(this.gameObject, nullItem.GetQuantity().ToString());
+            
+            // Initialise rollover object
+            rolloverObject.GetComponentInChildren<Text>().font = assetManager.FontHelveticaNeueBold;
+            rolloverObject.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleCenter;
         }
 
         private void Update() {
             RectTransform hex = transform as RectTransform;
             SVGImage highlight = highlightObject.GetComponent<SVGImage>();
 
-            if (RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition) && !mouseOver) {
-                // Mouse entry
-                mouseOver = true;
-                setHighlightLocation(transform.position.x, transform.position.y);
+            if (RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition)) {
+                if (!mouseOver) {
+                    // Mouse entry
+                    mouseOver = true;
+                    mouseEntryTime = Time.realtimeSinceStartup;
+                    setHighlightLocation(transform.position.x, transform.position.y);
+                } else {
+                    // Rollover 
+                    if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime) {
+                        if (!rolloverState) {
+                            rolloverState = true;
+                            rolloverObject.SetActive(true);
+                            rolloverPosition = Input.mousePosition;
+                            setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.GetName());
+                        } else {
+                            if (Input.mousePosition != rolloverPosition) {
+                                rolloverObject.SetActive(false);
+                            }
+                        }
+                    }
+                }
             }
 
             if (!RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition) && mouseOver) {
                 // Mouse exit 
                 mouseOver = false;
+                rolloverState = false;
+                rolloverObject.SetActive(false);
             }
         }
+
+        private void setRolloverLocation(float x, float y, string inputText) {
+            rolloverObject.transform.position = new Vector2(x, y);
+            Text text = rolloverObject.GetComponentInChildren<Text>();
+            text.text = inputText;
+        } 
 
         private void setHighlightLocation(float x, float y) {
             highlightObject.transform.position = new Vector2(x, y); 
