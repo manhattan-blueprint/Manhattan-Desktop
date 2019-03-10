@@ -67,7 +67,7 @@ namespace Controller {
                     setHighlightLocation(transform.position.x, transform.position.y);
                 } else {
                     // Rollover 
-                    if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime) {
+                    if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem != nullItem) {
                         if (!rolloverState) {
                             rolloverState = true;
                             rolloverObject.SetActive(true);
