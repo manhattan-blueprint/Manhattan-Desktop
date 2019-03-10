@@ -66,19 +66,14 @@ namespace Controller {
                     // Mouse entry
                     mouseOver = true;
                     mouseEntryTime = Time.realtimeSinceStartup;
-                } else {
-                    // Rollover 
-                    if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem != nullItem) {
-                        if (!rolloverState) {
-                            rolloverState = true;
-                            rolloverObject.SetActive(true);
-                            rolloverPosition = Input.mousePosition;
-                            setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.GetName());
-                        } else {
-                            if (Input.mousePosition != rolloverPosition) {
-                                rolloverObject.SetActive(false);
-                            }
-                        }
+                } else if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem != nullItem) {
+                    if (!rolloverState) {
+                        rolloverState = true;
+                        rolloverObject.SetActive(true);
+                        rolloverPosition = Input.mousePosition;
+                        setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.GetName());
+                    } else if (Input.mousePosition != rolloverPosition) {
+                        rolloverObject.SetActive(false);
                     }
                 }
             }
