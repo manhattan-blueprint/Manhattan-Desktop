@@ -128,11 +128,12 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         go.transform.position = new Vector2(x, y);
         
         // Background Image
-        SVGImage background = go.AddComponent<SVGImage>();
+        Image background = go.AddComponent<Image>();
         background.sprite = HexTile;
         background.color = new Color32((byte)(background.color.r*255), (byte)(background.color.g*255), 
             (byte)(background.color.b*255), (byte)192);
-        
+        background.alphaHitTestMinimumThreshold = 0.5f;
+            
         // Border
         GameObject svgChild = new GameObject("Border" + id);
         svgChild.transform.SetParent(go.transform);

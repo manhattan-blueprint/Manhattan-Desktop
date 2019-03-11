@@ -14,7 +14,7 @@ using Image = UnityEngine.UI.Image;
 
 /* Attached to each slot in the inventory grid */
 namespace Controller {
-    public class InventorySlotController : MonoBehaviour, IDropHandler {
+    public class InventorySlotController : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
         private int id;
         private bool mouseOver = false;
         private InventoryItem nullItem = new InventoryItem("", 0, 0);
@@ -55,39 +55,39 @@ namespace Controller {
             rolloverObject.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleCenter;
         }
 
-        private void Update() {
-            RectTransform hex = transform as RectTransform;
-            SVGImage highlight = highlightObject.GetComponent<SVGImage>();
-
-            if (RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition)) {
-                setHighlightLocation(transform.position.x, transform.position.y);
+        public void OnPointerEnter(PointerEventData pointerEventData) {
+            setHighlightLocation(transform.position.x, transform.position.y);
                 
-                if (!mouseOver) {
-                    // Mouse entry
-                    mouseOver = true;
-                    mouseEntryTime = Time.realtimeSinceStartup;
-                } else if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem.GetName() != nullItem.GetName()) {
-                    if (!rolloverState) {
-                        rolloverState = true;
-                        rolloverObject.SetActive(true);
-                        rolloverPosition = Input.mousePosition;
-                        setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.GetName());
-                    } else if (Input.mousePosition != rolloverPosition) {
-                        rolloverObject.SetActive(false);
-                        rolloverState = false;
-                        mouseEntryTime = Time.realtimeSinceStartup;
-                    }
-                }
-            }
-
-            if (!RectTransformUtility.RectangleContainsScreenPoint(hex, Input.mousePosition) && mouseOver) {
-                // Mouse exit 
-                mouseOver = false;
-                rolloverState = false;
-                rolloverObject.SetActive(false);
-            }
+            if (!mouseOver) {
+                // Mouse entry
+                mouseOver = true;
+                mouseEntryTime = Time.realtimeSinceStartup;
+            } 
         }
 
+        public void OnPointerExit(PointerEventData pointerEventData) {
+            mouseOver = false;
+            rolloverState = false;
+            rolloverObject.SetActive(false);
+        }
+
+        private void Update() {
+            if (mouseOver && (Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime &&
+                storedItem.GetName() != nullItem.GetName()) {
+                 
+                if (!rolloverState) {
+                    rolloverState = true;
+                    rolloverObject.SetActive(true);
+                    rolloverPosition = Input.mousePosition;
+                    setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.GetName());
+                } else if (Input.mousePosition != rolloverPosition) {
+                    rolloverObject.SetActive(false);
+                    rolloverState = false;
+                    mouseEntryTime = Time.realtimeSinceStartup;
+                }
+            } 
+        }
+        
         private void setRolloverLocation(float x, float y, string inputText) {
             rolloverObject.transform.position = new Vector2(x, y);
             Text text = rolloverObject.GetComponentInChildren<Text>();
