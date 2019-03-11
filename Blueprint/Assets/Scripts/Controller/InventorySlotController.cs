@@ -31,7 +31,7 @@ namespace Controller {
         
         // EDITABLE
         // Time before rollover text shows (secs)
-        private float rolloverTime = 2.0f;
+        private float rolloverTime = 1.0f;
 
         private void Start() {
             highlightObject = GameObject.Find("Highlight");

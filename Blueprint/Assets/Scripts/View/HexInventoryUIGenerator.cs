@@ -92,6 +92,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         svg.sprite = highlightSprite;
         svg.raycastTarget = false;
         (svg.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
+        highlight.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
         
         // Temp drag object
         GameObject drag = new GameObject("drag");
@@ -114,6 +115,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         rolloverText.raycastTarget = false;
         rolloverText.fontSize = AssetManager.Instance().QuantityFieldFontSize;
         rolloverText.horizontalOverflow = HorizontalWrapMode.Overflow;
+        
+        rollover.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
     }
 
     // Create new slot, place in centre 
