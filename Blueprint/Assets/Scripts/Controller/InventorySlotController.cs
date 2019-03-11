@@ -69,6 +69,7 @@ namespace Controller {
             mouseOver = false;
             rolloverState = false;
             rolloverObject.SetActive(false);
+            highlightObject.SetActive(false);
         }
 
         private void Update() {
@@ -99,6 +100,7 @@ namespace Controller {
         } 
 
         private void setHighlightLocation(float x, float y) {
+            highlightObject.SetActive(true);
             highlightObject.transform.position = new Vector2(x, y); 
         }
 
