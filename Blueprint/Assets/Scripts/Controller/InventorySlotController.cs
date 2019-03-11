@@ -66,7 +66,7 @@ namespace Controller {
                     // Mouse entry
                     mouseOver = true;
                     mouseEntryTime = Time.realtimeSinceStartup;
-                } else if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem != nullItem) {
+                } else if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem.GetName() != nullItem.GetName()) {
                     if (!rolloverState) {
                         rolloverState = true;
                         rolloverObject.SetActive(true);
@@ -74,6 +74,8 @@ namespace Controller {
                         setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.GetName());
                     } else if (Input.mousePosition != rolloverPosition) {
                         rolloverObject.SetActive(false);
+                        rolloverState = false;
+                        mouseEntryTime = Time.realtimeSinceStartup;
                     }
                 }
             }
@@ -90,6 +92,10 @@ namespace Controller {
             rolloverObject.transform.position = new Vector2(x, y);
             Text text = rolloverObject.GetComponentInChildren<Text>();
             text.text = inputText;
+            
+            // Set box to width of word
+            RectTransform rect = rolloverObject.transform as RectTransform;
+            rect.sizeDelta = new Vector2(text.preferredWidth + slotWidth/8, slotHeight/5);            
         } 
 
         private void setHighlightLocation(float x, float y) {

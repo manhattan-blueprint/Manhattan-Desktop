@@ -112,8 +112,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         text.transform.parent = rollover.transform; 
         Text rolloverText = text.AddComponent<Text>();
         rolloverText.raycastTarget = false;
-        //rolloverText.resizeTextForBestFit = true;
         rolloverText.fontSize = AssetManager.Instance().QuantityFieldFontSize;
+        rolloverText.horizontalOverflow = HorizontalWrapMode.Overflow;
     }
 
     // Create new slot, place in centre 
