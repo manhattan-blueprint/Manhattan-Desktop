@@ -142,43 +142,54 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Inventory) {
-                multiCanvas = false;
-                OpenInventory();
-            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
-                ContinueGame();
-            } else if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
-                multiCanvas = false;
-                OpenBlueprint();
-            } else if (state.uiState.Selected == UIState.OpenUI.Pause) {
-                multiCanvas = false;
-                PauseGame();
-            } else if (state.uiState.Selected == UIState.OpenUI.InvPause
-                       || state.uiState.Selected == UIState.OpenUI.BluePause
-                       || state.uiState.Selected == UIState.OpenUI.MachPause) {
-                multiCanvas = true;
-                PauseGame();
-            } else if (state.uiState.Selected == UIState.OpenUI.Logout) {
-                multiCanvas = false;
-                LogoutPrompt();
-            } else if (state.uiState.Selected == UIState.OpenUI.InvLogout
-                       || state.uiState.Selected == UIState.OpenUI.BlueLogout
-                       || state.uiState.Selected == UIState.OpenUI.MachLogout) {
-                multiCanvas = true;
-                LogoutPrompt();
-            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
-                SceneManager.LoadScene(SceneMapping.MainMenu);
-                GameManager.Instance().store.Unsubscribe(this);
-            } else if (state.uiState.Selected == UIState.OpenUI.Exit) {
-                multiCanvas = false;
-                ExitPrompt();
-            } else if (state.uiState.Selected == UIState.OpenUI.InvExit
-                       || state.uiState.Selected == UIState.OpenUI.BlueExit
-                       || state.uiState.Selected == UIState.OpenUI.MachExit) {
-                multiCanvas = true;
-                ExitPrompt();
-            } else {
-                throw new System.Exception("Not in expected state.");
+            switch (state.uiState.Selected) {
+              case UIState.OpenUI.Inventory:
+                  multiCanvas = false;
+                  OpenInventory();
+                  break;
+              case UIState.OpenUI.Playing:
+                  ContinueGame();
+                  break;
+              case UIState.OpenUI.Blueprint:
+                  multiCanvas = false;
+                  OpenBlueprint();
+                  break;
+              case UIState.OpenUI.Pause:
+                  multiCanvas = false;
+                  PauseGame();
+                  break;
+              case UIState.OpenUI.InvPause:
+              case UIState.OpenUI.BluePause:
+              case UIState.OpenUI.MachPause:
+                  multiCanvas = true;
+                  PauseGame();
+                  break;
+              case UIState.OpenUI.Logout:
+                  multiCanvas = false;
+                  LogoutPrompt();
+                  break;
+              case UIState.OpenUI.InvLogout:
+              case UIState.OpenUI.BlueLogout:
+              case UIState.OpenUI.MachLogout:
+                  multiCanvas = true;
+                  LogoutPrompt();
+                  break;
+              case UIState.OpenUI.InvExit:
+              case UIState.OpenUI.BlueExit:
+              case UIState.OpenUI.MachExit:
+                  multiCanvas = true;
+                  ExitPrompt();
+                  break;
+              case UIState.OpenUI.Login:
+                  SceneManager.LoadScene(SceneMapping.MainMenu);
+                  GameManager.Instance().store.Unsubscribe(this);
+                  break;
+              case UIState.OpenUI.Exit:
+                  multiCanvas = false;
+                  ExitPrompt();
+                  break;
+              default:
+                  throw new System.Exception("Not in expected state.");
             }
         }
     }
