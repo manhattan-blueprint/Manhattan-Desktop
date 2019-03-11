@@ -17,7 +17,7 @@ public class GameManager {
             mapReducer = new MapReducer();
             uiReducer = new UIReducer();
         }
-       
+
         // Dispatch to appropriate handler
         public GameState Reduce(GameState current, Action action) {
             if (action is InventoryAction){
@@ -30,7 +30,7 @@ public class GameManager {
             return current;
         }
     }
-    
+
     private static GameManager manager;
     public readonly StateStore<GameState, Action> store;
     private UserCredentials credentials;
@@ -38,15 +38,15 @@ public class GameManager {
     public UserCredentials GetUserCredentials() {
         return this.credentials;
     }
-    
+
     public void SetUserCredentials(UserCredentials credentials) {
         this.credentials = credentials;
     }
-    
+
     private GameManager() {
         this.store = new StateStore<GameState, Action>(new GameStateReducer(), new GameState());
     }
-    
+
     public static GameManager Instance() {
         if (manager == null) {
             manager = new GameManager();

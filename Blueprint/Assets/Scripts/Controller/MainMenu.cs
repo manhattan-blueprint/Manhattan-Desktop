@@ -24,8 +24,12 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     [SerializeField] private Text   infoMessage;
     private int maxUsernameLength;
     private BlueprintAPI api;
+    private bool splashScreenShowing;
+    private GameObject background;
 
     void Start() {
+        background = GameObject.Find("HexVideoHolder");
+
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
@@ -36,8 +40,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         usernameLoginInput.Select();
         GameManager.Instance().store.Subscribe(this);
     }
-    
-    
+
+
     public void StateDidUpdate(GameState state) {
         if (state.uiState.Selected == UIState.OpenUI.Playing) {
             SceneManager.LoadScene(SceneMapping.World);
@@ -46,41 +50,48 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Tab)) {
-            if (usernameLoginInput.isFocused) {
-                passwordLoginInput.Select();
-            } else if (passwordLoginInput.isFocused) {
-                loginButton.Select();
-            } else if (usernameSignupInput.isFocused) {
-                passwordSignupInput.Select();
-            } else if (passwordSignupInput.isFocused) {
-                signupButton.Select();
-            } else if (usernameLoginInput.IsActive()) {
-                usernameLoginInput.Select();
-            } else if (usernameSignupInput.IsActive()) {
-                usernameSignupInput.Select();
+        if (splashScreenShowing) {
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                HideSplashScreen();
             }
-        } else if (Input.GetKeyDown(KeyCode.Return)) {
-            if (passwordLoginInput.IsActive()) {
-                onLoginClick();
-            } else if (passwordSignupInput.IsActive()) {
-                onRegisterClick();
+        }
+        else {
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                if (usernameLoginInput.isFocused) {
+                    passwordLoginInput.Select();
+                } else if (passwordLoginInput.isFocused) {
+                    loginButton.Select();
+                } else if (usernameSignupInput.isFocused) {
+                    passwordSignupInput.Select();
+                } else if (passwordSignupInput.isFocused) {
+                    signupButton.Select();
+                } else if (usernameLoginInput.IsActive()) {
+                    usernameLoginInput.Select();
+                } else if (usernameSignupInput.IsActive()) {
+                    usernameSignupInput.Select();
+                }
+            } else if (Input.GetKeyDown(KeyCode.Return)) {
+                if (passwordLoginInput.IsActive()) {
+                    OnLoginClick();
+                } else if (passwordSignupInput.IsActive()) {
+                    OnRegisterClick();
+                }
             }
         }
     }
 
-    public void onLoginClick() {
-        setInfoMessage("");
+    public void OnLoginClick() {
+        SetInfoMessage("");
         string usernameLoginText = usernameLoginInput.text;
         string passwordLoginText = passwordLoginInput.text;
 
         // Validate user input
         if (string.IsNullOrWhiteSpace(usernameLoginText) ||
             usernameLoginText.Length > maxUsernameLength) {
-            setErrorMessage("Invalid username, it must have between 1 and 16 characters.");
+            SetErrorMessage("Invalid username, it must have between 1 and 16 characters.");
             return;
         } else if (string.IsNullOrWhiteSpace(passwordLoginText))  {
-            setErrorMessage("Please enter a non-empty password.");
+            SetErrorMessage("Please enter a non-empty password.");
             return;
         }
 
@@ -89,7 +100,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         Task.Run( async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
-            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) )
             //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
@@ -101,26 +112,26 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                         GameManager.Instance().store.Dispatch(
                             new OpenPlayingUI());
                 } else {
-                    setErrorMessage(response.GetError().error);
+                    SetErrorMessage(response.GetError().error);
                 }
             } catch (Exception e) {
-                setErrorMessage(e.Message);
+                SetErrorMessage(e.Message);
             }
         }).GetAwaiter().GetResult();
     }
 
-    public void onRegisterClick() {
-        setInfoMessage("");
+    public void OnRegisterClick() {
+        SetInfoMessage("");
         string usernameSignupText = usernameSignupInput.text;
         string passwordSignupText = passwordSignupInput.text;
 
         // Validate user input
         if (string.IsNullOrWhiteSpace(usernameSignupText) ||
             usernameSignupText.Length > maxUsernameLength) {
-            setErrorMessage("Invalid username, it must have between 1 and 16 characters.");
+            SetErrorMessage("Invalid username, it must have between 1 and 16 characters.");
             return;
         } else if (string.IsNullOrWhiteSpace(passwordSignupText)) {
-            setErrorMessage("Please enter a non-empty password.");
+            SetErrorMessage("Please enter a non-empty password.");
             return;
         }
 
@@ -128,7 +139,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(usernameSignupText, passwordSignupText);
-            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) )
             //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
@@ -138,32 +149,36 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                     // Launch Blueprint
                     SceneManager.LoadScene(SceneMapping.World);
                 } else {
-                    setErrorMessage(response.GetError().error);
+                    SetErrorMessage(response.GetError().error);
                 }
             }
             catch (Exception e) {
-                setErrorMessage(e.Message);
+                SetErrorMessage(e.Message);
             }
         }).GetAwaiter().GetResult();
     }
 
-    public void onSignupClick() {
-        setInfoMessage("");
+    public void OnSignupClick() {
+        SetInfoMessage("");
         usernameSignupInput.Select();
     }
 
-    public void onBackClick() {
-        setInfoMessage("");
+    public void OnBackClick() {
+        SetInfoMessage("");
         usernameLoginInput.Select();
     }
 
-    private void setErrorMessage(string msg) {
+    private void SetErrorMessage(string msg) {
         this.infoMessage.color = Color.red;
         this.infoMessage.text = msg;
     }
 
-    private void setInfoMessage(string msg) {
+    private void SetInfoMessage(string msg) {
         this.infoMessage.color = Color.blue;
         this.infoMessage.text = msg;
+    }
+
+    private void HideSplashScreen() {
+        splashScreenShowing = false;
     }
 }

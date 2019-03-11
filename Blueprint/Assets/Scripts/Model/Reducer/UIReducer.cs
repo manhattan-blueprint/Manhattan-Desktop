@@ -39,7 +39,7 @@ namespace Model.Reducer {
                     break;
             }
         }
-        
+
         public void visit(OpenLoginUI login) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -47,7 +47,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Login;
             }
         }
-        
+
         public void visit(OpenPlayingUI playing) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -55,7 +55,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Playing;
             }
         }
-        
+
         public void visit(OpenInventoryUI inventory) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -63,7 +63,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Inventory;
             }
         }
-        
+
         public void visit(OpenBlueprintUI blueprint) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -71,7 +71,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Blueprint;
             }
         }
-                
+
         public void visit(OpenMachineUI machine) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
@@ -79,7 +79,7 @@ namespace Model.Reducer {
                 state.Selected = UIState.OpenUI.Machine;
             }
         }
-        
+
         public void visit(OpenSettingsUI settings) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;

@@ -37,7 +37,7 @@ public class UIGenerator : MonoBehaviour {
     private string GetGridChildName(int i) {
         return "GridChild" + ++i;
     }
-    
+
     private string GetSlotName(int i) {
         return "Slot" + ++i;
     }
@@ -45,7 +45,7 @@ public class UIGenerator : MonoBehaviour {
     private string GetButtonName(int i) {
         return "Button" + ++i;
     }
-    
+
     private string GetTextName() {
         return "Text";
     }
@@ -60,13 +60,13 @@ public class UIGenerator : MonoBehaviour {
         return grid;
     }
 
-    private GameObject SetUpGridChild(int i) {	
+    private GameObject SetUpGridChild(int i) {
         GameObject gridChild = new GameObject(GetGridChildName(i), typeof(RectTransform));
         gridChild.GetComponent<RectTransform>().SetParent(slotGrid.transform);
         return gridChild;
     }
-    
-    private GameObject SetUpSlot(int i, GameObject gridChild) {	
+
+    private GameObject SetUpSlot(int i, GameObject gridChild) {
         GameObject slot = new GameObject(GetSlotName(i), typeof(RectTransform));
         Image slotImg = slot.AddComponent<Image>();
         InventorySlotController script = slot.AddComponent<InventorySlotController>();
