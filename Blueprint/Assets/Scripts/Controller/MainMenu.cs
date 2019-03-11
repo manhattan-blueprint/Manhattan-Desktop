@@ -60,10 +60,6 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
             } else if (usernameSignupInput.IsActive()) {
                 usernameSignupInput.Select();
             }
-        } else if (Input.GetKeyDown(KeyMapping.Hack)) {
-          // For UI testing purposes, skip typing details every time 
-          SceneManager.LoadScene(SceneMapping.World);
-          GameManager.Instance().store.Dispatch(new OpenPlayingUI());
         } else if (Input.GetKeyDown(KeyCode.Return)) {
             if (passwordLoginInput.IsActive()) {
                 onLoginClick();
