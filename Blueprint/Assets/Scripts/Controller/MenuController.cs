@@ -142,7 +142,6 @@ namespace Controller {
         }
 
         public void StateDidUpdate(GameState state) {
-            Debug.Log(state.uiState.Selected);
             if (state.uiState.Selected == UIState.OpenUI.Inventory) {
                 multiCanvas = false;
                 OpenInventory();

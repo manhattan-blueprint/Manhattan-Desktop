@@ -50,26 +50,34 @@ namespace View {
         }
 
         public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Inventory) {
+            switch (state.uiState.Selected) {
+              // case UIState.OpenUI.Inventory:
+              // case UIState.OpenUI.Blueprint:
+              // case UIState.OpenUI.Machine:
+              // case UIState.OpenUI.Pause:
+              // case UIState.OpenUI.InvPause:
+              // case UIState.OpenUI.BluePause:
+              // case UIState.OpenUI.MachPause:
+              // case UIState.OpenUI.Exit:
+              // case UIState.OpenUI.InvExit:
+              // case UIState.OpenUI.BlueExit:
+              // case UIState.OpenUI.MachExit:
+              // case UIState.OpenUI.Logout:
+              // case UIState.OpenUI.InvLogout:
+              // case UIState.OpenUI.BlueLogout:
+              // case UIState.OpenUI.MachLogout:
+              //     resetColor();
+              //     break;
+              case UIState.OpenUI.Playing:
+                  paused = false;
+                  break;
+              case UIState.OpenUI.Login:
+                  GameManager.Instance().store.Unsubscribe(this);
+                  break;
+              default:
                 resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
-                paused = false;
-            } else if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
-                resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Pause || state.uiState.Selected == UIState.OpenUI.InvPause
-                       || state.uiState.Selected == UIState.OpenUI.BluePause || state.uiState.Selected == UIState.OpenUI.MachPause) {
-                resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Exit || state.uiState.Selected == UIState.OpenUI.InvExit
-                       || state.uiState.Selected == UIState.OpenUI.BlueExit || state.uiState.Selected == UIState.OpenUI.MachExit) {
-                resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Logout || state.uiState.Selected == UIState.OpenUI.InvLogout
-                           || state.uiState.Selected == UIState.OpenUI.BlueLogout || state.uiState.Selected == UIState.OpenUI.MachLogout) {
-                    resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
-                GameManager.Instance().store.Unsubscribe(this);
-            } else {
-                throw new System.Exception("I haven't handled this case yet.");
-            }
+                break;
+              }
         }
     }
 }
