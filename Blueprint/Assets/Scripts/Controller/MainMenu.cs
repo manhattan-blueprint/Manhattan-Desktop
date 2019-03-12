@@ -16,23 +16,33 @@ using Service;
 using Service.Response;
 
 public class MainMenu : MonoBehaviour, Subscriber<GameState> {
-    [SerializeField] private GameObject loginMenu;
-    [SerializeField] private GameObject registerMenu;
+    [SerializeField] private Text infoMessage;
+
     [SerializeField] private GameObject splashScreen;
-    [SerializeField] private InputField usernameLoginInput;
-    [SerializeField] private InputField passwordLoginInput;
-    [SerializeField] private InputField usernameRegisterInput;
-    [SerializeField] private InputField passwordRegisterInput;
-    [SerializeField] private Button loginButton;
-    [SerializeField] private Button registerButton;
-    [SerializeField] private Text registerMsg;
     [SerializeField] private Text blueprintLogo;
     [SerializeField] private Text pressSpace;
+
+    [SerializeField] private GameObject loginMenu;
+    [SerializeField] private InputField loginUsernameInput;
+    [SerializeField] private InputField loginPasswordInput;
+    [SerializeField] private Button loginLoginButton;
+    [SerializeField] private Button loginRegisterButton;
+
+    [SerializeField] private GameObject registerMenu;
+    [SerializeField] private InputField registerUsernameInput;
+    [SerializeField] private InputField registerPasswordInput;
+    [SerializeField] private Button registerRegisterButton;
+    [SerializeField] private Button registerBackButton;
+
     private int maxUsernameLength;
     private BlueprintAPI api;
-    private MenuState menuState;
+    private VisibleMenu visibleMenu;
 
-    private enum MenuState {
+    private bool isMessageErrorStyle;
+    private bool toLaunch;
+    private string infoMessageText;
+
+    private enum VisibleMenu {
         SplashScreen,
         Login,
         Register
@@ -43,7 +53,10 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         loginMenu.GetComponent<CanvasGroup>().interactable = false;
         registerMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
         registerMenu.GetComponent<CanvasGroup>().interactable = false;
-        menuState = MenuState.SplashScreen;
+        SetMessageClear();
+        visibleMenu = VisibleMenu.SplashScreen;
+        isMessageErrorStyle = false;
+        toLaunch = false;
 
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
@@ -59,146 +72,237 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     }
 
     void Update() {
-        if (menuState == MenuState.SplashScreen) {
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                ToLoginMenu();
-            }
+        switch (visibleMenu) {
+            case VisibleMenu.SplashScreen:
+                if (Input.GetKeyDown(KeyCode.Space)) {
+                    ToLoginMenu();
+                }
+                break;
+
+            case VisibleMenu.Login:
+                if (Input.GetKeyDown(KeyCode.Tab)) {
+                    // Cyclic movement through menu using Tab
+                    if (loginUsernameInput.isFocused) {
+                        loginPasswordInput.Select();
+                    }
+                    else if (loginPasswordInput.isFocused) {
+                        loginLoginButton.Select();
+                    }
+                    else if (loginLoginButton.IsActive()) {
+                        loginRegisterButton.Select();
+                    }
+                    else if (loginRegisterButton.IsActive()) {
+                        loginUsernameInput.Select();
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.Return)) {
+                    if (loginPasswordInput.IsActive()) {
+                        OnLoginClick();
+                    }
+                    else if (registerPasswordInput.IsActive()) {
+                        OnRegisterClick();
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.Escape)) {
+                    ToSplashScreen();
+                }
+                break;
+
+            case VisibleMenu.Register:
+                if (Input.GetKeyDown(KeyCode.Tab)) {
+                    if (registerUsernameInput.isFocused) {
+                        registerPasswordInput.Select();
+                    }
+                    else if (registerPasswordInput.isFocused) {
+                        registerRegisterButton.Select();
+                    }
+                    else if (registerRegisterButton.IsActive()) {
+                        registerBackButton.Select();
+                    }
+                    else if (registerBackButton.IsActive()) {
+                        registerUsernameInput.Select();
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.Escape)) {
+                    ToLoginMenu();
+                }
+                break;
+        }
+
+        // As the API call is running on a separate thread and Unity is not
+        // technically thread safe, the actual game object has to be modified
+        // here rather than doing it straight from the separate thread.
+        if (isMessageErrorStyle) {
+            infoMessage.color = Color.red;
+            infoMessage.text = infoMessageText;
         }
         else {
-            if (Input.GetKeyDown(KeyCode.Tab)) {
-                if (usernameLoginInput.isFocused) {
-                    passwordLoginInput.Select();
-                } else if (passwordLoginInput.isFocused) {
-                    loginButton.Select();
-                } else if (usernameRegisterInput.isFocused) {
-                    passwordRegisterInput.Select();
-                } else if (passwordRegisterInput.isFocused) {
-                    registerButton.Select();
-                } else if (usernameLoginInput.IsActive()) {
-                    usernameLoginInput.Select();
-                } else if (usernameRegisterInput.IsActive()) {
-                    usernameRegisterInput.Select();
-                }
-            } else if (Input.GetKeyDown(KeyCode.Return)) {
-                if (passwordLoginInput.IsActive()) {
-                    OnLoginClick();
-                } else if (passwordRegisterInput.IsActive()) {
-                    OnRegisterClick();
-                }
-            }
+            infoMessage.color = Color.blue;
+            infoMessage.text = infoMessageText;
+        }
+
+        if (toLaunch) {
+            toLaunch = false;
+            GameManager.Instance().store.Dispatch(
+                new OpenPlayingUI());
         }
     }
 
+    // API call from login menu.
     public void OnLoginClick() {
-        SetRegisterMsg("");
-        string usernameLoginText = usernameLoginInput.text;
-        string passwordLoginText = passwordLoginInput.text;
+        SetMessageClear();
+        string loginUsernameText = loginUsernameInput.text;
+        string loginPasswordText = loginPasswordInput.text;
 
         // Validate user input
-        if (string.IsNullOrWhiteSpace(usernameLoginText) ||
-            usernameLoginText.Length > maxUsernameLength) {
-            SetErrorMessage("Invalid username, it must have between 1 and 16 characters.");
+        if (string.IsNullOrWhiteSpace(loginUsernameText) ||
+            loginUsernameText.Length > maxUsernameLength) {
+            SetMessageError("Invalid username\nMust be between 1 and 16 characters");
+            isMessageErrorStyle = true;
             return;
-        } else if (string.IsNullOrWhiteSpace(passwordLoginText))  {
-            SetErrorMessage("Please enter a non-empty password.");
+        } else if (string.IsNullOrWhiteSpace(loginPasswordText))  {
+            SetMessageError("Please enter a non-empty password");
             return;
         }
 
-        UserCredentials userCredentials = new UserCredentials(usernameLoginText, passwordLoginText);
+        UserCredentials userCredentials = new UserCredentials(loginUsernameText, loginPasswordText);
         UserCredentials returnUser;
 
         Task.Run( async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
-            // TODO Add a visual cue ( using setRegisterMsg(“Connecting . . . “) )
-            //      to indicate to the user that the app is waiting on a response form the server.
+            SetMessageInfo("Loading . . .");
+            Debug.Log("Loading");
 
             try {
                 APIResult<UserCredentials, JsonError> response = await fetchingResponse;
                 returnUser = response.GetSuccess();
                 GameManager.Instance().SetUserCredentials(returnUser);
                 if (response.isSuccess()) {
-                    // Launch Blueprint
-                        GameManager.Instance().store.Dispatch(
-                            new OpenPlayingUI());
+                    toLaunch = true;
                 } else {
-                    SetErrorMessage(response.GetError().error);
+                    SetMessageError(response.GetError().error);
                 }
             } catch (Exception e) {
-                SetErrorMessage(e.Message);
+                SetMessageError(e.Message);
             }
         }).GetAwaiter().GetResult();
     }
 
+    // API call from the register menu.
     public void OnRegisterClick() {
-        SetRegisterMsg("");
-        string usernameRegisterText = usernameRegisterInput.text;
-        string passwordRegisterText = passwordRegisterInput.text;
+        SetMessageClear();
+        string registerUsernameText = registerUsernameInput.text;
+        string registerPasswordText = registerPasswordInput.text;
 
         // Validate user input
-        if (string.IsNullOrWhiteSpace(usernameRegisterText) ||
-            usernameRegisterText.Length > maxUsernameLength) {
-            SetErrorMessage("Invalid username, it must have between 1 and 16 characters.");
+        if (string.IsNullOrWhiteSpace(registerUsernameText) ||
+            registerUsernameText.Length > maxUsernameLength) {
+            SetMessageError("Invalid username\nMust have between 1 and 16 characters");
             return;
-        } else if (string.IsNullOrWhiteSpace(passwordRegisterText)) {
-            SetErrorMessage("Please enter a non-empty password.");
+        } else if (string.IsNullOrWhiteSpace(registerPasswordText)) {
+            SetMessageError("Please enter a non-empty password");
             return;
         }
 
         UserCredentials returnUser;
 
         Task.Run(async () => {
-            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(usernameRegisterText, passwordRegisterText);
-            // TODO Add a visual cue ( using setRegisterMsg(“Connecting . . . “) )
-            //      to indicate to the user that the app is waiting on a response form the server.
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(registerUsernameText, registerPasswordText);
+            SetMessageInfo("Connecting . . .");
 
             try {
                 APIResult<UserCredentials, JsonError> response = await fetchingResponse;
                 returnUser = response.GetSuccess();
                 if (response.isSuccess()) {
-                    // Launch Blueprint
-                    SceneManager.LoadScene(SceneMapping.World);
+                    toLaunch = true;
                 } else {
-                    SetErrorMessage(response.GetError().error);
+                    SetMessageError(response.GetError().error);
                 }
             }
             catch (Exception e) {
-                SetErrorMessage(e.Message);
+                SetMessageError(e.Message);
             }
         }).GetAwaiter().GetResult();
     }
 
-    private void SetErrorMessage(string msg) {
-        registerMsg.color = Color.red;
-        registerMsg.text = msg;
+    // Splash screen is only accessible from the login menu.
+    public void ToSplashScreen() {
+
+        // Prevents error where register still selected after changing screen.
+        loginUsernameInput.Select();
+
+        SetMessageClear();
+        splashScreen.GetComponent<CanvasGroup>().alpha = 1.0f;
+        splashScreen.GetComponent<CanvasGroup>().interactable = true;
+        loginMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
+        loginMenu.GetComponent<CanvasGroup>().interactable = false;
+        blueprintLogo.transform.position -= new Vector3(0.0f, 150.0f, 0.0f);
+        blueprintLogo.fontSize = 180;
+        visibleMenu = VisibleMenu.SplashScreen;
     }
 
-    private void SetRegisterMsg(string msg) {
-        registerMsg.color = Color.blue;
-        registerMsg.text = msg;
-    }
-
-    private void ToLoginMenu() {
-        switch (menuState) {
-            case MenuState.SplashScreen:
+    // Login menu is accessible from either the splash screen or the register
+    // menu.
+    public void ToLoginMenu() {
+        SetMessageClear();
+        switch(visibleMenu) {
+            case VisibleMenu.SplashScreen:
                 loginMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
                 loginMenu.GetComponent<CanvasGroup>().interactable = true;
                 splashScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
                 splashScreen.GetComponent<CanvasGroup>().interactable = false;
-                blueprintLogo.transform.position += new Vector3(0.0f, 100.0f, 0.0f);
-                usernameLoginInput.Select();
+                blueprintLogo.transform.position += new Vector3(0.0f, 150.0f, 0.0f);
+                blueprintLogo.fontSize = 100;
+                loginUsernameInput.Select();
+                visibleMenu = VisibleMenu.Login;
+                break;
+
+            case VisibleMenu.Register:
+                loginMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
+                loginMenu.GetComponent<CanvasGroup>().interactable = true;
+                registerMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
+                registerMenu.GetComponent<CanvasGroup>().interactable = false;
+                visibleMenu = VisibleMenu.Login;
+                loginUsernameInput.Select();
+                break;
+
+            default:
                 break;
         }
+
+        // Have to do this to stop one layer blocking the other.
+        registerMenu.transform.position -= new Vector3(0.0f, 1000.0f, 0.0f);
     }
 
-    private void ToRegister() {
-        switch (menuState) {
-            case MenuState.SplashScreen:
-                registerMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
-                registerMenu.GetComponent<CanvasGroup>().interactable = true;
-                loginMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
-                loginMenu.GetComponent<CanvasGroup>().interactable = false;
-                usernameRegisterInput.Select();
-                break;
-        }
+    // Register menu is only accessible from the login menu.
+    public void ToRegister() {
+
+        // Prevents error where register still selected after changing screen.
+        loginUsernameInput.Select();
+
+        SetMessageClear();
+        registerMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
+        registerMenu.GetComponent<CanvasGroup>().interactable = true;
+        loginMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
+        loginMenu.GetComponent<CanvasGroup>().interactable = false;
+        registerUsernameInput.Select();
+        visibleMenu = VisibleMenu.Register;
+
+        // Have to do this to stop one layer blocking the other.
+        registerMenu.transform.position += new Vector3(0.0f, 1000.0f, 0.0f);
+    }
+
+    private void SetMessageInfo(string msg) {
+        isMessageErrorStyle = false;
+        infoMessageText = msg;
+    }
+
+    private void SetMessageError(string msg) {
+        isMessageErrorStyle = true;
+        infoMessageText = msg;
+    }
+
+    private void SetMessageClear() {
+        infoMessageText = "";
     }
 }
