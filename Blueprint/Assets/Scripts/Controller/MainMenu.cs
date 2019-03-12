@@ -43,7 +43,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     private VisibleMenu visibleMenu;
     private bool toLaunch;
 
-    // Need to prevent use of keyboard during the animations.
+    // Used to prevent the user from interacting during animation to prevent
+    // unexpected errors.
     private bool animating;
 
     private ManhattanAnimation animationManager;
@@ -59,11 +60,13 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         visibleMenu = VisibleMenu.SplashScreen;
         isMessageErrorStyle = false;
         toLaunch = false;
-        animating = false;
 
+        // Make "Press space..." button flash opacity.
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         animationManager.StartAppearanceAnimation(pressSpace.gameObject,
             Anim.OscillateAlpha, 0.6f, true, 0.3f);
+
+        ShowMenu(splashScreen);
 
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
@@ -79,6 +82,9 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     }
 
     void Update() {
+        if (animating)
+            return;
+
         switch (visibleMenu) {
             case VisibleMenu.SplashScreen:
                 if (Input.GetKeyDown(KeyCode.Space)) {
@@ -190,6 +196,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                 }
             } catch (Exception e) {
                 SetMessageError(e.Message);
+                if (String.Equals(e.Message, "Password invalid"))
+                    SetMessageError("Incorrect password");
             }
         }).GetAwaiter().GetResult();
     }
@@ -214,7 +222,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(registerUsernameText, registerPasswordText);
-            SetMessageInfo("Connecting . . .");
+            SetMessageInfo("Loading . . .");
 
             try {
                 APIResult<UserCredentials, JsonError> response = await fetchingResponse;
@@ -227,27 +235,22 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
             }
             catch (Exception e) {
                 SetMessageError(e.Message);
+                if (String.Equals(e.Message, "Password invalid"))
+                    SetMessageError("Password must have between 5 and 24\ncharactersand have at least one upper and\nlower case letters and at least one number");
             }
         }).GetAwaiter().GetResult();
     }
 
     // Splash screen is only accessible from the login menu.
     public void ToSplashScreen() {
-        // Make splash screen fade in and be usable.
-        animationManager.StartAppearanceAnimation(splashScreen.gameObject,
-            Anim.Appear, 0.4f, false, 0.0f, 0.5f);
-
-        // Make login menu fade out and be usable.
-        animationManager.StartAppearanceAnimation(loginMenu.gameObject,
-            Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(loginMenu.gameObject,
-            Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
+        ShowMenu(splashScreen);
+        HideMenu(loginMenu);
 
         // Make Blueprint logo fly out.
         animationManager.StartMovementAnimation(blueprintLogo.gameObject,
             Anim.MoveToDecelerate, new Vector3(0.0f, -150.0f, 0.0f), 0.4f, false);
         animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
-            Anim.Grow, 0.7f, false, (4.0f/3.0f), 0.0f);
+            Anim.Grow, 0.6f, false, (4.0f/3.0f), 0.0f);
 
         visibleMenu = VisibleMenu.SplashScreen;
 
@@ -259,30 +262,21 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     // Login menu is accessible from either the splash screen or the register
     // menu.
     public void ToLoginMenu() {
-        SetMessageClear();
         switch(visibleMenu) {
             case VisibleMenu.SplashScreen:
-                // Make splash screen fade out and be unusable.
-                animationManager.StartAppearanceAnimation(splashScreen.gameObject,
-                    Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
+                HideMenu(splashScreen);
+                loginUsernameInput.Select();
+                visibleMenu = VisibleMenu.Login;
 
                 // Make Blueprint logo fly in.
                 animationManager.StartMovementAnimation(blueprintLogo.gameObject,
-                    Anim.MoveToDecelerate, new Vector3(0.0f, 150.0f, 0.0f), 0.5f, false);
+                    Anim.MoveToDecelerate, new Vector3(0.0f, 150.0f, 0.0f), 0.4f, false);
                 animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
-                    Anim.Grow, 0.7f, false, (3.0f/4.0f));
-
-                loginUsernameInput.Select();
-                visibleMenu = VisibleMenu.Login;
+                    Anim.Grow, 0.6f, false, (3.0f/4.0f));
                 break;
 
             case VisibleMenu.Register:
-                // Make register menu fade out and move down.
-                animationManager.StartAppearanceAnimation(registerMenu.gameObject,
-                    Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
-                animationManager.StartMovementAnimation(registerMenu.gameObject,
-                    Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
-
+                HideMenu(registerMenu);
                 loginUsernameInput.Select();
                 visibleMenu = VisibleMenu.Login;
                 break;
@@ -291,29 +285,45 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                 break;
         }
 
-        // Make login menu fade in and move up.
-        animationManager.StartAppearanceAnimation(loginMenu.gameObject,
-            Anim.Appear, 0.4f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(loginMenu.gameObject,
-            Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
+        ShowMenu(loginMenu);
+        SetMessageClear();
     }
 
     // Register menu is only accessible from the login menu.
     public void ToRegister() {
-        // Make register menu fade in and move up.
-        animationManager.StartAppearanceAnimation(registerMenu.gameObject,
-            Anim.Appear, 0.4f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(registerMenu.gameObject,
-            Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
-
-        // Make login menu fade out and move down.
-        animationManager.StartAppearanceAnimation(loginMenu.gameObject,
-            Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(loginMenu.gameObject,
-            Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
-
+        ShowMenu(registerMenu);
+        HideMenu(loginMenu);
         registerUsernameInput.Select();
         visibleMenu = VisibleMenu.Register;
+        SetMessageClear();
+    }
+
+    // Make an object fade out and fly downwards.
+    private void HideMenu(GameObject obj) {
+        triggerAnimating();
+        animationManager.StartAppearanceAnimation(obj.gameObject,
+            Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
+        animationManager.StartMovementAnimation(obj.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
+
+    }
+
+    // Make an object fade in and fly upwards.
+    private void ShowMenu(GameObject obj) {
+        triggerAnimating();
+        animationManager.StartAppearanceAnimation(obj.gameObject,
+            Anim.Appear, 0.4f, false, 0.0f, 0.2f);
+        animationManager.StartMovementAnimation(obj.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
+    }
+
+    private void triggerAnimating() {
+        animating = true;
+        Invoke("resetAnimating", 1.0f);
+    }
+
+    private void resetAnimating() {
+        animating = false;
     }
 
     private void SetMessageInfo(string msg) {
