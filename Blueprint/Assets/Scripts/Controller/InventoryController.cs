@@ -61,7 +61,20 @@ namespace Controller {
         
         public void StateDidUpdate(GameState state) {
             inventoryContents = state.inventoryState.inventoryContents;
-    
+            redrawInventory();
+        }
+
+        public string GetItemName(int id) {
+            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+            return goh.GameObjs.items[id - 1].name;
+        }
+        
+        public int GetItemType(int id) {
+            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+            return goh.GameObjs.items[id - 1].type;
+        }
+
+        public void redrawInventory() {
             // Clear slots
             foreach (InventorySlotController slot in itemSlots) {
                 slot.SetStoredItem(nullItem);
@@ -74,16 +87,6 @@ namespace Controller {
                     itemSlots[loc.hexID].SetStoredItem(item);
                 } 
             }
-        }
-
-        public string GetItemName(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].name;
-        }
-        
-        public int GetItemType(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].type;
         }
     }
 }

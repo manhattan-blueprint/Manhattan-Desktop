@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
@@ -31,5 +32,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
         float slotHeight = (eventData.pointerEnter.transform.parent.transform as RectTransform).rect.height;
         transform.localPosition = new Vector3(0, slotHeight/8, 0);
         foregroundImage.enabled = false;
+        GameObject.Find("Player").GetComponent<InventoryController>().redrawInventory();
     }
 }
