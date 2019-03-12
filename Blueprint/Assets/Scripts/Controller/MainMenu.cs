@@ -65,10 +65,6 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         animationManager.StartAppearanceAnimation(pressSpace.gameObject,
             Anim.OscillateAlpha, 0.6f, true, 0.3f);
 
-        animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
-        animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
-            Anim.OscillateSize, 0.6f, false, 0.95f);
-
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
@@ -243,7 +239,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         // Make login menu fade out and be usable.
         animationManager.StartAppearanceAnimation(loginMenu.gameObject,
-            Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+            Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
         animationManager.StartMovementAnimation(loginMenu.gameObject,
             Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
 
@@ -272,7 +268,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
                 // Make Blueprint logo fly in.
                 animationManager.StartMovementAnimation(blueprintLogo.gameObject,
-                    Anim.MoveToDecelerate, new Vector3(0.0f, 150.0f, 0.0f), 0.4f, false);
+                    Anim.MoveToDecelerate, new Vector3(0.0f, 150.0f, 0.0f), 0.5f, false);
                 animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
                     Anim.Grow, 0.7f, false, (3.0f/4.0f));
 
@@ -283,7 +279,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
             case VisibleMenu.Register:
                 // Make register menu fade out and move down.
                 animationManager.StartAppearanceAnimation(registerMenu.gameObject,
-                    Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+                    Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
                 animationManager.StartMovementAnimation(registerMenu.gameObject,
                     Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
 
@@ -297,7 +293,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         // Make login menu fade in and move up.
         animationManager.StartAppearanceAnimation(loginMenu.gameObject,
-            Anim.Appear, 0.5f, false, 0.0f, 0.0f);
+            Anim.Appear, 0.4f, false, 0.0f, 0.0f);
         animationManager.StartMovementAnimation(loginMenu.gameObject,
             Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
     }
@@ -306,13 +302,13 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     public void ToRegister() {
         // Make register menu fade in and move up.
         animationManager.StartAppearanceAnimation(registerMenu.gameObject,
-            Anim.Appear, 0.5f, false, 0.0f, 0.0f);
+            Anim.Appear, 0.4f, false, 0.0f, 0.0f);
         animationManager.StartMovementAnimation(registerMenu.gameObject,
             Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
 
         // Make login menu fade out and move down.
         animationManager.StartAppearanceAnimation(loginMenu.gameObject,
-            Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+            Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
         animationManager.StartMovementAnimation(loginMenu.gameObject,
             Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
 
