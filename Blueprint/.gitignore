@@ -45,7 +45,3 @@ sysinfo.txt
 Assets/Plugins
 Game_Data
 *.x86_64
-
-# Working temporary
-Assets/Resources/Videos/hexagon-background.mov
-Assets/Resources/Videos/hexagon-background.mov.meta
