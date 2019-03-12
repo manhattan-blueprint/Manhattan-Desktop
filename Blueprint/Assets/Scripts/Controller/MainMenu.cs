@@ -14,6 +14,7 @@ using Model.Redux;
 using Model.State;
 using Service;
 using Service.Response;
+using Utils;
 
 public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     [SerializeField] private Text infoMessage;
@@ -36,11 +37,16 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
     private int maxUsernameLength;
     private BlueprintAPI api;
-    private VisibleMenu visibleMenu;
-
-    private bool isMessageErrorStyle;
-    private bool toLaunch;
     private string infoMessageText;
+    private bool isMessageErrorStyle;
+
+    private VisibleMenu visibleMenu;
+    private bool toLaunch;
+
+    // Need to prevent use of keyboard during the animations.
+    private bool animating;
+
+    private ManhattanAnimation animationManager;
 
     private enum VisibleMenu {
         SplashScreen,
@@ -49,14 +55,19 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     }
 
     void Start() {
-        loginMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
-        loginMenu.GetComponent<CanvasGroup>().interactable = false;
-        registerMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
-        registerMenu.GetComponent<CanvasGroup>().interactable = false;
         SetMessageClear();
         visibleMenu = VisibleMenu.SplashScreen;
         isMessageErrorStyle = false;
         toLaunch = false;
+        animating = false;
+
+        animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
+        animationManager.StartAppearanceAnimation(pressSpace.gameObject,
+            Anim.OscillateAlpha, 0.6f, true, 0.3f);
+
+        animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
+        animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
+            Anim.OscillateSize, 0.6f, false, 0.95f);
 
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
@@ -171,7 +182,6 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         Task.Run( async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
             SetMessageInfo("Loading . . .");
-            Debug.Log("Loading");
 
             try {
                 APIResult<UserCredentials, JsonError> response = await fetchingResponse;
@@ -227,18 +237,27 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
     // Splash screen is only accessible from the login menu.
     public void ToSplashScreen() {
+        // Make splash screen fade in and be usable.
+        animationManager.StartAppearanceAnimation(splashScreen.gameObject,
+            Anim.Appear, 0.4f, false, 0.0f, 0.5f);
+
+        // Make login menu fade out and be usable.
+        animationManager.StartAppearanceAnimation(loginMenu.gameObject,
+            Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+        animationManager.StartMovementAnimation(loginMenu.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
+
+        // Make Blueprint logo fly out.
+        animationManager.StartMovementAnimation(blueprintLogo.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, -150.0f, 0.0f), 0.4f, false);
+        animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
+            Anim.Grow, 0.7f, false, (4.0f/3.0f), 0.0f);
+
+        visibleMenu = VisibleMenu.SplashScreen;
 
         // Prevents error where register still selected after changing screen.
         loginUsernameInput.Select();
-
         SetMessageClear();
-        splashScreen.GetComponent<CanvasGroup>().alpha = 1.0f;
-        splashScreen.GetComponent<CanvasGroup>().interactable = true;
-        loginMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
-        loginMenu.GetComponent<CanvasGroup>().interactable = false;
-        blueprintLogo.transform.position -= new Vector3(0.0f, 150.0f, 0.0f);
-        blueprintLogo.fontSize = 180;
-        visibleMenu = VisibleMenu.SplashScreen;
     }
 
     // Login menu is accessible from either the splash screen or the register
@@ -247,49 +266,58 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         SetMessageClear();
         switch(visibleMenu) {
             case VisibleMenu.SplashScreen:
-                loginMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
-                loginMenu.GetComponent<CanvasGroup>().interactable = true;
-                splashScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-                splashScreen.GetComponent<CanvasGroup>().interactable = false;
-                blueprintLogo.transform.position += new Vector3(0.0f, 150.0f, 0.0f);
-                blueprintLogo.fontSize = 100;
+                // Make splash screen fade out and be unusable.
+                animationManager.StartAppearanceAnimation(splashScreen.gameObject,
+                    Anim.Dissappear, 0.4f, false, 0.0f, 0.0f);
+
+                // Make Blueprint logo fly in.
+                animationManager.StartMovementAnimation(blueprintLogo.gameObject,
+                    Anim.MoveToDecelerate, new Vector3(0.0f, 150.0f, 0.0f), 0.4f, false);
+                animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
+                    Anim.Grow, 0.7f, false, (3.0f/4.0f));
+
                 loginUsernameInput.Select();
                 visibleMenu = VisibleMenu.Login;
                 break;
 
             case VisibleMenu.Register:
-                loginMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
-                loginMenu.GetComponent<CanvasGroup>().interactable = true;
-                registerMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
-                registerMenu.GetComponent<CanvasGroup>().interactable = false;
-                visibleMenu = VisibleMenu.Login;
+                // Make register menu fade out and move down.
+                animationManager.StartAppearanceAnimation(registerMenu.gameObject,
+                    Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+                animationManager.StartMovementAnimation(registerMenu.gameObject,
+                    Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
+
                 loginUsernameInput.Select();
+                visibleMenu = VisibleMenu.Login;
                 break;
 
             default:
                 break;
         }
 
-        // Have to do this to stop one layer blocking the other.
-        registerMenu.transform.position -= new Vector3(0.0f, 1000.0f, 0.0f);
+        // Make login menu fade in and move up.
+        animationManager.StartAppearanceAnimation(loginMenu.gameObject,
+            Anim.Appear, 0.5f, false, 0.0f, 0.0f);
+        animationManager.StartMovementAnimation(loginMenu.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
     }
 
     // Register menu is only accessible from the login menu.
     public void ToRegister() {
+        // Make register menu fade in and move up.
+        animationManager.StartAppearanceAnimation(registerMenu.gameObject,
+            Anim.Appear, 0.5f, false, 0.0f, 0.0f);
+        animationManager.StartMovementAnimation(registerMenu.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, 500.0f, 0.0f), 0.4f, false);
 
-        // Prevents error where register still selected after changing screen.
-        loginUsernameInput.Select();
+        // Make login menu fade out and move down.
+        animationManager.StartAppearanceAnimation(loginMenu.gameObject,
+            Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+        animationManager.StartMovementAnimation(loginMenu.gameObject,
+            Anim.MoveToDecelerate, new Vector3(0.0f, -500.0f, 0.0f), 0.4f, false);
 
-        SetMessageClear();
-        registerMenu.GetComponent<CanvasGroup>().alpha = 1.0f;
-        registerMenu.GetComponent<CanvasGroup>().interactable = true;
-        loginMenu.GetComponent<CanvasGroup>().alpha = 0.0f;
-        loginMenu.GetComponent<CanvasGroup>().interactable = false;
         registerUsernameInput.Select();
         visibleMenu = VisibleMenu.Register;
-
-        // Have to do this to stop one layer blocking the other.
-        registerMenu.transform.position += new Vector3(0.0f, 1000.0f, 0.0f);
     }
 
     private void SetMessageInfo(string msg) {
