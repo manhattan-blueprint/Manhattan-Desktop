@@ -17,6 +17,7 @@ namespace Controller {
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
         private bool multiCanvas;
+        private GameObject rootObject;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -25,6 +26,7 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            rootObject = GameObject.Find("RootObject");
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
@@ -181,6 +183,8 @@ namespace Controller {
                   ExitPrompt();
                   break;
               case UIState.OpenUI.Login:
+                  Destroy(rootObject);
+                  SceneManager.UnloadScene(SceneMapping.World);
                   SceneManager.LoadScene(SceneMapping.MainMenu);
                   GameManager.Instance().store.Unsubscribe(this);
                   break;

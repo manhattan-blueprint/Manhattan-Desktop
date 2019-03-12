@@ -320,6 +320,17 @@ namespace Tests {
         }
 
         [Test]
+        public void TestLogoutLogin() {
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            gameManager.store.Dispatch(new Logout());
+            gameManager.store.Dispatch(new OpenLoginUI());
+            gameManager.store.Dispatch(new OpenPlayingUI());
+            gameManager.store.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Pause));
+        }
+
+        [Test]
         public void TestGameManagerExists() {
             Assert.NotNull(gameManager);
         }
