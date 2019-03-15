@@ -96,11 +96,9 @@ namespace Model.Action {
     
     public class RemoveHeldItem : InventoryAction {
         public readonly (int itemId, HexLocation hexLocation) heldItem;
-        public int quantity;
 
-        public RemoveHeldItem(int itemId, HexLocation hexLocation, int quantity) {
+        public RemoveHeldItem(int itemId, HexLocation hexLocation) {
             heldItem = (itemId, hexLocation);
-            this.quantity = quantity;
         }
         
         public override void Accept(InventoryVisitor visitor) {
