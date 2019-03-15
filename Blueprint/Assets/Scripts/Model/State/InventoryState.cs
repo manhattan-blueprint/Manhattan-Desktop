@@ -9,6 +9,7 @@ namespace Model {
     public class InventoryState {
         public Dictionary<int, List<HexLocation>> inventoryContents;
         public int inventorySize = 0;
+        public (int itemId, HexLocation hexLocation) heldItem;
 
         public InventoryState() {
             inventoryContents = new Dictionary<int ,List<HexLocation>>(); 
