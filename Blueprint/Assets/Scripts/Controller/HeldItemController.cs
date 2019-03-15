@@ -17,10 +17,6 @@ public class HeldItemController : MonoBehaviour, Subscriber<GameState> {
         heldItemSlots = gameObject.GetComponentsInChildren<HeldItemSlotController>();
     }
 
-    void Update() {
-        
-    }
-
     public void StateDidUpdate(GameState gameState) {
         List<InventoryItem> temp = new List<InventoryItem>();
         

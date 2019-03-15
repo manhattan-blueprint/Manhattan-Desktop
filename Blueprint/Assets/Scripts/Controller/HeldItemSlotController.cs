@@ -14,10 +14,6 @@ public class HeldItemSlotController : MonoBehaviour {
         assetManager = AssetManager.Instance();
     }
 
-    void Update() {
-        
-    }
-
     public void setSlotItem(InventoryItem item) {
         itemInSlot = item;
         updateFields();
