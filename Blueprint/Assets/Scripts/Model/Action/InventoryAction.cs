@@ -85,8 +85,8 @@ namespace Model.Action {
     public class SetHeldItem : InventoryAction {
         public readonly (int itemId, HexLocation hexLocation) heldItem;
 
-        public AddHeldItem(int itemId, HexLocation hexLocation) {
-            heldItem = (itemId, hexLocation);
+        public SetHeldItem(int itemId, HexLocation hexLocation) {
+            this.heldItem = (itemId, hexLocation);
         }
         
         public override void Accept(InventoryVisitor visitor) {
@@ -98,9 +98,9 @@ namespace Model.Action {
         public readonly (int itemId, HexLocation hexLocation) heldItem;
         public int quantity;
 
-        public AddHeldItem(int itemId, HexLocation hexLocation, int quantity) {
+        public RemoveHeldItem(int itemId, HexLocation hexLocation, int quantity) {
             heldItem = (itemId, hexLocation);
-            quantity = quantity;
+            this.quantity = quantity;
         }
         
         public override void Accept(InventoryVisitor visitor) {

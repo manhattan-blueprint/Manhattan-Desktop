@@ -121,9 +121,9 @@ namespace Model.Reducer {
         public void visit(RemoveHeldItem removeHeldItem) {
             // Remove heldItem from inventory slot (state.heldItem is a reference to the location of heldItem)
             visit(new RemoveItemFromStackInventory(removeHeldItem.heldItem.Item1, removeHeldItem.quantity, 
-                removeHeldItem.heldItem.Item2));
+                removeHeldItem.heldItem.Item2.hexID));
 
-            state.heldItem = null;
+            state.heldItem = (0, new HexLocation(0, 0));
 
             // If there are items left in the heldItem slot, set state.Helditem correctly
             foreach (HexLocation loc in state.inventoryContents[removeHeldItem.heldItem.Item1]) {
@@ -131,11 +131,6 @@ namespace Model.Reducer {
                     state.heldItem = (removeHeldItem.heldItem.Item1, loc);
                 }    
             }
-
-            // Else, set state.heldItem to a null value 
-            if (state.heldItem == null) {
-                state.heldItem = (0, new HexLocation(0, 0));
-            } 
         }
     }
 }
