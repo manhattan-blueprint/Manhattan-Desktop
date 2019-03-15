@@ -4,6 +4,7 @@ using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Model.Action;
 using UnityEngine;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
@@ -23,6 +24,7 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().store.Dispatch(new OpenInventoryUI());
+                    PauseGame();
                 } else {
                     GameManager.Instance().store.Dispatch(new CloseUI());
                 }

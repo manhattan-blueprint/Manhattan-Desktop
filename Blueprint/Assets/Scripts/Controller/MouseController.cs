@@ -36,21 +36,21 @@ namespace Controller {
             holdInitiated = false;
         }
 
-        private void SetFocus(Interactable newFocus) {
-            focus = newFocus;
-        }
+        //private void SetFocus(Interactable newFocus) {
+        //    focus = newFocus;
+        //}
 
-        void Update() {
-            // Pick up an object
-            if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
-                collectItem();
-            } else if (Input.GetMouseButtonDown(leftButton)) {
-                holdInitiated = true;
-            } else if (Input.GetMouseButton(leftButton)) {
-                timer += Time.deltaTime;
-            } else if (Input.GetMouseButtonUp(leftButton)) {
-                timer = 0.0f;
-            }
+        //void Update() {
+        //    // Pick up an object
+        //    if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
+        //        collectItem();
+        //    } else if (Input.GetMouseButtonDown(leftButton)) {
+        //        holdInitiated = true;
+        //    } else if (Input.GetMouseButton(leftButton)) {
+        //        timer += Time.deltaTime;
+        //    } else if (Input.GetMouseButtonUp(leftButton)) {
+        //        timer = 0.0f;
+        //    }
 
             // Place an object
             if (Input.GetMouseButtonDown(rightButton)) {
@@ -64,28 +64,44 @@ namespace Controller {
                 GameManager.Instance().store.Dispatch(new CellSelected(pos, 1));
             }
         }
+        //    // Place an object
+        //    if (Input.GetMouseButtonDown(rightButton)) {
+        //        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+        //        hit = new RaycastHit();
 
-        private void collectItem() {
-            // Cast ray from the cursor through the centre of the viewport (what's the mouse hovering over?)
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-            hit = new RaycastHit();
+        //        // If a GameObject is hit
+        //        if (!Physics.Raycast(ray, out hit)) return;
+        //        SetFocus(hit.collider.GetComponent<Interactable>());
+        //        //if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
+        //        //    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
+        //        //        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
+        //        //
+        //        //    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
+        //        //}
+        //    }
+        //}
 
-            // If a GameObject is hit
-            if (!Physics.Raycast(ray, out hit)) return;
-            SetFocus(hit.collider.GetComponent<Interactable>());
+        //private void collectItem() {
+        //    // Cast ray from the cursor through the centre of the viewport (what's the mouse hovering over?)
+        //    Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+        //    hit = new RaycastHit();
 
-            float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
+        //    // If a GameObject is hit
+        //    if (!Physics.Raycast(ray, out hit)) return;
+        //    SetFocus(hit.collider.GetComponent<Interactable>());
 
-            if (focus != null && dist < maxDistance) {
-                Renderer rend = hit.collider.GetComponent<Renderer>();
-                Highlight hi = hit.collider.GetComponent<Highlight>();
-                rend.material.color = hi.tempColor;
-                
-                inventory.CollectItem(focus, hit.transform.gameObject);
-            } else {
-                Debug.Log("No inventory items hit");
-            }
-            holdInitiated = false;
-        }
+        //    float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
+
+        //    if (focus != null && dist < maxDistance) {
+        //        Renderer rend = hit.collider.GetComponent<Renderer>();
+        //        Highlight hi = hit.collider.GetComponent<Highlight>();
+        //        rend.material.color = hi.tempColor;
+        //        
+        //        inventory.CollectItem(focus, hit.transform.gameObject);
+        //    } else {
+        //        Debug.Log("No inventory items hit");
+        //    }
+        //    holdInitiated = false;
+        //}
     }
 }
