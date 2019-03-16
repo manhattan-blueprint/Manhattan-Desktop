@@ -99,14 +99,16 @@ namespace Model.Reducer {
         }
 
         public void visit(SwapItemLocations swapItemLocations) {
-            foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItemID]) {
-                if (hexLocation.hexID == swapItemLocations.sourceHexID) {
-                    hexLocation.hexID = swapItemLocations.destinationHexID;
+            if (swapItemLocations.sourceItem.IsPresent()) {
+                foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItem.Get().GetId()]) {
+                    if (hexLocation.hexID == swapItemLocations.sourceHexID) {
+                        hexLocation.hexID = swapItemLocations.destinationHexID;
+                    }
                 }
             }
             
-            if (swapItemLocations.destinationItemID != 0) {
-                foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItemID]) {
+            if (swapItemLocations.destinationItem.IsPresent()) {
+                foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItem.Get().GetId()]) {
                     if (hexLocation.hexID == swapItemLocations.destinationHexID) {
                         hexLocation.hexID = swapItemLocations.sourceHexID;
                     }
@@ -115,7 +117,7 @@ namespace Model.Reducer {
         }
 
         public void visit(SetHeldItem setHeldItem) {
-            state.heldItem = Optional<InventoryState.HeldItem>.of(setHeldItem.heldItem);
+            state.heldItem = Optional<InventoryState.HeldItem>.Of(setHeldItem.heldItem);
         }
 
         public void visit(RemoveHeldItem removeHeldItem) {
@@ -123,12 +125,12 @@ namespace Model.Reducer {
             visit(new RemoveItemFromStackInventory(removeHeldItem.heldItem.itemID, removeHeldItem.heldItem.location.quantity, 
                 removeHeldItem.heldItem.location.hexID));
 
-            state.heldItem = Optional<InventoryState.HeldItem>.empty();
+            state.heldItem = Optional<InventoryState.HeldItem>.Empty();
 
             // If there are items left in the heldItem slot, set state.Helditem correctly
             foreach (HexLocation loc in state.inventoryContents[removeHeldItem.heldItem.itemID]) {
                 if (loc.hexID == removeHeldItem.heldItem.location.hexID) {
-                    state.heldItem = Optional<InventoryState.HeldItem>.of(new InventoryState.HeldItem(removeHeldItem.heldItem.itemID, loc));
+                    state.heldItem = Optional<InventoryState.HeldItem>.Of(new InventoryState.HeldItem(removeHeldItem.heldItem.itemID, loc));
                 }    
             }
         }

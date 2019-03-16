@@ -21,13 +21,19 @@ using UnityEngine.Experimental.Rendering;
 namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<GameState> {
         public Dictionary<int, List<HexLocation>> inventoryContents;
-        private List<InventorySlotController> itemSlots;
+        private Dictionary<int, InventorySlotController> itemSlots;
         private ResponseGetInventory remoteInv;
         private GameManager gameManager;
-        private InventoryItem nullItem = new InventoryItem("", 0, 0);
 
         public void Start() {
-            itemSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+            
+            // Generate dictionary of item slots for fast lookup
+            itemSlots = new Dictionary<int, InventorySlotController>();
+            List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+            foreach (InventorySlotController controller in allSlots) {
+              itemSlots.Add(controller.getId(), controller);
+            }
+            
             UserCredentials user = GameManager.Instance().GetUserCredentials();
             BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
             
@@ -56,6 +62,7 @@ namespace Controller {
                             }    
                         }).GetAwaiter().GetResult();
             */
+            
             GameManager.Instance().store.Subscribe(this);
         }
         
@@ -76,15 +83,15 @@ namespace Controller {
 
         public void redrawInventory() {
             // Clear slots
-            foreach (InventorySlotController slot in itemSlots) {
-                slot.SetStoredItem(nullItem);
+            foreach (KeyValuePair<int, InventorySlotController> slot in itemSlots) {
+                slot.Value.SetStoredItem(Optional<InventoryItem>.Empty());
             }
             
             // Re-populate slots
             foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
                 foreach(HexLocation loc in element.Value) {
                     InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
-                    itemSlots[loc.hexID].SetStoredItem(item);
+                    itemSlots[loc.hexID].SetStoredItem(Optional<InventoryItem>.Of(item));
                 } 
             }
         }

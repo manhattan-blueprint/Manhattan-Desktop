@@ -65,9 +65,9 @@ namespace Controller {
                 Vector2 pos = hc.getPosition();
                 
                 Optional<InventoryState.HeldItem> currentItem = GameManager.Instance().store.GetState().inventoryState.heldItem;
-                if (!currentItem.isPresent()) return;
-                GameManager.Instance().store.Dispatch(new CellSelected(pos, currentItem.get().itemID));
-                GameManager.Instance().store.Dispatch(new RemoveHeldItem(currentItem.get()));
+                if (!currentItem.IsPresent()) return;
+                GameManager.Instance().store.Dispatch(new CellSelected(pos, currentItem.Get().itemID));
+                GameManager.Instance().store.Dispatch(new RemoveHeldItem(currentItem.Get()));
             }
         //    // Place an object
         //    if (Input.GetMouseButtonDown(rightButton)) {

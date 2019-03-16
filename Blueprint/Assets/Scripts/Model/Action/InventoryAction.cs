@@ -65,14 +65,14 @@ namespace Model.Action {
     public class SwapItemLocations : InventoryAction {
         public readonly int sourceHexID;
         public readonly int destinationHexID;
-        public readonly int sourceItemID;
-        public readonly int destinationItemID;
+        public readonly Optional<InventoryItem> sourceItem;
+        public readonly Optional<InventoryItem> destinationItem;
 
-        public SwapItemLocations(int sourceHexID, int destinationHexID, int sourceItemID, int destinationItemID) {
+        public SwapItemLocations(int sourceHexID, int destinationHexID, Optional<InventoryItem> sourceItem, Optional<InventoryItem> destinationItem) {
             this.sourceHexID = sourceHexID;
             this.destinationHexID = destinationHexID;
-            this.sourceItemID = sourceItemID;
-            this.destinationItemID = destinationItemID;
+            this.sourceItem = sourceItem;
+            this.destinationItem = destinationItem;
         }
 
         public override void Accept(InventoryVisitor visitor) {

@@ -247,9 +247,9 @@ namespace Tests {
             this.gameManager.store.Dispatch(new SetHeldItem(new InventoryState.HeldItem(1, new HexLocation(0, 10)))); 
             
             // Assert heldItem has correct ItemID, hexID, quantity
-            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.get().itemID, Is.EqualTo(1));
-            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.get().location.hexID, Is.EqualTo(0));
-            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.get().location.quantity, Is.EqualTo(10));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Get().itemID, Is.EqualTo(1));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Get().location.hexID, Is.EqualTo(0));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Get().location.quantity, Is.EqualTo(10));
         }
 
         [Test]
@@ -270,9 +270,9 @@ namespace Tests {
             this.gameManager.store.Dispatch(new RemoveHeldItem(new InventoryState.HeldItem(1, new HexLocation(0, 1))));
             
             // Assert reduced quantity
-            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.get().itemID, Is.EqualTo(1));
-            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.get().location.hexID, Is.EqualTo(0));
-            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.get().location.quantity, Is.EqualTo(9));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Get().itemID, Is.EqualTo(1));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Get().location.hexID, Is.EqualTo(0));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Get().location.quantity, Is.EqualTo(9));
         }
     }
 }

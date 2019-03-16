@@ -37,7 +37,6 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("InventoryUICanvas").transform);
         }
 
         private void ContinueGame() {
@@ -46,7 +45,6 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             cursorCanvas.enabled = true;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("HeldItemCanvas").transform);
         }
 
         public void StateDidUpdate(GameState state) {
