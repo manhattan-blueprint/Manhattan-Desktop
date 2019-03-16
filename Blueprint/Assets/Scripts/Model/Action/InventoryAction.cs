@@ -4,6 +4,8 @@ namespace Model.Action {
         void visit(RemoveItemFromInventory anotherInventoryAction);
         void visit(RemoveItemFromStackInventory anotherInventoryAction);
         void visit(SwapItemLocations anotherInventoryAction);
+        void visit(SetHeldItem anotherInventoryAction);
+        void visit(RemoveHeldItem anotherInventoryAction);
     }
 
     public abstract class InventoryAction : Action {
@@ -78,4 +80,29 @@ namespace Model.Action {
         }
     }
 
+    // For use when changing the heldItem slot (i.e. scroll wheel)
+    // Use AddToInventory on item pickup
+    public class SetHeldItem : InventoryAction {
+        public readonly (int itemId, HexLocation hexLocation) heldItem;
+
+        public SetHeldItem(int itemId, HexLocation hexLocation) {
+            this.heldItem = (itemId, hexLocation);
+        }
+        
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    public class RemoveHeldItem : InventoryAction {
+        public readonly (int itemId, HexLocation hexLocation) heldItem;
+
+        public RemoveHeldItem(int itemId, HexLocation hexLocation) {
+            heldItem = (itemId, hexLocation);
+        }
+        
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
 }

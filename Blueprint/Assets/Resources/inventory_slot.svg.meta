@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b52f6e54b0e6b4ad3be1f36d12f3a77e
+guid: d0b0c1354880d420084b7829e6a8747e
 ScriptedImporter:
   fileIDToRecycleName:
     2800000: tex
@@ -18,8 +18,8 @@ ScriptedImporter:
   generatePhysicsShape: 0
   preserveViewport: 0
   advancedMode: 0
-  predefinedResolutionIndex: 0
-  targetResolution: 2160
+  predefinedResolutionIndex: 1
+  targetResolution: 1080
   resolutionMultiplier: 1
   stepDistance: 10
   samplingStepDistance: 100
@@ -48,5 +48,5 @@ ScriptedImporter:
         y: 0
         width: 0
         height: 0
-      spriteID: da722679866794d40928834b4ae6bc49
+      spriteID: ba7505900e93b464bbae132391e29cac
     PhysicsOutlines: []
