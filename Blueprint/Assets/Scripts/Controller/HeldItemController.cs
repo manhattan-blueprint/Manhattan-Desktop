@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class HeldItemController : MonoBehaviour {
     public InventoryItem heldItem;
-    private List<InventoryItem> placeableItems = new List<InventoryItem>();
     private InventoryController inventoryController;
     
     void Start() {
