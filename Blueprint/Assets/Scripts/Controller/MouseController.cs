@@ -57,11 +57,17 @@ namespace Controller {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
                 
+                
                 // TODO: Calculate if we have hit a model to remove - blocked on models! 
                 if (!Physics.Raycast(ray, out hit)) return;
-                Vector2 pos = hit.transform.gameObject.GetComponent<HexCell>().position;
-                // TODO: Get id of object from held item
-                GameManager.Instance().store.Dispatch(new CellSelected(pos, 1));
+                HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
+                if (hc == null) return;
+                Vector2 pos = hc.getPosition();
+                
+                Optional<InventoryState.HeldItem> currentItem = GameManager.Instance().store.GetState().inventoryState.heldItem;
+                if (!currentItem.isPresent()) return;
+                GameManager.Instance().store.Dispatch(new CellSelected(pos, currentItem.get().itemID));
+                GameManager.Instance().store.Dispatch(new RemoveHeldItem(currentItem.get()));
             }
         //    // Place an object
         //    if (Input.GetMouseButtonDown(rightButton)) {

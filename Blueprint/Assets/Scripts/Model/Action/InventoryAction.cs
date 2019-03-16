@@ -83,10 +83,10 @@ namespace Model.Action {
     // For use when changing the heldItem slot (i.e. scroll wheel)
     // Use AddToInventory on item pickup
     public class SetHeldItem : InventoryAction {
-        public readonly (int itemId, HexLocation hexLocation) heldItem;
+        public readonly InventoryState.HeldItem heldItem;
 
-        public SetHeldItem(int itemId, HexLocation hexLocation) {
-            this.heldItem = (itemId, hexLocation);
+        public SetHeldItem(InventoryState.HeldItem heldItem) {
+            this.heldItem = heldItem;
         }
         
         public override void Accept(InventoryVisitor visitor) {
@@ -95,10 +95,10 @@ namespace Model.Action {
     }
     
     public class RemoveHeldItem : InventoryAction {
-        public readonly (int itemId, HexLocation hexLocation) heldItem;
+        public readonly InventoryState.HeldItem heldItem;
 
-        public RemoveHeldItem(int itemId, HexLocation hexLocation) {
-            heldItem = (itemId, hexLocation);
+        public RemoveHeldItem(InventoryState.HeldItem heldItem) {
+            this.heldItem = heldItem;
         }
         
         public override void Accept(InventoryVisitor visitor) {

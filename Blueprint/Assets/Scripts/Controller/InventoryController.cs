@@ -30,20 +30,20 @@ namespace Controller {
             itemSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
             BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
-
+            
             Task.Run(async () => {
                 APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
                 if (finalInventoryResponse.isSuccess()) {
                     remoteInv = finalInventoryResponse.GetSuccess();
+                    foreach (InventoryEntry entry in remoteInv.items) {
+                        GameManager.Instance().store.Dispatch(
+                            new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
+                    }
                 } else {
                     JsonError error = finalInventoryResponse.GetError();
                 }
             }).GetAwaiter().GetResult();
             
-            foreach (InventoryEntry entry in remoteInv.items) {
-                GameManager.Instance().store.Dispatch(
-                    new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
-            }
             /*            
                         Task.Run(async () => {
                             try {

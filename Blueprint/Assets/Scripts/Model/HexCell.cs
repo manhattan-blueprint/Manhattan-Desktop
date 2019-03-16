@@ -5,7 +5,7 @@ using Vector2 = UnityEngine.Vector2;
 
 namespace Model {
     public class HexCell: MonoBehaviour {
-        public Vector2 position;
+        private Vector2 position;
 
         public void setPosition(Vector2 position) {
             this.position = position;
