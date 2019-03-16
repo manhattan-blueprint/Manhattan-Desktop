@@ -40,7 +40,7 @@ namespace Controller {
         //    focus = newFocus;
         //}
 
-        //void Update() {
+        void Update() {
         //    // Pick up an object
         //    if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
         //        collectItem();
@@ -63,7 +63,6 @@ namespace Controller {
                 // TODO: Get id of object from held item
                 GameManager.Instance().store.Dispatch(new CellSelected(pos, 1));
             }
-        }
         //    // Place an object
         //    if (Input.GetMouseButtonDown(rightButton)) {
         //        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -102,6 +101,6 @@ namespace Controller {
         //        Debug.Log("No inventory items hit");
         //    }
         //    holdInitiated = false;
-        //}
+        }
     }
 }
