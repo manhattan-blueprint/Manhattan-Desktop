@@ -115,23 +115,29 @@ namespace Model.Reducer {
                 }
             }
         }
+        
+        public void visit(RotateHeldItemForward rotateHeldItemForward) {
+            state.indexOfHeldItem = (state.indexOfHeldItem + 1) % 6;
+        }
 
-        public void visit(SetHeldItem setHeldItem) {
-            state.heldItem = Optional<InventoryState.HeldItem>.Of(setHeldItem.heldItem);
+        public void visit(RotateHeldItemBackward rotateHeldItemBackward) {
+            // +5 is the same as -1 mod 6, but avoids dealing with negative indices
+            state.indexOfHeldItem = (state.indexOfHeldItem + 5) % 6;
         }
 
         public void visit(RemoveHeldItem removeHeldItem) {
-            // Remove heldItem from inventory slot (state.heldItem is a reference to the location of heldItem)
-            visit(new RemoveItemFromStackInventory(removeHeldItem.heldItem.itemID, removeHeldItem.heldItem.location.quantity, 
-                removeHeldItem.heldItem.location.hexID));
-
-            state.heldItem = Optional<InventoryState.HeldItem>.Empty();
-
-            // If there are items left in the heldItem slot, set state.Helditem correctly
-            foreach (HexLocation loc in state.inventoryContents[removeHeldItem.heldItem.itemID]) {
-                if (loc.hexID == removeHeldItem.heldItem.location.hexID) {
-                    state.heldItem = Optional<InventoryState.HeldItem>.Of(new InventoryState.HeldItem(removeHeldItem.heldItem.itemID, loc));
-                }    
+            // Look for the object in that cell
+            int index = state.indexOfHeldItem;
+            
+            foreach (KeyValuePair<int, List<HexLocation>> content in state.inventoryContents) {
+                foreach (HexLocation hexLocation in content.Value) {
+                    // Only remove and place if quantity > 0
+                    if (hexLocation.hexID == index && hexLocation.quantity > 0) {
+                        visit(new RemoveItemFromStackInventory(content.Key, 1, index));
+                        GameManager.Instance().store.Dispatch(new PlaceItem(removeHeldItem.dropAt, content.Key));
+                        return;
+                    } 
+                }
             }
         }
     }

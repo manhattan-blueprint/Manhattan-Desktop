@@ -22,7 +22,6 @@ namespace Controller {
         private RaycastHit hit;
         private Text txt;
         private InventoryController inventory;
-        private Interactable focus;
         private float timer;
         private string index;
         private HexMapController hexMapController;
@@ -36,77 +35,51 @@ namespace Controller {
             holdInitiated = false;
         }
 
-        //private void SetFocus(Interactable newFocus) {
-        //    focus = newFocus;
-        //}
-
         void Update() {
-        //    // Pick up an object
-        //    if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
-        //        collectItem();
-        //    } else if (Input.GetMouseButtonDown(leftButton)) {
-        //        holdInitiated = true;
-        //    } else if (Input.GetMouseButton(leftButton)) {
-        //        timer += Time.deltaTime;
-        //    } else if (Input.GetMouseButtonUp(leftButton)) {
-        //        timer = 0.0f;
-        //    }
-
-            // Place an object
+            // Scrolling
+            float threshold = 0f;
+            float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+            if (scrollDelta > threshold) {
+                // Scroll Up 
+                GameManager.Instance().store.Dispatch(new RotateHeldItemForward());
+            }
+            else if (scrollDelta < -threshold) {
+                // Scroll down
+                GameManager.Instance().store.Dispatch(new RotateHeldItemBackward());
+            }
+            
+            
+            // Put down held item
             if (Input.GetMouseButtonDown(rightButton)) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
-                
-                
-                // TODO: Calculate if we have hit a model to remove - blocked on models! 
+
                 if (!Physics.Raycast(ray, out hit)) return;
                 HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
-                Vector2 pos = hc.getPosition();
+                GameManager.Instance().store.Dispatch(new RemoveHeldItem(hc.getPosition()));
+            } 
+            
+            
+            // Pick up item
+            if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
+                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+                hit = new RaycastHit();
                 
-                Optional<InventoryState.HeldItem> currentItem = GameManager.Instance().store.GetState().inventoryState.heldItem;
-                if (!currentItem.IsPresent()) return;
-                GameManager.Instance().store.Dispatch(new CellSelected(pos, currentItem.Get().itemID));
-                GameManager.Instance().store.Dispatch(new RemoveHeldItem(currentItem.Get()));
+                if (!Physics.Raycast(ray, out hit)) return;
+                Placeable p = hit.transform.gameObject.GetComponent<Placeable>();
+                if (p == null) return;
+                HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
+                if (hc == null) return;
+                GameManager.Instance().store.Dispatch(new CollectItem(hc.getPosition()));
+                holdInitiated = false;
+            } else if (Input.GetMouseButtonDown(leftButton)) {
+                holdInitiated = true;
+            } else if (Input.GetMouseButton(leftButton)) {
+                timer += Time.deltaTime;
+            } else if (Input.GetMouseButtonUp(leftButton)) {
+                timer = 0.0f;
             }
-        //    // Place an object
-        //    if (Input.GetMouseButtonDown(rightButton)) {
-        //        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-        //        hit = new RaycastHit();
-
-        //        // If a GameObject is hit
-        //        if (!Physics.Raycast(ray, out hit)) return;
-        //        SetFocus(hit.collider.GetComponent<Interactable>());
-        //        //if (inventory.GetItemType(inventory.GetItems()[inventory.GetCurrentHeld()].GetId()) == 2 && inventory.GetItems()[inventory.GetCurrentHeld()].GetQuantity() > 0) {
-        //        //    hexMapController.hexMap.PlaceOnGrid(hit.transform.position.x, hit.transform.position.z,
-        //        //        Quaternion.Euler(0, 0, 0), Resources.Load(inventory.GetItemName(inventory.GetItems()[inventory.GetCurrentHeld()].GetId())) as GameObject);
-        //        //
-        //        //    GameManager.Instance().store.Dispatch(new RemoveItemFromInventory(inventory.GetItems()[inventory.GetCurrentHeld()].GetId(), 1));
-        //        //}
-        //    }
-        //}
-
-        //private void collectItem() {
-        //    // Cast ray from the cursor through the centre of the viewport (what's the mouse hovering over?)
-        //    Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-        //    hit = new RaycastHit();
-
-        //    // If a GameObject is hit
-        //    if (!Physics.Raycast(ray, out hit)) return;
-        //    SetFocus(hit.collider.GetComponent<Interactable>());
-
-        //    float dist = Vector3.Distance(hit.transform.position, Camera.main.transform.position);
-
-        //    if (focus != null && dist < maxDistance) {
-        //        Renderer rend = hit.collider.GetComponent<Renderer>();
-        //        Highlight hi = hit.collider.GetComponent<Highlight>();
-        //        rend.material.color = hi.tempColor;
-        //        
-        //        inventory.CollectItem(focus, hit.transform.gameObject);
-        //    } else {
-        //        Debug.Log("No inventory items hit");
-        //    }
-        //    holdInitiated = false;
         }
     }
 }

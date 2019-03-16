@@ -14,7 +14,7 @@ namespace Controller {
         private Canvas cursorCanvas;
 
         void Start() {
-            inventoryCanvas = GetComponent<Canvas> ();
+            inventoryCanvas = GetComponent<Canvas>();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             GameManager.Instance().store.Subscribe(this);
@@ -24,7 +24,6 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().store.Dispatch(new OpenInventoryUI());
-                    PauseGame();
                 } else {
                     GameManager.Instance().store.Dispatch(new CloseUI());
                 }

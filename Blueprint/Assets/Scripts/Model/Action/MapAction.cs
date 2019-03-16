@@ -3,21 +3,35 @@ using Vector2 = UnityEngine.Vector2;
 
 namespace Model.Action {
     public interface MapVisitor {
-        void visit(CellSelected cellSelected);
+        void visit(PlaceItem placeItem);
+        void visit(CollectItem collectItem);
     }
 
     public abstract class MapAction : Action {
         public abstract void Accept(MapVisitor visitor);
     }
     
-    /* User did select a cell on the grid */
-    public class CellSelected: MapAction {
+    /* Place an item at grid position */
+    public class PlaceItem: MapAction {
         public readonly Vector2 position;
-        public readonly int id;
+        public readonly int itemID;
         
-        public CellSelected(Vector2 position, int id) {
+        public PlaceItem(Vector2 position, int itemID) {
             this.position = position;
-            this.id = id;
+            this.itemID = itemID;
+        }
+
+        public override void Accept(MapVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+   
+    /* Collect an item from a grid position */
+    public class CollectItem: MapAction {
+        public readonly Vector2 position;
+        
+        public CollectItem(Vector2 position) {
+            this.position = position;
         }
 
         public override void Accept(MapVisitor visitor) {

@@ -1,10 +1,13 @@
+using UnityEngine;
+
 namespace Model.Action {
     public interface InventoryVisitor {
         void visit(AddItemToInventory addItemToInventoryAction);
         void visit(RemoveItemFromInventory anotherInventoryAction);
         void visit(RemoveItemFromStackInventory anotherInventoryAction);
         void visit(SwapItemLocations anotherInventoryAction);
-        void visit(SetHeldItem anotherInventoryAction);
+        void visit(RotateHeldItemForward anotherInventoryAction);
+        void visit(RotateHeldItemBackward anotherInventoryAction);
         void visit(RemoveHeldItem anotherInventoryAction);
     }
 
@@ -80,25 +83,23 @@ namespace Model.Action {
         }
     }
 
-    // For use when changing the heldItem slot (i.e. scroll wheel)
-    // Use AddToInventory on item pickup
-    public class SetHeldItem : InventoryAction {
-        public readonly InventoryState.HeldItem heldItem;
-
-        public SetHeldItem(InventoryState.HeldItem heldItem) {
-            this.heldItem = heldItem;
+    public class RotateHeldItemForward: InventoryAction {
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
         }
-        
+    }
+
+    public class RotateHeldItemBackward : InventoryAction {
         public override void Accept(InventoryVisitor visitor) {
             visitor.visit(this);
         }
     }
     
     public class RemoveHeldItem : InventoryAction {
-        public readonly InventoryState.HeldItem heldItem;
+        public readonly Vector2 dropAt;
 
-        public RemoveHeldItem(InventoryState.HeldItem heldItem) {
-            this.heldItem = heldItem;
+        public RemoveHeldItem(Vector2 dropAt) {
+            this.dropAt = dropAt;
         }
         
         public override void Accept(InventoryVisitor visitor) {

@@ -140,8 +140,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         GameObject go;
         go = newSlot(ref id, (float) hotbarCenterX - slotDimension / 2, (float) hotbarCenterY + (slotDimension / tileYOffset), true);
         go = newSlot(ref id, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY + (slotDimension / tileYOffset), true);
-        go = newSlot(ref id, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset), true);
         go = newSlot(ref id, (float) hotbarCenterX + slotDimension, (float) hotbarCenterY, true);
+        go = newSlot(ref id, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset), true);
         go = newSlot(ref id, (float) hotbarCenterX - slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset), true);
         go = newSlot(ref id, (float) hotbarCenterX - slotDimension, (float) hotbarCenterY, true);
     }

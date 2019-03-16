@@ -5,16 +5,26 @@ namespace Model.Reducer {
         private MapState state;
         public MapState Reduce(MapState current, MapAction action) {
             this.state = current; 
-            
             action.Accept(this);
             return this.state;
         }
 
-        public void visit(CellSelected cellSelected) {
-            if (state.getObjects().ContainsKey(cellSelected.position)) {
-                state.removeObject(cellSelected.position);
-            } else {
-                state.addObject(cellSelected.position, cellSelected.id);
+        public void visit(PlaceItem placeItem) {
+            if (!state.getObjects().ContainsKey(placeItem.position)) {
+                state.addObject(placeItem.position, placeItem.itemID);
+            }
+        }
+
+        public void visit(CollectItem collectItem) {
+            if (state.getObjects().ContainsKey(collectItem.position)) {
+                MapObject obj = state.getObjects()[collectItem.position];
+               
+                // TODO: replace this with a locally stored schema!
+                GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+                string name = goh.GameObjs.items[obj.GetID() - 1].name;
+                
+                GameManager.Instance().store.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
+                state.removeObject(collectItem.position);
             }
         }
     }

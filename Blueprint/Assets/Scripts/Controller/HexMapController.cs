@@ -32,6 +32,7 @@ namespace Controller {
 
             // Draw origin hexagon
             GameObject cell = Instantiate(hexTile, Vector3.zero, rotation);
+            cell.transform.parent = this.gameObject.transform;
             Vector2 position = new Vector2(0, 0);
             cell.AddComponent<HexCell>().setPosition(position);
             grid.Add(position, cell);
@@ -41,6 +42,7 @@ namespace Controller {
                 cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, 0f, l * 1.5f), rotation);
                 position = new Vector2(-l, l);
                 cell.AddComponent<HexCell>().setPosition(position);
+                cell.transform.parent = this.gameObject.transform;
                 grid.Add(position, cell);
                 
                 setPreviousCoords(cell);
@@ -50,6 +52,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3), 0f, previousZ), rotation);
                     position = new Vector2(-l + i, l);
                     cell.AddComponent<HexCell>().setPosition(position);
+                    cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
@@ -59,6 +62,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, 0f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(i, l-i);
                     cell.AddComponent<HexCell>().setPosition(position);
+                    cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
@@ -68,6 +72,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, 0f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(l, -i);
                     cell.AddComponent<HexCell>().setPosition(position);
+                    cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
@@ -77,6 +82,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3), 0f, previousZ), rotation);
                     position = new Vector2(l-i, -l);
                     cell.AddComponent<HexCell>().setPosition(position);
+                    cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
@@ -86,6 +92,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, 0f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-i, -l + i);
                     cell.AddComponent<HexCell>().setPosition(position);
+                    cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
@@ -95,6 +102,7 @@ namespace Controller {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, 0f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-l, i);
                     cell.AddComponent<HexCell>().setPosition(position);
+                    cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
             } 

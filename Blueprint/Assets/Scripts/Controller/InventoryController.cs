@@ -22,7 +22,6 @@ namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<GameState> {
         public Dictionary<int, List<HexLocation>> inventoryContents;
         private Dictionary<int, InventorySlotController> itemSlots;
-        private ResponseGetInventory remoteInv;
         private GameManager gameManager;
 
         public void Start() {
@@ -40,7 +39,7 @@ namespace Controller {
             Task.Run(async () => {
                 APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
                 if (finalInventoryResponse.isSuccess()) {
-                    remoteInv = finalInventoryResponse.GetSuccess();
+                    ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
                     foreach (InventoryEntry entry in remoteInv.items) {
                         GameManager.Instance().store.Dispatch(
                             new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
@@ -50,20 +49,8 @@ namespace Controller {
                 }
             }).GetAwaiter().GetResult();
             
-            /*            
-                        Task.Run(async () => {
-                            try {
-                                APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
-
-                                // Success case
-                            } catch (WebException e) {
-                                // Failure case
-                                throw new System.Exception("Did not delete inventory.");
-                            }    
-                        }).GetAwaiter().GetResult();
-            */
-            
             GameManager.Instance().store.Subscribe(this);
+            
         }
         
         public void StateDidUpdate(GameState state) {

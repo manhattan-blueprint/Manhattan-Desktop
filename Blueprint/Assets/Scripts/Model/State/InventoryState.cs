@@ -7,22 +7,12 @@ using System.Linq;
 
 namespace Model {
     public class InventoryState {
-        public class HeldItem {
-            public readonly int itemID;
-            public readonly HexLocation location;
-
-            public HeldItem(int itemID, HexLocation location) {
-                this.itemID = itemID;
-                this.location = location;
-            }
-        }
-        
         public Dictionary<int, List<HexLocation>> inventoryContents;
         public int inventorySize = 0;
-        public Optional<HeldItem> heldItem;
+        public int indexOfHeldItem = 0; 
 
         public InventoryState() {
-            inventoryContents = new Dictionary<int ,List<HexLocation>>(); 
+            inventoryContents = new Dictionary<int, List<HexLocation>>(); 
         }
     }
 }
