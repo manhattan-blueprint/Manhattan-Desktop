@@ -20,9 +20,7 @@ namespace Model.Reducer {
             if (state.getObjects().ContainsKey(collectItem.position)) {
                 MapObject obj = state.getObjects()[collectItem.position];
                
-                // TODO: replace this with a locally stored schema!
-                GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-                string name = goh.GameObjs.items[obj.GetID() - 1].name;
+                string name = GameManager.Instance().goh.GameObjs.items[obj.GetID() - 1].name;
                 
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
                 state.removeObject(collectItem.position);

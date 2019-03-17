@@ -10,8 +10,10 @@ public class GameManager {
     public readonly StateStore<InventoryState, InventoryAction> inventoryStore;
     public readonly StateStore<UIState, UIAction> uiStore;
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
+    public readonly GameObjectsHandler goh;
     
     private UserCredentials credentials;
+    
     public readonly int gridSize = 16;
 
     public UserCredentials GetUserCredentials() {
@@ -27,6 +29,9 @@ public class GameManager {
         this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
+        
+        // Load item schema from server
+        this.goh = GameObjectsHandler.WithRemoteSchema();
     }
     
     public static GameManager Instance() {

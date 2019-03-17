@@ -59,13 +59,11 @@ namespace Controller {
         }
 
         public string GetItemName(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].name;
+            return GameManager.Instance().goh.GameObjs.items[id - 1].name;
         }
         
         public int GetItemType(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].type;
+            return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
 
         public void redrawInventory() {
