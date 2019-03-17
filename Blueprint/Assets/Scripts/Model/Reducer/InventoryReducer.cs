@@ -1,10 +1,6 @@
-using System;
 using Model.Action;
-using UnityEngine;
-using Utils;
-using System.Collections;
+using Model.State;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using System.Linq;
 
 namespace Model.Reducer {
@@ -116,25 +112,17 @@ namespace Model.Reducer {
             }
         }
         
-        public void visit(RotateHeldItemForward rotateHeldItemForward) {
-            state.indexOfHeldItem = (state.indexOfHeldItem + 1) % 6;
-        }
-
-        public void visit(RotateHeldItemBackward rotateHeldItemBackward) {
-            // +5 is the same as -1 mod 6, but avoids dealing with negative indices
-            state.indexOfHeldItem = (state.indexOfHeldItem + 5) % 6;
-        }
 
         public void visit(RemoveHeldItem removeHeldItem) {
             // Look for the object in that cell
-            int index = state.indexOfHeldItem;
+            int index = GameManager.Instance().heldItemStore.GetState().indexOfHeldItem;
             
             foreach (KeyValuePair<int, List<HexLocation>> content in state.inventoryContents) {
                 foreach (HexLocation hexLocation in content.Value) {
                     // Only remove and place if quantity > 0
                     if (hexLocation.hexID == index && hexLocation.quantity > 0) {
                         visit(new RemoveItemFromStackInventory(content.Key, 1, index));
-                        GameManager.Instance().store.Dispatch(new PlaceItem(removeHeldItem.dropAt, content.Key));
+                        GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, content.Key));
                         return;
                     } 
                 }

@@ -9,7 +9,7 @@ using UnityEngine;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
-    public class MenuController : MonoBehaviour, Subscriber<GameState> {
+    public class MenuController : MonoBehaviour, Subscriber<UIState> {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
 
@@ -17,15 +17,19 @@ namespace Controller {
             inventoryCanvas = GetComponent<Canvas>();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
-            GameManager.Instance().store.Subscribe(this);
+            
+            GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(1, 1, "Wood"));
+            
+            GameManager.Instance().uiStore.Subscribe(this);
         }
 
         void Update() {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
-                    GameManager.Instance().store.Dispatch(new OpenInventoryUI());
+                    GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
                 } else {
-                    GameManager.Instance().store.Dispatch(new CloseUI());
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
         }
@@ -46,10 +50,10 @@ namespace Controller {
             cursorCanvas.enabled = true;
         }
 
-        public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Inventory) {
+        public void StateDidUpdate(UIState state) {
+            if (state.Selected == UIState.OpenUI.Inventory) {
                 PauseGame();
-            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
+            } else if (state.Selected == UIState.OpenUI.Playing) {
                 ContinueGame();
             } else {
                 throw new System.Exception("Not in expected state.");

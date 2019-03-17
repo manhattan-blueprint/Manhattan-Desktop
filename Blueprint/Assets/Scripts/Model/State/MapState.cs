@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Model {
+namespace Model.State {
     public class MapState {
         private Dictionary<Vector2, MapObject> grid;
 

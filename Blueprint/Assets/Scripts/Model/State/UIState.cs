@@ -1,4 +1,4 @@
-namespace Model {
+namespace Model.State {
     public class UIState {
         public enum OpenUI {
             Welcome,

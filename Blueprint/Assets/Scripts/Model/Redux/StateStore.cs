@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Reducer;
+using UnityEngine;
 
 namespace Model.Redux {
     public class StateStore<S, A> {
@@ -14,6 +15,7 @@ namespace Model.Redux {
         }
 
         public void Dispatch(A action) {
+            Debug.Log("Notifying " + subscribers.Count + " of change");
             this.state = reducer.Reduce(state, action);
             subscribers.ForEach(x => x.StateDidUpdate(this.state));
         }

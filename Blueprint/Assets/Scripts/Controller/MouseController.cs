@@ -41,11 +41,10 @@ namespace Controller {
             float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
             if (scrollDelta > threshold) {
                 // Scroll Up 
-                GameManager.Instance().store.Dispatch(new RotateHeldItemForward());
-            }
-            else if (scrollDelta < -threshold) {
+                GameManager.Instance().heldItemStore.Dispatch(new RotateHeldItemForward());
+            } else if (scrollDelta < -threshold) {
                 // Scroll down
-                GameManager.Instance().store.Dispatch(new RotateHeldItemBackward());
+                GameManager.Instance().heldItemStore.Dispatch(new RotateHeldItemBackward());
             }
             
             
@@ -57,7 +56,7 @@ namespace Controller {
                 if (!Physics.Raycast(ray, out hit)) return;
                 HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
-                GameManager.Instance().store.Dispatch(new RemoveHeldItem(hc.getPosition()));
+                GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
             } 
             
             
@@ -71,7 +70,7 @@ namespace Controller {
                 if (p == null) return;
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
-                GameManager.Instance().store.Dispatch(new CollectItem(hc.getPosition()));
+                GameManager.Instance().mapStore.Dispatch(new CollectItem(hc.getPosition()));
                 holdInitiated = false;
             } else if (Input.GetMouseButtonDown(leftButton)) {
                 holdInitiated = true;

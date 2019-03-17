@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Model;
+﻿using Model.State;
 using Model.Action;
 using Model.Redux;
-using Model.State;
 using UnityEngine;
 
 namespace Controller {
-    public class BlueprintUIController : MonoBehaviour, Subscriber<GameState> {
+    public class BlueprintUIController : MonoBehaviour, Subscriber<UIState> {
 
         private Canvas blueprintCanvas;
         private Canvas cursorCanvas;
@@ -17,15 +14,15 @@ namespace Controller {
             blueprintCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor")
                 .GetComponent<Canvas>();
-            GameManager.Instance().store.Subscribe(this);
+            GameManager.Instance().uiStore.Subscribe(this);
         }
 
         void Update() {
             if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
-                    GameManager.Instance().store.Dispatch(new OpenBlueprintUI());
+                    GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else {
-                    GameManager.Instance().store.Dispatch(new CloseUI());
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
         }
@@ -46,10 +43,10 @@ namespace Controller {
             cursorCanvas.enabled = true;
         }
         
-        public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
+        public void StateDidUpdate(UIState state) {
+            if (state.Selected == UIState.OpenUI.Blueprint) {
                 PauseGame();
-            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
+            } else if (state.Selected == UIState.OpenUI.Playing) {
                 ContinueGame();
             }
         }

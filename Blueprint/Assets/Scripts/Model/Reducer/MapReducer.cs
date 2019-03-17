@@ -1,4 +1,5 @@
 using Model.Action;
+using Model.State;
 
 namespace Model.Reducer {
     public class MapReducer: Reducer<MapState, MapAction>, MapVisitor {
@@ -23,7 +24,7 @@ namespace Model.Reducer {
                 GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
                 string name = goh.GameObjs.items[obj.GetID() - 1].name;
                 
-                GameManager.Instance().store.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
                 state.removeObject(collectItem.position);
             }
         }

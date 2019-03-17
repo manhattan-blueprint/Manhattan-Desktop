@@ -180,7 +180,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         rt.sizeDelta = new Vector2(slotDimension, slotDimension);
 
         id++;
-        GameManager.Instance().store.GetState().inventoryState.inventorySize += 1;
+        // TODO: THIS IS BAD. WE SHOULD NOT MANIPULATE STATE IN THIS WAY!
+        GameManager.Instance().inventoryStore.GetState().inventorySize += 1;
         return go;
     }
 

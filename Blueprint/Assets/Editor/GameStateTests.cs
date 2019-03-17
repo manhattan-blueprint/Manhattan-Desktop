@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using Model;
+using Model.State;
 using Model.Action;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using UnityEngine;
 
 namespace Tests {
     public class GameStateTests {
@@ -17,134 +15,134 @@ namespace Tests {
 
         [Test]
         public void TestGameStartsInCorrectUIState() {
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Login));
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Login));
         }
         
         [Test]
         public void TestOpenPlayingUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
         
         [Test]
         public void TestOpenInventoryUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenInventoryUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Inventory));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenInventoryUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Inventory));
         }
                 
         [Test]
         public void TestCloseInventoryUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenInventoryUI());
-            gameManager.store.Dispatch(new CloseUI());
-            gameManager.store.Dispatch(new OpenInventoryUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenInventoryUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            gameManager.uiStore.Dispatch(new OpenInventoryUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
                 
         [Test]
         public void TestOpenBlueprintUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenBlueprintUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBlueprintUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
         }
                 
         [Test]
         public void TestCloseBlueprintUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenBlueprintUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBlueprintUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
         
         [Test]
         public void TestOpenMachineUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenMachineUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Machine));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Machine));
         }
                 
         [Test]
         public void TestCloseMachineUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenMachineUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
         
         [Test]
         public void TestOpenPlaySettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Pause));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Pause));
         }
                 
         [Test]
         public void TestClosePlaySettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Playing));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
         
         [Test]
         public void TestOpenInvSettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenInventoryUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.InvPause));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenInventoryUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.InvPause));
         }
                 
         [Test]
         public void TestCloseInvSettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenInventoryUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Inventory));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenInventoryUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Inventory));
         }
         
         [Test]
         public void TestOpenBlueSettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenBlueprintUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.BluePause));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBlueprintUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.BluePause));
         }
                 
         [Test]
         public void TestCloseBlueSettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenBlueprintUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBlueprintUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
         }
         
         [Test]
         public void TestOpenMachSettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenMachineUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.MachPause));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.MachPause));
         }
                 
         [Test]
         public void TestCloseMachSettingsUI() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenMachineUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            gameManager.store.Dispatch(new CloseUI());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Machine));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Machine));
         }
         
         [Test]
         public void TestLogout() {
-            gameManager.store.Dispatch(new OpenPlayingUI());
-            gameManager.store.Dispatch(new OpenSettingsUI());
-            gameManager.store.Dispatch(new Logout());
-            Assert.That(gameManager.store.GetState().uiState.Selected, Is.EqualTo(UIState.OpenUI.Welcome));
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            gameManager.uiStore.Dispatch(new Logout());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Welcome));
         }
         
         [Test]
@@ -156,9 +154,9 @@ namespace Tests {
         [Test]
         public void TestAddToInventory() {                        
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1, "wood"));
 
-            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.inventoryStore.GetState().inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(1, item.Value[0].quantity);
@@ -171,15 +169,15 @@ namespace Tests {
         [Test]
         public void TestAddToInventoryTwice() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
+            if (this.gameManager.inventoryStore.GetState().inventoryContents.Count > 0) {
                 Assert.Fail();
             }
             
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
 
-            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.inventoryStore.GetState().inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(11, item.Value[0].quantity);
@@ -192,15 +190,16 @@ namespace Tests {
         [Test]
         public void TestRemoveFromInventory() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
+            if (this.gameManager.inventoryStore.GetState().inventoryContents.Count > 0) {
                 Assert.Fail();
             }
             
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
-            this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 4));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new RemoveItemFromInventory(1, 4));
 
-            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.inventoryStore.GetState().inventoryContents) {
+                
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(6, item.Value[0].quantity);
@@ -213,16 +212,15 @@ namespace Tests {
         [Test]
         public void TestRemoveMoreThanAvailable() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
-                Debug.Log(this.gameManager.store.GetState().inventoryState.inventoryContents.Count);
+            if (this.gameManager.inventoryStore.GetState().inventoryContents.Count > 0) {
                 Assert.Fail();
             }
             
             // Add an item and validate it updates the state
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
-            this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 11));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new RemoveItemFromInventory(1, 11));
 
-            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.inventoryStore.GetState().inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(0, item.Value.Count);
@@ -235,13 +233,12 @@ namespace Tests {
         [Test]
         public void TestSetHeldItem() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
-                Debug.Log(this.gameManager.store.GetState().inventoryState.inventoryContents.Count);
+            if (this.gameManager.inventoryStore.GetState().inventoryContents.Count > 0) {
                 Assert.Fail();
             }
             
             // Add an item 
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
             
 //            // Set item as heldItem  
 //            this.gameManager.store.Dispatch(new SetHeldItem(new InventoryState.HeldItem(1, new HexLocation(0, 10)))); 
@@ -255,13 +252,12 @@ namespace Tests {
         [Test]
         public void TestRemoveSomeHeldItem() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
-                Debug.Log(this.gameManager.store.GetState().inventoryState.inventoryContents.Count);
+            if (this.gameManager.inventoryStore.GetState().inventoryContents.Count > 0) {
                 Assert.Fail();
             }
             
             // Add an item 
-            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
             
 //            // Set item as heldItem  
 //            this.gameManager.store.Dispatch(new SetHeldItem(new InventoryState.HeldItem(1, new HexLocation(0, 10)))); 

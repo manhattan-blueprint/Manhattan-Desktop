@@ -5,11 +5,10 @@ using Model.Action;
 using UnityEngine;
 using System.Linq;
 
-namespace Model {
+namespace Model.State {
     public class InventoryState {
         public Dictionary<int, List<HexLocation>> inventoryContents;
         public int inventorySize = 0;
-        public int indexOfHeldItem = 0; 
 
         public InventoryState() {
             inventoryContents = new Dictionary<int, List<HexLocation>>(); 

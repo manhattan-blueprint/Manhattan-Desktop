@@ -6,8 +6,6 @@ namespace Model.Action {
         void visit(RemoveItemFromInventory anotherInventoryAction);
         void visit(RemoveItemFromStackInventory anotherInventoryAction);
         void visit(SwapItemLocations anotherInventoryAction);
-        void visit(RotateHeldItemForward anotherInventoryAction);
-        void visit(RotateHeldItemBackward anotherInventoryAction);
         void visit(RemoveHeldItem anotherInventoryAction);
     }
 
@@ -78,18 +76,6 @@ namespace Model.Action {
             this.destinationItem = destinationItem;
         }
 
-        public override void Accept(InventoryVisitor visitor) {
-            visitor.visit(this);
-        }
-    }
-
-    public class RotateHeldItemForward: InventoryAction {
-        public override void Accept(InventoryVisitor visitor) {
-            visitor.visit(this);
-        }
-    }
-
-    public class RotateHeldItemBackward : InventoryAction {
         public override void Accept(InventoryVisitor visitor) {
             visitor.visit(this);
         }

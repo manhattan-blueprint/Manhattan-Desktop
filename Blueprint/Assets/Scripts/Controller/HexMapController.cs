@@ -11,7 +11,7 @@ using Vector3 = UnityEngine.Vector3;
 
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
-    public class HexMapController : MonoBehaviour, Subscriber<GameState> {
+    public class HexMapController : MonoBehaviour, Subscriber<MapState> {
         private int gridSize = 16;
         private float previousX = 0;
         private float previousZ = 0;
@@ -24,7 +24,7 @@ namespace Controller {
             this.objectsPlaced = new Dictionary<Vector2, GameObject>();
             drawMap(gridSize);
             
-            GameManager.Instance().store.Subscribe(this);
+            GameManager.Instance().mapStore.Subscribe(this);
         }
         private void drawMap(int layers) {
             GameObject hexTile = Resources.Load("hex_cell") as GameObject;
@@ -113,8 +113,8 @@ namespace Controller {
             previousZ = go.transform.position.z;
         }
 
-        public void StateDidUpdate(GameState state) {
-            Dictionary<Vector2, MapObject> newObjects = state.mapState.getObjects(); 
+        public void StateDidUpdate(MapState state) {
+            Dictionary<Vector2, MapObject> newObjects = state.getObjects(); 
             Dictionary<Vector2, MapObject>.KeyCollection newKeys = newObjects.Keys;
             Dictionary<Vector2, GameObject>.KeyCollection oldKeys = objectsPlaced.Keys;
 	

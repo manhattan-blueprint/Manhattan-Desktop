@@ -40,8 +40,8 @@ namespace Controller {
         //}
 
         public void OnButtonClick() {
-            GameManager.Instance().store.Dispatch(new AddItemToInventory(7, 1, "furnace"));
-            GameManager.Instance().store.Dispatch((new RemoveItemFromInventory(2, 8)));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(7, 1, "furnace"));
+            GameManager.Instance().inventoryStore.Dispatch((new RemoveItemFromInventory(2, 8)));
         }
     }
 }

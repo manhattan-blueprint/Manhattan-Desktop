@@ -1,38 +1,15 @@
-﻿using Model;
+﻿using Model.State;
 using Model.Action;
 using Model.Reducer;
 using Model.Redux;
-using Model.State;
-using Service;
 using Service.Response;
 
 public class GameManager {
-    private class GameStateReducer : Reducer<GameState, Action> {
-        private readonly InventoryReducer inventoryReducer;
-        private readonly MapReducer mapReducer;
-        private readonly UIReducer uiReducer;
-
-        public GameStateReducer() {
-            inventoryReducer = new InventoryReducer();
-            mapReducer = new MapReducer();
-            uiReducer = new UIReducer();
-        }
-       
-        // Dispatch to appropriate handler
-        public GameState Reduce(GameState current, Action action) {
-            if (action is InventoryAction){
-                current.inventoryState = inventoryReducer.Reduce(current.inventoryState, (InventoryAction) action);
-            } else if (action is MapAction) {
-                current.mapState = mapReducer.Reduce(current.mapState, (MapAction) action);
-            } else if (action is UIAction) {
-                current.uiState = uiReducer.Reduce(current.uiState, (UIAction) action);
-            }
-            return current;
-        }
-    }
-    
     private static GameManager manager;
-    public readonly StateStore<GameState, Action> store;
+    public readonly StateStore<MapState, MapAction> mapStore;
+    public readonly StateStore<InventoryState, InventoryAction> inventoryStore;
+    public readonly StateStore<UIState, UIAction> uiStore;
+    public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
     
     private UserCredentials credentials;
     public readonly int gridSize = 16;
@@ -46,7 +23,10 @@ public class GameManager {
     }
     
     private GameManager() {
-        this.store = new StateStore<GameState, Action>(new GameStateReducer(), new GameState());
+        this.mapStore = new StateStore<MapState, MapAction>(new MapReducer(), new MapState());
+        this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
+        this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
+        this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
     }
     
     public static GameManager Instance() {

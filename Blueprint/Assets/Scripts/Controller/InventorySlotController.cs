@@ -177,7 +177,7 @@ namespace Controller {
                     source.SetStoredItem(Optional<InventoryItem>.Empty());
                 }
 
-                this.gameManager.store.Dispatch(new SwapItemLocations(source.id, destination.id,
+                this.gameManager.inventoryStore.Dispatch(new SwapItemLocations(source.id, destination.id,
                     destination.storedItem, source.storedItem));
             }
         } 

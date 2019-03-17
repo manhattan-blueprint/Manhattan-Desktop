@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Controller;
 using Model;
-using Model.Action;
 using Model.Redux;
 using Model.State;
-using Service;
-using Service.Response;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeldItemController : MonoBehaviour, Subscriber<GameState> {
+public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Subscriber<UIState>, Subscriber<HeldItemState> {
     
     private readonly float slotDimension = Screen.width / 15;
     private readonly float tileYOffset = 1.35f;
@@ -20,7 +16,9 @@ public class HeldItemController : MonoBehaviour, Subscriber<GameState> {
         heldItemControllers = new Dictionary<int, HeldItemSlotController>(); 
        
         generateHotbar(); 
-        GameManager.Instance().store.Subscribe(this);
+        GameManager.Instance().inventoryStore.Subscribe(this);
+        GameManager.Instance().uiStore.Subscribe(this);
+        GameManager.Instance().heldItemStore.Subscribe(this);
         
         // Since held item is shown before inventory, do the loading here
     }
@@ -82,19 +80,19 @@ public class HeldItemController : MonoBehaviour, Subscriber<GameState> {
         return goh.GameObjs.items[id - 1].name;
     }
 
-    public void StateDidUpdate(GameState state) {
+    public void StateDidUpdate(UIState state) {
         // Disable canvas if in inventory 
-        gameObject.GetComponent<Canvas>().enabled = state.uiState.Selected != UIState.OpenUI.Inventory;
-       
-        
+        gameObject.GetComponent<Canvas>().enabled = state.Selected != UIState.OpenUI.Inventory;
+    }
+
+    public void StateDidUpdate(InventoryState state) {
         // Clear slots
         foreach (KeyValuePair<int, HeldItemSlotController> slot in heldItemControllers) {
             slot.Value.SetStoredItem(Optional<InventoryItem>.Empty());
-            slot.Value.border.sprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
         }
             
         // Re-populate slots
-        Dictionary<int, List<HexLocation>> inventoryContents = state.inventoryState.inventoryContents;
+        Dictionary<int, List<HexLocation>> inventoryContents = state.inventoryContents;
         
         foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
             foreach(HexLocation loc in element.Value) {
@@ -105,10 +103,19 @@ public class HeldItemController : MonoBehaviour, Subscriber<GameState> {
                 heldItemControllers[loc.hexID].SetStoredItem(Optional<InventoryItem>.Of(item));
             } 
         }
-        
-        // Set current held
-        heldItemControllers[state.inventoryState.indexOfHeldItem].border.sprite =
-            Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
-        heldItemControllers[state.inventoryState.indexOfHeldItem].transform.SetAsLastSibling();
     }
+
+    public void StateDidUpdate(HeldItemState state) {
+        // Set current held
+        Debug.Log(state.indexOfHeldItem);
+        
+        foreach (KeyValuePair<int, HeldItemSlotController> slot in heldItemControllers) {
+            slot.Value.border.sprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
+        }
+        heldItemControllers[state.indexOfHeldItem].border.sprite =
+            Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
+        heldItemControllers[state.indexOfHeldItem].transform.SetAsLastSibling();
+    }
+    
+    
 }

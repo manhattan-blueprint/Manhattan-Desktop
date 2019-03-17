@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Model;
-using Model.Action;
-using Model.Redux;
+﻿using UnityEngine;
 using Model.State;
+using Model.Redux;
 
 namespace View {
-    public class Highlight : MonoBehaviour, Subscriber<GameState>{
+    public class Highlight : MonoBehaviour, Subscriber<UIState>{
         [SerializeField] private Color highlightColor;
         [SerializeField] private bool holdable;
         private Color initialColor;
@@ -16,7 +12,7 @@ namespace View {
 
         void Start () {
             rend = GetComponent<Renderer>();
-            GameManager.Instance().store.Subscribe(this);
+            GameManager.Instance().uiStore.Subscribe(this);
             paused = false;
             initialColor = rend.material.color;
         }
@@ -49,17 +45,17 @@ namespace View {
           rend.material.color = initialColor;
         }
 
-        public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Inventory) {
+        public void StateDidUpdate(UIState state) {
+            if (state.Selected == UIState.OpenUI.Inventory) {
                 resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
+            } else if (state.Selected == UIState.OpenUI.Playing) {
                 paused = false;
-            } else if (state.uiState.Selected == UIState.OpenUI.Pause) {
+            } else if (state.Selected == UIState.OpenUI.Pause) {
                 resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Exit) {
+            } else if (state.Selected == UIState.OpenUI.Exit) {
                 resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
-                GameManager.Instance().store.Unsubscribe(this);
+            } else if (state.Selected == UIState.OpenUI.Login) {
+                GameManager.Instance().uiStore.Unsubscribe(this);
             } else {
                 throw new System.Exception("I haven't handled this case yet.");
             }

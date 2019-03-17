@@ -19,7 +19,7 @@ using UnityEngine.Experimental.Rendering;
 
 /* Attached to the player and controls inventory collection */
 namespace Controller {
-    public class InventoryController : MonoBehaviour, Subscriber<GameState> {
+    public class InventoryController : MonoBehaviour, Subscriber<InventoryState> {
         public Dictionary<int, List<HexLocation>> inventoryContents;
         private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
@@ -41,7 +41,7 @@ namespace Controller {
                 if (finalInventoryResponse.isSuccess()) {
                     ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
                     foreach (InventoryEntry entry in remoteInv.items) {
-                        GameManager.Instance().store.Dispatch(
+                        GameManager.Instance().inventoryStore.Dispatch(
                             new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
                     }
                 } else {
@@ -49,12 +49,12 @@ namespace Controller {
                 }
             }).GetAwaiter().GetResult();
             
-            GameManager.Instance().store.Subscribe(this);
+            GameManager.Instance().inventoryStore.Subscribe(this);
             
         }
         
-        public void StateDidUpdate(GameState state) {
-            inventoryContents = state.inventoryState.inventoryContents;
+        public void StateDidUpdate(InventoryState state) {
+            inventoryContents = state.inventoryContents;
             redrawInventory();
         }
 
