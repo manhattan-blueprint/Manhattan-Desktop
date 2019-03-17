@@ -107,8 +107,6 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
 
     public void StateDidUpdate(HeldItemState state) {
         // Set current held
-        Debug.Log(state.indexOfHeldItem);
-        
         foreach (KeyValuePair<int, HeldItemSlotController> slot in heldItemControllers) {
             slot.Value.border.sprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
         }

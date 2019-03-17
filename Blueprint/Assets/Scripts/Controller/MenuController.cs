@@ -18,9 +18,6 @@ namespace Controller {
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             
-            GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
-            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(1, 1, "Wood"));
-            
             GameManager.Instance().uiStore.Subscribe(this);
         }
 

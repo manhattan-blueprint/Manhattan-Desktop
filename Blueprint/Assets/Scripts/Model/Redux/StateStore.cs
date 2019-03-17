@@ -15,7 +15,6 @@ namespace Model.Redux {
         }
 
         public void Dispatch(A action) {
-            Debug.Log("Notifying " + subscribers.Count + " of change");
             this.state = reducer.Reduce(state, action);
             subscribers.ForEach(x => x.StateDidUpdate(this.state));
         }
