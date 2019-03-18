@@ -18,7 +18,7 @@ namespace View {
         }
 
         public Color GetColor() {
-          return this.initialColor;
+            return this.initialColor;
         }
 
         void OnMouseEnter() {
@@ -41,24 +41,22 @@ namespace View {
         }
 
         void resetColor() {
-          paused = true;
-          rend.material.color = initialColor;
+            paused = true;
+            rend.material.color = initialColor;
         }
 
         public void StateDidUpdate(UIState state) {
-            if (state.Selected == UIState.OpenUI.Inventory) {
-                resetColor();
-            } else if (state.Selected == UIState.OpenUI.Playing) {
-                paused = false;
-            } else if (state.Selected == UIState.OpenUI.Pause) {
-                resetColor();
-            } else if (state.Selected == UIState.OpenUI.Exit) {
-                resetColor();
-            } else if (state.Selected == UIState.OpenUI.Login) {
-                GameManager.Instance().uiStore.Unsubscribe(this);
-            } else {
-                throw new System.Exception("I haven't handled this case yet.");
-            }
+            switch (state.Selected) {
+              case UIState.OpenUI.Playing:
+                  paused = false;
+                  break;
+              case UIState.OpenUI.Login:
+                  GameManager.Instance().uiStore.Unsubscribe(this);
+                  break;
+              default:
+                  resetColor();
+                  break;
+              }
         }
     }
 }

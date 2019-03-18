@@ -7,7 +7,7 @@ using Model.State;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Subscriber<UIState>, Subscriber<HeldItemState> {
+public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Subscriber<HeldItemState> {
 
     private Sprite backgroundSprite;
     private Sprite highlightSprite;
@@ -31,7 +31,6 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
     void Update() {
         if (firstUIUpdate) {
             GameManager.Instance().inventoryStore.Subscribe(this);
-            GameManager.Instance().uiStore.Subscribe(this);
             GameManager.Instance().heldItemStore.Subscribe(this);
             firstUIUpdate = false;
         }
@@ -91,11 +90,6 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
     
     public string GetItemName(int id) {
         return GameManager.Instance().goh.GameObjs.items[id - 1].name;
-    }
-
-    public void StateDidUpdate(UIState state) {
-        // Disable canvas if in inventory 
-        gameObject.GetComponent<Canvas>().enabled = state.Selected != UIState.OpenUI.Inventory;
     }
 
     public void StateDidUpdate(InventoryState state) {

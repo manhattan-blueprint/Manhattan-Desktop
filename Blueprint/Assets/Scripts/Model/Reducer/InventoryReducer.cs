@@ -59,10 +59,8 @@ namespace Model.Reducer {
             // If item exists, increment quantity on first stack
             // Else add item
             if (state.inventoryContents.ContainsKey(addItemToInventoryAction.item)) {
-                Debug.Log("Feck");
                 state.inventoryContents[addItemToInventoryAction.item][0].quantity += addItemToInventoryAction.count;
             } else {
-                Debug.Log("Will is the best.");
                 HexLocation item = new HexLocation(getFirstEmptySlot(), addItemToInventoryAction.count);
                 List<HexLocation> list = new List<HexLocation>();
                 list.Add(item);

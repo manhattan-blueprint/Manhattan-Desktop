@@ -37,7 +37,6 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         GameManager.Instance().uiStore.Subscribe(this);
     }
     
-    
     public void StateDidUpdate(UIState state) {
         if (state.Selected == UIState.OpenUI.Playing) {
             GameManager.Instance().uiStore.Unsubscribe(this);
@@ -89,7 +88,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
 
         Task.Run( async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
-            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) )
             //      to indicate to the user that the app is waiting on a response form the server.
 
             try {
@@ -128,7 +127,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
 
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(usernameSignupText, passwordSignupText);
-            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) ) 
+            // TODO Add a visual cue ( using setInfoMessage(“Connecting . . . “) )
             //      to indicate to the user that the app is waiting on a response form the server.
 
             try {

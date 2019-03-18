@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using UnityEngine.Assertions.Must;
 using UnityEngine.Experimental.Rendering;
 
-/* Attached to the player and controls inventory collection */
+/* Attached to the inventory canvas and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<InventoryState> {
         public Dictionary<int, List<HexLocation>> inventoryContents;
@@ -51,7 +51,7 @@ namespace Controller {
         public string GetItemName(int id) {
             return GameManager.Instance().goh.GameObjs.items[id - 1].name;
         }
-        
+
         public int GetItemType(int id) {
             return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
