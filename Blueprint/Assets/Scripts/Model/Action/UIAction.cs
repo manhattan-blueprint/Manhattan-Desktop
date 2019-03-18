@@ -8,6 +8,7 @@ namespace Model.Action {
         void visit(OpenMachineUI machine);
         void visit(OpenSettingsUI settings);
         void visit(Logout logout);
+        void visit(Exit exit);
     }
 
     public abstract class UIAction : Action {
@@ -20,37 +21,37 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenLoginUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenPlayingUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenInventoryUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenBlueprintUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenMachineUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenSettingsUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
@@ -58,6 +59,12 @@ namespace Model.Action {
     }
 
     public class Logout : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class Exit : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

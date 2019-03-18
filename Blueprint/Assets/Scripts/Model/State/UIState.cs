@@ -14,7 +14,11 @@ namespace Model {
             Exit,
             InvExit,
             BlueExit,
-            MachExit
+            MachExit,
+            Logout,
+            InvLogout,
+            BlueLogout,
+            MachLogout,
         };
 
         public OpenUI Selected;

@@ -107,7 +107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightColor: {r: 0, g: 0.93781066, b: 1, a: 0}
   holdable: 0
-  tempColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1729554324734633372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +120,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapResource: 0
-  gameObject: {fileID: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  position: {x: 0, y: 0, z: 0}

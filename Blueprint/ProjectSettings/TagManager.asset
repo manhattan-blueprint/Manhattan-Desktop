@@ -9,6 +9,11 @@ TagManager:
   - Map
   - Cursor
   - Held
+  - Pause
+  - MenuButton
+  - Exit
+  - Blueprint
+  - Logout
   layers:
   - Default
   - TransparentFX

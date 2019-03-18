@@ -8,5 +8,6 @@ namespace Controller {
         public const KeyCode PlaceRandom = KeyCode.Quote;
         public const KeyCode Increment = KeyCode.Equals;
         public const KeyCode Decrement = KeyCode.Minus;
+        public const KeyCode Pause = KeyCode.Escape;
     }
 }

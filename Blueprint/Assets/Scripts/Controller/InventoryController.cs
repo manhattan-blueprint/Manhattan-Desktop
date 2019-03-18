@@ -39,12 +39,12 @@ namespace Controller {
                     JsonError error = finalInventoryResponse.GetError();
                 }
             }).GetAwaiter().GetResult();
-            
+
             foreach (InventoryEntry entry in remoteInv.items) {
                 GameManager.Instance().store.Dispatch(
                     new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
             }
-            /*            
+            /*
                         Task.Run(async () => {
                             try {
                                 APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
@@ -53,7 +53,7 @@ namespace Controller {
                             } catch (WebException e) {
                                 // Failure case
                                 throw new System.Exception("Did not delete inventory.");
-                            }    
+                            }
                         }).GetAwaiter().GetResult();
             */
             GameManager.Instance().store.Subscribe(this);
@@ -68,7 +68,7 @@ namespace Controller {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
             return goh.GameObjs.items[id - 1].name;
         }
-        
+
         public int GetItemType(int id) {
             GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
             return goh.GameObjs.items[id - 1].type;
