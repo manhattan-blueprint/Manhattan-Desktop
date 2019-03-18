@@ -46,7 +46,6 @@ namespace Controller {
                     GameManager.Instance().store.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                Debug.Log("Attempt pause");
                 if (!pauseCanvas.enabled) {
                     GameManager.Instance().store.Dispatch(new OpenSettingsUI());
                 } else {
