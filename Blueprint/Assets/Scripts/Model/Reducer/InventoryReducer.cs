@@ -104,6 +104,7 @@ namespace Model.Reducer {
                             state.inventoryContents.Remove(removeItemFromStackInventory.item);
                         }
                     }
+                    return;
                 }
             }
         }
