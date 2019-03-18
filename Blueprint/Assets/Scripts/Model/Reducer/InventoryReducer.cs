@@ -51,6 +51,10 @@ namespace Model.Reducer {
             return 0;
         }
 
+        public void visit(SetInventorySize setInventorySizeAction) {
+            state.inventorySize = setInventorySizeAction.size;
+        }
+
         public void visit(AddItemToInventory addItemToInventoryAction) {
             // If item exists, increment quantity on first stack
             // Else add item
@@ -91,7 +95,7 @@ namespace Model.Reducer {
         public void visit(RemoveItemFromStackInventory removeItemFromStackInventory) {
             for (int i = 0; i < state.inventoryContents[removeItemFromStackInventory.item].Count; i++) {
                 if (state.inventoryContents[removeItemFromStackInventory.item][i].hexID ==
-                    removeItemFromStackInventory.hexId &&
+                    removeItemFromStackInventory.hexID &&
                     state.inventoryContents[removeItemFromStackInventory.item][i].quantity >=
                     removeItemFromStackInventory.count) {
 

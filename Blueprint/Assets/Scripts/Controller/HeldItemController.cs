@@ -26,15 +26,13 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         borderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
        
         generateHotbar();
-        
-        GameManager.Instance().inventoryStore.Subscribe(this);
-        GameManager.Instance().uiStore.Subscribe(this);
-        GameManager.Instance().heldItemStore.Subscribe(this);
     }
 
     void Update() {
         if (firstUIUpdate) {
-            StateDidUpdate(GameManager.Instance().inventoryStore.GetState());
+            GameManager.Instance().inventoryStore.Subscribe(this);
+            GameManager.Instance().uiStore.Subscribe(this);
+            GameManager.Instance().heldItemStore.Subscribe(this);
             firstUIUpdate = false;
         }
     }

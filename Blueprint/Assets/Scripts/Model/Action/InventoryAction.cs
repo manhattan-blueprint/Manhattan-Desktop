@@ -7,10 +7,24 @@ namespace Model.Action {
         void visit(RemoveItemFromStackInventory anotherInventoryAction);
         void visit(SwapItemLocations anotherInventoryAction);
         void visit(RemoveHeldItem anotherInventoryAction);
+        void visit(SetInventorySize anotherInventoryAction);
     }
 
     public abstract class InventoryAction : Action {
         public abstract void Accept(InventoryVisitor visitor);
+    }
+    
+    /* Change the inventory size */
+    public class SetInventorySize : InventoryAction {
+        public readonly int size;
+
+        public SetInventorySize(int size) {
+            this.size = size;
+        }
+
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
     }
 
     /* Add an item to the inventory for the user */
@@ -49,12 +63,12 @@ namespace Model.Action {
     public class RemoveItemFromStackInventory : InventoryAction {
         public readonly int item;
         public readonly int count;
-        public readonly int hexId;
+        public readonly int hexID;
         
-        public RemoveItemFromStackInventory(int item, int count, int hexId) {
+        public RemoveItemFromStackInventory(int item, int count, int hexID) {
             this.item = item;
             this.count = count;
-            this.hexId = hexId;
+            this.hexID = hexID;
         }
 
         public override void Accept(InventoryVisitor visitor) {

@@ -34,13 +34,11 @@ namespace Controller {
             foreach (InventorySlotController controller in allSlots) {
               itemSlots.Add(controller.getId(), controller);
             }
-            
-            GameManager.Instance().inventoryStore.Subscribe(this);
         }
         
         void Update() {
             if (firstUIUpdate) {
-                StateDidUpdate(GameManager.Instance().inventoryStore.GetState());
+                GameManager.Instance().inventoryStore.Subscribe(this);
                 firstUIUpdate = false;
             }
         }

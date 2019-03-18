@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Controller;
 using Model.State;
 using Model.Action;
@@ -20,6 +21,7 @@ public class GameManager {
     private UserCredentials credentials;
     
     public readonly int gridSize = 16;
+    public readonly int inventoryLayers = 2;
     
     public UserCredentials GetUserCredentials() {
         return this.credentials;
@@ -47,6 +49,9 @@ public class GameManager {
     }
 
     public void StartGame() {
+        // Calculate the number of inventory slots and set inventory size, i.e. 3n^2 - 3n + 1 + numberOfHeldItem slots - 1 for zero indexing
+        inventoryStore.Dispatch(new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
+        
         BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
         
         // Load player inventory and then load world

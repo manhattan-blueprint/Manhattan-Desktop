@@ -19,7 +19,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
     private float slotDimension = 0;
     
     // EDITABLE
-    private int numLayers = 2;
+    private int numLayers;
     private float slotScale = 10;
     
     void Start() {
@@ -27,6 +27,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
         highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
         outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
+
+        numLayers = GameManager.Instance().inventoryLayers;
 
         slotDimension = Screen.width / slotScale;
        
