@@ -14,6 +14,5 @@ namespace Model {
         public Vector2 getPosition() {
             return position;
         }
-
     }
 }

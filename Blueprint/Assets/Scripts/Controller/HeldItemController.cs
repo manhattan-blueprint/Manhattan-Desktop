@@ -9,9 +9,6 @@ using UnityEngine.UI;
 
 public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Subscriber<HeldItemState> {
 
-    private Sprite backgroundSprite;
-    private Sprite highlightSprite;
-    private Sprite borderSprite;
     private readonly float slotDimension = Screen.width / 15;
     private readonly float tileYOffset = 1.35f;
     private Dictionary<int, HeldItemSlotController> heldItemControllers;
@@ -20,10 +17,6 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
     void Start() {
         firstUIUpdate = true;
         heldItemControllers = new Dictionary<int, HeldItemSlotController>();
-        
-        backgroundSprite = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
-        highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
-        borderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
        
         generateHotbar();
     }
@@ -59,7 +52,7 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         
         // Background Image
         Image background = go.AddComponent<Image>();
-        background.sprite = backgroundSprite;
+        background.sprite = AssetManager.Instance().backgroundSprite;
         background.color = new Color32((byte)(background.color.r*255), (byte)(background.color.g*255), 
             (byte)(background.color.b*255), (byte)192);
         background.alphaHitTestMinimumThreshold = 0.5f;
@@ -71,9 +64,9 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         SVGImage border = svgChild.AddComponent<SVGImage>();
 
         if (id == 0) {
-            border.sprite = highlightSprite;
+            border.sprite = AssetManager.Instance().highlightSprite;
         } else {
-            border.sprite = borderSprite;
+            border.sprite = AssetManager.Instance().outerBorderSprite;
         }
 
         (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
@@ -114,10 +107,10 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
     public void StateDidUpdate(HeldItemState state) {
         // Set current held
         foreach (KeyValuePair<int, HeldItemSlotController> slot in heldItemControllers) {
-            slot.Value.border.sprite = borderSprite;
+            slot.Value.border.sprite = AssetManager.Instance().outerBorderSprite;
         }
 
-        heldItemControllers[state.indexOfHeldItem].border.sprite = highlightSprite;
+        heldItemControllers[state.indexOfHeldItem].border.sprite = AssetManager.Instance().highlightSprite;
         heldItemControllers[state.indexOfHeldItem].transform.SetAsLastSibling();
     }
     

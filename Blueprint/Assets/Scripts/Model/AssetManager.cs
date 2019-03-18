@@ -8,6 +8,11 @@ namespace Model {
         public readonly Font FontHelveticaNeueBold = Resources.Load("helveticaneue_bold", typeof(Font)) as Font;
         public readonly Color ColourOffWhite = new Color32(245, 245, 245, 255);
         public readonly int QuantityFieldFontSize = (int) Mathf.Round(Screen.height/50);
+        
+        public readonly Sprite backgroundSprite = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
+        public readonly Sprite highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
+        public readonly Sprite borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
+        public readonly Sprite outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
     
         private AssetManager() { }
     

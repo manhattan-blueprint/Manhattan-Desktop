@@ -153,9 +153,6 @@ namespace Controller {
             image.rectTransform.sizeDelta = new Vector2(slotWidth/3, slotHeight/3);
             return image;
         }
-
-//        private void updateFields(InventoryItem item) {
-//        }
     
         public void OnDrop(PointerEventData eventData) {
             RectTransform invPanel = transform as RectTransform;

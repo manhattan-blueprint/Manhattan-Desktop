@@ -128,7 +128,6 @@ namespace Model.Reducer {
                 }
             }
         }
-        
 
         public void visit(RemoveHeldItem removeHeldItem) {
             // Look for the object in that cell

@@ -8,10 +8,6 @@ using Model.Action;
 using UnityEngine.UI;
 
 public class HexInventoryUIGenerator : MonoBehaviour {
-    private Sprite HexTile;
-    private Sprite borderSprite;
-    private Sprite highlightSprite;
-    private Sprite outerBorderSprite;
     private float tileYOffset = 1.35f;
     private float tileXOffset = 2.0f;
     private float previousX = 0;
@@ -23,11 +19,6 @@ public class HexInventoryUIGenerator : MonoBehaviour {
     private float slotScale = 10;
     
     void Start() {
-        HexTile = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
-        borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
-        highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
-        outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
-
         numLayers = GameManager.Instance().inventoryLayers;
 
         slotDimension = Screen.width / slotScale;
@@ -100,7 +91,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         GameObject highlight = new GameObject("Highlight");
         highlight.transform.parent = transform;
         SVGImage svg = highlight.AddComponent<SVGImage>();
-        svg.sprite = highlightSprite;
+        svg.sprite = AssetManager.Instance().highlightSprite;
         svg.raycastTarget = false;
         (svg.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
         highlight.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
@@ -161,7 +152,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         
         // Background Image
         Image background = go.AddComponent<Image>();
-        background.sprite = HexTile;
+        background.sprite = AssetManager.Instance().backgroundSprite;
         background.color = new Color32((byte)(background.color.r*255), (byte)(background.color.g*255), 
             (byte)(background.color.b*255), (byte)192);
         background.alphaHitTestMinimumThreshold = 0.5f;
@@ -187,9 +178,9 @@ public class HexInventoryUIGenerator : MonoBehaviour {
 
     private Sprite getBorder(bool outer) {
         if (outer) {
-            return outerBorderSprite;
+            return AssetManager.Instance().outerBorderSprite;
         } else {
-            return borderSprite;
+            return AssetManager.Instance().borderSprite;
         }
     }
 

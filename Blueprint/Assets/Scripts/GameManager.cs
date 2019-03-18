@@ -17,7 +17,6 @@ public class GameManager {
     public readonly StateStore<UIState, UIAction> uiStore;
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
     public readonly GameObjectsHandler goh;
-    
     private UserCredentials credentials;
     
     public readonly int gridSize = 16;

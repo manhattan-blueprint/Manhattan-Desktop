@@ -136,7 +136,7 @@ namespace Controller {
             // Draw things in new but not in old
             foreach (Vector3 newObjectPosition in inNewNotInOld) {
                 MapObject mapObject = newObjects[newObjectPosition];
-                GameObject original = ModelManager.Instance().GetModel(mapObject.GetID());
+                GameObject original = AssetManager.Instance().GetModel(mapObject.GetID());
 
                 GameObject parent = grid[newObjectPosition];
                 Vector3 pos = parent.transform.position;
