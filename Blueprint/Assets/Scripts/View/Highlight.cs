@@ -58,7 +58,7 @@ namespace View {
                 resetColor();
             } else if (state.uiState.Selected == UIState.OpenUI.Exit) {
                 resetColor();
-            } else if (state.uiState.Selected == UIState.OpenUI.Login) {
+            } else if (state.uiState.Selected == UIState.OpenUI.MainMenu) {
                 GameManager.Instance().store.Unsubscribe(this);
             } else {
                 throw new System.Exception("I haven't handled this case yet.");

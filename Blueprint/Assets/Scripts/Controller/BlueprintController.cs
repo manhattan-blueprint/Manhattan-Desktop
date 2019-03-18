@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 
-namespace Controller {
+namespace Controller.UIController {
     //public class BlueprintController : MonoBehaviour, Subscriber<GameState> {
     public class BlueprintController : MonoBehaviour {
 
@@ -26,11 +26,11 @@ namespace Controller {
 
         //public void StateDidUpdate(GameState state) {
         //    InventoryItem[] inventoryContents = state.inventoryState.inventoryContents;
-        //    
+        //
         //    // TODO: Replace all of this after the demo, hardcoded to make furnaces
         //    checkImage.sprite = Resources.Load<Sprite>("Cross");
         //    blueprintButton.interactable = false;
-        //    
+        //
         //    inventoryContents.Where(x => x != null).Each((element, i) => {
         //        if (element.GetId() == 2 && element.GetQuantity() >= 8) {
         //            checkImage.sprite = Resources.Load<Sprite>("Tick");

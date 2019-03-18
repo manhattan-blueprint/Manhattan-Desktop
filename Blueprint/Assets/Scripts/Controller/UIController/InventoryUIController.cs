@@ -9,15 +9,17 @@ using UnityEngine;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
-    public class MenuController : MonoBehaviour, Subscriber<GameState> {
+    public class InventoryUIController : MonoBehaviour, Subscriber<GameState> {
         private Canvas inventoryCanvas;
         private Canvas cursorCanvas;
+        private bool paused;
 
         void Start() {
             inventoryCanvas = GetComponent<Canvas> ();
             inventoryCanvas.enabled = false;
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             GameManager.Instance().store.Subscribe(this);
+            paused = false;
         }
 
         void Update() {
@@ -37,7 +39,6 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("InventoryUICanvas").transform);
         }
 
         private void ContinueGame() {
@@ -46,16 +47,33 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             cursorCanvas.enabled = true;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("HeldItemCanvas").transform);
         }
 
         public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Inventory) {
-                PauseGame();
-            } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
-                ContinueGame();
-            } else {
-                throw new System.Exception("Not in expected state.");
+            switch (state.uiState.Selected) {
+                case UIState.OpenUI.Playing:
+                    if (paused)
+                        ContinueGame();
+                    break;
+
+                case UIState.OpenUI.InvPause:
+                    if (!paused)
+                        PauseGame();
+                    break;
+
+                case UIState.OpenUI.BluePause:
+                    if (!paused)
+                        PauseGame();
+                    break;
+
+                case UIState.OpenUI.MachPause:
+                    if (!paused)
+                        PauseGame();
+                    break;
+
+                default:
+                    throw new System.Exception("Not in expected state.");
+                    break;
             }
         }
     }

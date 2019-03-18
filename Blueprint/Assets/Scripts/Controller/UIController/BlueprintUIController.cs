@@ -18,7 +18,6 @@ namespace Controller {
             // HexTile = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
             // borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
 
-            Hide();
         }
 
         void Update() {
@@ -33,19 +32,27 @@ namespace Controller {
             }
         }
 
-        private void Show() {
+        private void PauseGame() {
+            Time.timeScale = 0;
             blueprintCanvas.enabled = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
         }
 
-        private void Hide() {
+        private void ContinueGame() {
+            Time.timeScale = 1;
             blueprintCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            cursorCanvas.enabled = true;
         }
 
         public void StateDidUpdate(GameState state) {
             if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
-                Show();
+                PauseGame();
             } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
-                Hide();
+                ContinueGame();
             }
         }
     }

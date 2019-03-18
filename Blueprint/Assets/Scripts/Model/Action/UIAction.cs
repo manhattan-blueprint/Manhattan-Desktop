@@ -1,8 +1,9 @@
 namespace Model.Action {
     public interface UIVisitor {
         void visit(CloseUI close);
-        void visit(OpenLoginUI login);
+        void visit(OpenMainMenuUI login);
         void visit(OpenPlayingUI playing);
+        void visit(OpenPauseMenuUI playing);
         void visit(OpenInventoryUI inventory);
         void visit(OpenBlueprintUI blueprint);
         void visit(OpenMachineUI machine);
@@ -20,37 +21,37 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
-    public class OpenLoginUI : UIAction {
+
+    public class OpenMainMenuUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenPlayingUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenInventoryUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenBlueprintUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenMachineUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
-    
+
     public class OpenSettingsUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
