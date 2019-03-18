@@ -8,16 +8,17 @@ using UnityEngine;
 
 namespace Controller {
     public class BlueprintUIController : MonoBehaviour, Subscriber<GameState> {
-
         private Canvas blueprintCanvas;
-        private Canvas cursorCanvas;
 
         void Start() {
             blueprintCanvas = GetComponent<Canvas> ();
             blueprintCanvas.enabled = false;
-            cursorCanvas = GameObject.FindGameObjectWithTag("Cursor")
-                .GetComponent<Canvas>();
             GameManager.Instance().store.Subscribe(this);
+
+            // HexTile = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
+            // borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
+
+            Hide();
         }
 
         void Update() {
@@ -27,30 +28,24 @@ namespace Controller {
                 } else {
                     GameManager.Instance().store.Dispatch(new CloseUI());
                 }
+            } else if (Input.GetKeyDown(KeyMapping.Escape) && blueprintCanvas.enabled) {
+                GameManager.Instance().store.Dispatch(new CloseUI());
             }
         }
 
-        private void PauseGame() {
-            Time.timeScale = 0;
+        private void Show() {
             blueprintCanvas.enabled = true;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            cursorCanvas.enabled = false;
         }
 
-        private void ContinueGame() {
-            Time.timeScale = 1;
+        private void Hide() {
             blueprintCanvas.enabled = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            cursorCanvas.enabled = true;
         }
-        
+
         public void StateDidUpdate(GameState state) {
             if (state.uiState.Selected == UIState.OpenUI.Blueprint) {
-                PauseGame();
+                Show();
             } else if (state.uiState.Selected == UIState.OpenUI.Playing) {
-                ContinueGame();
+                Hide();
             }
         }
     }

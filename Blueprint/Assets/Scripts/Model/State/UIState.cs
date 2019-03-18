@@ -20,7 +20,12 @@ namespace Model {
         public OpenUI Selected;
 
         public UIState() {
+// Default to in world if in unity editor simulation.
+#if UNITY_EDITOR
+            this.Selected = OpenUI.Playing;
+#else
             this.Selected = OpenUI.Login;
+#endif
         }
     }
 }
