@@ -1,6 +1,9 @@
-﻿using Model;
+﻿using System.Collections.Generic;
+using Model;
 using Model.Action;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
+using UnityEngine;
 
 namespace Tests {
     public class GameStateTests {
@@ -342,11 +345,10 @@ namespace Tests {
             gameManager.store.Dispatch(new OpenPlayingUI());
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
 
-            foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
-                if (item.GetId() == 1) {
-                    Assert.AreEqual(1, item.GetQuantity());
-                    Assert.AreEqual("wood", item.GetName());
+                if (item.Key == 1) {
+                    Assert.AreEqual(1, item.Value[0].quantity);
                     return;
                 }
             }
@@ -356,7 +358,7 @@ namespace Tests {
         [Test]
         public void TestAddToInventoryTwice() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents == null || this.gameManager.store.GetState().inventoryState.inventoryContents.Length == 0) {
+            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
                 Assert.Fail();
             }
 
@@ -364,11 +366,10 @@ namespace Tests {
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 1, "wood"));
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
 
-            foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
-                if (item.GetId() == 1) {
-                    Assert.AreEqual(11, item.GetQuantity());
-                    Assert.AreEqual("wood", item.GetName());
+                if (item.Key == 1) {
+                    Assert.AreEqual(11, item.Value[0].quantity);
                     return;
                 }
             }
@@ -378,7 +379,7 @@ namespace Tests {
         [Test]
         public void TestRemoveFromInventory() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents == null || this.gameManager.store.GetState().inventoryState.inventoryContents.Length == 0) {
+            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
                 Assert.Fail();
             }
 
@@ -386,11 +387,10 @@ namespace Tests {
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
             this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 4));
 
-            foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
-                if (item.GetId() == 1) {
-                    Assert.AreEqual(6, item.GetQuantity());
-                    Assert.AreEqual("wood", item.GetName());
+                if (item.Key == 1) {
+                    Assert.AreEqual(6, item.Value[0].quantity);
                     return;
                 }
             }
@@ -400,7 +400,8 @@ namespace Tests {
         [Test]
         public void TestRemoveMoreThanAvailable() {
             // Assert empty to begin with
-            if (this.gameManager.store.GetState().inventoryState.inventoryContents == null || this.gameManager.store.GetState().inventoryState.inventoryContents.Length == 0) {
+            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
+                Debug.Log(this.gameManager.store.GetState().inventoryState.inventoryContents.Count);
                 Assert.Fail();
             }
 
@@ -408,15 +409,57 @@ namespace Tests {
             this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
             this.gameManager.store.Dispatch(new RemoveItemFromInventory(1, 11));
 
-            foreach (InventoryItem item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.store.GetState().inventoryState.inventoryContents) {
                 //Success case
-                if (item.GetId() == 1) {
-                    Assert.AreEqual(0, item.GetQuantity());
-                    Assert.AreEqual("wood", item.GetName());
+                if (item.Key == 1) {
+                    Assert.AreEqual(0, item.Value.Count);
                     return;
                 }
             }
             Assert.Fail();
+        }
+
+        [Test]
+        public void TestSetHeldItem() {
+            // Assert empty to begin with
+            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
+                Debug.Log(this.gameManager.store.GetState().inventoryState.inventoryContents.Count);
+                Assert.Fail();
+            }
+            
+            // Add an item 
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            
+            // Set item as heldItem  
+            this.gameManager.store.Dispatch(new SetHeldItem(1, new HexLocation(0, 10))); 
+            
+            // Assert heldItem has correct ItemID, hexID, quantity
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Item1, Is.EqualTo(1));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Item2.hexID, Is.EqualTo(0));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Item2.quantity, Is.EqualTo(10));
+        }
+
+        [Test]
+        public void TestRemoveSomeHeldItem() {
+            // Assert empty to begin with
+            if (this.gameManager.store.GetState().inventoryState.inventoryContents.Count > 0) {
+                Debug.Log(this.gameManager.store.GetState().inventoryState.inventoryContents.Count);
+                Assert.Fail();
+            }
+            
+            // Add an item 
+            this.gameManager.store.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            
+            // Set item as heldItem  
+            this.gameManager.store.Dispatch(new SetHeldItem(1, new HexLocation(0, 10))); 
+            
+            // Remove 1 from heldItem quantity
+            this.gameManager.store.Dispatch(new RemoveHeldItem(1, new HexLocation(0, 1)));
+            
+            // Assert reduced quantity
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Item1, Is.EqualTo(1));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Item2.hexID, Is.EqualTo(0));
+            Assert.That(this.gameManager.store.GetState().inventoryState.heldItem.Item2.quantity, Is.EqualTo(9));
         }
     }
 }

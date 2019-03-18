@@ -10,7 +10,7 @@ namespace Controller {
         private const string verticalInputName = "Vertical";
         private const float movementSpeed = 6.0f;
         private const float jumpMultiplier = 6.0f;
-        
+
         private CharacterController charController;
         private bool isJumping;
 
@@ -52,7 +52,7 @@ namespace Controller {
                 charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
                 timeInAir += Time.deltaTime;
                 yield return null;
-            } while(!charController.isGrounded && 
+            } while(!charController.isGrounded &&
                 charController.collisionFlags != CollisionFlags.Above);
 
             charController.slopeLimit = 45.0f;

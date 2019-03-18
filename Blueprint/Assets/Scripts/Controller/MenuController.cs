@@ -4,6 +4,7 @@ using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Model.Action;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,6 +48,7 @@ namespace Controller {
                     GameManager.Instance().store.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
+                Debug.Log("Attempt pause");
                 if (!pauseCanvas.enabled) {
                     GameManager.Instance().store.Dispatch(new OpenSettingsUI());
                 } else {
@@ -68,7 +70,6 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("InventoryUICanvas").transform);
         }
 
         private void OpenBlueprint() {
@@ -78,7 +79,6 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("BlueprintUICanvas").transform);
         }
 
         // Playing state
@@ -90,8 +90,6 @@ namespace Controller {
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             cursorCanvas.enabled = true;
-            GameObject.Find("HeldItemCanvas").GetComponent<Canvas>().enabled = true;
-            GameObject.Find("HeldItem").transform.SetParent(GameObject.Find("HeldItemCanvas").transform);
         }
 
         // Logout button from the pause menu
@@ -140,7 +138,6 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
-            GameObject.Find("HeldItemCanvas").GetComponent<Canvas>().enabled = false;
         }
 
         public void StateDidUpdate(GameState state) {

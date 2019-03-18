@@ -16,7 +16,7 @@ namespace Service {
         private const string registerEndpoint      = ":8000/api/v1/authenticate/register";
         private const string refreshEndpoint       = ":8000/api/v1/authenticate/refresh";
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
-        private const string itemSchemaEndpoint    = ":8000/api/v1/item-schema";
+        private const string itemSchemaEndpoint    = ":8003/api/v1/item-schema";
         private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
         
         // Enum

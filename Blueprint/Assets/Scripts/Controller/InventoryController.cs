@@ -14,27 +14,21 @@ using View;
 using Service;
 using Service.Response;
 using System.Threading.Tasks;
+using UnityEngine.Assertions.Must;
+using UnityEngine.Experimental.Rendering;
 
 /* Attached to the player and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<GameState> {
-        [SerializeField] private GameObject itemLabel;
-        private InventoryItem[] inventoryContents;
+        public Dictionary<int, List<HexLocation>> inventoryContents;
         private List<InventorySlotController> itemSlots;
-        private const int size = 16;
         private ResponseGetInventory remoteInv;
-        [SerializeField] private GameObject itemButton;
-        private GameObject dropButton;
-        private GameObject heldItem;
-        private int currentHeld;
+        private GameManager gameManager;
+        private InventoryItem nullItem = new InventoryItem("", 0, 0);
 
         public void Start() {
-            heldItem = GameObject.Find("HeldItem");
-            currentHeld = 0;
-            inventoryContents = new InventoryItem[size];
-            itemSlots = GameObject.Find("GridPanel").GetComponentsInChildren<InventorySlotController>().ToList();
+            itemSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
             UserCredentials user = GameManager.Instance().GetUserCredentials();
-            GameManager.Instance().store.Subscribe(this);
             BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
             Task.Run(async () => {
@@ -62,103 +56,12 @@ namespace Controller {
                             }
                         }).GetAwaiter().GetResult();
             */
-            foreach (Transform child in heldItem.transform) {
-                if (child.gameObject.CompareTag("Held")) {
-                    child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
-                }
-            }
+            GameManager.Instance().store.Subscribe(this);
         }
-
-        public InventoryItem[] GetItems() {
-            return inventoryContents;
-        }
-
+        
         public void StateDidUpdate(GameState state) {
-            if (state.uiState.Selected == UIState.OpenUI.Login) {
-              GameManager.Instance().store.Unsubscribe(this);
-            }
-            int length = 0;
             inventoryContents = state.inventoryState.inventoryContents;
-
-            // Update UI based on new state
-            inventoryContents.Where(x => x != null).Each((element, i) => {
-                length++;
-                if (itemSlots[i].transform.childCount < 2) {
-                    GameObject label = Instantiate(itemLabel, itemSlots[i].transform, false);
-                    label.name = getSlotName(i);
-                    label.GetComponent<Text>().text = $"{element.GetName()} ({element.GetQuantity()})";
-                } else if (element.GetQuantity() > 0){
-                    GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text =
-                        $"{element.GetName()} ({element.GetQuantity()})";
-                } else {
-                    GameObject.Find(getSlotName(i)).GetComponentInChildren<Text>().text = "";
-                }
-
-                // Change load order or UI elements for accessible hit-box
-                GameObject dropButton = GameObject.Find(getButtonName(i));
-                itemLabel.transform.SetSiblingIndex(0);
-                dropButton.transform.SetSiblingIndex(1);
-            });
-
-            if (length > 0) {
-                foreach (Transform child in heldItem.transform) {
-                    if (child.gameObject.CompareTag("Held")) {
-                        child.gameObject.GetComponent<Text>().text = GetItemName(inventoryContents[currentHeld].GetId());
-                    }
-                }
-            }
-        }
-
-        public void CollectItem(Interactable focus, GameObject pickup) {
-            // TODO: This destroy should be the role of the map state
-            Destroy(pickup);
-            GameManager.Instance().store.Dispatch(
-                new AddItemToInventory(focus.GetId(), 1, focus.GetItemType()));
-        }
-
-        void Update() {
-            if (Input.GetKeyDown(KeyMapping.Increment)) {
-                SwitchHeld(1);
-            } else if (Input.GetKeyDown(KeyMapping.Decrement)) {
-                SwitchHeld(0);
-            }
-        }
-
-        void SwitchHeld(int i) {
-            int length = 0;
-            inventoryContents.Where(x => x != null).Each((element, x) => { length++;});
-            if (length > 0) {
-                foreach (Transform child in heldItem.transform) {
-                    if (child.gameObject.name == "held") {
-                        if (i > 0) {
-                            if (currentHeld == length - 1) {
-                                currentHeld = 0;
-                                child.gameObject.GetComponent<Text>().text =
-                                    GetItemName(inventoryContents[currentHeld].GetId());
-                            }
-                            else {
-                                child.gameObject.GetComponent<Text>().text =
-                                    GetItemName(inventoryContents[++currentHeld].GetId());
-                            }
-                        }
-                        else {
-                            if (currentHeld == 0) {
-                                currentHeld = length - 1;
-                                child.gameObject.GetComponent<Text>().text =
-                                    GetItemName(inventoryContents[currentHeld].GetId());
-                            }
-                            else {
-                                child.gameObject.GetComponent<Text>().text =
-                                    GetItemName(inventoryContents[--currentHeld].GetId());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public int GetCurrentHeld() {
-            return currentHeld;
+            redrawInventory();
         }
 
         public string GetItemName(int id) {
@@ -171,12 +74,19 @@ namespace Controller {
             return goh.GameObjs.items[id - 1].type;
         }
 
-        private string getSlotName(int id) {
-            return "InventoryItemSlot " + id;
-        }
-
-        private string getButtonName(int id) {
-            return "Button" + (id + 1);
+        public void redrawInventory() {
+            // Clear slots
+            foreach (InventorySlotController slot in itemSlots) {
+                slot.SetStoredItem(nullItem);
+            }
+            
+            // Re-populate slots
+            foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
+                foreach(HexLocation loc in element.Value) {
+                    InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
+                    itemSlots[loc.hexID].SetStoredItem(item);
+                } 
+            }
         }
     }
 }
