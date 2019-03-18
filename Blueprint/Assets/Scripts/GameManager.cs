@@ -37,10 +37,6 @@ public class GameManager {
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
         
-        // TODO: REMOVE
-        //inventoryStore.Dispatch(new AddItemToInventory(1, 1, "Wood"));
-        //uiStore.Dispatch(new OpenPlayingUI());
-        
         // Load item schema from server
         this.goh = GameObjectsHandler.WithRemoteSchema();
     }

@@ -32,6 +32,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
         float slotHeight = (eventData.pointerEnter.transform.parent.transform as RectTransform).rect.height;
         transform.localPosition = new Vector3(0, slotHeight/8, 0);
         foregroundImage.enabled = false;
-        GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>().redrawInventory();
+        GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>().RedrawInventory();
     }
 }

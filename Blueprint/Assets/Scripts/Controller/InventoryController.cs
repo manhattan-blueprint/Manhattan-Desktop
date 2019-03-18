@@ -27,25 +27,25 @@ namespace Controller {
 
         public void Start() {
             firstUIUpdate = true;
-            
-            // Generate dictionary of item slots for fast lookup
             itemSlots = new Dictionary<int, InventorySlotController>();
-            List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
-            foreach (InventorySlotController controller in allSlots) {
-              itemSlots.Add(controller.getId(), controller);
-            }
         }
         
         void Update() {
             if (firstUIUpdate) {
-                GameManager.Instance().inventoryStore.Subscribe(this);
+                List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+                foreach (InventorySlotController controller in allSlots) {
+                  itemSlots.Add(controller.getId(), controller);
+                }
                 firstUIUpdate = false;
+                
+                // *MUST* subscribe *AFTER* finishing configuring the UI.
+                GameManager.Instance().inventoryStore.Subscribe(this);
             }
         }
         
         public void StateDidUpdate(InventoryState state) {
             inventoryContents = state.inventoryContents;
-            redrawInventory();
+            RedrawInventory();
         }
 
         public string GetItemName(int id) {
@@ -56,7 +56,7 @@ namespace Controller {
             return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
 
-        public void redrawInventory() {
+        public void RedrawInventory() {
             // Clear slots
             foreach (KeyValuePair<int, InventorySlotController> slot in itemSlots) {
                 slot.Value.SetStoredItem(Optional<InventoryItem>.Empty());
