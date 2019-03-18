@@ -2,6 +2,8 @@ using Model.Action;
 using Model.State;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace Model.Reducer {
     public class InventoryReducer : Reducer<InventoryState, InventoryAction>, InventoryVisitor {
@@ -53,8 +55,10 @@ namespace Model.Reducer {
             // If item exists, increment quantity on first stack
             // Else add item
             if (state.inventoryContents.ContainsKey(addItemToInventoryAction.item)) {
+                Debug.Log("Feck");
                 state.inventoryContents[addItemToInventoryAction.item][0].quantity += addItemToInventoryAction.count;
             } else {
+                Debug.Log("Will is the best.");
                 HexLocation item = new HexLocation(getFirstEmptySlot(), addItemToInventoryAction.count);
                 List<HexLocation> list = new List<HexLocation>();
                 list.Add(item);
@@ -86,10 +90,20 @@ namespace Model.Reducer {
 
         public void visit(RemoveItemFromStackInventory removeItemFromStackInventory) {
             for (int i = 0; i < state.inventoryContents[removeItemFromStackInventory.item].Count; i++) {
-                if (state.inventoryContents[removeItemFromStackInventory.item][i].hexID == removeItemFromStackInventory.hexId && 
-                    state.inventoryContents[removeItemFromStackInventory.item][i].quantity >= removeItemFromStackInventory.count) {
-                    
-                    state.inventoryContents[removeItemFromStackInventory.item][i].quantity -= removeItemFromStackInventory.count;
+                if (state.inventoryContents[removeItemFromStackInventory.item][i].hexID ==
+                    removeItemFromStackInventory.hexId &&
+                    state.inventoryContents[removeItemFromStackInventory.item][i].quantity >=
+                    removeItemFromStackInventory.count) {
+
+                    state.inventoryContents[removeItemFromStackInventory.item][i].quantity -=
+                        removeItemFromStackInventory.count;
+
+                    if (state.inventoryContents[removeItemFromStackInventory.item][i].quantity == 0) {
+                        state.inventoryContents[removeItemFromStackInventory.item].RemoveAt(i);
+                        if (state.inventoryContents[removeItemFromStackInventory.item].Count == 0) {
+                            state.inventoryContents.Remove(removeItemFromStackInventory.item);
+                        }
+                    }
                 }
             }
         }
@@ -119,8 +133,9 @@ namespace Model.Reducer {
             
             foreach (KeyValuePair<int, List<HexLocation>> content in state.inventoryContents) {
                 foreach (HexLocation hexLocation in content.Value) {
-                    // Only remove and place if quantity > 0
-                    if (hexLocation.hexID == index && hexLocation.quantity > 0) {
+                    // Only remove and place if quantity > 0 and there is not a item placed at this location
+                    if (hexLocation.hexID == index && hexLocation.quantity > 0 &&
+                            !GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(removeHeldItem.dropAt)) {
                         visit(new RemoveItemFromStackInventory(content.Key, 1, index));
                         GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, content.Key));
                         return;

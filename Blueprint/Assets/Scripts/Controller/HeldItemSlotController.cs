@@ -43,7 +43,7 @@ namespace Controller {
         public void SetStoredItem(Optional<InventoryItem> item) {
             if (image == null || text == null) return;
             
-            if (!item.IsPresent() || item.Get().GetQuantity() == 0) {
+            if (!item.IsPresent()) {
                 image.enabled = false;
                 text.enabled = false;
             } else {

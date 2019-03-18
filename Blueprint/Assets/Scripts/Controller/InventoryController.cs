@@ -23,8 +23,10 @@ namespace Controller {
         public Dictionary<int, List<HexLocation>> inventoryContents;
         private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
+        private bool firstUIUpdate;
 
         public void Start() {
+            firstUIUpdate = true;
             
             // Generate dictionary of item slots for fast lookup
             itemSlots = new Dictionary<int, InventorySlotController>();
@@ -33,24 +35,14 @@ namespace Controller {
               itemSlots.Add(controller.getId(), controller);
             }
             
-            UserCredentials user = GameManager.Instance().GetUserCredentials();
-            BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
-            
-            Task.Run(async () => {
-                APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
-                if (finalInventoryResponse.isSuccess()) {
-                    ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
-                    foreach (InventoryEntry entry in remoteInv.items) {
-                        GameManager.Instance().inventoryStore.Dispatch(
-                            new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
-                    }
-                } else {
-                    JsonError error = finalInventoryResponse.GetError();
-                }
-            }).GetAwaiter().GetResult();
-            
             GameManager.Instance().inventoryStore.Subscribe(this);
-            
+        }
+        
+        void Update() {
+            if (firstUIUpdate) {
+                StateDidUpdate(GameManager.Instance().inventoryStore.GetState());
+                firstUIUpdate = false;
+            }
         }
         
         public void StateDidUpdate(InventoryState state) {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Controller;
 using Model;
+using Model.Action;
 using Model.Redux;
 using Model.State;
 using UnityEngine;
@@ -14,20 +15,28 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
     private readonly float slotDimension = Screen.width / 15;
     private readonly float tileYOffset = 1.35f;
     private Dictionary<int, HeldItemSlotController> heldItemControllers;
+    private bool firstUIUpdate;
     
     void Start() {
+        firstUIUpdate = true;
         heldItemControllers = new Dictionary<int, HeldItemSlotController>();
         
         backgroundSprite = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
         highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
         borderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
        
-        generateHotbar(); 
+        generateHotbar();
+        
         GameManager.Instance().inventoryStore.Subscribe(this);
         GameManager.Instance().uiStore.Subscribe(this);
         GameManager.Instance().heldItemStore.Subscribe(this);
-        
-        // Since held item is shown before inventory, do the loading here
+    }
+
+    void Update() {
+        if (firstUIUpdate) {
+            StateDidUpdate(GameManager.Instance().inventoryStore.GetState());
+            firstUIUpdate = false;
+        }
     }
     
     private void generateHotbar() {
@@ -104,7 +113,6 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
             foreach(HexLocation loc in element.Value) {
                 // Only consider held items
                 if (loc.hexID > 5) continue;
-                
                 InventoryItem item = new InventoryItem("", element.Key, loc.quantity);
                 heldItemControllers[loc.hexID].SetStoredItem(Optional<InventoryItem>.Of(item));
             } 

@@ -22,8 +22,8 @@ namespace Model.Reducer {
                
                 string name = GameManager.Instance().goh.GameObjs.items[obj.GetID() - 1].name;
                 
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
                 state.removeObject(collectItem.position);
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
             }
         }
     }

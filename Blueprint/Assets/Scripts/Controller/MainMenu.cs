@@ -40,8 +40,8 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     
     public void StateDidUpdate(UIState state) {
         if (state.Selected == UIState.OpenUI.Playing) {
-            SceneManager.LoadScene(SceneMapping.World);
             GameManager.Instance().uiStore.Unsubscribe(this);
+            GameManager.Instance().StartGame();
         }
     }
 
