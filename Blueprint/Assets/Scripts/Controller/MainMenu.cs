@@ -102,26 +102,21 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                     // Cyclic movement through menu using Tab
                     if (loginUsernameInput.isFocused) {
                         loginPasswordInput.Select();
-                    }
-                    else if (loginPasswordInput.isFocused) {
+                    } else if (loginPasswordInput.isFocused) {
                         loginLoginButton.Select();
-                    }
-                    else if (loginLoginButton.IsActive()) {
+                    } else if (loginLoginButton.IsActive()) {
                         loginRegisterButton.Select();
-                    }
-                    else if (loginRegisterButton.IsActive()) {
+                    } else if (loginRegisterButton.IsActive()) {
                         loginUsernameInput.Select();
                     }
                 }
                 else if (Input.GetKeyDown(KeyCode.Return)) {
                     if (loginPasswordInput.IsActive()) {
                         OnLoginClick();
-                    }
-                    else if (registerPasswordInput.IsActive()) {
+                    } else if (registerPasswordInput.IsActive()) {
                         OnRegisterClick();
                     }
-                }
-                else if (Input.GetKeyDown(KeyCode.Escape)) {
+                } else if (Input.GetKeyDown(KeyCode.Escape)) {
                     ToSplashScreen();
                 }
                 infoMessage.gameObject.transform.position =
@@ -132,18 +127,14 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                 if (Input.GetKeyDown(KeyCode.Tab)) {
                     if (registerUsernameInput.isFocused) {
                         registerPasswordInput.Select();
-                    }
-                    else if (registerPasswordInput.isFocused) {
+                    } else if (registerPasswordInput.isFocused) {
                         registerRegisterButton.Select();
-                    }
-                    else if (registerRegisterButton.IsActive()) {
+                    } else if (registerRegisterButton.IsActive()) {
                         registerBackButton.Select();
-                    }
-                    else if (registerBackButton.IsActive()) {
+                    } else if (registerBackButton.IsActive()) {
                         registerUsernameInput.Select();
                     }
-                }
-                else if (Input.GetKeyDown(KeyCode.Escape)) {
+                } else if (Input.GetKeyDown(KeyCode.Escape)) {
                     ToLoginMenu();
                 }
                 infoMessage.gameObject.transform.position =
@@ -157,8 +148,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         if (isMessageErrorStyle) {
             infoMessage.color = Color.red;
             infoMessage.text = infoMessageText;
-        }
-        else {
+        } else {
             infoMessage.color = Color.blue;
             infoMessage.text = infoMessageText;
         }
@@ -244,8 +234,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                     } else {
                         SetMessageError(response.GetError().error);
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     SetMessageError(e.Message);
                     if (String.Equals(e.Message, "Password invalid"))
                         SetMessageError("Password must have between 5 and 24\ncharactersand have at least one upper and\nlower case letters and at least one number");
@@ -319,10 +308,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         SetMessageClear();
         obj.GetComponent<CanvasGroup>().interactable = false;
         triggerAnimating();
-        animationManager.StartAppearanceAnimation(obj.gameObject,
-            Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(obj.gameObject,
-            Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f, false);
+        animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f, false);
 
     }
 
@@ -331,10 +318,8 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         SetMessageClear();
         obj.GetComponent<CanvasGroup>().interactable = true;
         triggerAnimating();
-        animationManager.StartAppearanceAnimation(obj.gameObject,
-            Anim.Appear, 0.3f, false, 0.0f, 0.2f);
-        animationManager.StartMovementAnimation(obj.gameObject,
-            Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.9f, 0.0f)), 0.4f, false);
+        animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Appear, 0.3f, false, 0.0f, 0.2f);
+        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.9f, 0.0f)), 0.4f, false);
     }
 
     private void triggerAnimating() {
@@ -359,8 +344,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
     private void SetMessageClear() {
         try {
             infoMessage.text = infoMessageText;
-        }
-        catch {}
+        } catch {}
         infoMessageText = "";
     }
 }
