@@ -8,7 +8,7 @@ namespace Service.Response {
     public class UserCredentials {
         private string username;
         private string password;
-        
+
         // Server tokens
         private string access;
         private string refresh;
@@ -26,20 +26,20 @@ namespace Service.Response {
             this.refresh = refresh;
             this.accountType = accountType;
         }
-        
+
         // Getters
         public string GetUsername() {
             return username;
         }
-        
+
         public string GetPassword() {
             return password;
         }
-        
+
         public string GetAccessToken() {
             return access;
         }
-        
+
         public string GetRefreshToken() {
             return refresh;
         }
@@ -47,6 +47,6 @@ namespace Service.Response {
         public string GetAccountType() {
             return accountType;
         }
-        
+
     }
 }
