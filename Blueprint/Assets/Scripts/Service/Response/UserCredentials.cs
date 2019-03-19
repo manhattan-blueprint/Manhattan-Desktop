@@ -26,27 +26,26 @@ namespace Service.Response {
             this.refresh = refresh;
             this.accountType = accountType;
         }
-
+        
         // Getters
         public string GetUsername() {
             return username;
         }
-
+        
         public string GetPassword() {
             return password;
         }
-
+        
         public string GetAccessToken() {
             return access;
         }
-
+        
         public string GetRefreshToken() {
             return refresh;
         }
-
+        
         public string GetAccountType() {
             return accountType;
         }
-
     }
 }

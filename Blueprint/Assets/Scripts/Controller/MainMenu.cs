@@ -40,18 +40,13 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     private BlueprintAPI api;
     private string infoMessageText;
     private bool isMessageErrorStyle;
-
     private VisibleMenu visibleMenu;
     private bool toLaunch;
-
-    // Variable name kept short so as not to be able to used in long arguments.
     private ScreenProportions sp;
-
-    // Used to prevent the user from interacting during animation to prevent
-    // unexpected errors.
-    private bool animating;
-
     private ManhattanAnimation animationManager;
+
+    // Used to prevent the user from interacting during animation to prevent unexpected errors.
+    private bool animating;
 
     private enum VisibleMenu {
         SplashScreen,
@@ -72,8 +67,6 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         animationManager.StartAppearanceAnimation(pressSpace.gameObject,
             Anim.OscillateAlpha, 0.6f, true, 0.3f);
 
-        // ShowMenu(splashScreen);
-
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
@@ -88,8 +81,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     }
 
     void Update() {
-        if (animating)
-            return;
+        if (animating) return;
 
         switch (visibleMenu) {
             case VisibleMenu.SplashScreen:
@@ -156,151 +148,142 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
 
         if (toLaunch) {
             toLaunch = false;
-            GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
+            GameManager.Instance().StartGame();
         }
     }
 
     // API call from login menu.
     public void OnLoginClick() {
-        if (!animating) {
-            SetMessageClear();
-            string loginUsernameText = loginUsernameInput.text;
-            string loginPasswordText = loginPasswordInput.text;
+        if (animating) return;
+        SetMessageClear();
+        string loginUsernameText = loginUsernameInput.text;
+        string loginPasswordText = loginPasswordInput.text;
 
-            // Validate user input
-            if (string.IsNullOrWhiteSpace(loginUsernameText) ||
-                loginUsernameText.Length > maxUsernameLength) {
-                SetMessageError("Invalid username\nMust be between 1 and 16 characters");
-                isMessageErrorStyle = true;
-                return;
-            } else if (string.IsNullOrWhiteSpace(loginPasswordText))  {
-                SetMessageError("Please enter a non-empty password");
-                return;
-            }
-
-            UserCredentials userCredentials = new UserCredentials(loginUsernameText, loginPasswordText);
-            UserCredentials returnUser;
-
-            Task.Run( async () => {
-                Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
-                SetMessageInfo("Loading . . .");
-
-                try {
-                    APIResult<UserCredentials, JsonError> response = await fetchingResponse;
-                    returnUser = response.GetSuccess();
-                    GameManager.Instance().SetUserCredentials(returnUser);
-                    if (response.isSuccess()) {
-                        toLaunch = true;
-                    } else {
-                        SetMessageError(response.GetError().error);
-                    }
-                } catch (Exception e) {
-                    SetMessageError(e.Message);
-                    if (String.Equals(e.Message, "Password invalid"))
-                        SetMessageError("Incorrect password");
-                }
-            }).GetAwaiter().GetResult();
+        // Validate user input
+        if (string.IsNullOrWhiteSpace(loginUsernameText) ||
+            loginUsernameText.Length > maxUsernameLength) {
+            SetMessageError("Invalid username\nMust be between 1 and 16 characters");
+            isMessageErrorStyle = true;
+            return;
+        } else if (string.IsNullOrWhiteSpace(loginPasswordText))  {
+            SetMessageError("Please enter a non-empty password");
+            return;
         }
+
+        UserCredentials userCredentials = new UserCredentials(loginUsernameText, loginPasswordText);
+        UserCredentials returnUser;
+
+        Task.Run( async () => {
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
+            SetMessageInfo("Loading . . .");
+
+            try {
+                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+                returnUser = response.GetSuccess();
+                GameManager.Instance().SetUserCredentials(returnUser);
+                if (response.isSuccess()) {
+                    toLaunch = true;
+                } else {
+                    SetMessageError(response.GetError().error);
+                }
+            } catch (Exception e) {
+                SetMessageError(e.Message);
+                if (String.Equals(e.Message, "Password invalid"))
+                    SetMessageError("Incorrect password");
+            }
+        }).GetAwaiter().GetResult();
     }
 
     // API call from the register menu.
     public void OnRegisterClick() {
-        if (!animating) {
-            SetMessageClear();
-            string registerUsernameText = registerUsernameInput.text;
-            string registerPasswordText = registerPasswordInput.text;
+        if (animating) return;
+        SetMessageClear();
+        string registerUsernameText = registerUsernameInput.text;
+        string registerPasswordText = registerPasswordInput.text;
 
-            // Validate user input
-            if (string.IsNullOrWhiteSpace(registerUsernameText) ||
-                registerUsernameText.Length > maxUsernameLength) {
-                SetMessageError("Invalid username\nMust have between 1 and 16 characters");
-                return;
-            } else if (string.IsNullOrWhiteSpace(registerPasswordText)) {
-                SetMessageError("Please enter a non-empty password");
-                return;
-            }
-
-            UserCredentials returnUser;
-
-            Task.Run(async () => {
-                Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(registerUsernameText, registerPasswordText);
-                SetMessageInfo("Loading . . .");
-
-                try {
-                    APIResult<UserCredentials, JsonError> response = await fetchingResponse;
-                    returnUser = response.GetSuccess();
-                    if (response.isSuccess()) {
-                        toLaunch = true;
-                    } else {
-                        SetMessageError(response.GetError().error);
-                    }
-                } catch (Exception e) {
-                    SetMessageError(e.Message);
-                    if (String.Equals(e.Message, "Password invalid"))
-                        SetMessageError("Password must contain between 5 and 24\ncharacters, have at least one upper and\nlower case letter, and at least one number");
-                }
-            }).GetAwaiter().GetResult();
+        // Validate user input
+        if (string.IsNullOrWhiteSpace(registerUsernameText) ||
+            registerUsernameText.Length > maxUsernameLength) {
+            SetMessageError("Invalid username\nMust have between 1 and 16 characters");
+            return;
+        } else if (string.IsNullOrWhiteSpace(registerPasswordText)) {
+            SetMessageError("Please enter a non-empty password");
+            return;
         }
+
+        UserCredentials returnUser;
+
+        Task.Run(async () => {
+            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(registerUsernameText, registerPasswordText);
+            SetMessageInfo("Loading . . .");
+
+            try {
+                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+                returnUser = response.GetSuccess();
+                if (response.isSuccess()) {
+                    toLaunch = true;
+                } else {
+                    SetMessageError(response.GetError().error);
+                }
+            } catch (Exception e) {
+                SetMessageError(e.Message);
+                if (String.Equals(e.Message, "Password invalid"))
+                    SetMessageError("Password must contain between 5 and 24\ncharacters, have at least one upper and\nlower case letter, and at least one number");
+            }
+        }).GetAwaiter().GetResult();
     }
 
     // Splash screen is only accessible from the login menu.
     public void ToSplashScreen() {
-        if (!animating) {
-            ShowMenu(splashScreen);
-            HideMenu(loginMenu);
+        if (animating) return;
+        ShowMenu(splashScreen);
+        HideMenu(loginMenu);
 
-            // Make Blueprint logo fly out.
-            animationManager.StartMovementAnimation(blueprintLogo.gameObject,
-                Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.2f, 0.0f)), 0.4f, false);
-            animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
-                Anim.Grow, 0.6f, false, (4.0f/3.0f), 0.0f);
+        // Make Blueprint logo fly out.
+        animationManager.StartMovementAnimation(blueprintLogo.gameObject,
+            Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.2f, 0.0f)), 0.4f, false);
+        animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
+            Anim.Grow, 0.6f, false, (4.0f/3.0f), 0.0f);
 
-            visibleMenu = VisibleMenu.SplashScreen;
+        visibleMenu = VisibleMenu.SplashScreen;
 
-            // Prevents error where register still selected after changing screen.
-            loginUsernameInput.Select();
-        }
+        // Prevents error where register still selected after changing screen.
+        loginUsernameInput.Select();
     }
 
     // Login menu is accessible from either the splash screen or the register
     // menu.
     public void ToLoginMenu() {
-        if (!animating) {
-            switch(visibleMenu) {
-                case VisibleMenu.SplashScreen:
-                    HideMenu(splashScreen);
-                    loginUsernameInput.Select();
-                    visibleMenu = VisibleMenu.Login;
+        if (animating) return;
+        switch(visibleMenu) {
+            case VisibleMenu.SplashScreen:
+                HideMenu(splashScreen);
+                loginUsernameInput.Select();
+                visibleMenu = VisibleMenu.Login;
 
-                    // Make Blueprint logo fly in.
-                    animationManager.StartMovementAnimation(blueprintLogo.gameObject,
-                        Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.2f, 0.0f)), 0.4f, false);
-                    animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
-                        Anim.Grow, 0.6f, false, (3.0f/4.0f));
-                    break;
+                // Make Blueprint logo fly in.
+                animationManager.StartMovementAnimation(blueprintLogo.gameObject,
+                    Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.2f, 0.0f)), 0.4f, false);
+                animationManager.StartAppearanceAnimation(blueprintLogo.gameObject,
+                    Anim.Grow, 0.6f, false, (3.0f/4.0f));
+                break;
 
-                case VisibleMenu.Register:
-                    HideMenu(registerMenu);
-                    loginUsernameInput.Select();
-                    visibleMenu = VisibleMenu.Login;
-                    break;
-
-                default:
-                    break;
-            }
-
-            ShowMenu(loginMenu);
+            case VisibleMenu.Register:
+                HideMenu(registerMenu);
+                loginUsernameInput.Select();
+                visibleMenu = VisibleMenu.Login;
+                break;
         }
+        ShowMenu(loginMenu);
     }
 
     // Register menu is only accessible from the login menu.
     public void ToRegister() {
-        if (!animating) {
-            ShowMenu(registerMenu);
-            HideMenu(loginMenu);
-            registerUsernameInput.Select();
-            visibleMenu = VisibleMenu.Register;
-        }
+        if (animating) return;
+        ShowMenu(registerMenu);
+        HideMenu(loginMenu);
+        registerUsernameInput.Select();
+        visibleMenu = VisibleMenu.Register;
     }
 
     // Make an object fade out and fly downwards.
@@ -310,7 +293,6 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         triggerAnimating();
         animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
         animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f, false);
-
     }
 
     // Make an object fade in and fly upwards.
@@ -342,9 +324,6 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     }
 
     private void SetMessageClear() {
-        try {
-            infoMessage.text = infoMessageText;
-        } catch {}
         infoMessageText = "";
     }
 }
