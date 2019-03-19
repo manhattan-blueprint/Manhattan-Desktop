@@ -11,7 +11,12 @@ ModelImporter:
     2300000: hex_tile
     3300000: hex_tile
     4300000: hex_tile
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hex_tileMat
+    second: {fileID: 2100000, guid: 928ab1509171227429d9b1746e429efb, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
