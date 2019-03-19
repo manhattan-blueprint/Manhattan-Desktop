@@ -15,8 +15,9 @@ using Model.State;
 using Service;
 using Service.Response;
 using Utils;
+using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour, Subscriber<GameState> {
+public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private Text infoMessage;
 
     [SerializeField] private GameObject splashScreen;
@@ -76,13 +77,13 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
-        GameManager.Instance().store.Subscribe(this);
+        GameManager.Instance().uiStore.Subscribe(this);
     }
 
-    public void StateDidUpdate(GameState state) {
-        if (state.uiState.Selected == UIState.OpenUI.Playing) {
+    public void StateDidUpdate(UIState state) {
+        if (state.Selected == UIState.OpenUI.Playing) {
+            GameManager.Instance().uiStore.Unsubscribe(this);
             SceneManager.LoadScene(SceneMapping.World);
-            GameManager.Instance().store.Unsubscribe(this);
         }
     }
 
@@ -155,8 +156,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
 
         if (toLaunch) {
             toLaunch = false;
-            GameManager.Instance().store.Dispatch(
-                new OpenPlayingUI());
+            GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
         }
     }
 
