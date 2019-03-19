@@ -24,7 +24,11 @@ namespace Model.State {
         public OpenUI Selected;
 
         public UIState() {
+#if UNITY_EDITOR
+            this.Selected = OpenUI.Playing;
+#else
             this.Selected = OpenUI.Login;
+#endif
         }
     }
 }

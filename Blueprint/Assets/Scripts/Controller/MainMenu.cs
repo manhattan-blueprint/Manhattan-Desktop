@@ -36,7 +36,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         usernameLoginInput.Select();
         GameManager.Instance().uiStore.Subscribe(this);
     }
-    
+
     public void StateDidUpdate(UIState state) {
         if (state.Selected == UIState.OpenUI.Playing) {
             GameManager.Instance().uiStore.Unsubscribe(this);
