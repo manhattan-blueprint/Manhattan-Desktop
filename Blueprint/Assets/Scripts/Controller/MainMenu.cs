@@ -121,7 +121,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
                     ToSplashScreen();
                 }
                 infoMessage.gameObject.transform.position =
-                    loginLoginButton.gameObject.transform.position - new Vector3(0, 75.0f, 0);
+                    loginLoginButton.gameObject.transform.position - new Vector3(0, 100.0f, 0);
                 break;
 
             case VisibleMenu.Register:
@@ -139,7 +139,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
                     ToLoginMenu();
                 }
                 infoMessage.gameObject.transform.position =
-                    registerRegisterButton.gameObject.transform.position - new Vector3(0, 75.0f, 0);
+                    registerRegisterButton.gameObject.transform.position - new Vector3(0, 100.0f, 0);
                 break;
         }
 
@@ -237,7 +237,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
                 } catch (Exception e) {
                     SetMessageError(e.Message);
                     if (String.Equals(e.Message, "Password invalid"))
-                        SetMessageError("Password must have between 5 and 24\ncharactersand have at least one upper and\nlower case letters and at least one number");
+                        SetMessageError("Password must contain between 5 and 24\ncharacters, have at least one upper and\nlower case letter, and at least one number");
                 }
             }).GetAwaiter().GetResult();
         }
