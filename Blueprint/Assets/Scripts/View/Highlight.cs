@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Model;
-using Model.Action;
-using Model.Redux;
+﻿using UnityEngine;
 using Model.State;
+using Model.Redux;
 
 namespace View {
-    public class Highlight : MonoBehaviour, Subscriber<GameState>{
+    public class Highlight : MonoBehaviour, Subscriber<UIState>{
         [SerializeField] private Color highlightColor;
         [SerializeField] private bool holdable;
         private Color initialColor;
@@ -16,7 +12,7 @@ namespace View {
 
         void Start () {
             rend = GetComponent<Renderer>();
-            GameManager.Instance().store.Subscribe(this);
+            GameManager.Instance().uiStore.Subscribe(this);
             paused = false;
             initialColor = rend.material.color;
         }
@@ -49,13 +45,13 @@ namespace View {
             rend.material.color = initialColor;
         }
 
-        public void StateDidUpdate(GameState state) {
-            switch (state.uiState.Selected) {
+        public void StateDidUpdate(UIState state) {
+            switch (state.Selected) {
               case UIState.OpenUI.Playing:
                   paused = false;
                   break;
               case UIState.OpenUI.Login:
-                  GameManager.Instance().store.Unsubscribe(this);
+                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               default:
                   resetColor();

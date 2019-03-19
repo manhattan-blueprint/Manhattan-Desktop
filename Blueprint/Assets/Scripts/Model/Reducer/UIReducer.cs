@@ -1,4 +1,5 @@
 using Model.Action;
+using Model.State;
 
 namespace Model.Reducer {
     public class UIReducer : Reducer<UIState, UIAction>, UIVisitor {

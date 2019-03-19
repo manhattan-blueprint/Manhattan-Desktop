@@ -4,13 +4,10 @@ using UnityEngine;
 using System;
 using Controller;
 using Model;
+using Model.Action;
 using UnityEngine.UI;
 
 public class HexInventoryUIGenerator : MonoBehaviour {
-    private Sprite HexTile;
-    private Sprite borderSprite;
-    private Sprite highlightSprite;
-    private Sprite outerBorderSprite;
     private float tileYOffset = 1.35f;
     private float tileXOffset = 2.0f;
     private float previousX = 0;
@@ -18,18 +15,16 @@ public class HexInventoryUIGenerator : MonoBehaviour {
     private float slotDimension = 0;
     
     // EDITABLE
-    private int numLayers = 2;
+    private int numLayers;
     private float slotScale = 10;
     
     void Start() {
-        HexTile = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
-        borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
-        highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
-        outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
+        numLayers = GameManager.Instance().inventoryLayers;
 
         slotDimension = Screen.width / slotScale;
-        
-        int hexCount = 0;
+       
+        // 0 -> 5 in hotbar
+        int hexCount = 6;
         GameObject go = newSlot(ref hexCount, false);
         setPreviousCoords(go);
         GameObject temp = null;
@@ -85,11 +80,18 @@ public class HexInventoryUIGenerator : MonoBehaviour {
             } 
         }
         
+        // Hotbar slots are smaller, but must be drawn before the drag and highlight
+        slotDimension = Screen.width / 15;
+        generateHotbar();
+        
+        // Back to normal for everything else
+        slotDimension = Screen.width / slotScale;
+        
         // Highlight object
         GameObject highlight = new GameObject("Highlight");
         highlight.transform.parent = transform;
         SVGImage svg = highlight.AddComponent<SVGImage>();
-        svg.sprite = highlightSprite;
+        svg.sprite = AssetManager.Instance().highlightSprite;
         svg.raycastTarget = false;
         (svg.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
         highlight.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
@@ -117,6 +119,24 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         rolloverText.horizontalOverflow = HorizontalWrapMode.Overflow;
         
         rollover.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
+
+    }
+
+    private void generateHotbar() {
+        // 0.5 * slotdimension padding on x
+        double hotbarCenterX = Screen.width - 2 * slotDimension;
+        // 0.25 * slotdim padding on y
+        double hotbarCenterY = 1.75 * slotDimension;
+        
+        // In order, starting from top left 
+        int id = 0;
+        GameObject go;
+        go = newSlot(ref id, (float) hotbarCenterX - slotDimension / 2, (float) hotbarCenterY + (slotDimension / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY + (slotDimension / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX + slotDimension, (float) hotbarCenterY, true);
+        go = newSlot(ref id, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX - slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX - slotDimension, (float) hotbarCenterY, true);
     }
 
     // Create new slot, place in centre 
@@ -132,7 +152,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         
         // Background Image
         Image background = go.AddComponent<Image>();
-        background.sprite = HexTile;
+        background.sprite = AssetManager.Instance().backgroundSprite;
         background.color = new Color32((byte)(background.color.r*255), (byte)(background.color.g*255), 
             (byte)(background.color.b*255), (byte)192);
         background.alphaHitTestMinimumThreshold = 0.5f;
@@ -147,21 +167,20 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         (svgChild.transform as RectTransform).localScale = new Vector3(1.05f, 1.05f, 0.0f);
         
         InventorySlotController isc = go.AddComponent<InventorySlotController>();
-        isc.setId(id);
+        isc.setID(id);
         
         RectTransform rt = go.transform as RectTransform;
         rt.sizeDelta = new Vector2(slotDimension, slotDimension);
 
         id++;
-        GameManager.Instance().store.GetState().inventoryState.inventorySize += 1;
         return go;
     }
 
     private Sprite getBorder(bool outer) {
         if (outer) {
-            return outerBorderSprite;
+            return AssetManager.Instance().outerBorderSprite;
         } else {
-            return borderSprite;
+            return AssetManager.Instance().borderSprite;
         }
     }
 

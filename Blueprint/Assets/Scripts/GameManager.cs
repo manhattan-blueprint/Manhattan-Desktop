@@ -1,40 +1,27 @@
-﻿using Model;
+﻿using System;
+using System.Threading.Tasks;
+using Controller;
+using Model.State;
 using Model.Action;
 using Model.Reducer;
 using Model.Redux;
-using Model.State;
 using Service;
 using Service.Response;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager {
-    private class GameStateReducer : Reducer<GameState, Action> {
-        private readonly InventoryReducer inventoryReducer;
-        private readonly MapReducer mapReducer;
-        private readonly UIReducer uiReducer;
-
-        public GameStateReducer() {
-            inventoryReducer = new InventoryReducer();
-            mapReducer = new MapReducer();
-            uiReducer = new UIReducer();
-        }
-       
-        // Dispatch to appropriate handler
-        public GameState Reduce(GameState current, Action action) {
-            if (action is InventoryAction){
-                current.inventoryState = inventoryReducer.Reduce(current.inventoryState, (InventoryAction) action);
-            } else if (action is MapAction) {
-                current.mapState = mapReducer.Reduce(current.mapState, (MapAction) action);
-            } else if (action is UIAction) {
-                current.uiState = uiReducer.Reduce(current.uiState, (UIAction) action);
-            }
-            return current;
-        }
-    }
-    
     private static GameManager manager;
-    public readonly StateStore<GameState, Action> store;
+    public readonly StateStore<MapState, MapAction> mapStore;
+    public readonly StateStore<InventoryState, InventoryAction> inventoryStore;
+    public readonly StateStore<UIState, UIAction> uiStore;
+    public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
+    public readonly GameObjectsHandler goh;
     private UserCredentials credentials;
-
+    
+    public readonly int gridSize = 16;
+    public readonly int inventoryLayers = 2;
+    
     public UserCredentials GetUserCredentials() {
         return this.credentials;
     }
@@ -44,7 +31,13 @@ public class GameManager {
     }
     
     private GameManager() {
-        this.store = new StateStore<GameState, Action>(new GameStateReducer(), new GameState());
+        this.mapStore = new StateStore<MapState, MapAction>(new MapReducer(), new MapState());
+        this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
+        this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
+        this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
+        
+        // Load item schema from server
+        this.goh = GameObjectsHandler.WithRemoteSchema();
     }
     
     public static GameManager Instance() {
@@ -52,6 +45,28 @@ public class GameManager {
             manager = new GameManager();
         }
         return manager;
+    }
+
+    public void StartGame() {
+        // Calculate the number of inventory slots and set inventory size, i.e. 3n^2 - 3n + 1 + numberOfHeldItem slots - 1 for zero indexing
+        inventoryStore.Dispatch(new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
+        
+        BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
+        
+        // Load player inventory and then load world
+        Task.Run(async () => {
+            APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(credentials);
+            if (finalInventoryResponse.isSuccess()) {
+                ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
+                foreach (InventoryEntry entry in remoteInv.items) {
+                    inventoryStore.Dispatch(
+                        new AddItemToInventory(entry.item_id, entry.quantity, goh.GameObjs.items[entry.item_id - 1].name));
+                }
+                SceneManager.LoadScene(SceneMapping.World);
+            } else {
+                JsonError error = finalInventoryResponse.GetError();
+            }
+        }).GetAwaiter().GetResult();
     }
 
     public void ResetGame() {

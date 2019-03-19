@@ -14,7 +14,7 @@ using Model.State;
 using Service;
 using Service.Response;
 
-public class MainMenu : MonoBehaviour, Subscriber<GameState> {
+public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private InputField usernameLoginInput;
     [SerializeField] private InputField passwordLoginInput;
     [SerializeField] private InputField usernameSignupInput;
@@ -34,14 +34,13 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
         infoMessage.color = Color.blue;
         infoMessage.text = "";
         usernameLoginInput.Select();
-        GameManager.Instance().store.Subscribe(this);
+        GameManager.Instance().uiStore.Subscribe(this);
     }
-
-
-    public void StateDidUpdate(GameState state) {
-        if (state.uiState.Selected == UIState.OpenUI.Playing) {
-            SceneManager.LoadScene(SceneMapping.World);
-            GameManager.Instance().store.Unsubscribe(this);
+    
+    public void StateDidUpdate(UIState state) {
+        if (state.Selected == UIState.OpenUI.Playing) {
+            GameManager.Instance().uiStore.Unsubscribe(this);
+            GameManager.Instance().StartGame();
         }
     }
 
@@ -98,8 +97,7 @@ public class MainMenu : MonoBehaviour, Subscriber<GameState> {
                 GameManager.Instance().SetUserCredentials(returnUser);
                 if (response.isSuccess()) {
                     // Launch Blueprint
-                    SceneManager.LoadScene(SceneMapping.World);
-                    GameManager.Instance().store.Dispatch(
+                        GameManager.Instance().uiStore.Dispatch(
                             new OpenPlayingUI());
                 } else {
                     setErrorMessage(response.GetError().error);

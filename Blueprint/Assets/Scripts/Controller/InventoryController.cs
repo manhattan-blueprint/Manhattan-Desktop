@@ -17,74 +17,56 @@ using System.Threading.Tasks;
 using UnityEngine.Assertions.Must;
 using UnityEngine.Experimental.Rendering;
 
-/* Attached to the player and controls inventory collection */
+/* Attached to the inventory canvas and controls inventory collection */
 namespace Controller {
-    public class InventoryController : MonoBehaviour, Subscriber<GameState> {
+    public class InventoryController : MonoBehaviour, Subscriber<InventoryState> {
         public Dictionary<int, List<HexLocation>> inventoryContents;
-        private List<InventorySlotController> itemSlots;
-        private ResponseGetInventory remoteInv;
+        private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
-        private InventoryItem nullItem = new InventoryItem("", 0, 0);
+        private bool firstUIUpdate;
 
         public void Start() {
-            itemSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
-            UserCredentials user = GameManager.Instance().GetUserCredentials();
-            BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
-
-            Task.Run(async () => {
-                APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
-                if (finalInventoryResponse.isSuccess()) {
-                    remoteInv = finalInventoryResponse.GetSuccess();
-                } else {
-                    JsonError error = finalInventoryResponse.GetError();
-                }
-            }).GetAwaiter().GetResult();
-
-            foreach (InventoryEntry entry in remoteInv.items) {
-                GameManager.Instance().store.Dispatch(
-                    new AddItemToInventory(entry.item_id, entry.quantity, GetItemName(entry.item_id)));
-            }
-            /*
-                        Task.Run(async () => {
-                            try {
-                                APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
-
-                                // Success case
-                            } catch (WebException e) {
-                                // Failure case
-                                throw new System.Exception("Did not delete inventory.");
-                            }
-                        }).GetAwaiter().GetResult();
-            */
-            GameManager.Instance().store.Subscribe(this);
+            firstUIUpdate = true;
+            itemSlots = new Dictionary<int, InventorySlotController>();
         }
         
-        public void StateDidUpdate(GameState state) {
-            inventoryContents = state.inventoryState.inventoryContents;
-            redrawInventory();
+        void Update() {
+            if (firstUIUpdate) {
+                List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+                foreach (InventorySlotController controller in allSlots) {
+                  itemSlots.Add(controller.getId(), controller);
+                }
+                firstUIUpdate = false;
+                
+                // *MUST* subscribe *AFTER* finishing configuring the UI.
+                GameManager.Instance().inventoryStore.Subscribe(this);
+            }
+        }
+        
+        public void StateDidUpdate(InventoryState state) {
+            inventoryContents = state.inventoryContents;
+            RedrawInventory();
         }
 
         public string GetItemName(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].name;
+            return GameManager.Instance().goh.GameObjs.items[id - 1].name;
         }
 
         public int GetItemType(int id) {
-            GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-            return goh.GameObjs.items[id - 1].type;
+            return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
 
-        public void redrawInventory() {
+        public void RedrawInventory() {
             // Clear slots
-            foreach (InventorySlotController slot in itemSlots) {
-                slot.SetStoredItem(nullItem);
+            foreach (KeyValuePair<int, InventorySlotController> slot in itemSlots) {
+                slot.Value.SetStoredItem(Optional<InventoryItem>.Empty());
             }
             
             // Re-populate slots
             foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
                 foreach(HexLocation loc in element.Value) {
                     InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
-                    itemSlots[loc.hexID].SetStoredItem(item);
+                    itemSlots[loc.hexID].SetStoredItem(Optional<InventoryItem>.Of(item));
                 } 
             }
         }

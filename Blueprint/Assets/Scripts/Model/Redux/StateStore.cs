@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Reducer;
+using UnityEngine;
 
 namespace Model.Redux {
     public class StateStore<S, A> {

@@ -10,8 +10,9 @@ using UnityEngine.SceneManagement;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
-    public class MenuController : MonoBehaviour, Subscriber<GameState> {
+    public class MenuController : MonoBehaviour, Subscriber<UIState> {
         private Canvas inventoryCanvas;
+        private Canvas heldCanvas;
         private Canvas cursorCanvas;
         private Canvas pauseCanvas;
         private Canvas logoutCanvas;
@@ -21,6 +22,7 @@ namespace Controller {
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
+            heldCanvas = GameObject.FindGameObjectWithTag("Held").GetComponent<Canvas>();
             cursorCanvas = GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>();
             pauseCanvas = GameObject.FindGameObjectWithTag("Pause").GetComponent<Canvas>();
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
@@ -35,27 +37,27 @@ namespace Controller {
 
             multiCanvas = false;
 
-            GameManager.Instance().store.Subscribe(this);
+            GameManager.Instance().uiStore.Subscribe(this);
         }
 
         void Update() {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
-                    GameManager.Instance().store.Dispatch(new OpenInventoryUI());
+                    GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
                 } else if (inventoryCanvas.enabled && !multiCanvas){
-                    GameManager.Instance().store.Dispatch(new CloseUI());
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
                 if (!pauseCanvas.enabled) {
-                    GameManager.Instance().store.Dispatch(new OpenSettingsUI());
+                    GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
                 } else {
-                    GameManager.Instance().store.Dispatch(new CloseUI());
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }  else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
-                    GameManager.Instance().store.Dispatch(new OpenBlueprintUI());
+                    GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled && !multiCanvas){
-                    GameManager.Instance().store.Dispatch(new CloseUI());
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
         }
@@ -67,6 +69,7 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
         }
 
         private void OpenBlueprint() {
@@ -76,6 +79,7 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
         }
 
         // Playing state
@@ -87,11 +91,12 @@ namespace Controller {
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             cursorCanvas.enabled = true;
+            heldCanvas.enabled = true;
         }
 
         // Logout button from the pause menu
         public void LogoutButton() {
-            GameManager.Instance().store.Dispatch(new Logout());
+            GameManager.Instance().uiStore.Dispatch(new Logout());
         }
 
         // Are you sure you would like to log out?
@@ -101,16 +106,16 @@ namespace Controller {
         }
 
         public void Logout() {
-            GameManager.Instance().store.Dispatch(new OpenLoginUI());
+            GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
         }
 
         public void LogoutCancel() {
-            GameManager.Instance().store.Dispatch(new CloseUI());
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
         // Exit button from the pause menu
         public void ExitButton() {
-            GameManager.Instance().store.Dispatch(new Exit());
+            GameManager.Instance().uiStore.Dispatch(new Exit());
         }
 
         // Are you sure you would like to quit?
@@ -124,7 +129,7 @@ namespace Controller {
         }
 
         public void ExitCancel() {
-            GameManager.Instance().store.Dispatch(new CloseUI());
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
         private void PauseGame() {
@@ -135,10 +140,11 @@ namespace Controller {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
         }
 
-        public void StateDidUpdate(GameState state) {
-            switch (state.uiState.Selected) {
+        public void StateDidUpdate(UIState state) {
+            switch (state.Selected) {
               case UIState.OpenUI.Inventory:
                   multiCanvas = false;
                   OpenInventory();
@@ -178,7 +184,7 @@ namespace Controller {
                   break;
               case UIState.OpenUI.Login:
                   SceneManager.LoadScene(SceneMapping.MainMenu);
-                  GameManager.Instance().store.Unsubscribe(this);
+                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Exit:
                   multiCanvas = false;

@@ -1,15 +1,30 @@
+using UnityEngine;
+
 namespace Model.Action {
     public interface InventoryVisitor {
         void visit(AddItemToInventory addItemToInventoryAction);
         void visit(RemoveItemFromInventory anotherInventoryAction);
         void visit(RemoveItemFromStackInventory anotherInventoryAction);
         void visit(SwapItemLocations anotherInventoryAction);
-        void visit(SetHeldItem anotherInventoryAction);
         void visit(RemoveHeldItem anotherInventoryAction);
+        void visit(SetInventorySize anotherInventoryAction);
     }
 
     public abstract class InventoryAction : Action {
         public abstract void Accept(InventoryVisitor visitor);
+    }
+    
+    /* Change the inventory size */
+    public class SetInventorySize : InventoryAction {
+        public readonly int size;
+
+        public SetInventorySize(int size) {
+            this.size = size;
+        }
+
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
     }
 
     /* Add an item to the inventory for the user */
@@ -48,12 +63,12 @@ namespace Model.Action {
     public class RemoveItemFromStackInventory : InventoryAction {
         public readonly int item;
         public readonly int count;
-        public readonly int hexId;
+        public readonly int hexID;
         
-        public RemoveItemFromStackInventory(int item, int count, int hexId) {
+        public RemoveItemFromStackInventory(int item, int count, int hexID) {
             this.item = item;
             this.count = count;
-            this.hexId = hexId;
+            this.hexID = hexID;
         }
 
         public override void Accept(InventoryVisitor visitor) {
@@ -65,40 +80,26 @@ namespace Model.Action {
     public class SwapItemLocations : InventoryAction {
         public readonly int sourceHexID;
         public readonly int destinationHexID;
-        public readonly int sourceItemID;
-        public readonly int destinationItemID;
+        public readonly Optional<InventoryItem> sourceItem;
+        public readonly Optional<InventoryItem> destinationItem;
 
-        public SwapItemLocations(int sourceHexID, int destinationHexID, int sourceItemID, int destinationItemID) {
+        public SwapItemLocations(int sourceHexID, int destinationHexID, Optional<InventoryItem> sourceItem, Optional<InventoryItem> destinationItem) {
             this.sourceHexID = sourceHexID;
             this.destinationHexID = destinationHexID;
-            this.sourceItemID = sourceItemID;
-            this.destinationItemID = destinationItemID;
+            this.sourceItem = sourceItem;
+            this.destinationItem = destinationItem;
         }
 
-        public override void Accept(InventoryVisitor visitor) {
-            visitor.visit(this);
-        }
-    }
-
-    // For use when changing the heldItem slot (i.e. scroll wheel)
-    // Use AddToInventory on item pickup
-    public class SetHeldItem : InventoryAction {
-        public readonly (int itemId, HexLocation hexLocation) heldItem;
-
-        public SetHeldItem(int itemId, HexLocation hexLocation) {
-            this.heldItem = (itemId, hexLocation);
-        }
-        
         public override void Accept(InventoryVisitor visitor) {
             visitor.visit(this);
         }
     }
     
     public class RemoveHeldItem : InventoryAction {
-        public readonly (int itemId, HexLocation hexLocation) heldItem;
+        public readonly Vector2 dropAt;
 
-        public RemoveHeldItem(int itemId, HexLocation hexLocation) {
-            heldItem = (itemId, hexLocation);
+        public RemoveHeldItem(Vector2 dropAt) {
+            this.dropAt = dropAt;
         }
         
         public override void Accept(InventoryVisitor visitor) {
