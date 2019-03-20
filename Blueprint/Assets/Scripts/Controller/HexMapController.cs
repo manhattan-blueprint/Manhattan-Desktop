@@ -12,8 +12,7 @@ using Vector3 = UnityEngine.Vector3;
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
     public class HexMapController : MonoBehaviour, Subscriber<MapState> {
-        private int gridSize = 16;
-        private int outerGridSize = 16;
+        private int gridSize = 18;
         private float previousX = 0;
         private float previousZ = 0;
         
@@ -40,14 +39,14 @@ namespace Controller {
             grid.Add(position, cell);
           
             
-            for (int l = 1; l < gridSize + outerGridSize; l++) {
-                bool shouldAddToGrid = l > gridSize;      
+            for (int l = 1; l < gridSize; l++) {
                 // Move to correct layer, top left of origin
+                
                 cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, -0.5f, l * 1.5f), rotation);
                 position = new Vector2(-l, l);
                 cell.transform.parent = this.gameObject.transform;
                 cell.AddComponent<HexCell>().setPosition(position);
-                if (shouldAddToGrid) grid.Add(position, cell);
+                grid.Add(position, cell);
                 
                 setPreviousCoords(cell);
 
@@ -57,7 +56,7 @@ namespace Controller {
                     position = new Vector2(-l + i, l);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
-                    if (shouldAddToGrid) grid.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
 
@@ -67,7 +66,7 @@ namespace Controller {
                     position = new Vector2(i, l-i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
-                    if (shouldAddToGrid) grid.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
 
@@ -77,7 +76,7 @@ namespace Controller {
                     position = new Vector2(l, -i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
-                    if (shouldAddToGrid) grid.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
 
@@ -87,7 +86,7 @@ namespace Controller {
                     position = new Vector2(l-i, -l);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
-                    if (shouldAddToGrid) grid.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
                 
@@ -97,7 +96,7 @@ namespace Controller {
                     position = new Vector2(-i, -l + i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
-                    if (shouldAddToGrid) grid.Add(position, cell);
+                    grid.Add(position, cell);
                 }
                 setPreviousCoords(cell);
                 
@@ -107,7 +106,7 @@ namespace Controller {
                     position = new Vector2(-l, i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
-                    if (shouldAddToGrid) grid.Add(position, cell);
+                    grid.Add(position, cell);
                 }
             } 
         }
