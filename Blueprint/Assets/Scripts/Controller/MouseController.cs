@@ -55,8 +55,6 @@ namespace Controller {
 
                 if (!Physics.Raycast(ray, out hit)) return;
                 HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
-                Debug.Log(hc.getPosition());
-                Destroy(hit.transform.gameObject);
                 if (hc == null) return;
                 GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
             } 
