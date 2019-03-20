@@ -113,7 +113,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
                     ToSplashScreen();
                 }
                 infoMessage.gameObject.transform.position =
-                    loginLoginButton.gameObject.transform.position - new Vector3(0, 100.0f, 0);
+                    loginLoginButton.gameObject.transform.position - new Vector3(0, Screen.height/10, 0);
                 break;
 
             case VisibleMenu.Register:
@@ -131,7 +131,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
                     ToLoginMenu();
                 }
                 infoMessage.gameObject.transform.position =
-                    registerRegisterButton.gameObject.transform.position - new Vector3(0, 100.0f, 0);
+                    registerRegisterButton.gameObject.transform.position - new Vector3(0, Screen.height/10, 0);
                 break;
         }
 
