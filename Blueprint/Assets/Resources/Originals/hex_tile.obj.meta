@@ -16,7 +16,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: hex_tileMat
-    second: {fileID: 2100000, guid: 928ab1509171227429d9b1746e429efb, type: 2}
+    second: {fileID: 2100000, guid: 867701a673f0649a3a7408b6b21a7641, type: 3}
   materials:
     importMaterials: 1
     materialName: 0
