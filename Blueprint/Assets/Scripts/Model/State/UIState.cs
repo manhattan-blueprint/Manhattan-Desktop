@@ -24,7 +24,7 @@ namespace Model.State {
         public OpenUI Selected;
 
         public UIState() {
-            this.Selected = OpenUI.Playing;
+            this.Selected = OpenUI.Login;
         }
     }
 }
