@@ -8,7 +8,7 @@ namespace Utils {
         OscillateHeight,
         Grow,
         Appear,
-        Dissappear,
+        Disappear,
         OscillateAlpha,
         OscillateSize
     }
@@ -20,14 +20,6 @@ namespace Utils {
         private IEnumerator timedCoroutine;
         private float overshoot;
         private float framePeriod;
-
-        public void Start() {
-
-        }
-
-        public void Update() {
-
-        }
 
         ////////////////////////////////////////////////////////////////////////
         // Movement Animations.
@@ -67,8 +59,7 @@ namespace Utils {
                     break;
             }
 
-            if (timedCoroutine != null)
-                StartCoroutine(timedCoroutine);
+            if (timedCoroutine != null) StartCoroutine(timedCoroutine);
         }
 
         private IEnumerator MoveToAccelerate(Vector3 moveVector, float time,
@@ -89,8 +80,7 @@ namespace Utils {
 
             gameObject.transform.position = originalPosition + moveVector;
 
-            if (destroyAfter)
-                MonoBehaviour.Destroy(gameObject);
+            if (destroyAfter) MonoBehaviour.Destroy(gameObject);
 
             Destroy(this);
         }
@@ -113,8 +103,7 @@ namespace Utils {
 
             gameObject.transform.position = originalPosition + moveVector;
 
-            if (destroyAfter)
-                MonoBehaviour.Destroy(gameObject);
+            if (destroyAfter) MonoBehaviour.Destroy(gameObject);
 
             Destroy(this);
         }
@@ -171,16 +160,15 @@ namespace Utils {
                     timedCoroutine = Appear(time, delay);
                     break;
 
-                case Anim.Dissappear:
-                    timedCoroutine = Dissappear(time, delay);
+                case Anim.Disappear:
+                    timedCoroutine = Disappear(time, delay);
                     break;
 
                 default:
                     break;
             }
 
-            if (timedCoroutine != null)
-                StartCoroutine(timedCoroutine);
+            if (timedCoroutine != null) StartCoroutine(timedCoroutine);
         }
 
         private IEnumerator OscillateAlpha(float time, bool makeBounce,
@@ -195,8 +183,7 @@ namespace Utils {
                 float alphaModifier = ((Mathf.Sin(count * Mathf.Deg2Rad) + 1) / 2.0f)
                     * (1 - minimumAlpha) + minimumAlpha;
 
-                if (!makeBounce)
-                    alphaModifier = Mathf.Abs(alphaModifier);
+                if (!makeBounce) alphaModifier = Mathf.Abs(alphaModifier);
 
                 if (gameObject.GetComponent<CanvasGroup>() != null)
                     gameObject.GetComponent<CanvasGroup>().alpha = alphaModifier;
@@ -266,7 +253,7 @@ namespace Utils {
             Destroy(this);
         }
 
-        private IEnumerator Dissappear(float time, float delay) {
+        private IEnumerator Disappear(float time, float delay) {
             float speed = (framePeriod * 90.0f) / time;
 
             yield return new WaitForSeconds(delay);

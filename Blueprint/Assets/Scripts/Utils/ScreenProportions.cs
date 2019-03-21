@@ -9,9 +9,6 @@ namespace Utils {
         private float height;
         private float width;
 
-        void Start() {
-        }
-
         void Update() {
             height = Screen.height;
             width = Screen.width;

@@ -19,6 +19,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private Text infoMessage;
+    [SerializeField] private GameObject fadeIn;
 
     [SerializeField] private GameObject splashScreen;
     [SerializeField] private Text blueprintLogo;
@@ -66,6 +67,10 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         animationManager.StartAppearanceAnimation(pressSpace.gameObject,
             Anim.OscillateAlpha, 0.6f, true, 0.3f);
+
+        // Fade whole menu fade in
+        animationManager.StartAppearanceAnimation(fadeIn.gameObject,
+            Anim.Disappear, 2.0f, true, 1.0f, 0.5f);
 
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
@@ -291,7 +296,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         SetMessageClear();
         obj.GetComponent<CanvasGroup>().interactable = false;
         triggerAnimating();
-        animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Dissappear, 0.3f, false, 0.0f, 0.0f);
+        animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Disappear, 0.3f, false, 0.0f, 0.0f);
         animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f, false);
     }
 
