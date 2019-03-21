@@ -24,10 +24,13 @@ namespace Model.BlueprintUI {
 
         }
 
-        private GameObject NewPrimaryResource(float x, float y) {
+        private GameObject NewPrimaryResource(float x, float y, string resourcePath) {
             GameObject hex = new GameObject();
             hex.transform.SetParent(BlueprintUICanvas.transform);
             hex.transform.position = new Vector2(x, y);
+
+            Image background = hex.AddComponent<Image>();
+            background.sprite = AssetManager.Instance().backgroundSprite;
 
             Image background = hex.AddComponent<Image>();
             background.sprite = AssetManager.Instance().backgroundSprite;

@@ -7,10 +7,11 @@ using UnityEngine.UI;
 namespace Model.BlueprintUI {
     // Holds interface and generic abstract functions for blueprint UI
     public interface IBlueprintUIMode {
-        Canvas BlueprintUICanvas { get; set; }
-        GameObject Title { get; set; }
+        Canvas BlueprintUICanvas { get; set; }          // The whole canvas for all menus.
+        GameObject Title { get; set; }                  //
         String TitleStr { get; set; }
         List<GameObject> CanvasObjects { get; set; }
+        Int UniqueID { get; set; }
 
         void OnInitialize();
         void OnShow();
