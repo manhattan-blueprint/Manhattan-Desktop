@@ -4525,25 +4525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpFalloff:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.020832062
-      value: 1.0062561
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.9874878
-      value: 0.012500763
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -4666,7 +4648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab9ad3676ea5e43358bf77dda0ad1648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cube: {fileID: 4178118753178404, guid: 3b40ceb137fe54b9c9c286cbf68279ee, type: 3}
-  cubeLarge: {fileID: 4860563762599424, guid: 6dc5f2df4889e4ff49d078c16bae0217, type: 3}
-  capsule: {fileID: 4341569406944394, guid: baf27c7d89b914e96ab73de5358017fc, type: 3}
-  machinery: {fileID: 4573807389177294, guid: e2032d64f6722460ca19b7a6adb03ae8, type: 3}
+  cube: {fileID: 0}
+  cubeLarge: {fileID: 0}
+  capsule: {fileID: 0}
+  machinery: {fileID: 0}

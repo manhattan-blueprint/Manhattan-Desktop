@@ -17,7 +17,7 @@ namespace Model.BlueprintUI {
         }
 
         void IBlueprintUIMode.OnShow() {
-            CanvasObjects.Add(NewPrimaryResource(100, 100));
+            CanvasObjects.Add(NewPrimaryResource(500, 500, "Logs"));
         }
 
         void IBlueprintUIMode.OnHide() {
@@ -25,17 +25,26 @@ namespace Model.BlueprintUI {
         }
 
         private GameObject NewPrimaryResource(float x, float y, string resourcePath) {
-            GameObject hex = new GameObject();
-            hex.transform.SetParent(BlueprintUICanvas.transform);
-            hex.transform.position = new Vector2(x, y);
+            // GameObject hex = new GameObject();
+            // hex.transform.SetParent(BlueprintUICanvas.transform);
+            // hex.transform.position = new Vector2(x, y);
+            //
+            // Image hexBackground = hex.AddComponent<Image>();
+            // hexBackground.sprite = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
 
-            Image background = hex.AddComponent<Image>();
-            background.sprite = AssetManager.Instance().backgroundSprite;
+            GameObject hexResource = new GameObject();
+            hexResource.transform.SetParent(BlueprintUICanvas.transform);
+            hexResource.transform.position = new Vector2(x, y);
 
-            Image background = hex.AddComponent<Image>();
-            background.sprite = AssetManager.Instance().backgroundSprite;
+            Image resourceImage = hexResource.AddComponent<Image>();
+            resourceImage.sprite = Resources.Load<Sprite>("Logs.jpeg");
 
-            return hex;
+            // (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
+            // (svgChild.transform as RectTransform).localScale = new Vector3(1.05f, 1.05f, 0.0f);
+
+            Debug.Log(resourceImage.sprite);
+
+            return hexResource;
         }
     }
 }

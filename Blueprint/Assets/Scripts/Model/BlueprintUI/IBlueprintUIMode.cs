@@ -11,7 +11,6 @@ namespace Model.BlueprintUI {
         GameObject Title { get; set; }                  //
         String TitleStr { get; set; }
         List<GameObject> CanvasObjects { get; set; }
-        Int UniqueID { get; set; }
 
         void OnInitialize();
         void OnShow();
