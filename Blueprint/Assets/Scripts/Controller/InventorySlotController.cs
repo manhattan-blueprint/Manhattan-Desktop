@@ -33,8 +33,8 @@ namespace Controller {
         private float rolloverTime = 1.0f;
 
         private void Start() {
-            highlightObject = GameObject.Find("Highlight");
-            rolloverObject = GameObject.Find("Rollover");
+            highlightObject = GameObject.Find(this.transform.parent.name + "/Highlight");
+            rolloverObject = GameObject.Find(this.transform.parent.name + "/Rollover");
             slotHeight = (transform as RectTransform).rect.height;
             slotWidth = (transform as RectTransform).rect.width;
             storedItem = Optional<InventoryItem>.Empty();
@@ -113,7 +113,8 @@ namespace Controller {
 
         public void SetStoredItem(Optional<InventoryItem> item) {
             this.storedItem = item;
-            Image image = GameObject.Find("Icon" + id).GetComponentInChildren<Image>();
+            //TODO: GetChild(1) is a hack, fix it.
+            Image image = this.transform.GetChild(1).GetComponent<Image>();
             Text text = transform.GetComponentInChildren<Text>();
 
             if (!this.storedItem.IsPresent()) {

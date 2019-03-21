@@ -18,6 +18,8 @@ namespace Controller {
         private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
+        private Canvas machineCanvas;
+        private Canvas machineInventoryCanvas;
         private bool multiCanvas;
 
         void Start() {
@@ -28,12 +30,15 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
+            machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
+            machineCanvas.enabled = false;
 
             multiCanvas = false;
 
@@ -53,10 +58,16 @@ namespace Controller {
                 } else {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            }  else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
+            } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled && !multiCanvas){
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                }
+            } else if (Input.GetKeyDown(KeyMapping.Machinery)) {
+                if (!machineCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenMachineUI());
+                } else {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
@@ -81,6 +92,17 @@ namespace Controller {
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
         }
+        
+        private void OpenMachine() {
+            Time.timeScale = 0;
+            machineCanvas.enabled = true;
+            machineInventoryCanvas.enabled = true;
+            pauseCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
 
         // Playing state
         private void ContinueGame() {
@@ -90,6 +112,8 @@ namespace Controller {
             Cursor.visible = false;
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            machineCanvas.enabled = false;
+            machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
         }
@@ -155,6 +179,10 @@ namespace Controller {
               case UIState.OpenUI.Blueprint:
                   multiCanvas = false;
                   OpenBlueprint();
+                  break;
+              case UIState.OpenUI.Machine:
+                  multiCanvas = false;
+                  OpenMachine();
                   break;
               case UIState.OpenUI.Pause:
                   multiCanvas = false;

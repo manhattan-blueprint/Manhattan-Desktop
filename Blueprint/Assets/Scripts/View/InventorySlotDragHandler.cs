@@ -17,7 +17,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
         GameObject.Find(this.transform.parent.name).GetComponentInChildren<Text>().text = "";
 
         // Foreground object
-        foregroundObject = GameObject.Find("drag");
+        foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
         foregroundImage = foregroundObject.GetComponent<Image>();
         RectTransform rect = transform as RectTransform;
         

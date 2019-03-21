@@ -32,7 +32,8 @@ namespace Controller {
         
         void Update() {
             if (firstUIUpdate) {
-                List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+                List<InventorySlotController> allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+                
                 foreach (InventorySlotController controller in allSlots) {
                   itemSlots.Add(controller.getId(), controller);
                 }
