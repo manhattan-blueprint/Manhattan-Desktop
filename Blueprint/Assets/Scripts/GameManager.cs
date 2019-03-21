@@ -62,7 +62,8 @@ public class GameManager {
                     inventoryStore.Dispatch(
                         new AddItemToInventory(entry.item_id, entry.quantity, goh.GameObjs.items[entry.item_id - 1].name));
                 }
-                SceneManager.LoadScene(SceneMapping.World);
+                // Can't call a scene dispatch in an asynchronous function.
+                this.uiStore.Dispatch(new OpenPlayingUI());
             } else {
                 JsonError error = finalInventoryResponse.GetError();
             }

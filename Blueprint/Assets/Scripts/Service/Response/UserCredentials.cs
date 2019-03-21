@@ -8,7 +8,7 @@ namespace Service.Response {
     public class UserCredentials {
         private string username;
         private string password;
-        
+
         // Server tokens
         private string access;
         private string refresh;
@@ -43,10 +43,9 @@ namespace Service.Response {
         public string GetRefreshToken() {
             return refresh;
         }
-
+        
         public string GetAccountType() {
             return accountType;
         }
-        
     }
 }

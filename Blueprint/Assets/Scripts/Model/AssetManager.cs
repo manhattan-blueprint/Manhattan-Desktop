@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Model {
     public class AssetManager {
         private static AssetManager instance;
-        public readonly Font FontHelveticaNeueBold = Resources.Load("helveticaneue_bold", typeof(Font)) as Font;
+        public readonly Font FontHelveticaNeueBold = Resources.Load("Fonts/HelveticaNeueBold", typeof(Font)) as Font;
         public readonly Color ColourOffWhite = new Color32(245, 245, 245, 255);
         public readonly int QuantityFieldFontSize = (int) Mathf.Round(Screen.height/50);
 
