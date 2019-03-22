@@ -46,5 +46,17 @@ namespace Model {
 
             return sprite;
         }
+
+        // Get the associated UI sprite for a given item ID
+        public Texture GetItemTexture(int id, string path="") {
+            Texture texture = Resources.Load(path + "sprite_" + id, typeof(Texture)) as Texture;
+
+            // Load default if object sprite doesn't exist
+            if (texture == null) {
+                texture = Resources.Load("sprite_default", typeof(Texture)) as Texture;
+            }
+
+            return texture;
+        }
     }
 }

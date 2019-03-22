@@ -7,6 +7,7 @@ using Model.BlueprintUI;
 namespace Controller {
     public class BlueprintUIController : MonoBehaviour {
         private IBlueprintUIMode primaryResourceUI;
+        private IBlueprintUIMode craftableResourceUI;
         private IBlueprintUIMode machineryResourceUI;
         private IBlueprintUIMode blueprintResourceUI;
         private IBlueprintUIMode goalResourceUI;
@@ -16,6 +17,7 @@ namespace Controller {
 
         private enum CurrentMenu {
             Primary,
+            Craftable,
             Machinery,
             Blueprint,
             Goal
@@ -23,41 +25,45 @@ namespace Controller {
 
         void Start() {
             primaryResourceUI = new PrimaryResourceUI();
-            primaryResourceUI.Initialize(gameObject.GetComponent<Canvas>(), "Primary Resources");
+            craftableResourceUI = new CraftableResourceUI();
+            machineryResourceUI = new MachineryResourceUI();
+            blueprintResourceUI = new BlueprintResourceUI();
+            goalResourceUI = new GoalResourceUI();
+            primaryResourceUI.Initialize(gameObject, "Primary Resources");
+            craftableResourceUI.Initialize(gameObject, "Craftable Resources");
+            machineryResourceUI.Initialize(gameObject, "Machine Craftable Resources");
+            blueprintResourceUI.Initialize(gameObject, "Blueprints");
+            goalResourceUI.Initialize(gameObject, "Final Goal: 'Phone' Home");
             currentMenu = CurrentMenu.Primary;
             visible = false;
         }
 
         void Update() {
+            // Need to make a menu visible if no menu is currently visible.
             if (gameObject.GetComponent<Canvas>().enabled && !visible) {
                 switch (currentMenu) {
                     case CurrentMenu.Primary: primaryResourceUI.Show(); break;
+                    case CurrentMenu.Craftable: craftableResourceUI.Show(); break;
                     case CurrentMenu.Machinery: machineryResourceUI.Show(); break;
                     case CurrentMenu.Blueprint: blueprintResourceUI.Show(); break;
                     case CurrentMenu.Goal: goalResourceUI.Show(); break;
                 }
                 visible = true;
             }
-
-            // All menus need to be rehidden for correct recreation.
-            if (!gameObject.GetComponent<Canvas>().enabled && visible) {
-                if (visible) {
-                    switch (currentMenu) {
-                        case CurrentMenu.Primary: primaryResourceUI.Hide(); break;
-                        case CurrentMenu.Machinery: machineryResourceUI.Hide(); break;
-                        case CurrentMenu.Blueprint: blueprintResourceUI.Hide(); break;
-                        case CurrentMenu.Goal: goalResourceUI.Hide(); break;
-                    }
-                }
-                visible = false;
-            }
         }
 
         // Swap to the next menu in menu progression.
-        private void NextMenu(GameObject obj) {
+        public void NextMenu() {
+            Debug.Log("Swapping to next menu");
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
+                    craftableResourceUI.Show();
+                    currentMenu = CurrentMenu.Craftable;
+                    break;
+
+                case CurrentMenu.Craftable:
+                    craftableResourceUI.Hide();
                     machineryResourceUI.Show();
                     currentMenu = CurrentMenu.Machinery;
                     break;
@@ -87,7 +93,8 @@ namespace Controller {
         }
 
         // Swap to the previous menu in menu progression.
-        private void PreviousMenu(GameObject obj) {
+        public void PreviousMenu() {
+            Debug.Log("Swapping to previous menu");
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
@@ -95,9 +102,15 @@ namespace Controller {
                     currentMenu = CurrentMenu.Goal;
                     break;
 
+                case CurrentMenu.Craftable:
+                    craftableResourceUI.Hide();
+                    primaryResourceUI.Show();
+                    currentMenu = CurrentMenu.Primary;
+                    break;
+
                 case CurrentMenu.Machinery:
                     machineryResourceUI.Hide();
-                    primaryResourceUI.Show();
+                    craftableResourceUI.Show();
                     currentMenu = CurrentMenu.Primary;
                     break;
 

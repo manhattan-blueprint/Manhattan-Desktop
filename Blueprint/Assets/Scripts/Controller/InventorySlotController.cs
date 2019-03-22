@@ -27,7 +27,7 @@ namespace Controller {
         private GameObject rolloverObject;
         private Vector3 rolloverPosition;
         private bool rolloverState;
-        
+
         // EDITABLE
         // Time before rollover text shows (secs)
         private float rolloverTime = 1.0f;
@@ -40,7 +40,7 @@ namespace Controller {
             storedItem = Optional<InventoryItem>.Empty();
             gameManager = GameManager.Instance();
             assetManager = AssetManager.Instance();
-                
+
             // Item image and quantity
             GameObject newGO = new GameObject("Icon" + id);
             newGO.transform.SetParent(gameObject.transform);
@@ -48,20 +48,20 @@ namespace Controller {
 
             setupImage(newGO);
             setupText(this.gameObject);
-            
+
             // Initialise rollover object
             rolloverObject.GetComponentInChildren<Text>().font = assetManager.FontHelveticaNeueBold;
             rolloverObject.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleCenter;
         }
-        
+
         public void OnPointerEnter(PointerEventData pointerEventData) {
             setHighlightLocation(transform.position.x, transform.position.y);
-                
+
             if (!mouseOver) {
                 // Mouse entry
                 mouseOver = true;
                 mouseEntryTime = Time.realtimeSinceStartup;
-            } 
+            }
         }
 
         public void OnPointerExit(PointerEventData pointerEventData) {
@@ -73,7 +73,7 @@ namespace Controller {
 
         private void Update() {
             if (mouseOver && (Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem.IsPresent()) {
-                 
+
                 if (!rolloverState) {
                     rolloverState = true;
                     rolloverObject.SetActive(true);
@@ -84,18 +84,18 @@ namespace Controller {
                     rolloverState = false;
                     mouseEntryTime = Time.realtimeSinceStartup;
                 }
-            } 
+            }
         }
-        
+
         private void setRolloverLocation(float x, float y, string inputText) {
             rolloverObject.transform.position = new Vector2(x, y);
             Text text = rolloverObject.GetComponentInChildren<Text>();
             text.text = inputText;
-            
+
             // Set box to width of word
             RectTransform rect = rolloverObject.transform as RectTransform;
-            rect.sizeDelta = new Vector2(text.preferredWidth + slotWidth/8, slotHeight/5);            
-        } 
+            rect.sizeDelta = new Vector2(text.preferredWidth + slotWidth/8, slotHeight/5);
+        }
 
         private void setHighlightLocation(float x, float y) {
             highlightObject.SetActive(true);
@@ -122,7 +122,7 @@ namespace Controller {
             } else {
                 image.sprite = assetManager.GetItemSprite(item.Get().GetId());
                 text.text = item.Get().GetQuantity().ToString();
-                    
+
                 image.enabled = true;
                 text.enabled = true;
                 image.transform.localPosition = new Vector3(0, slotHeight/8, 0);
@@ -137,7 +137,7 @@ namespace Controller {
             text.font = assetManager.FontHelveticaNeueBold;
             text.transform.localPosition = new Vector3(0, -slotHeight/6, 0);
             text.color = assetManager.ColourOffWhite;
-            text.alignment = TextAnchor.MiddleCenter; 
+            text.alignment = TextAnchor.MiddleCenter;
             text.text = "";
             text.raycastTarget = false;
             text.fontSize = assetManager.QuantityFieldFontSize;
@@ -153,19 +153,19 @@ namespace Controller {
             image.rectTransform.sizeDelta = new Vector2(slotWidth/3, slotHeight/3);
             return image;
         }
-    
+
         public void OnDrop(PointerEventData eventData) {
             RectTransform invPanel = transform as RectTransform;
             GameObject droppedObject = eventData.pointerDrag;
-            
-            InventorySlotController source = GameObject.Find(droppedObject.transform.name).GetComponentInParent<InventorySlotController>(); 
+
+            InventorySlotController source = GameObject.Find(droppedObject.transform.name).GetComponentInParent<InventorySlotController>();
             InventorySlotController destination = GameObject.Find(transform.name).GetComponentInParent<InventorySlotController>();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
                 if (destination.storedItem.IsPresent()) {
                     // Move to occupied slot
                     Optional<InventoryItem> temp = destination.storedItem;
-                    
+
                     destination.SetStoredItem(source.storedItem);
                     source.SetStoredItem(temp);
                 } else {
@@ -177,6 +177,6 @@ namespace Controller {
                 this.gameManager.inventoryStore.Dispatch(new SwapItemLocations(source.id, destination.id,
                     destination.storedItem, source.storedItem));
             }
-        } 
+        }
     }
-}    
+}

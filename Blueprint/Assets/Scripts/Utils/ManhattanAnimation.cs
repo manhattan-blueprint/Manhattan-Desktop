@@ -16,7 +16,7 @@ namespace Utils {
     // Makes an animation happen to an object, and then removes the component
     // after. The component istherefore not removed if the animation is
     // indefinite.
-    class ManhattanAnimation : MonoBehaviour {
+    public class ManhattanAnimation : MonoBehaviour {
         private IEnumerator timedCoroutine;
         private float overshoot;
         private float framePeriod;
