@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
-using Model.Action;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

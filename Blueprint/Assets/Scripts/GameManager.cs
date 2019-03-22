@@ -16,6 +16,7 @@ public class GameManager {
     public readonly StateStore<InventoryState, InventoryAction> inventoryStore;
     public readonly StateStore<UIState, UIAction> uiStore;
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
+    public readonly StateStore<MachineState, MachineAction> machineStore;
     public readonly GameObjectsHandler goh;
     private UserCredentials credentials;
     
@@ -35,6 +36,7 @@ public class GameManager {
         this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
+        this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
         
         // Load item schema from server
         this.goh = GameObjectsHandler.WithRemoteSchema();
