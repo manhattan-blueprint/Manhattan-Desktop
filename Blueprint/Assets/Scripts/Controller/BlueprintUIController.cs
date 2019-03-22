@@ -33,7 +33,7 @@ namespace Controller {
             craftableResourceUI.Initialize(gameObject, "Craftable Resources");
             machineryResourceUI.Initialize(gameObject, "Machine Craftable Resources");
             blueprintResourceUI.Initialize(gameObject, "Blueprints");
-            goalResourceUI.Initialize(gameObject, "Final Goal: 'Phone' Home");
+            goalResourceUI.Initialize(gameObject, "Final Goal");
             currentMenu = CurrentMenu.Primary;
             visible = false;
         }
@@ -54,7 +54,6 @@ namespace Controller {
 
         // Swap to the next menu in menu progression.
         public void NextMenu() {
-            Debug.Log("Swapping to next menu");
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
@@ -94,7 +93,6 @@ namespace Controller {
 
         // Swap to the previous menu in menu progression.
         public void PreviousMenu() {
-            Debug.Log("Swapping to previous menu");
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
@@ -111,7 +109,7 @@ namespace Controller {
                 case CurrentMenu.Machinery:
                     machineryResourceUI.Hide();
                     craftableResourceUI.Show();
-                    currentMenu = CurrentMenu.Primary;
+                    currentMenu = CurrentMenu.Craftable;
                     break;
 
                 case CurrentMenu.Blueprint:
@@ -127,7 +125,7 @@ namespace Controller {
                     break;
 
                 default:
-                    throw new Exception("Attempting to swap menu while in unexpected state.");
+                    throw new Exception("Attempting to swap menu while in an unexpected state.");
                     break;
             }
         }

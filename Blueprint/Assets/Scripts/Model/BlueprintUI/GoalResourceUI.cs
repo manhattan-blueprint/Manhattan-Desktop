@@ -19,6 +19,10 @@ namespace Model.BlueprintUI {
         }
 
         void IBlueprintUIMode.OnShow() {
+            BlueprintUITools.NewGoal(BlueprintUICanvas.transform, CanvasObjects, 0.5f, 0.45f, 0.25f, 32, 28, 30, 31);
+
+            BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
+                "Craft this to win! ᕙ(⇀‸↼‶)ᕗ");
         }
 
         void IBlueprintUIMode.OnHide() {

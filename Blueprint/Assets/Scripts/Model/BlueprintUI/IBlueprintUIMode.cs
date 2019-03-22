@@ -34,13 +34,12 @@ namespace Model.BlueprintUI {
 
         // Show spawns that are congruent between all screens.
         public static void Show(this IBlueprintUIMode bUIMode) {
-            bUIMode.Title = BlueprintUITools.CreateTitle(bUIMode.BlueprintUICanvas.transform, bUIMode.TitleStr);
-            bUIMode.CanvasObjects.Add(bUIMode.Title);
+            BlueprintUITools.CreateTitle(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, bUIMode.TitleStr);
 
-            Button leftBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.075f, 0.5f), "LeftArrow");
+            Button leftBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.075f, 0.5f), "LeftArrow", 0.1f);
             leftBtn.onClick.AddListener(bUIMode.blueprintUIController.PreviousMenu);
 
-            Button rightBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.925f, 0.5f), "RightArrow");
+            Button rightBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.925f, 0.5f), "RightArrow", 0.1f);
             rightBtn.onClick.AddListener(bUIMode.blueprintUIController.NextMenu);
 
             // BlueprintUICanvas.interactable = true;
