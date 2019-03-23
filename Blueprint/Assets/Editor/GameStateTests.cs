@@ -2,6 +2,7 @@
 using Model.State;
 using Model.Action;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Tests {
     public class GameStateTests {
@@ -59,14 +60,15 @@ namespace Tests {
         [Test]
         public void TestOpenMachineUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Machine));
+            Assert.That(gameManager.uiStore.GetState().SelectedMachineLocation, Is.EqualTo(new Vector2(0, 0)));
         }
 
         [Test]
         public void TestCloseMachineUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new CloseUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
@@ -123,7 +125,7 @@ namespace Tests {
         [Test]
         public void TestOpenMachSettingsUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.MachPause));
         }
@@ -131,7 +133,7 @@ namespace Tests {
         [Test]
         public void TestCloseMachSettingsUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new CloseUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Machine));
@@ -195,7 +197,7 @@ namespace Tests {
         [Test]
         public void TestOpenMachLogoutUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new Logout());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.MachLogout));
@@ -204,7 +206,7 @@ namespace Tests {
         [Test]
         public void TestCloseMachLogoutUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0,0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new Logout());
             gameManager.uiStore.Dispatch(new CloseUI());
@@ -269,7 +271,7 @@ namespace Tests {
         [Test]
         public void TestOpenMachExitUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new Exit());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.MachExit));
@@ -278,7 +280,7 @@ namespace Tests {
         [Test]
         public void TestCloseMachExitUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new Exit());
             gameManager.uiStore.Dispatch(new CloseUI());
@@ -288,7 +290,7 @@ namespace Tests {
         [Test]
         public void TestMachExitUIToMachineUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMachineUI());
+            gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new Exit());
             gameManager.uiStore.Dispatch(new CloseUI());

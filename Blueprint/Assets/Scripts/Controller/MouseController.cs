@@ -54,9 +54,21 @@ namespace Controller {
                 hit = new RaycastHit();
 
                 if (!Physics.Raycast(ray, out hit)) return;
+                
+                // If we hit a machine, go to machine UI
+                MachinePlaceable mp = hit.transform.gameObject.GetComponent<MachinePlaceable>();
+                if (mp != null) {
+                    // Calculate where the machine is
+                    HexCell parentHex = mp.transform.parent.gameObject.GetComponent<HexCell>();
+                    GameManager.Instance().uiStore.Dispatch(new OpenMachineUI(parentHex.getPosition()));
+                    return;
+                }
+                
+                // Otherwise try and place an object in that spot
                 HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
-                if (hc == null) return;
-                GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
+                if (hc != null) {
+                    GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
+                }
             } 
             
             

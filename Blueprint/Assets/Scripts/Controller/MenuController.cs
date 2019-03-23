@@ -37,6 +37,8 @@ namespace Controller {
             machineCanvas.enabled = false;
 
             multiCanvas = false;
+            
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(11, 3, "Furnace"));
 
             GameManager.Instance().uiStore.Subscribe(this);
         }
@@ -49,7 +51,9 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (!pauseCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
                 } else {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
@@ -60,13 +64,7 @@ namespace Controller {
                 } else if (blueprintCanvas.enabled && !multiCanvas){
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            } else if (Input.GetKeyDown(KeyMapping.Machinery)) {
-                if (!machineCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenMachineUI());
-                } else {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
-                }
-            }
+            } 
         }
 
         private void OpenInventory() {
@@ -163,6 +161,7 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
+        // TODO: REFACTOR NOW WE DONT ALLOW MULTIPLE CANVAS
         public void StateDidUpdate(UIState state) {
             switch (state.Selected) {
               case UIState.OpenUI.Inventory:

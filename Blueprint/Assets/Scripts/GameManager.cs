@@ -39,7 +39,7 @@ public class GameManager {
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
 
         // Load item schema from server
-        this.goh = GameObjectsHandler.WithRemoteSchema();
+        this.goh = GameObjectsHandler.FromRemote();
     }
 
     public static GameManager Instance() {

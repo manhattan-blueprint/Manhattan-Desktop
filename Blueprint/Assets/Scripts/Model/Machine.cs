@@ -9,5 +9,21 @@ namespace Model {
         public Optional<InventoryItem> rightInput;
         public Optional<InventoryItem> fuel;
         public Optional<InventoryItem> output;
+
+        // Flattens left and right input into a list of recipe elements
+        public List<RecipeElement> GetInputs() {
+            List<RecipeElement> recipeElements = new List<RecipeElement>();
+            if (leftInput.IsPresent()) {
+                InventoryItem left = leftInput.Get();
+                recipeElements.Add(new RecipeElement(left.GetId(), left.GetQuantity()));
+            }
+
+            if (rightInput.IsPresent()) {
+                InventoryItem right = rightInput.Get();
+                recipeElements.Add(new RecipeElement(right.GetId(), right.GetQuantity()));
+            }
+
+            return recipeElements;
+        }
     }
 }

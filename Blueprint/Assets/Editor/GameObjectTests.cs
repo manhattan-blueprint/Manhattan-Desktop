@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Model;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ public class GameObjectTests {
     // Serializes the whole item schema using GameObjectsHandler
     [Test]
     public void TestInitialiseGameObjectsHandler() {
-        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));     
+        GameObjectsHandler goh = GameObjectsHandler.FromFilepath(getFilepath(itemSchemaV1));     
         
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(16));
@@ -72,7 +73,7 @@ public class GameObjectTests {
     // Serializes item schema from default remote url
     [Test]
     public void TestInitialiseGameObjectsHandlerRemote() {
-        GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
+        GameObjectsHandler goh = GameObjectsHandler.FromRemote();
         
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(32));
@@ -90,17 +91,18 @@ public class GameObjectTests {
     [Test]
     public void TestGetSingleElementBlueprintPass() {
         // Serialize schema
-        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
+        GameObjectsHandler goh = GameObjectsHandler.FromFilepath(getFilepath(itemSchemaV1));
 
         // Create list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(2, 8));
 
         try {
-            GameObjectEntry goe = goh.GetBlueprint(availables, 7);
+            Optional<GameObjectEntry> goe = goh.GetBlueprint(availables, 7);
             
             //Assert values are correct
-            Assert.That(goe.name, Is.EqualTo("furnace"));
+            Assert.That(goe.IsPresent());
+            Assert.That(goe.Get().name, Is.EqualTo("furnace"));
         } catch (InvalidDataException e) {
             // Exception thrown, failure case
             Assert.Fail();
@@ -111,15 +113,15 @@ public class GameObjectTests {
     [Test]
     public void TestGetSingleElementBlueprintFail() {
         // Serialize schema
-        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
+        GameObjectsHandler goh = GameObjectsHandler.FromFilepath(getFilepath(itemSchemaV1));
 
         // Create list of available objects, with too few values
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(2, 6));
         
-        GameObjectEntry goe = goh.GetBlueprint(availables, 7);
+        Optional<GameObjectEntry> goe = goh.GetBlueprint(availables, 7);
 
-        if (goe != null) {
+        if (goe.IsPresent()) {
             // Failure case
             // GetBlueprint returns non-null object where null expected
             Assert.Fail();
@@ -130,7 +132,7 @@ public class GameObjectTests {
     [Test]
     public void TestGetRecipePass() {
         // Serialize schema
-        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
+        GameObjectsHandler goh = GameObjectsHandler.FromFilepath(getFilepath(itemSchemaV1));
         
         // Create valid list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
@@ -138,27 +140,28 @@ public class GameObjectTests {
         availables.Add(new RecipeElement(5, 1));
 
         // Obtain valid output
-        GameObjectEntry goe = goh.GetRecipe(availables, 7);
+        Optional<GameObjectEntry> goe = goh.GetRecipe(availables, 7);
         
         // Asserts
-        Assert.That(goe.name, Is.EqualTo("steel"));
+        Assert.That(goe.IsPresent());
+        Assert.That(goe.Get().name, Is.EqualTo("steel"));
     }
 
     // Asserts that a null value is correctly returned where no recipe is valid
     [Test]
     public void TestGetRecipeFail() {
         // Serialize schema
-        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
+        GameObjectsHandler goh = GameObjectsHandler.FromFilepath(getFilepath(itemSchemaV1));
         
         // Create valid list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(5, 1));
 
         // Obtain valid output
-        GameObjectEntry goe = goh.GetRecipe(availables, 7);
+        Optional<GameObjectEntry> goe = goh.GetRecipe(availables, 7);
         
         // Asserts
-        if (goe != null) {
+        if (goe.IsPresent()) {
             // Failure case, no objects are valid. Hence goe should be null
             Assert.Fail();
         }
