@@ -53,7 +53,7 @@ namespace Controller {
             return GameManager.Instance().goh.GameObjs.items[id - 1].name;
         }
 
-        public int GetItemType(int id) {
+        public GameObjectEntry.ItemType GetItemType(int id) {
             return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
 

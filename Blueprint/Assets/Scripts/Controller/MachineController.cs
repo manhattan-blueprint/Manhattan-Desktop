@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Model;
 using Model.Redux;
 using Model.State;
@@ -28,8 +29,13 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         
         Machine machine = state.grid[machineLocation];
         // TODO: Layout ui based on machine info (clear output)
-        // TODO: Validate the machine has fuel
+        
+        // Check the fuel is present otherwise don't bother checking what we can make
+        if (!machine.HasFuel()) {
+            return;
+        }
 
+        // Check if anything can be made
         Optional<GameObjectEntry> possibleOutput = GameManager.Instance().goh.GetRecipe(machine.GetInputs(), machine.id);
         if (possibleOutput.IsPresent()) {
             GameObjectEntry output = possibleOutput.Get();
@@ -43,7 +49,9 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     public void StateDidUpdate(UIState state) {
         if (state.Selected != UIState.OpenUI.Machine) return;
         this.machineLocation = state.SelectedMachineLocation;
+        Debug.Log("Showing for " + machineLocation);
     }
+
     
     // TODO
     // Increase quantity / split stacks?

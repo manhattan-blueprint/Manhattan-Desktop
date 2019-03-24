@@ -41,8 +41,8 @@ public class GameObjectsHandler {
 
     // Takes ItemIds of available objects, and itemId of target object
     // If targetItem can be made, return corresponding GameObjectEntry
-    public Optional<GameObjectEntry> GetBlueprint(List<RecipeElement> availableItems, int targetItemId) {
-        GameObjectEntry entry = GameObjs.items.Find(item => item.item_id == targetItemId);
+    public Optional<GameObjectEntry> GetBlueprint(List<RecipeElement> availableItems, int targetItemID) {
+        GameObjectEntry entry = GameObjs.items.Find(item => item.item_id == targetItemID);
         
         foreach (RecipeElement item in entry.blueprint) {
             RecipeElement available = availableItems.Find(itemToFind => itemToFind.item_id == item.item_id);

@@ -11,6 +11,14 @@ namespace Model.Reducer {
             return this.state;
         }
 
+        public void visit(AddMachine addMachine) {
+            if (state.grid.ContainsKey(addMachine.machineLocation)) {
+                throw new Exception("Machine already exists at a given location");
+            }
+            Machine machine = new Machine(addMachine.itemID);
+            state.grid.Add(addMachine.machineLocation, machine);
+        }
+
         public void visit(SetLeftInput setLeftInput) {
             if (!state.grid.ContainsKey(setLeftInput.machineLocation)) {
                 throw new Exception("Machine does not exist at the given location");
