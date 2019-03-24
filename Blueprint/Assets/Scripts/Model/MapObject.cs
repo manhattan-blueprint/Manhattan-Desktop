@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System;
 using Controller;
 using Model;
+using Model.Action;
 
 namespace Model {
+    [Serializable]
     public class MapObject {
-        private int id;
-        private List<int> input;
-        private List<int> output;
+        [SerializeField] private int id;
+        [SerializeField] private List<int> input;
+        [SerializeField] private List<int> output;
 
         public MapObject(int id) {
             this.id = id;

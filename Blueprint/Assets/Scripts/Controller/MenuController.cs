@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
 using Model.Action;
+using Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -183,6 +186,16 @@ namespace Controller {
                   ExitPrompt();
                   break;
               case UIState.OpenUI.Login:
+                  GameState gameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                                                      GameManager.Instance().heldItemStore.GetState(),
+                                                      GameManager.Instance().inventoryStore.GetState());
+                  
+                  // TODO: Uncomment when serialization is debugged
+                  /*
+                  BlueprintAPI.DefaultCredentials()
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), gameState);
+                  */
+                  
                   SceneManager.LoadScene(SceneMapping.MainMenu);
                   GameManager.Instance().uiStore.Unsubscribe(this);
                   break;

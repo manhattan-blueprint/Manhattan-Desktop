@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using Controller;
@@ -6,16 +7,18 @@ using UnityEngine;
 using System.Linq;
 
 namespace Model.State {
+    [Serializable]
     public class InventoryState {
-        public Dictionary<int, List<HexLocation>> inventoryContents;
+        public SerializableDictionary<int, List<HexLocation>> inventoryContents;
         public int inventorySize = 0;
-
+        
         public InventoryState() {
-            inventoryContents = new Dictionary<int, List<HexLocation>>(); 
+            inventoryContents = new SerializableDictionary<int, List<HexLocation>>();
         }
     }
 }
 
+[Serializable]
 public class HexLocation {
     public int hexID;
     public int quantity;

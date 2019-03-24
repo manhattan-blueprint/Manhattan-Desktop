@@ -4,6 +4,8 @@ using System.Net;
 using System.Security.Authentication;
 using UnityEngine;
 using System.Threading.Tasks;
+using Model;
+using Model.State;
 using Service.Request;
 using Service.Response;
 
@@ -17,6 +19,7 @@ namespace Service {
         private const string refreshEndpoint       = ":8000/api/v1/authenticate/refresh";
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
         private const string itemSchemaEndpoint    = ":8003/api/v1/item-schema";
+        private const string desktopStateEndpoint  = ":8003/api/v1/progress/desktop-state";
         private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
         
         // Enum
@@ -245,6 +248,43 @@ namespace Service {
                 // Return APIResult:JsonError in failure case
                 return new APIResult<string, JsonError>(error);  
             } 
+        }
+
+        public async Task<APIResult<Boolean, JsonError>> AsyncAddState(UserCredentials user, GameState gameState) {
+            
+            string json = JsonUtility.ToJson(gameState);
+            
+            try {
+                string response = await rs.PerformAsyncPost(desktopStateEndpoint, json, user.GetAccessToken());
+
+                // Return APIResult:Boolean in success case
+                return new APIResult<Boolean, JsonError>(true);
+            }
+            catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
+                // If access token doesn't match a user, refresh tokens and retry
+                APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
+
+                try {
+                    string response =  await rs.PerformAsyncPost(desktopStateEndpoint, json,
+                        refreshedTokens.GetSuccess().access);
+
+                    // Return APIResult:Boolean in success case
+                    return new APIResult<Boolean, JsonError>(true);
+                }
+                catch (WebException f) {
+                    // Retrieve error payload from WebException
+                    JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+
+                    // Return APIResult:JsonError in error case
+                    return new APIResult<Boolean, JsonError>(error);
+                }
+            } catch (WebException e) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+                
+                // Return APIResult:JsonError in error case
+                return new APIResult<Boolean, JsonError>(error);
+            }
         }
 
         private class RefreshPayload {

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Model;
 using Model.Redux;
@@ -114,9 +115,9 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Dictionary<Vector2, MapObject> newObjects = state.getObjects(); 
-            Dictionary<Vector2, MapObject>.KeyCollection newKeys = newObjects.Keys;
-            Dictionary<Vector2, GameObject>.KeyCollection oldKeys = objectsPlaced.Keys;
+            SerializableDictionary<Vector2, MapObject> newObjects = state.getObjects();
+            ICollection<Vector2> newKeys = newObjects.Keys;
+            ICollection<Vector2> oldKeys = objectsPlaced.Keys;
 	
             List<Vector2> inNewNotInOld = new List<Vector2>();
             List<Vector2> inOldNotInNew = new List<Vector2>();

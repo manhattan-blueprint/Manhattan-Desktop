@@ -5,11 +5,12 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Model.State {
+    [Serializable]
     public class MapState {
-        private Dictionary<Vector2, MapObject> grid;
+        [SerializeField] private SerializableDictionary<Vector2, MapObject> grid;
 
         public MapState() {
-            grid = new Dictionary<Vector2, MapObject>(); 
+            grid = new SerializableDictionary<Vector2, MapObject>();
         }
 
         public void addObject(Vector2 position, int id) {
@@ -20,7 +21,7 @@ namespace Model.State {
             grid.Remove(position);
         }
 
-        public Dictionary<Vector2, MapObject> getObjects() {
+        public SerializableDictionary<Vector2, MapObject> getObjects() {
             return grid;
         }
 
