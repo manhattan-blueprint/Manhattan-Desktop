@@ -26,7 +26,7 @@ public class GameObjectTests {
             // Assert fields are correct
             Assert.That(entry.item_id, Is.EqualTo(1));
             Assert.That(entry.name, Is.EqualTo("wood"));
-            Assert.That(entry.type, Is.EqualTo(1));
+            Assert.That(entry.type, Is.EqualTo(GameObjectEntry.ItemType.PrimaryResource));
         }
     }
     
@@ -41,7 +41,7 @@ public class GameObjectTests {
             // Assert fields are correct
             Assert.That(entry.item_id, Is.EqualTo(8));
             Assert.That(entry.name, Is.EqualTo("steel"));
-            Assert.That(entry.type, Is.EqualTo(4));
+            Assert.That(entry.type, Is.EqualTo(GameObjectEntry.ItemType.BlueprintCraftedComponent));
             
             // Asserts recipe entry is correct
             Assert.That(entry.recipe[0].item_id, Is.EqualTo(4));
@@ -59,11 +59,11 @@ public class GameObjectTests {
         
         Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
         Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("wood"));
-        Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(1));
+        Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(GameObjectEntry.ItemType.PrimaryResource));
         
         Assert.That(goh.GameObjs.items[15].item_id, Is.EqualTo(16));
         Assert.That(goh.GameObjs.items[15].name, Is.EqualTo("dune buggy"));
-        Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(5));
+        Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(GameObjectEntry.ItemType.Intangible));
         Assert.That(goh.GameObjs.items[15].blueprint[0].item_id, Is.EqualTo(9));
         Assert.That(goh.GameObjs.items[15].blueprint[0].quantity, Is.EqualTo(4));
         Assert.That(goh.GameObjs.items[15].blueprint[1].item_id, Is.EqualTo(10));
@@ -80,11 +80,11 @@ public class GameObjectTests {
         
         Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
         Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("Wood"));
-        Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(1));
+        Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(GameObjectEntry.ItemType.PrimaryResource));
         
         Assert.That(goh.GameObjs.items[15].item_id, Is.EqualTo(16));
         Assert.That(goh.GameObjs.items[15].name, Is.EqualTo("Glass"));
-        Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(3));
+        Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(GameObjectEntry.ItemType.MachineCraftedComponent));
     }
 
     // Asserts that a blueprint is retrieved without exception
