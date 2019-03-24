@@ -92,7 +92,7 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         }
             
         // Re-populate slots
-        SerializableDictionary<int, List<HexLocation>> inventoryContents = state.inventoryContents;
+        Dictionary<int, List<HexLocation>> inventoryContents = state.inventoryContents;
         
         foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
             foreach(HexLocation loc in element.Value) {

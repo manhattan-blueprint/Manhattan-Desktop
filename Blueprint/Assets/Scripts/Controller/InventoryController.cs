@@ -20,7 +20,7 @@ using UnityEngine.Experimental.Rendering;
 /* Attached to the inventory canvas and controls inventory collection */
 namespace Controller {
     public class InventoryController : MonoBehaviour, Subscriber<InventoryState> {
-        public SerializableDictionary<int, List<HexLocation>> inventoryContents;
+        public Dictionary<int, List<HexLocation>> inventoryContents;
         private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
         private bool firstUIUpdate;

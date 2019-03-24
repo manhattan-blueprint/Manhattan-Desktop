@@ -7,10 +7,10 @@ using UnityEngine;
 namespace Model.State {
     [Serializable]
     public class MapState {
-        [SerializeField] private SerializableDictionary<Vector2, MapObject> grid;
+        [SerializeField] private Dictionary<Vector2, MapObject> grid;
 
         public MapState() {
-            grid = new SerializableDictionary<Vector2, MapObject>();
+            grid = new Dictionary<Vector2, MapObject>();
         }
 
         public void addObject(Vector2 position, int id) {
@@ -21,7 +21,7 @@ namespace Model.State {
             grid.Remove(position);
         }
 
-        public SerializableDictionary<Vector2, MapObject> getObjects() {
+        public Dictionary<Vector2, MapObject> getObjects() {
             return grid;
         }
 

@@ -9,11 +9,11 @@ using System.Linq;
 namespace Model.State {
     [Serializable]
     public class InventoryState {
-        public SerializableDictionary<int, List<HexLocation>> inventoryContents;
+        public Dictionary<int, List<HexLocation>> inventoryContents;
         public int inventorySize = 0;
         
         public InventoryState() {
-            inventoryContents = new SerializableDictionary<int, List<HexLocation>>();
+            inventoryContents = new Dictionary<int, List<HexLocation>>();
         }
     }
 }
