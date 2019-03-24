@@ -190,11 +190,8 @@ namespace Controller {
                                                       GameManager.Instance().heldItemStore.GetState(),
                                                       GameManager.Instance().inventoryStore.GetState());
                   
-                  // TODO: Uncomment when serialization is debugged
-                  /*
                   BlueprintAPI.DefaultCredentials()
                       .AsyncAddState(GameManager.Instance().GetUserCredentials(), gameState);
-                  */
                   
                   SceneManager.LoadScene(SceneMapping.MainMenu);
                   GameManager.Instance().uiStore.Unsubscribe(this);

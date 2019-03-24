@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Controller;
+using FullSerializer;
 using Model;
 using Model.State;
 using Model.Action;
@@ -37,12 +38,6 @@ public class GameManager {
         this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
-        
-        uiStore.Dispatch(new OpenPlayingUI());
-        GameState gameState = new GameState(mapStore.GetState(), heldItemStore.GetState(), inventoryStore.GetState());
-        string json = JsonUtility.ToJson(gameState);
-
-        Debug.Log("Output: " + json);
 
         // Load item schema from server
         this.goh = GameObjectsHandler.WithRemoteSchema();

@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Authentication;
 using UnityEngine;
 using System.Threading.Tasks;
+using FullSerializer;
 using Model;
 using Model.State;
 using Service.Request;
@@ -20,7 +21,7 @@ namespace Service {
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
         private const string itemSchemaEndpoint    = ":8003/api/v1/item-schema";
         private const string desktopStateEndpoint  = ":8003/api/v1/progress/desktop-state";
-        private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
+        private const string defaultBaseUrl        = "http://localhost";
         
         // Enum
         public enum httpResponseCode {
@@ -252,7 +253,11 @@ namespace Service {
 
         public async Task<APIResult<Boolean, JsonError>> AsyncAddState(UserCredentials user, GameState gameState) {
             
-            string json = JsonUtility.ToJson(gameState);
+            // Convert gameState to json string
+            fsSerializer serializer = new fsSerializer();
+            fsData data;
+            serializer.TrySerialize(gameState, out data).AssertSuccessWithoutWarnings();
+            string json = fsJsonPrinter.CompressedJson(data);
             
             try {
                 string response = await rs.PerformAsyncPost(desktopStateEndpoint, json, user.GetAccessToken());
