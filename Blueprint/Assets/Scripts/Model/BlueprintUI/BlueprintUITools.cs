@@ -4,10 +4,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
+using View;
 
 namespace Model.BlueprintUI {
     // Abstraction tools for creating the Blueprint UI
     public static class BlueprintUITools {
+
+        ////////////////////////////////////////////////////////////////////////
+        // Checking quantities in inventory and whether crafting is feasible.
+        ////////////////////////////////////////////////////////////////////////
+
+        // Check how many of a particular type of item is in an inventory.
+        public static int GetQuantity(int id) {
+            if (id == 0) return 0;
+
+            Dictionary<int, List<HexLocation>> inventoryContents =
+                GameManager.Instance().inventoryStore.GetState().inventoryContents;
+            int sum = 0;
+
+            foreach (KeyValuePair<int, List<HexLocation>> item in inventoryContents) {
+                if (item.Key == id){
+                    sum += item.Value.quantity;
+                }
+            }
+
+            return sum;
+        }
+
+        // Return true if inventory quantities are large enough.
+        public static Boolean ViableCraft(int resourceIDA=0, int resourceIDARequired=0,
+                                          int resourceIDB=0, int resourceIDBRequired=0,
+                                          int resourceIDC=0, int resourceIDCRequired=0) {
+            if (GetQuantity(resourceIDA) >= resourceIDARequired) {
+                if (GetQuantity(resourceIDB) >= resourceIDBRequired) {
+                    if (GetQuantity(resourceIDC) >= resourceIDCRequired) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        // Process a craf (should already have checked for viability).
+        public static void ProcessCraft(int resourceIDA=0, int resourceIDARequired=0,
+                                        int resourceIDB=0, int resourceIDBRequired=0,
+                                        int resourceIDC=0, int resourceIDCRequired=0) {
+            return;
+        }
 
         ////////////////////////////////////////////////////////////////////////
         // Creating Unity containers
@@ -45,7 +89,7 @@ namespace Model.BlueprintUI {
 
         // Create an overlay with number of resources out of total required.
         public static GameObject NewInfoNumber(Transform parent, List<GameObject> objList, Vector2 position, float relativeSize, int id, int required) {
-            string text = "/" + required.ToString();
+            string text = GetQuantity(id).ToString() + "/" + required.ToString();
 
             // TODO: Make equal to num in inventory
             if (required == 0) text = "";
@@ -59,7 +103,10 @@ namespace Model.BlueprintUI {
             numText.alignment = TextAnchor.MiddleCenter;
             numText.fontSize = (int)(relativeSize / 4.0f);
             numText.font = Resources.Load<Font>("Fonts/HelveticaNeueMedium");
-            numText.color = new Color(9.0f, 38.0f, 66.0f);
+            numText.color = new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f);
+            Outline outline = num.AddComponent<Outline>();
+            outline.effectDistance = new Vector2(1.0f, 1.0f);
+            outline.effectColor = new Color(9.0f/255.0f, 38.0f/255.0f, 66.0f/255.0f);
             num.transform.position = position;
             (num.transform as RectTransform).sizeDelta = new Vector2(relativeSize, relativeSize);
             objList.Add(num);
@@ -155,18 +202,6 @@ namespace Model.BlueprintUI {
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // Effects of crafting an item
-        ////////////////////////////////////////////////////////////////////////
-        public static Boolean ViableCraft() {
-            // Return true if inventory quantities are large enough
-            return true;
-        }
-
-        public static void ProcessCraft() {
-
-        }
-
-        ////////////////////////////////////////////////////////////////////////
         // UI specific creation of recipes
         ////////////////////////////////////////////////////////////////////////
         // Create a new visual craftable instruction.
@@ -186,56 +221,71 @@ namespace Model.BlueprintUI {
             if (resourceIDC > 0)
                 NewResource(parent, objList, x - scale * 0.3f, y + scale * niceRatio, scale, resourceIDC, resourceIDCRequired);
 
-            New2D(parent, objList, sp.ToV(new Vector2(x + scale * 1.2f, y)),
+            GameObject resultBackground = New2D(parent, objList, sp.ToV(new Vector2(x + scale * 1.2f, y)),
                 relativeSize, Resources.Load<Sprite>("inventory_slot"));
-            Button createButton = CreateButton(parent, objList, new Vector2(x + scale * 1.2f, y), scale * 0.7f, Resources.Load<Texture>("Models/2D/sprite_" + resultID.ToString()));
-            NewCraftableBorder(parent, objList, x + scale * 1.2f, y, scale);
+
+            // Make hex background oscillate up and down.
+            ManhattanAnimation animationManager = GameObject.Find("AnimationManager").GetComponent<ManhattanAnimation>();
+            animationManager.StartMovementAnimation(resultBackground.gameObject,
+                Anim.OscillateHeight, sp.ToV(new Vector3(0.0f, scale/2.0f, 0.0f)), 1.0f);
+
+            Button createButton = CreateButton(parent, objList, new Vector2(x + scale * 1.2f, y),
+                scale * 0.7f, Resources.Load<Texture>("Models/2D/sprite_" + resultID.ToString()));
+            if (ViableCraft(resourceIDA, resourceIDARequired,
+                            resourceIDB, resourceIDBRequired,
+                            resourceIDC, resourceIDCRequired))
+                NewAvailableBorder(parent, objList, x + scale * 1.2f, y, scale);
+            else
+                NewCraftableBorder(parent, objList, x + scale * 1.2f, y, scale);
         }
 
         // Create a new visual craftable instruction.
-        public static void NewMachine(Transform parent, List<GameObject> objList, float x, float y, float scale, int resultID, int machineID, int resourceIDA, int resourceIDB=0) {
+        public static void NewMachine(Transform parent, List<GameObject> objList,
+                                      float x, float y, float scale, int resultID,
+                                      int machineID,
+                                      int resourceIDA=0, int resourceIDARequired=0,
+                                      int resourceIDB=0, int resourceIDBRequired=0) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             float relativeSize = sp.ToH(scale);
             float niceRatio = 0.8f; // Slightly less than sqrt(3)/2. Hexagon stuff.
 
             NewResource(parent, objList, x + scale * 1.2f, y, scale, resultID);
             NewCraftArrow(parent, objList, x + scale * 0.6f, y, scale);
-            NewResource(parent, objList, x - scale * 0.6f, y, scale, resourceIDA);
+            NewResource(parent, objList, x - scale * 0.6f, y, scale, resourceIDA, resourceIDARequired);
             if (resourceIDB > 0)
-                NewResource(parent, objList, x - scale * 0.3f, y + scale * niceRatio, scale, resourceIDB);
+                NewResource(parent, objList, x - scale * 0.3f, y + scale * niceRatio, scale, resourceIDB, resourceIDBRequired);
             NewResource(parent, objList, x, y, scale, machineID);
             NewMachineBorder(parent, objList, x, y, scale);
         }
 
         // Create a new visual craftable blueprint.
-        public static void NewBlueprint(Transform parent, List<GameObject> objList, float x, float y, float scale, int resultID, int resourceIDA, int resourceIDB=0, int resourceIDC=0) {
+        public static void NewBlueprint(Transform parent, List<GameObject> objList,
+                                        float x, float y, float scale, int resultID,
+                                        int resourceIDA=0, int resourceIDARequired=0,
+                                        int resourceIDB=0, int resourceIDBRequired=0,
+                                        int resourceIDC=0, int resourceIDCRequired=0) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             float relativeSize = sp.ToH(scale);
             float niceRatio = 0.8f; // Slightly less than sqrt(3)/2. Hexagon stuff.
 
-            NewCraftArrow(parent, objList, x + scale * 0.6f, y, scale);
-            NewResource(parent, objList, x - scale * 0.6f, y, scale, resourceIDA);
-            if (resourceIDB > 0)
-                NewResource(parent, objList, x - scale * 0.3f, y + scale * niceRatio, scale, resourceIDB);
-            if (resourceIDC > 0)
-                NewResource(parent, objList, x - scale * 0.3f, y + scale * niceRatio, scale, resourceIDC);
-
-            NewResource(parent, objList, x + scale * 1.2f, y, scale, resultID);
-            NewCraftableBorder(parent, objList, x + scale * 1.2f, y, scale);
+            // TODO: Change graphics slightly to indicate blueprintedness.
+            NewCraftable(parent, objList, x, y, scale, resultID, resourceIDA,
+                         resourceIDARequired, resourceIDB, resourceIDBRequired,
+                         resourceIDC, resourceIDCRequired);
         }
 
         // Create the visual goal to win.
         public static void NewGoal(Transform parent, List<GameObject> objList, float x, float y, float scale, int resultID, int resourceIDA=0, int resourceIDB=0, int resourceIDC=0) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             float relativeSize = sp.ToH(scale);
-            float niceRatio = 0.8f; // Slightly less than sqrt(3)/2. Hexagon stuff.
+            float niceRatio = 0.7f; // Slightly less than sqrt(3)/2. Hexagon stuff.
 
             if (resourceIDA > 0)
-                NewResource(parent, objList, x - scale * 0.6f, y, scale, resourceIDA);
+                NewResource(parent, objList, x - scale * 0.58f, y, scale, resourceIDA);
             if (resourceIDB > 0)
-                NewResource(parent, objList, x + scale * 0.3f, y + scale * niceRatio, scale, resourceIDB);
+                NewResource(parent, objList, x + scale * 0.29f, y + scale * niceRatio, scale, resourceIDB);
             if (resourceIDC > 0)
-                NewResource(parent, objList, x + scale * 0.3f, y - scale * niceRatio, scale, resourceIDC);
+                NewResource(parent, objList, x + scale * 0.29f, y - scale * niceRatio, scale, resourceIDC);
 
             NewResource(parent, objList, x, y, scale, resultID);
             NewMachineBorder(parent, objList, x, y, scale);
@@ -255,7 +305,7 @@ namespace Model.BlueprintUI {
             newText.alignment = TextAnchor.MiddleCenter;
             newText.fontSize = 80;
             newText.font = Resources.Load<Font>("Fonts/MeckaBleckaRegular");
-            newText.color = new Color(9.0f, 38.0f, 66.0f);
+            newText.color = new Color(9.0f/255.0f, 38.0f/255.0f, 66.0f/255.0f);
             title.transform.position = sp.ToV(new Vector2(0.5f, 0.9f));
             (title.transform as RectTransform).sizeDelta = new Vector2(sp.ToH(1.0f), sp.ToH(0.2f));
             objList.Add(title);
@@ -275,7 +325,7 @@ namespace Model.BlueprintUI {
             newText.alignment = TextAnchor.MiddleCenter;
             newText.fontSize = 20;
             newText.font = Resources.Load<Font>("Fonts/HelveticaNeueMedium");
-            newText.color = new Color(9.0f, 38.0f, 66.0f);
+            newText.color = new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f);
             title.transform.position = sp.ToV(new Vector2(0.5f, 0.85f));
             (title.transform as RectTransform).sizeDelta = new Vector2(sp.ToH(1.0f), sp.ToH(0.2f));
             objList.Add(title);

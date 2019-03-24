@@ -52,7 +52,7 @@ namespace Utils {
                     break;
 
                 case Anim.OscillateHeight:
-                    timedCoroutine = OscillateHeight();
+                    timedCoroutine = OscillateHeight(moveVector, time, destroyAfter, delay);
                     break;
 
                 default:
@@ -86,7 +86,7 @@ namespace Utils {
         }
 
         private IEnumerator MoveToDecelerate(Vector3 moveVector, float time,
-            bool destroyAfter, float delay) {
+                                             bool destroyAfter, float delay) {
             float speed = (120.0f * framePeriod) / time;
 
             Vector3 originalPosition = gameObject.transform.position;
@@ -108,10 +108,14 @@ namespace Utils {
             Destroy(this);
         }
 
-        private IEnumerator OscillateHeight() {
-            float maxDifference = 0.5f;
+        private IEnumerator OscillateHeight(Vector3 max, float time,
+                                            bool destroyAfter, float delay) {
+            float maxDifference = max.y;
+            float speed = (120.0f * framePeriod) / time;
 
-            for (int count = 0; ; count++) {
+            yield return new WaitForSeconds(delay);
+
+            for (float count = 0; ; count += speed) {
                 yield return new WaitForSeconds(framePeriod);
 
                 float positionModifier = maxDifference * Mathf.Sin((Mathf.PI * count) / 90) / 200;
