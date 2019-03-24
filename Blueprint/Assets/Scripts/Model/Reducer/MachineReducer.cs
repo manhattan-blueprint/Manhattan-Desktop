@@ -1,6 +1,7 @@
 using System;
 using Model.Action;
 using Model.State;
+using UnityEngine;
 
 namespace Model.Reducer {
     public class MachineReducer: Reducer<MachineState, MachineAction>, MachineVisitor {
@@ -17,6 +18,37 @@ namespace Model.Reducer {
             }
             Machine machine = new Machine(addMachine.itemID);
             state.grid.Add(addMachine.machineLocation, machine);
+        }
+
+        public void visit(RemoveMachine removeMachine) {
+            if (!state.grid.ContainsKey(removeMachine.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location " + removeMachine.machineLocation);
+            }
+
+            Machine machine = state.grid[removeMachine.machineLocation];
+            
+            // Add items within the machine back to the inventory
+            if (machine.leftInput.IsPresent()) {
+                InventoryItem item = machine.leftInput.Get();
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+            }
+
+            if (machine.rightInput.IsPresent()) {
+                InventoryItem item = machine.rightInput.Get();
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+            }
+
+            if (machine.fuel.IsPresent()) {
+                InventoryItem item = machine.fuel.Get();
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+            }
+
+            if (machine.output.IsPresent()) {
+                InventoryItem item = machine.output.Get();
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+            }
+
+            state.grid.Remove(removeMachine.machineLocation);
         }
 
         public void visit(SetLeftInput setLeftInput) {

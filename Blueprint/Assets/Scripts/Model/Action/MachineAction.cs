@@ -4,6 +4,7 @@ using Vector2 = UnityEngine.Vector2;
 namespace Model.Action {
     public interface MachineVisitor {
         void visit(AddMachine addMachine);
+        void visit(RemoveMachine removeMachine);
         void visit(SetLeftInput setLeftInput);
         void visit(SetRightInput setRightInput);
         void visit(SetFuel setFuel);
@@ -13,6 +14,7 @@ namespace Model.Action {
         public abstract void Accept(MachineVisitor visitor);
     }
 
+    /* Call when adding a machine to the map */
     public class AddMachine : MachineAction {
         public readonly Vector2 machineLocation;
         public readonly int itemID;
@@ -20,6 +22,19 @@ namespace Model.Action {
         public AddMachine(Vector2 machineLocation, int itemID) {
             this.machineLocation = machineLocation;
             this.itemID = itemID;
+        }
+
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    /* Call when removing a machine from the map */
+    public class RemoveMachine : MachineAction {
+        public readonly Vector2 machineLocation;
+
+        public RemoveMachine(Vector2 machineLocation) {
+            this.machineLocation = machineLocation;
         }
 
         public override void Accept(MachineVisitor visitor) {

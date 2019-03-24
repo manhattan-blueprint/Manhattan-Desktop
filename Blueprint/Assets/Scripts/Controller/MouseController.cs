@@ -82,8 +82,14 @@ namespace Controller {
                 if (p == null) return;
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
+
                 GameManager.Instance().mapStore.Dispatch(new CollectItem(hc.getPosition()));
                 holdInitiated = false;
+                
+                if (p is MachinePlaceable) {
+                    GameManager.Instance().machineStore.Dispatch(new RemoveMachine(hc.getPosition()));
+                }
+                
             } else if (Input.GetMouseButtonDown(leftButton)) {
                 holdInitiated = true;
             } else if (Input.GetMouseButton(leftButton)) {

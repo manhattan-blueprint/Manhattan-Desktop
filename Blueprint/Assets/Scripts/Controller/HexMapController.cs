@@ -135,7 +135,7 @@ namespace Controller {
             }
 	
             // Draw things in new but not in old
-            foreach (Vector3 newObjectPosition in inNewNotInOld) {
+            foreach (Vector2 newObjectPosition in inNewNotInOld) {
                 MapObject mapObject = newObjects[newObjectPosition];
                 GameObject original = AssetManager.Instance().GetModel(mapObject.GetID());
 
@@ -151,7 +151,7 @@ namespace Controller {
                     .Find(x => x.item_id == mapObject.GetID());
                 
                 if (entry.type == GameObjectEntry.ItemType.BlueprintCraftedMachine) {
-                    GameManager.Instance().machineStore.Dispatch(new AddMachine(pos, mapObject.GetID())); 
+                    GameManager.Instance().machineStore.Dispatch(new AddMachine(newObjectPosition, mapObject.GetID())); 
                 }
             }
 	
