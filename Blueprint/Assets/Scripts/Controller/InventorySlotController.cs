@@ -8,6 +8,7 @@ using Model.Reducer;
 using Model.Redux;
 using Model.State;
 using UnityEditor;
+using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.UIElements;
 using Image = UnityEngine.UI.Image;
@@ -114,8 +115,8 @@ namespace Controller {
         public void SetStoredItem(Optional<InventoryItem> item) {
             this.storedItem = item;
             //TODO: GetChild(1) is a hack, fix it.
-            Image image = this.transform.GetChild(1).GetComponent<Image>();
-            Text text = transform.GetComponentInChildren<Text>();
+            Image image = gameObject.transform.GetChild(1).GetComponent<Image>();
+            Text text = gameObject.GetComponentInChildren<Text>();
 
             if (!this.storedItem.IsPresent()) {
                 image.enabled = false;
@@ -158,9 +159,9 @@ namespace Controller {
         public void OnDrop(PointerEventData eventData) {
             RectTransform invPanel = transform as RectTransform;
             GameObject droppedObject = eventData.pointerDrag;
-            
-            InventorySlotController source = GameObject.Find(droppedObject.transform.name).GetComponentInParent<InventorySlotController>(); 
-            InventorySlotController destination = GameObject.Find(transform.name).GetComponentInParent<InventorySlotController>();
+
+            InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>(); 
+            InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
                 if (destination.storedItem.IsPresent()) {
