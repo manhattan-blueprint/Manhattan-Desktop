@@ -6,8 +6,8 @@ using Model.BlueprintUI;
 
 namespace Controller {
     public class BlueprintUIController : MonoBehaviour {
-        private IBlueprintUIMode primaryResourceUI;
-        private IBlueprintUIMode craftableResourceUI;
+        private IBlueprintUIMode primaryResourceUI;         // Guidance
+        private IBlueprintUIMode craftableResourceUI;       //
         private IBlueprintUIMode machineryResourceUI;
         private IBlueprintUIMode blueprintResourceUI;
         private IBlueprintUIMode goalResourceUI;
@@ -25,14 +25,14 @@ namespace Controller {
 
         void Start() {
             primaryResourceUI = new PrimaryResourceUI();
-            craftableResourceUI = new CraftableResourceUI();
-            machineryResourceUI = new MachineryResourceUI();
-            blueprintResourceUI = new BlueprintResourceUI();
-            goalResourceUI = new GoalResourceUI();
             primaryResourceUI.Initialize(gameObject, "Primary Resources");
+            craftableResourceUI = new CraftableResourceUI();
             craftableResourceUI.Initialize(gameObject, "Craftable Resources");
-            machineryResourceUI.Initialize(gameObject, "Machine Craftable Resources");
+            machineryResourceUI = new MachineryResourceUI();
+            machineryResourceUI.Initialize(gameObject, "Machine Craftables");
+            blueprintResourceUI = new BlueprintResourceUI();
             blueprintResourceUI.Initialize(gameObject, "Blueprints");
+            goalResourceUI = new GoalResourceUI();
             goalResourceUI.Initialize(gameObject, "Final Goal");
             currentMenu = CurrentMenu.Primary;
             visible = false;
@@ -49,6 +49,14 @@ namespace Controller {
                     case CurrentMenu.Goal: goalResourceUI.Show(); break;
                 }
                 visible = true;
+            }
+
+            if (!gameObject.GetComponent<Canvas>().enabled && visible)
+                visible = false;
+
+            if (visible) {
+                if (Input.GetKeyDown(KeyCode.RightArrow)) NextMenu();
+                if (Input.GetKeyDown(KeyCode.LeftArrow)) PreviousMenu();
             }
         }
 

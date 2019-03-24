@@ -36,10 +36,10 @@ namespace Model.BlueprintUI {
         public static void Show(this IBlueprintUIMode bUIMode) {
             BlueprintUITools.CreateTitle(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, bUIMode.TitleStr);
 
-            Button leftBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.075f, 0.5f), "LeftArrow", 0.1f);
+            Button leftBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.075f, 0.5f), 0.1f, Resources.Load<Sprite>("LeftArrow"));
             leftBtn.onClick.AddListener(bUIMode.blueprintUIController.PreviousMenu);
 
-            Button rightBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.925f, 0.5f), "RightArrow", 0.1f);
+            Button rightBtn = BlueprintUITools.CreateButton(bUIMode.BlueprintUICanvas.transform, bUIMode.CanvasObjects, new Vector2(0.925f, 0.5f), 0.1f, Resources.Load<Sprite>("RightArrow"));
             rightBtn.onClick.AddListener(bUIMode.blueprintUIController.NextMenu);
 
             // BlueprintUICanvas.interactable = true;
