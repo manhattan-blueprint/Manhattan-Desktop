@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 using View;
+using Model.Action;
+using Service;
 
 namespace Model.BlueprintUI {
     // Abstraction tools for creating the Blueprint UI
@@ -24,7 +26,9 @@ namespace Model.BlueprintUI {
 
             foreach (KeyValuePair<int, List<HexLocation>> item in inventoryContents) {
                 if (item.Key == id){
-                    sum += item.Value.quantity;
+                    foreach (HexLocation hexLocation in item.Value) {
+                        sum += hexLocation.quantity;
+                    }
                 }
             }
 
@@ -47,9 +51,34 @@ namespace Model.BlueprintUI {
         }
 
         // Process a craf (should already have checked for viability).
-        public static void ProcessCraft(int resourceIDA=0, int resourceIDARequired=0,
+        public static void ProcessCraft(int resultID, GameObject availableBorder=null,
+                                        int resourceIDA=0, int resourceIDARequired=0,
                                         int resourceIDB=0, int resourceIDBRequired=0,
                                         int resourceIDC=0, int resourceIDCRequired=0) {
+
+            // Remove items from inventory
+            if (resourceIDA > 0)
+                new RemoveItemFromInventory(resourceIDA, resourceIDARequired);
+            if (resourceIDB > 0)
+                new RemoveItemFromInventory(resourceIDB, resourceIDBRequired);
+            if (resourceIDC > 0)
+                new RemoveItemFromInventory(resourceIDC, resourceIDCRequired);
+
+            // Add the item to inventory
+            string resourceName = GameManager.Instance().goh.GameObjs.items.Find(x => x.item_id == resultID).name;
+            Debug.Log("Crafting a " + resourceName);
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(resultID, 1, resourceName));
+
+            // If crafting no longer viable then destroy the border indicating
+            // craft is available.
+            if (ViableCraft(resourceIDA, resourceIDARequired,
+                             resourceIDB, resourceIDBRequired,
+                             resourceIDC, resourceIDCRequired)) {
+                MonoBehaviour.Destroy(availableBorder);
+            }
+
+            BlueprintAPI.DefaultCredentials().AsyncAddToLeaderboard(GameManager.Instance().GetUserCredentials(), resultID);
+
             return;
         }
 
@@ -114,7 +143,7 @@ namespace Model.BlueprintUI {
         }
 
         // Create a new button that is also an svg image.
-        public static Button CreateButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Sprite sprite) {
+        public static GameObject CreateButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Sprite sprite) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             Vector2 relativePosition = sp.ToV(position);
             float relativeSize = sp.ToH(scale);
@@ -129,11 +158,11 @@ namespace Model.BlueprintUI {
             // colors.pressedColor = new Color(122f, 122f, 122f);
             btn.colors = colors;
 
-            return btn;
+            return obj;
         }
 
         // Create a new button that is also an svg image.
-        public static Button CreateButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Texture texture) {
+        public static GameObject CreateButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Texture texture) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             Vector2 relativePosition = sp.ToV(position);
             float relativeSize = sp.ToH(scale);
@@ -148,7 +177,7 @@ namespace Model.BlueprintUI {
             // colors.pressedColor = new Color(122f, 122f, 122f);
             btn.colors = colors;
 
-            return btn;
+            return obj;
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -173,12 +202,12 @@ namespace Model.BlueprintUI {
         }
 
         // Create a dark border around a hexagon.
-        public static void NewAvailableBorder(Transform parent, List<GameObject> objList, float x, float y, float scale) {
+        public static GameObject NewAvailableBorder(Transform parent, List<GameObject> objList, float x, float y, float scale) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             Vector2 position = sp.ToV(new Vector2(x, y));
             float relativeSize = sp.ToH(scale);
 
-            New2D(parent, objList, position, relativeSize * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
+            return New2D(parent, objList, position, relativeSize * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
         }
 
         // Create a basic arrow.
@@ -221,23 +250,29 @@ namespace Model.BlueprintUI {
             if (resourceIDC > 0)
                 NewResource(parent, objList, x - scale * 0.3f, y + scale * niceRatio, scale, resourceIDC, resourceIDCRequired);
 
-            GameObject resultBackground = New2D(parent, objList, sp.ToV(new Vector2(x + scale * 1.2f, y)),
-                relativeSize, Resources.Load<Sprite>("inventory_slot"));
-
-            // Make hex background oscillate up and down.
-            ManhattanAnimation animationManager = GameObject.Find("AnimationManager").GetComponent<ManhattanAnimation>();
-            animationManager.StartMovementAnimation(resultBackground.gameObject,
-                Anim.OscillateHeight, sp.ToV(new Vector3(0.0f, scale/2.0f, 0.0f)), 1.0f);
-
-            Button createButton = CreateButton(parent, objList, new Vector2(x + scale * 1.2f, y),
-                scale * 0.7f, Resources.Load<Texture>("Models/2D/sprite_" + resultID.ToString()));
+            NewResource(parent, objList, x + scale * 1.2f, y, scale, resultID);
+            NewCraftableBorder(parent, objList, x + scale * 1.2f, y, scale);
+            // Button game object has to be drawn after so not to be required.
             if (ViableCraft(resourceIDA, resourceIDARequired,
-                            resourceIDB, resourceIDBRequired,
-                            resourceIDC, resourceIDCRequired))
-                NewAvailableBorder(parent, objList, x + scale * 1.2f, y, scale);
-            else
-                NewCraftableBorder(parent, objList, x + scale * 1.2f, y, scale);
+                             resourceIDB, resourceIDBRequired,
+                             resourceIDC, resourceIDCRequired)) {
+                GameObject availableBorder = NewAvailableBorder(parent, objList, x + scale * 1.2f, y, scale);
+                GameObject craftButton = CreateButton(parent, objList,
+                    new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
+                craftButton.GetComponent<Button>().onClick.AddListener(
+                    delegate{ProcessCraft(resultID, availableBorder,
+                                          resourceIDA, resourceIDARequired,
+                                          resourceIDB, resourceIDBRequired,
+                                          resourceIDC, resourceIDCRequired);});
+            }
+
+            // // TODO: Make craftable resource and border oscillate up and down.
+            // ManhattanAnimation animationManager = GameObject.Find("AnimationManager").GetComponent<ManhattanAnimation>();
+            // animationManager.StartMovementAnimation(resultBackground.gameObject,
+            //     Anim.OscillateHeight, sp.ToV(new Vector3(0.0f, scale/2.0f, 0.0f)), 1.0f);
         }
+
+        public static void Test() {Debug.Log("Text received!");}
 
         // Create a new visual craftable instruction.
         public static void NewMachine(Transform parent, List<GameObject> objList,
@@ -272,6 +307,23 @@ namespace Model.BlueprintUI {
             NewCraftable(parent, objList, x, y, scale, resultID, resourceIDA,
                          resourceIDARequired, resourceIDB, resourceIDBRequired,
                          resourceIDC, resourceIDCRequired);
+
+
+            NewResource(parent, objList, x + scale * 1.2f, y, scale, resultID);
+            NewCraftableBorder(parent, objList, x + scale * 1.2f, y, scale);
+            // Button game object has to be drawn after so not to be required.
+            if (!ViableCraft(resourceIDA, resourceIDARequired,
+                              resourceIDB, resourceIDBRequired,
+                              resourceIDC, resourceIDCRequired)) {
+                GameObject availableBorder = NewAvailableBorder(parent, objList, x + scale * 1.2f, y, scale);
+                GameObject craftButton = CreateButton(parent, objList,
+                new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
+                craftButton.GetComponent<Button>().onClick.AddListener(
+                    delegate{ProcessCraft(resultID, availableBorder,
+                                          resourceIDA, resourceIDARequired,
+                                          resourceIDB, resourceIDBRequired,
+                                          resourceIDC, resourceIDCRequired);});
+            }
         }
 
         // Create the visual goal to win.

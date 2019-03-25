@@ -9,7 +9,7 @@ namespace Model.State {
         private Dictionary<Vector2, MapObject> grid;
 
         public MapState() {
-            grid = new Dictionary<Vector2, MapObject>(); 
+            grid = new Dictionary<Vector2, MapObject>();
         }
 
         public void addObject(Vector2 position, int id) {

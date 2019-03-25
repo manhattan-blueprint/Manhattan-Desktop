@@ -21,6 +21,11 @@ namespace Utils {
         private float overshoot;
         private float framePeriod;
 
+        private int count = 0;
+        public void Start() {}
+        public void Update() {
+        }
+
         ////////////////////////////////////////////////////////////////////////
         // Movement Animations.
         ////////////////////////////////////////////////////////////////////////
@@ -29,6 +34,7 @@ namespace Utils {
             bool destroyAfter = false, float delay = 0.0f) {
             ManhattanAnimation animation = inpObject.AddComponent<ManhattanAnimation>() as ManhattanAnimation;
             animation.StartMovementAnimation(anim, moveVector, time, destroyAfter, delay);
+            Debug.Log("Starting Animation");
         }
 
         public void StartMovementAnimation(Anim anim, Vector3 moveVector,
@@ -132,6 +138,7 @@ namespace Utils {
         public void StartAppearanceAnimation(GameObject inpObject,
             Anim anim, float time = 1.0f, bool boolModifier = false,
             float floatModifier = 200.0f, float delay = 0.0f) {
+            Debug.Log("Starting appearance animation");
             ManhattanAnimation animation = inpObject.AddComponent<ManhattanAnimation>() as ManhattanAnimation;
             animation.StartAppearanceAnimation(anim, time, boolModifier, floatModifier, delay);
         }
@@ -260,11 +267,20 @@ namespace Utils {
         private IEnumerator Disappear(float time, float delay) {
             float speed = (framePeriod * 90.0f) / time;
 
+            Debug.Log("framePeriod: " + framePeriod);
+            Debug.Log("speed: " + speed);
+            Debug.Log("delay: " + delay);
+            Debug.Log("Fadein bar dissapearing 1");
+
             yield return new WaitForSeconds(delay);
+
+            Debug.Log("framePeriod: " + framePeriod);
+            Debug.Log("Fadein bar dissapearing 2");
 
             // Note: does not overshoot.
             for (float count = 90.0f; count < 180.0f; count += speed) {
                 yield return new WaitForSeconds(framePeriod);
+                Debug.Log("Fadein bar dissapearing 3");
 
                 float alphaModifier = Mathf.Sin(count * Mathf.Deg2Rad);
 

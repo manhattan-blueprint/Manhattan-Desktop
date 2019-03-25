@@ -56,6 +56,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     }
 
     void Start() {
+        Debug.Log("Starting menu");
         SetMessageClear();
         visibleMenu = VisibleMenu.SplashScreen;
         isMessageErrorStyle = false;
@@ -71,6 +72,8 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         // Fade whole menu fade in
         animationManager.StartAppearanceAnimation(fadeIn.gameObject,
             Anim.Disappear, 2.0f, true, 1.0f, 0.5f);
+
+        Debug.Log(this.gameObject.GetComponent<ManhattanAnimation>());
 
         maxUsernameLength = 16;
         api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");

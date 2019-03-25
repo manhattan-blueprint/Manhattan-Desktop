@@ -17,8 +17,9 @@ namespace Service {
         private const string refreshEndpoint       = ":8000/api/v1/authenticate/refresh";
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
         private const string itemSchemaEndpoint    = ":8003/api/v1/item-schema";
+        private const string leaderboardEndpoint    = ":8003/api/v1/progress";
         private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
-        
+
         // Enum
         public enum httpResponseCode {
             ok = 200,
@@ -33,7 +34,7 @@ namespace Service {
         public static BlueprintAPI WithBaseUrl(string baseUrl) {
             return new BlueprintAPI(baseUrl);
         }
-        
+
         public static BlueprintAPI DefaultCredentials() {
             return new BlueprintAPI(defaultBaseUrl);
         }
@@ -49,7 +50,7 @@ namespace Service {
             if (!rs.CheckPasswordValid(password)) {
                 throw new InvalidCredentialException("Password invalid");
             }
-            
+
             // Check validity of username
             if (username.Length >= 16) {
                 throw new InvalidCredentialException("Username invalid, must have less than 16 characters");
@@ -62,10 +63,10 @@ namespace Service {
                 return reader.ReadToEnd();
             }
         }
-        
+
         public async Task<APIResult<UserCredentials, JsonError>> AsyncAuthenticateUser(UserCredentials user) {
             validateUsernamePassword(user.GetUsername(), user.GetPassword());
-            
+
             // Prepare JSON payload & local variables
             string json = JsonUtility.ToJson(new PayloadAuthenticate(user));
 
@@ -81,15 +82,15 @@ namespace Service {
             } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
-            
+
                 // Return APIResult:JsonError in error case
                 return new APIResult<UserCredentials, JsonError>(error);
             }
         }
-        
+
         public async Task<APIResult<UserCredentials, JsonError>> AsyncRegisterUser(string username, string password) {
             validateUsernamePassword(username, password);
-            
+
             // Prepare JSON payload & local variables
             string json = JsonUtility.ToJson(new PayloadAuthenticate(username, password));
 
@@ -105,7 +106,7 @@ namespace Service {
             } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
-            
+
                 // Return APIResult:JsonError in error case
                 return new APIResult<UserCredentials, JsonError>(error);
             }
@@ -114,7 +115,7 @@ namespace Service {
         public async Task<APIResult<ResponseAuthenticate, JsonError>> AsyncRefreshTokens(UserCredentials user) {
             // Prepare JSON payload & local variables
             string json = JsonUtility.ToJson(new RefreshPayload(user.GetRefreshToken()));
-            
+
             try {
                 string response = await rs.PerformAsyncPost(refreshEndpoint, json);
 
@@ -125,12 +126,12 @@ namespace Service {
             } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
-                
+
                 // Return APIResult:JsonError in error case
                 return new APIResult<ResponseAuthenticate, JsonError>(error);
             }
         }
-        
+
         public async Task<APIResult<ResponseGetInventory, JsonError>> AsyncGetInventory(UserCredentials user) {
             try {
                 string response = await rs.PerformAsyncGet(inventoryEndpoint, user.GetAccessToken());
@@ -153,19 +154,19 @@ namespace Service {
                 } catch (WebException f) {
                     // Retrieve error payload from WebException
                     JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
-                
+
                     // Return APIResult:JsonError in error case
                     return new APIResult<ResponseGetInventory, JsonError>(error);
                 }
             } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
-                
+
                 // Return APIResult:JsonError in error case
                 return new APIResult<ResponseGetInventory, JsonError>(error);
             }
         }
-        
+
         public async Task<APIResult<Boolean, JsonError>> AsyncAddToInventory(UserCredentials user, ResponseGetInventory items) {
             // Prepare JSON payload
             string json = JsonUtility.ToJson(items);
@@ -187,20 +188,19 @@ namespace Service {
                 } catch (WebException f) {
                     // Retrieve error payload from WebException
                     JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
-                
+
                     // Return APIResult:JsonError in error case
                     return new APIResult<Boolean, JsonError>(error);
                 }
             } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
-                
+
                 // Return APIResult:JsonError in error case
                 return new APIResult<Boolean, JsonError>(error);
             }
-            
         }
-        
+
         public async Task<APIResult<Boolean, JsonError>> AsyncDeleteInventory(UserCredentials user) {
             try {
                 string response = await rs.PerformAsyncDelete(inventoryEndpoint, user.GetAccessToken());
@@ -219,32 +219,51 @@ namespace Service {
                 } catch (WebException f) {
                     // Retrieve error payload from WebException
                     JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
-                
+
                     // Return APIResult:JsonError in error case
                     return new APIResult<Boolean, JsonError>(error);
                 }
             } catch (WebException e) {
                 // Retrieve error payload from WebException
                 JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
-                
+
                 // Return APIResult:JsonError in error case
                 return new APIResult<Boolean, JsonError>(error);
             }
         }
-        
+
         public async Task<APIResult<string, JsonError>> AsyncGetItemSchema() {
             try {
                 string response = await rs.PerformAsyncGet(itemSchemaEndpoint);
-    
+
                 // Return APIResult:string in success case
                 return new APIResult<string, JsonError>(response);
             } catch (WebException e) {
                 JsonError error = new JsonError();
                 error.error = e.Message;
-                
+
                 // Return APIResult:JsonError in failure case
-                return new APIResult<string, JsonError>(error);  
-            } 
+                return new APIResult<string, JsonError>(error);
+            }
+        }
+
+        public async Task<APIResult<string, JsonError>> AsyncAddToLeaderboard(UserCredentials user, int id) {
+            Debug.Log(user.GetAccessToken());
+
+            string json = JsonUtility.ToJson(new PayloadLeaderboard(id));
+
+            try {
+                string response = await rs.PerformAsyncPost(leaderboardEndpoint, json, user.GetAccessToken());
+
+                // Return APIResult:string in success case
+                return new APIResult<string, JsonError>(response);
+            } catch (WebException e) {
+                JsonError error = new JsonError();
+                error.error = e.Message;
+
+                // Return APIResult:JsonError in failure case
+                return new APIResult<string, JsonError>(error);
+            }
         }
 
         private class RefreshPayload {
