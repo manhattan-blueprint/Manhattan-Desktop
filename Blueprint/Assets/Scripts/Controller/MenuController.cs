@@ -86,7 +86,7 @@ namespace Controller {
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
             playerMoveController.active = false;
-            playerLookController.active = false;;
+            playerLookController.active = false;
         }
 
         // Playing state

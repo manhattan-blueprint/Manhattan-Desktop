@@ -10,7 +10,6 @@ namespace Controller {
         private const string MouseYInputName = "Mouse Y";
         private const float mouseSensitivity = 150;
         private float xAxisClamp = 0;
-
         public bool active;
 
         private void Awake() {
