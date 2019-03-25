@@ -10,12 +10,12 @@ namespace Controller {
         private const string MouseYInputName = "Mouse Y";
         private const float mouseSensitivity = 150;
         private float xAxisClamp = 0;
-        private bool paused = false; 
-        
+        private bool paused = false;
+
         private void Awake() {
             LockCursor();
         }
-            
+
         private void LockCursor() {
             Cursor.lockState = CursorLockMode.Locked;
         }
