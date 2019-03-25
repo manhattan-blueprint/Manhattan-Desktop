@@ -14,7 +14,6 @@ namespace Model.BlueprintUI {
         GameObject Title { get; set; }                              // The title for this mode.
         String TitleStr { get; set; }                               // The string to set the title to show for this mode.
         List<GameObject> CanvasObjects { get; set; }                // All objects in this canvas.
-        ManhattanAnimation animationManager { get; set; }           // A utility for animation.
 
         void OnInitialize();
         void OnShow();
@@ -29,7 +28,6 @@ namespace Model.BlueprintUI {
             bUIMode.CanvasObjects = new List<GameObject>();
             bUIMode.OnInitialize();
             bUIMode.TitleStr = screenName;
-            bUIMode.animationManager = bUIMode.BlueprintUICanvas.gameObject.AddComponent<ManhattanAnimation>();
         }
 
         // Show spawns that are congruent between all screens.

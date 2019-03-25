@@ -13,7 +13,6 @@ namespace Model.BlueprintUI {
         public GameObject Title { get; set; }
         public String TitleStr { get; set; }
         public List<GameObject> CanvasObjects { get; set; }
-        public ManhattanAnimation animationManager { get; set; }
 
         void IBlueprintUIMode.OnInitialize() {
         }

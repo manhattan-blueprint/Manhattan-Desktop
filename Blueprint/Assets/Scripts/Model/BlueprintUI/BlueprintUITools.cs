@@ -267,10 +267,7 @@ namespace Model.BlueprintUI {
                    new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_dark"));
             }
 
-            // // TODO: Make craftable resource and border oscillate up and down.
-            // ManhattanAnimation animationManager = GameObject.Find("AnimationManager").GetComponent<ManhattanAnimation>();
-            // animationManager.StartMovementAnimation(resultBackground.gameObject,
-            //     Anim.OscillateHeight, sp.ToV(new Vector3(0.0f, scale/2.0f, 0.0f)), 1.0f);
+            // TODO: Make craftable resource and border oscillate up and down.
         }
 
         // Create a new visual craftable instruction.

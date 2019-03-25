@@ -16,15 +16,10 @@ namespace Utils {
     // Makes an animation happen to an object, and then removes the component
     // after. The component istherefore not removed if the animation is
     // indefinite.
-    public class ManhattanAnimation : MonoBehaviour {
+    class ManhattanAnimation : MonoBehaviour {
         private IEnumerator timedCoroutine;
         private float overshoot;
         private float framePeriod;
-
-        private int count = 0;
-        public void Start() {}
-        public void Update() {
-        }
 
         ////////////////////////////////////////////////////////////////////////
         // Movement Animations.
@@ -57,7 +52,7 @@ namespace Utils {
                     break;
 
                 case Anim.OscillateHeight:
-                    timedCoroutine = OscillateHeight(moveVector, time, destroyAfter, delay);
+                    timedCoroutine = OscillateHeight();
                     break;
 
                 default:
@@ -91,7 +86,7 @@ namespace Utils {
         }
 
         private IEnumerator MoveToDecelerate(Vector3 moveVector, float time,
-                                             bool destroyAfter, float delay) {
+            bool destroyAfter, float delay) {
             float speed = (120.0f * framePeriod) / time;
 
             Vector3 originalPosition = gameObject.transform.position;
@@ -113,14 +108,10 @@ namespace Utils {
             Destroy(this);
         }
 
-        private IEnumerator OscillateHeight(Vector3 max, float time,
-                                            bool destroyAfter, float delay) {
-            float maxDifference = max.y;
-            float speed = (120.0f * framePeriod) / time;
+        private IEnumerator OscillateHeight() {
+            float maxDifference = 0.5f;
 
-            yield return new WaitForSeconds(delay);
-
-            for (float count = 0; ; count += speed) {
+            for (int count = 0; ; count++) {
                 yield return new WaitForSeconds(framePeriod);
 
                 float positionModifier = maxDifference * Mathf.Sin((Mathf.PI * count) / 90) / 200;
