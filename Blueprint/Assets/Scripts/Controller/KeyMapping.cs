@@ -9,5 +9,6 @@ namespace Controller {
         public const KeyCode Increment = KeyCode.Equals;
         public const KeyCode Decrement = KeyCode.Minus;
         public const KeyCode Pause = KeyCode.Escape;
+        public const KeyCode Bindings = KeyCode.H;
     }
 }

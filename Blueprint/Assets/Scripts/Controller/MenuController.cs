@@ -18,6 +18,7 @@ namespace Controller {
         private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
+        private Canvas bindingsCanvas;
         private bool multiCanvas;
 
         void Start() {
@@ -28,12 +29,14 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
+            bindingsCanvas.enabled = false;
 
             multiCanvas = false;
 
@@ -60,6 +63,13 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
+              else if (Input.GetKeyDown(KeyMapping.Bindings)) {
+                if (!bindingsCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
+                } else if (bindingsCanvas.enabled && !multiCanvas){
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                }
+              }
         }
 
         private void OpenInventory() {
@@ -82,6 +92,16 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
+        private void OpenBindings() {
+            Time.timeScale = 0;
+            bindingsCanvas.enabled = true;
+            pauseCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
+
         // Playing state
         private void ContinueGame() {
             Time.timeScale = 1;
@@ -90,6 +110,7 @@ namespace Controller {
             Cursor.visible = false;
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            bindingsCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
         }
@@ -155,6 +176,9 @@ namespace Controller {
               case UIState.OpenUI.Blueprint:
                   multiCanvas = false;
                   OpenBlueprint();
+                  break;
+              case UIState.OpenUI.Bindings:
+                  OpenBindings();
                   break;
               case UIState.OpenUI.Pause:
                   multiCanvas = false;

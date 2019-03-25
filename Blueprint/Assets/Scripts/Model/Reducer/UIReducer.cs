@@ -27,6 +27,9 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
+                case UIState.OpenUI.Bindings:
+                    state.Selected = UIState.OpenUI.Playing;
+                    break;
                 case UIState.OpenUI.InvPause:
                     state.Selected = UIState.OpenUI.Inventory;
                     break;
@@ -96,6 +99,14 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Playing) {
                 state.Selected = UIState.OpenUI.Blueprint;
+            }
+        }
+
+        public void visit(OpenBindingsUI blueprint) {
+            // Update if exists or add new
+            UIState.OpenUI current = state.Selected;
+            if (current == UIState.OpenUI.Playing) {
+                state.Selected = UIState.OpenUI.Bindings;
             }
         }
 
