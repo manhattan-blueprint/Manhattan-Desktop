@@ -248,7 +248,6 @@ namespace Service {
         }
 
         public async Task<APIResult<string, JsonError>> AsyncAddToLeaderboard(UserCredentials user, int id) {
-            Debug.Log(user.GetAccessToken());
 
             string json = JsonUtility.ToJson(new PayloadLeaderboard(id));
 

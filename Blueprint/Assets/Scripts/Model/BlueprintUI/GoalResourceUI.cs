@@ -22,7 +22,7 @@ namespace Model.BlueprintUI {
             BlueprintUITools.NewGoal(BlueprintUICanvas.transform, CanvasObjects, 0.5f, 0.4f, 0.25f, 32, 28, 30, 31);
 
             BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
-                "Craft this to win! ᕙ(⇀‸↼‶)ᕗ");
+                "Phone home! Place the required items inside the central frame to win");
         }
 
         void IBlueprintUIMode.OnHide() {

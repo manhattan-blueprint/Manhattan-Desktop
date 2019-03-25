@@ -28,7 +28,7 @@ namespace Model.BlueprintUI {
             BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.575f, 0.2f, 0.12f, 25, 19, 1, 16, 6, 17, 6);
 
             BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
-                "Craft these when you have the required resources (ʘᗩʘ')");
+                "Click on the highlighted items to craft them once you have the required ingredients");
         }
 
         void IBlueprintUIMode.OnHide() {

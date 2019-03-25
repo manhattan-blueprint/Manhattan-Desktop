@@ -28,7 +28,7 @@ namespace Model.BlueprintUI {
             BlueprintUITools.NewBlueprint(BlueprintUICanvas.transform, CanvasObjects, 0.575f, 0.2f, 0.12f, 28, 27, 1, 24, 1, 18, 6);
 
             BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
-                "Craft these to progress on the leaderboard (~˘▾˘)~");
+                "Click on the highlighted items to craft them once you have the required ingredients");
         }
 
         void IBlueprintUIMode.OnHide() {

@@ -439,7 +439,6 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
 
         // Check returned string is empty.
-        Debug.Log(error.error);
         Assert.AreEqual(error, null);
         Assert.AreEqual(returnString, "{}");
     }

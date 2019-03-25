@@ -32,7 +32,7 @@ namespace Model.BlueprintUI {
             BlueprintUITools.NewMachine(BlueprintUICanvas.transform, CanvasObjects, 0.48f, 0.15f, 0.1f, 27, 26, 13, 10);
 
             BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
-                "Craft these using the shown machines ʘ‿ʘ");
+                "Craft these using the highlighted machines you've placed on the map");
         }
 
         void IBlueprintUIMode.OnHide() {

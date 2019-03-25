@@ -33,7 +33,7 @@ namespace Model.BlueprintUI {
             BlueprintUITools.NewResource(BlueprintUICanvas.transform, CanvasObjects, 0.7f, 0.25f, 0.2f, 10);
 
             BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
-                "Collect these outside with your phone using our augmented reality experience ( ͡° ͜ʖ ͡°)");
+                "Collect these outside with your phone using our augmented reality experience");
         }
 
         void IBlueprintUIMode.OnHide() {
