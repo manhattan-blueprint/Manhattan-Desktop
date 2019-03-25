@@ -186,17 +186,23 @@ namespace Controller {
                   ExitPrompt();
                   break;
               case UIState.OpenUI.Login:
-                  GameState gameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                  GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
                                                       GameManager.Instance().heldItemStore.GetState(),
                                                       GameManager.Instance().inventoryStore.GetState());
                   
                   BlueprintAPI.DefaultCredentials()
-                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), gameState);
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), logoutGameState);
                   
                   SceneManager.LoadScene(SceneMapping.MainMenu);
                   GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Exit:
+                  GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                      GameManager.Instance().heldItemStore.GetState(),
+                      GameManager.Instance().inventoryStore.GetState());
+                  
+                  BlueprintAPI.DefaultCredentials()
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), exitGameState);
                   multiCanvas = false;
                   ExitPrompt();
                   break;
