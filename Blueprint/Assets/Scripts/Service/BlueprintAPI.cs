@@ -21,7 +21,7 @@ namespace Service {
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
         private const string itemSchemaEndpoint    = ":8003/api/v1/item-schema";
         private const string desktopStateEndpoint  = ":8003/api/v1/progress/desktop-state";
-        private const string defaultBaseUrl        = "http://localhost";
+        private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
         
         // Enum
         public enum httpResponseCode {

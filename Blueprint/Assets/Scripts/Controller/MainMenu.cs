@@ -73,7 +73,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
             Anim.Disappear, 2.0f, true, 1.0f, 0.5f);
 
         maxUsernameLength = 16;
-        api = BlueprintAPI.WithBaseUrl("http://localhost");
+        api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
         GameManager.Instance().uiStore.Subscribe(this);
     }
