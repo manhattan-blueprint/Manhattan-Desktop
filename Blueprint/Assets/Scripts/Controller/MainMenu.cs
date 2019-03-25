@@ -60,6 +60,9 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         visibleMenu = VisibleMenu.SplashScreen;
         isMessageErrorStyle = false;
         toLaunch = false;
+        animating = false;
+
+        Time.timeScale = 1;
 
         sp = this.gameObject.AddComponent<ScreenProportions>();
 
@@ -87,6 +90,18 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
 
     void Update() {
         if (animating) return;
+
+        // Checking the animation manager still exists.
+        Debug.Log(this.gameObject.GetComponent<ManhattanAnimation>());
+
+        // Checking the menu is currently active.
+        Debug.Log(this.gameObject.activeSelf);
+
+        // Check fade in animation monobhaviour is running.
+        Debug.Log(pressSpace.gameObject.GetComponent<ManhattanAnimation>());
+
+        // Checking press space animation is currently active.
+        Debug.Log(pressSpace.gameObject.activeSelf);
 
         switch (visibleMenu) {
             case VisibleMenu.SplashScreen:

@@ -251,7 +251,7 @@ namespace Model.BlueprintUI {
 
             NewResource(parent, objList, x + scale * 1.2f, y, scale, resultID);
             // Button game object has to be drawn after so not to be required.
-            if (!ViableCraft(resourceIDA, resourceIDARequired,
+            if (ViableCraft(resourceIDA, resourceIDARequired,
                              resourceIDB, resourceIDBRequired,
                              resourceIDC, resourceIDCRequired)) {
                 GameObject craftButton = CreateButton(parent, objList,

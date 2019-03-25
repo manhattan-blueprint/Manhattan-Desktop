@@ -10,10 +10,12 @@ namespace Controller {
         private const string MouseYInputName = "Mouse Y";
         private const float mouseSensitivity = 150;
         private float xAxisClamp = 0;
-        private bool paused = false;
+
+        public bool active;
 
         private void Awake() {
             LockCursor();
+            active = true;
         }
 
         private void LockCursor() {
@@ -21,7 +23,7 @@ namespace Controller {
         }
 
         private void Update() {
-            CameraRotation();
+            if (active) CameraRotation();
         }
 
         private void CameraRotation() {
