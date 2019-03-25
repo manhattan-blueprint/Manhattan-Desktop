@@ -8,6 +8,7 @@ namespace Model.Action {
         void visit(SwapItemLocations anotherInventoryAction);
         void visit(RemoveHeldItem anotherInventoryAction);
         void visit(SetInventorySize anotherInventoryAction);
+        void visit(AddItemToInventoryAtHex anotherInventoryAction);
     }
 
     public abstract class InventoryAction : Action {
@@ -37,6 +38,25 @@ namespace Model.Action {
             this.item = item;
             this.count = count;
             this.name = name;
+        }
+
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    /* Add an item to the inventory for the user, at a specific location */
+    public class AddItemToInventoryAtHex : InventoryAction {
+        public readonly int item;
+        public readonly int count;
+        public readonly string name;
+        public readonly int hexID;
+        
+        public AddItemToInventoryAtHex(int item, int count, string name, int hexID) {
+            this.item = item;
+            this.count = count;
+            this.name = name;
+            this.hexID = hexID;
         }
 
         public override void Accept(InventoryVisitor visitor) {

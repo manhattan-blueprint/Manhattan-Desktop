@@ -1750,10 +1750,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 412792597}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d021e62ca1444f95b1f8a7e454638d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 272b9121f46f84f21bf4ccacdbeb27d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlotType: 1
+  SlotType: 2
 --- !u!1 &484680881
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,10 +2161,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 527665082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d021e62ca1444f95b1f8a7e454638d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 272b9121f46f84f21bf4ccacdbeb27d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlotType: 0
+  SlotType: 1
 --- !u!1 &542257897
 GameObject:
   m_ObjectHideFlags: 0
@@ -3436,10 +3436,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 945796351}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d021e62ca1444f95b1f8a7e454638d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 272b9121f46f84f21bf4ccacdbeb27d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SlotType: 2
+  SlotType: 3
 --- !u!114 &945796354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5940,7 +5940,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1905435958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d021e62ca1444f95b1f8a7e454638d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 272b9121f46f84f21bf4ccacdbeb27d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SlotType: 0
@@ -6063,6 +6063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16424853af9d844cf8ccdea2ebaa4eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  machineLocation: {x: 0, y: 0}
 --- !u!114 &1968530714
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -38,7 +38,10 @@ namespace Controller {
 
             multiCanvas = false;
             
+            // TODO: remove when finished testing
             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(11, 3, "Furnace"));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(4, 1, "Iron ore"));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(12, 1, "Charcoal"));
 
             GameManager.Instance().uiStore.Subscribe(this);
         }

@@ -86,5 +86,49 @@ namespace Model.Reducer {
             }
             machine.fuel = Optional<InventoryItem>.Of(setFuel.item);
         }
+
+        public void visit(ClearLeftInput clearLeftInput) {
+            if (!state.grid.ContainsKey(clearLeftInput.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location");
+            }
+
+            state.grid[clearLeftInput.machineLocation].leftInput = Optional<InventoryItem>.Empty();
+        }
+        
+        public void visit(ClearRightInput clearRightInput) {
+            if (!state.grid.ContainsKey(clearRightInput.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location");
+            }
+
+            state.grid[clearRightInput.machineLocation].rightInput = Optional<InventoryItem>.Empty();
+        }
+        
+        public void visit(ClearFuel clearFuel) {
+            if (!state.grid.ContainsKey(clearFuel.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location");
+            }
+
+            state.grid[clearFuel.machineLocation].fuel = Optional<InventoryItem>.Empty();
+        }
+
+        public void visit(ConsumeInputs consumeInputs) {
+            if (!state.grid.ContainsKey(consumeInputs.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location");
+            }
+
+            Machine machine = state.grid[consumeInputs.machineLocation];
+            if (machine.leftInput.IsPresent()) {
+                machine.leftInput.Get().SetQuantity(machine.leftInput.Get().GetQuantity() - 1);
+                if (machine.leftInput.Get().GetQuantity() == 0) machine.leftInput = Optional<InventoryItem>.Empty();
+            }
+            if (machine.rightInput.IsPresent()) {
+                machine.rightInput.Get().SetQuantity(machine.rightInput.Get().GetQuantity() - 1);
+                if (machine.rightInput.Get().GetQuantity() == 0) machine.rightInput = Optional<InventoryItem>.Empty();
+            }
+            if (machine.fuel.IsPresent()) {
+                machine.fuel.Get().SetQuantity(machine.fuel.Get().GetQuantity() - 1);
+                if (machine.fuel.Get().GetQuantity() == 0)  machine.fuel = Optional<InventoryItem>.Empty();
+            }
+        }
     }
 }

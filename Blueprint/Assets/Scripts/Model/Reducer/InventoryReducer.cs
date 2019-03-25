@@ -67,7 +67,38 @@ namespace Model.Reducer {
                 
                 state.inventoryContents.Add(addItemToInventoryAction.item, list);
             }
-            
+        }
+        
+        public void visit(AddItemToInventoryAtHex addItemToInventoryAction) {
+            // Cases:
+            //     Not in inventory - create new stack
+            //     Drag onto stack of existing object - increment
+            //     Drag onto empty slot - create new stack
+            bool placed = false;
+
+            if (state.inventoryContents.ContainsKey(addItemToInventoryAction.item)) {
+                foreach (HexLocation location in state.inventoryContents[addItemToInventoryAction.item]) {
+                    if (location.hexID == addItemToInventoryAction.hexID) {
+                        // Dragging onto existing stack
+                        location.quantity += addItemToInventoryAction.count;
+                        placed = true;
+                    }
+                }
+
+                // Not placed onto an existing stack, create new one
+                if (!placed) {
+                    HexLocation item = new HexLocation(addItemToInventoryAction.hexID, addItemToInventoryAction.count);
+                    state.inventoryContents[addItemToInventoryAction.item].Add(item);
+                }
+                
+            } else {
+                // Not present in inventory
+                HexLocation item = new HexLocation(addItemToInventoryAction.hexID, addItemToInventoryAction.count);
+                List<HexLocation> list = new List<HexLocation>();
+                list.Add(item);
+                
+                state.inventoryContents.Add(addItemToInventoryAction.item, list);
+            }
         }
 
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
@@ -112,20 +143,29 @@ namespace Model.Reducer {
         }
 
         public void visit(SwapItemLocations swapItemLocations) {
-            if (swapItemLocations.sourceItem.IsPresent()) {
-                foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItem.Get().GetId()]) {
-                    if (hexLocation.hexID == swapItemLocations.sourceHexID) {
-                        hexLocation.hexID = swapItemLocations.destinationHexID;
+            if (state.inventoryContents.ContainsKey(swapItemLocations.sourceItem.Get().GetId())) {
+                if (swapItemLocations.sourceItem.IsPresent()) {
+                    foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItem.Get().GetId()]) {
+                        if (hexLocation.hexID == swapItemLocations.sourceHexID) {
+                            hexLocation.hexID = swapItemLocations.destinationHexID;
+                        }
+                    }
+                } 
+                
+                if (swapItemLocations.destinationItem.IsPresent()) {
+                    foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItem.Get().GetId()]) {
+                        if (hexLocation.hexID == swapItemLocations.destinationHexID) {
+                            hexLocation.hexID = swapItemLocations.sourceHexID;
+                        }
                     }
                 }
-            }
-            
-            if (swapItemLocations.destinationItem.IsPresent()) {
-                foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItem.Get().GetId()]) {
-                    if (hexLocation.hexID == swapItemLocations.destinationHexID) {
-                        hexLocation.hexID = swapItemLocations.sourceHexID;
-                    }
-                }
+            } else {
+                // Something new is dragged into inventory, i.e. from machine
+                HexLocation item = new HexLocation(swapItemLocations.destinationHexID, swapItemLocations.sourceItem.Get().GetQuantity());
+                List<HexLocation> list = new List<HexLocation>();
+                list.Add(item);
+                
+                state.inventoryContents.Add(swapItemLocations.sourceItem.Get().GetId(), list);
             }
         }
 

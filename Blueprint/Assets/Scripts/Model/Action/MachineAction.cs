@@ -8,6 +8,10 @@ namespace Model.Action {
         void visit(SetLeftInput setLeftInput);
         void visit(SetRightInput setRightInput);
         void visit(SetFuel setFuel);
+        void visit(ConsumeInputs consumeInputs);
+        void visit(ClearLeftInput clearLeftInput);
+        void visit(ClearRightInput clearRightInput);
+        void visit(ClearFuel clearFuel);
     }
 
     public abstract class MachineAction : Action {
@@ -71,6 +75,42 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
+    
+    public class ClearLeftInput: MachineAction {
+        public readonly Vector2 machineLocation;
+
+        public ClearLeftInput(Vector2 machineLocation) {
+            this.machineLocation = machineLocation;
+        }
+
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    public class ClearRightInput : MachineAction {
+        public readonly Vector2 machineLocation;
+
+        public ClearRightInput(Vector2 machineLocation) {
+            this.machineLocation = machineLocation;
+        }
+
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    public class ClearFuel : MachineAction {
+        public readonly Vector2 machineLocation;
+
+        public ClearFuel (Vector2 machineLocation) {
+            this.machineLocation = machineLocation;
+        }
+
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
 
     /* Call when item is dropped on fuel */
     public class SetFuel : MachineAction {
@@ -82,6 +122,18 @@ namespace Model.Action {
             this.item = item;
         }
 
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ConsumeInputs : MachineAction {
+        public readonly Vector2 machineLocation;
+
+        public ConsumeInputs(Vector2 machineLocation) {
+            this.machineLocation = machineLocation;
+        }
+        
         public override void Accept(MachineVisitor visitor) {
             visitor.visit(this);
         }
