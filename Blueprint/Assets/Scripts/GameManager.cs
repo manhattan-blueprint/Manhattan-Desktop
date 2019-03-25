@@ -56,8 +56,22 @@ public class GameManager {
 
         BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
-        // Load player inventory and then load world
+        // Load desktop state and then player backpack
         Task.Run(async () => {
+            
+            // Load desktop state
+            APIResult<GameState, JsonError> finalGameStateResponse = await blueprintApi.AsyncGetState(credentials);
+            if (finalGameStateResponse.isSuccess()) {
+                GameState remoteGameState = finalGameStateResponse.GetSuccess();
+                mapStore.ConfigureState(remoteGameState.mapState);
+                heldItemStore.ConfigureState(remoteGameState.heldItemState);
+                inventoryStore.ConfigureState(remoteGameState.inventoryState);
+            } else {
+                // TODO: Do something with this error
+                JsonError error = finalGameStateResponse.GetError();
+            }
+            
+            // Load player backpack into inventory
             APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(credentials);
             if (finalInventoryResponse.isSuccess()) {
                 ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
@@ -68,6 +82,7 @@ public class GameManager {
                 // Can't call a scene dispatch in an asynchronous function.
                 this.uiStore.Dispatch(new OpenPlayingUI());
             } else {
+                // TODO: Do something with this error
                 JsonError error = finalInventoryResponse.GetError();
             }
         }).GetAwaiter().GetResult();

@@ -6,9 +6,9 @@ using UnityEngine;
 namespace Model {
     [Serializable]
     public class GameState {
-        [SerializeField] private MapState mapState;
-        [SerializeField] private HeldItemState heldItemState;
-        [SerializeField] private InventoryState inventoryState;
+        public MapState mapState;
+        public HeldItemState heldItemState;
+        public InventoryState inventoryState;
 
         public GameState(MapState mapState, HeldItemState heldItemState, InventoryState inventoryState) {
             this.mapState = mapState;

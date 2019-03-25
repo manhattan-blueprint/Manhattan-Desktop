@@ -292,6 +292,49 @@ namespace Service {
             }
         }
 
+        public async Task<APIResult<GameState, JsonError>> AsyncGetState(UserCredentials user) {
+            try {
+                string response = await rs.PerformAsyncGet(desktopStateEndpoint, user.GetAccessToken());
+
+                fsSerializer serializer = new fsSerializer();
+                fsData data = fsJsonParser.Parse(response);
+                GameState gameState = null;
+                serializer.TryDeserialize(data, ref gameState).AssertSuccessWithoutWarnings();
+
+                // Return APIResult:ResponseGetInventory in success case
+                return new APIResult<GameState, JsonError>(gameState);
+            } catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised){
+                // If access token doesn't match a user, refresh tokens and retry
+                APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
+
+                try {
+                    string response =
+                        await rs.PerformAsyncGet(desktopStateEndpoint, refreshedTokens.GetSuccess().access);
+
+                    fsSerializer serializer = new fsSerializer();
+                    fsData data = fsJsonParser.Parse(response);
+                    GameState gameState = null;
+                    serializer.TryDeserialize(data, ref gameState).AssertSuccessWithoutWarnings();
+
+                    // Return APIResult:ResponseGetInventory in success case
+                    return new APIResult<GameState, JsonError>(gameState);
+                }
+                catch (WebException f) {
+                    // Retrieve error payload from WebException
+                    JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+
+                    // Return APIResult:
+                    return new APIResult<GameState, JsonError>(error);
+                }
+            } catch (WebException e) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+                
+                // Return APIResult:JsonError in error case
+                return new APIResult<GameState, JsonError>(error);
+            }
+        }
+
         private class RefreshPayload {
             public string refresh;
 
