@@ -127,7 +127,7 @@ namespace Model.Reducer {
             }
             if (machine.fuel.IsPresent()) {
                 machine.fuel.Get().SetQuantity(machine.fuel.Get().GetQuantity() - 1);
-                if (machine.fuel.Get().GetQuantity() == 0)  machine.fuel = Optional<InventoryItem>.Empty();
+                //if (machine.fuel.Get().GetQuantity() == 0) visit(new ClearFuel(consumeInputs.machineLocation));
             }
         }
     }

@@ -119,6 +119,11 @@ namespace Controller {
             Image image = gameObject.transform.GetChild(1).GetComponent<Image>();
             Text text = gameObject.GetComponentInChildren<Text>();
 
+            // TODO: sub-optimal, fix it. 
+            if (gameObject.name == "FuelSlot" && storedItem.IsPresent()) {
+                if (storedItem.Get().GetQuantity() == 0) storedItem = Optional<InventoryItem>.Empty();
+            } 
+
             if (!this.storedItem.IsPresent()) {
                 image.enabled = false;
                 text.enabled = false;
