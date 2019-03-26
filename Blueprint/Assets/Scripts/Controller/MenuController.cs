@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
-using Model.Action;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +14,8 @@ namespace Controller {
         private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
+        private Canvas machineCanvas;
+        private Canvas machineInventoryCanvas;
         private bool multiCanvas;
         private PlayerMoveController playerMoveController;
         private PlayerLookController playerLookController;
@@ -30,6 +28,8 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
+            machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
 
             playerMoveController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoveController>();
             playerLookController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerLookController>();
@@ -39,9 +39,10 @@ namespace Controller {
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
+            machineCanvas.enabled = false;
 
             multiCanvas = false;
-
+            
             GameManager.Instance().uiStore.Subscribe(this);
         }
 
@@ -53,18 +54,20 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (!pauseCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
                 } else {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            }  else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
+            } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled && !multiCanvas){
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            }
+            } 
         }
 
         private void OpenInventory() {
@@ -88,6 +91,17 @@ namespace Controller {
             playerMoveController.active = false;
             playerLookController.active = false;
         }
+        
+        private void OpenMachine() {
+            Time.timeScale = 0;
+            machineCanvas.enabled = true;
+            machineInventoryCanvas.enabled = true;
+            pauseCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
 
         // Playing state
         private void ContinueGame() {
@@ -96,6 +110,8 @@ namespace Controller {
             Cursor.visible = false;
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            machineCanvas.enabled = false;
+            machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
             playerMoveController.active = true;
@@ -151,6 +167,7 @@ namespace Controller {
             playerLookController.active = false;
         }
 
+        // TODO: REFACTOR NOW WE DONT ALLOW MULTIPLE CANVAS
         public void StateDidUpdate(UIState state) {
             switch (state.Selected) {
               case UIState.OpenUI.Inventory:
@@ -163,6 +180,10 @@ namespace Controller {
               case UIState.OpenUI.Blueprint:
                   multiCanvas = false;
                   OpenBlueprint();
+                  break;
+              case UIState.OpenUI.Machine:
+                  multiCanvas = false;
+                  OpenMachine();
                   break;
               case UIState.OpenUI.Pause:
                   multiCanvas = false;

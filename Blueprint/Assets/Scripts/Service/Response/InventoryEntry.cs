@@ -11,9 +11,5 @@ namespace Service.Response {
             this.item_id = itemId;
             this.quantity = quantity;
         }
-        
-        public string ToString() {
-            return this.item_id + " " + this.quantity;
-        }
     }
 }

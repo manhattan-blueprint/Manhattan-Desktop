@@ -1,3 +1,6 @@
+using System.Threading;
+using UnityEngine;
+
 namespace Model.State {
     public class UIState {
         public enum OpenUI {
@@ -22,13 +25,10 @@ namespace Model.State {
         };
 
         public OpenUI Selected;
+        public Vector2 SelectedMachineLocation;
 
         public UIState() {
-#if UNITY_EDITOR
-            this.Selected = OpenUI.Playing;
-#else
             this.Selected = OpenUI.Login;
-#endif
         }
     }
 }

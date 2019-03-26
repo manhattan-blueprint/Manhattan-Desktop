@@ -32,7 +32,8 @@ namespace Controller {
 
         void Update() {
             if (firstUIUpdate) {
-                List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+                List<InventorySlotController> allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+                
                 foreach (InventorySlotController controller in allSlots) {
                   itemSlots.Add(controller.getId(), controller);
                 }
@@ -52,7 +53,7 @@ namespace Controller {
             return GameManager.Instance().goh.GameObjs.items[id - 1].name;
         }
 
-        public int GetItemType(int id) {
+        public GameObjectEntry.ItemType GetItemType(int id) {
             return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
 
