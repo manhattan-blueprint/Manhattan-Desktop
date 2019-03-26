@@ -193,8 +193,9 @@ namespace Controller {
                   BlueprintAPI.DefaultCredentials()
                       .AsyncAddState(GameManager.Instance().GetUserCredentials(), logoutGameState);
                   
+                  Time.timeScale = 1;
+                  GameManager.Instance().ResetGame();
                   SceneManager.LoadScene(SceneMapping.MainMenu);
-                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Exit:
                   GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
