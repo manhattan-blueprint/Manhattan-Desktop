@@ -82,7 +82,7 @@ namespace Model.BlueprintUI {
 
             BlueprintAPI.DefaultCredentials().AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
 
-            GameObject.Find("BlueprintUICanvas").GetComponent<BlueprintUIController>().RefreshMenu();
+            GameObject.Find("BlueprintUICanvas").GetComponent<BlueprintUIController>().RefreshMenu(GetItemName(resultID) + " crafted!");
 
             return;
         }
@@ -295,9 +295,6 @@ namespace Model.BlueprintUI {
                                           resourceIDA, resourceIDARequired,
                                           resourceIDB, resourceIDBRequired,
                                           resourceIDC, resourceIDCRequired);});
-
-                NewText(parent, objList, new Vector2(0.5f, 0.1f),
-                    20, GetItemName(resultID) + " crafted!", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
             }
             else {
                 GameObject craftButton = NewButton(parent, objList,
@@ -356,9 +353,6 @@ namespace Model.BlueprintUI {
                                       resourceIDA, resourceIDARequired,
                                       resourceIDB, resourceIDBRequired,
                                       resourceIDC, resourceIDCRequired);});
-
-                NewText(parent, objList, new Vector2(0.5f, 0.1f),
-                    20, GetItemName(resultID) + " crafted!", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
 
             }
             else {

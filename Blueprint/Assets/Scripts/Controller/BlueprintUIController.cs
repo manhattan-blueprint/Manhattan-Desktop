@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Model.BlueprintUI;
+using UnityEngine.UI;
+using Utils;
 
 namespace Controller {
     public class BlueprintUIController : MonoBehaviour {
@@ -14,6 +16,8 @@ namespace Controller {
 
         private Boolean visible;
         private CurrentMenu currentMenu;
+
+        Text infoText;
 
         private enum CurrentMenu {
             Primary,
@@ -36,6 +40,22 @@ namespace Controller {
             goalResourceUI.Initialize(gameObject, "Final Goal");
             currentMenu = CurrentMenu.Primary;
             visible = false;
+
+            // Create some ifno text between screens for when stuff is crafted.
+            ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
+            Vector2 relativePosition = sp.ToV(new Vector2(0.5f, 0.1f));
+
+            GameObject obj = new GameObject();
+            obj.AddComponent<RectTransform>();
+            obj.AddComponent<CanvasRenderer>();
+            infoText = obj.AddComponent<Text>();
+            infoText.text = "";
+            infoText.alignment = TextAnchor.MiddleCenter;
+            infoText.fontSize = 20;
+            infoText.font = Resources.Load<Font>("Fonts/HelveticaNeueMedium");
+            infoText.color = new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f);
+            obj.transform.position = relativePosition;
+            (obj.transform as RectTransform).sizeDelta = new Vector2(sp.ToH(1.0f), sp.ToH(0.2f));
         }
 
         void Update() {
@@ -138,7 +158,13 @@ namespace Controller {
             }
         }
 
-        public void RefreshMenu() {
+        public void RefreshMenu(string info) {
+            // Reset invoke in case outstanding one.
+            CancelInvoke();
+
+            infoText.text = info;
+            Invoke("EmptyText", 2.0f);
+
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
@@ -169,6 +195,10 @@ namespace Controller {
                     throw new Exception("Attempting to refresh menu while in an unexpected state.");
                     break;
             }
+        }
+
+        void EmptyText() {
+            infoText.text="";
         }
     }
 }
