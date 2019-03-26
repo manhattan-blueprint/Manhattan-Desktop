@@ -424,7 +424,7 @@ public class RestHandlerTests {
         Task.Run(async () => {
             // Test with satellite dish (28).
             Task<APIResult<string, JsonError>> fetchingResponse =
-                blueprintApi.AsyncAddToLeaderboard(user, 28);
+                blueprintApi.AsyncAddToProgress(user, 28);
 
             APIResult<string, JsonError> response = await fetchingResponse;
 

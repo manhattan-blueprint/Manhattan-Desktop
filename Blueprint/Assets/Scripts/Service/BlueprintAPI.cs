@@ -247,7 +247,7 @@ namespace Service {
             }
         }
 
-        public async Task<APIResult<string, JsonError>> AsyncAddToLeaderboard(UserCredentials user, int id) {
+        public async Task<APIResult<string, JsonError>> AsyncAddToProgress(UserCredentials user, int id) {
 
             string json = JsonUtility.ToJson(new PayloadLeaderboard(id));
 

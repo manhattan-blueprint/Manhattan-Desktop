@@ -10,7 +10,7 @@ namespace Service.Request {
         }
     }
 
-	public class PayloadLeaderboard {
+    public class PayloadLeaderboard {
         List<Item> blueprints;
 
 		public PayloadLeaderboard(int id) {

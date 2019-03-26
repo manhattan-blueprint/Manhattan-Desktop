@@ -52,17 +52,18 @@ namespace Model.BlueprintUI {
 
         // Process a craf (should already have checked for viability).
         public static void ProcessCraft(int resultID, GameObject availableBorder=null,
+                                        GameObject craftText=null,
                                         int resourceIDA=0, int resourceIDARequired=0,
                                         int resourceIDB=0, int resourceIDBRequired=0,
                                         int resourceIDC=0, int resourceIDCRequired=0) {
 
             // Remove items from inventory
             if (resourceIDA > 0)
-                new RemoveItemFromInventory(resourceIDA, resourceIDARequired);
+                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(resourceIDA, resourceIDARequired));
             if (resourceIDB > 0)
-                new RemoveItemFromInventory(resourceIDB, resourceIDBRequired);
+                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(resourceIDB, resourceIDBRequired));
             if (resourceIDC > 0)
-                new RemoveItemFromInventory(resourceIDC, resourceIDCRequired);
+                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(resourceIDC, resourceIDCRequired));
 
             // Add the item to inventory
             string resourceName = GameManager.Instance().goh.GameObjs.items.Find(x => x.item_id == resultID).name;
@@ -76,7 +77,9 @@ namespace Model.BlueprintUI {
                 MonoBehaviour.Destroy(availableBorder);
             }
 
-            BlueprintAPI.DefaultCredentials().AsyncAddToLeaderboard(GameManager.Instance().GetUserCredentials(), resultID);
+            BlueprintAPI.DefaultCredentials().AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
+
+            if (craftText) craftText.GetComponent<Text>().text = resourceName + " crafted!";
 
             return;
         }
@@ -142,7 +145,7 @@ namespace Model.BlueprintUI {
         }
 
         // Create a new button that is also an svg image.
-        public static GameObject CreateButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Sprite sprite) {
+        public static GameObject NewButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Sprite sprite) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             Vector2 relativePosition = sp.ToV(position);
             float relativeSize = sp.ToH(scale);
@@ -161,7 +164,7 @@ namespace Model.BlueprintUI {
         }
 
         // Create a new button that is also an svg image.
-        public static GameObject CreateButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Texture texture) {
+        public static GameObject NewButton(Transform parent, List<GameObject> objList, Vector2 position, float scale, Texture texture) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             Vector2 relativePosition = sp.ToV(position);
             float relativeSize = sp.ToH(scale);
@@ -176,6 +179,27 @@ namespace Model.BlueprintUI {
             // colors.pressedColor = new Color(122f, 122f, 122f);
             btn.colors = colors;
 
+            return obj;
+        }
+
+        // Create a new piece of text.
+        public static GameObject NewText(Transform parent, List<GameObject> objList, Vector2 position, int fontSize, string infoText, Color color) {
+            ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
+            Vector2 relativePosition = sp.ToV(position);
+
+            GameObject obj = new GameObject();
+            obj.transform.SetParent(parent);
+            obj.AddComponent<RectTransform>();
+            obj.AddComponent<CanvasRenderer>();
+            Text text = obj.AddComponent<Text>();
+            text.text = infoText;
+            text.alignment = TextAnchor.MiddleCenter;
+            text.fontSize = fontSize;
+            text.font = Resources.Load<Font>("Fonts/HelveticaNeueMedium");
+            text.color = color;
+            obj.transform.position = relativePosition;
+            (obj.transform as RectTransform).sizeDelta = new Vector2(sp.ToH(1.0f), sp.ToH(0.2f));
+            objList.Add(obj);
             return obj;
         }
 
@@ -254,16 +278,20 @@ namespace Model.BlueprintUI {
             if (ViableCraft(resourceIDA, resourceIDARequired,
                              resourceIDB, resourceIDBRequired,
                              resourceIDC, resourceIDCRequired)) {
-                GameObject craftButton = CreateButton(parent, objList,
+                GameObject craftText = NewText(parent, objList, new Vector2(0.5f, 0.1f),
+                    20, "", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
+
+                GameObject craftButton = NewButton(parent, objList,
                     new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
+
                 craftButton.GetComponent<Button>().onClick.AddListener(
-                    delegate{ProcessCraft(resultID, craftButton,
+                    delegate{ProcessCraft(resultID, craftButton, craftText,
                                           resourceIDA, resourceIDARequired,
                                           resourceIDB, resourceIDBRequired,
                                           resourceIDC, resourceIDCRequired);});
             }
             else {
-                GameObject craftButton = CreateButton(parent, objList,
+                GameObject craftButton = NewButton(parent, objList,
                    new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_dark"));
             }
 
@@ -308,18 +336,22 @@ namespace Model.BlueprintUI {
             NewResource(parent, objList, x + scale * 1.2f, y, scale, resultID);
             // Button game object has to be drawn after so not to be required.
             if (ViableCraft(resourceIDA, resourceIDARequired,
-                resourceIDB, resourceIDBRequired,
-                resourceIDC, resourceIDCRequired)) {
-                    GameObject craftButton = CreateButton(parent, objList,
-                        new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
-                    craftButton.GetComponent<Button>().onClick.AddListener(
-                        delegate{ProcessCraft(resultID, craftButton,
-                        resourceIDA, resourceIDARequired,
-                        resourceIDB, resourceIDBRequired,
-                        resourceIDC, resourceIDCRequired);});
+                            resourceIDB, resourceIDBRequired,
+                            resourceIDC, resourceIDCRequired)) {
+                GameObject craftText = NewText(parent, objList, new Vector2(0.5f, 0.1f),
+                    20, "", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
+
+                GameObject craftButton = NewButton(parent, objList,
+                    new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
+
+                craftButton.GetComponent<Button>().onClick.AddListener(
+                delegate{ProcessCraft(resultID, craftButton, craftText,
+                                      resourceIDA, resourceIDARequired,
+                                      resourceIDB, resourceIDBRequired,
+                                      resourceIDC, resourceIDCRequired);});
             }
             else {
-                GameObject craftButton = CreateButton(parent, objList,
+                GameObject craftButton = NewButton(parent, objList,
                     new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_dark"));
             }
         }
@@ -364,22 +396,7 @@ namespace Model.BlueprintUI {
 
         // Create infomative text for each blueprint UI menu.
         public static GameObject CreateInfoText(Transform parent, List<GameObject> objList, string infoText) {
-            ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
-
-            GameObject title = new GameObject();
-            title.transform.SetParent(parent);
-            title.AddComponent<RectTransform>();
-            title.AddComponent<CanvasRenderer>();
-            Text newText = title.AddComponent<Text>();
-            newText.text = infoText;
-            newText.alignment = TextAnchor.MiddleCenter;
-            newText.fontSize = 20;
-            newText.font = Resources.Load<Font>("Fonts/HelveticaNeueMedium");
-            newText.color = new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f);
-            title.transform.position = sp.ToV(new Vector2(0.5f, 0.85f));
-            (title.transform as RectTransform).sizeDelta = new Vector2(sp.ToH(1.0f), sp.ToH(0.2f));
-            objList.Add(title);
-            return title;
+            return NewText(parent, objList, new Vector2(0.5f, 0.85f), 20, infoText, new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
         }
     }
 }
