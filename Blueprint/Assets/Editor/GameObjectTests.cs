@@ -28,7 +28,7 @@ public class GameObjectTests {
             Assert.That(entry.type, Is.EqualTo(1));
         }
     }
-    
+
     // Serializes a single GameObjectEntry containing a recipe list
     [Test]
     public void TestSerializeSingleItemWithList() {
@@ -41,7 +41,7 @@ public class GameObjectTests {
             Assert.That(entry.item_id, Is.EqualTo(8));
             Assert.That(entry.name, Is.EqualTo("steel"));
             Assert.That(entry.type, Is.EqualTo(4));
-            
+
             // Asserts recipe entry is correct
             Assert.That(entry.recipe[0].item_id, Is.EqualTo(4));
             Assert.That(entry.recipe[0].quantity, Is.EqualTo(1));
@@ -51,15 +51,15 @@ public class GameObjectTests {
     // Serializes the whole item schema using GameObjectsHandler
     [Test]
     public void TestInitialiseGameObjectsHandler() {
-        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));     
-        
+        GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
+
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(16));
-        
+
         Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
         Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("wood"));
         Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(1));
-        
+
         Assert.That(goh.GameObjs.items[15].item_id, Is.EqualTo(16));
         Assert.That(goh.GameObjs.items[15].name, Is.EqualTo("dune buggy"));
         Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(5));
@@ -73,14 +73,14 @@ public class GameObjectTests {
     [Test]
     public void TestInitialiseGameObjectsHandlerRemote() {
         GameObjectsHandler goh = GameObjectsHandler.WithRemoteSchema();
-        
+
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(32));
-        
+
         Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
         Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("Wood"));
         Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(1));
-        
+
         Assert.That(goh.GameObjs.items[15].item_id, Is.EqualTo(16));
         Assert.That(goh.GameObjs.items[15].name, Is.EqualTo("Glass"));
         Assert.That(goh.GameObjs.items[15].type, Is.EqualTo(3));
@@ -98,15 +98,15 @@ public class GameObjectTests {
 
         try {
             GameObjectEntry goe = goh.GetBlueprint(availables, 7);
-            
+
             //Assert values are correct
             Assert.That(goe.name, Is.EqualTo("furnace"));
         } catch (InvalidDataException e) {
             // Exception thrown, failure case
             Assert.Fail();
-        } 
+        }
     }
-    
+
     // Asserts that correct exception is thrown for invalid blueprint retrieval
     [Test]
     public void TestGetSingleElementBlueprintFail() {
@@ -116,14 +116,14 @@ public class GameObjectTests {
         // Create list of available objects, with too few values
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(2, 6));
-        
+
         GameObjectEntry goe = goh.GetBlueprint(availables, 7);
 
         if (goe != null) {
             // Failure case
             // GetBlueprint returns non-null object where null expected
             Assert.Fail();
-        } 
+        }
     }
 
     // Asserts that a recipe is correctly returned
@@ -131,7 +131,7 @@ public class GameObjectTests {
     public void TestGetRecipePass() {
         // Serialize schema
         GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
-        
+
         // Create valid list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(4, 1));
@@ -139,7 +139,7 @@ public class GameObjectTests {
 
         // Obtain valid output
         GameObjectEntry goe = goh.GetRecipe(availables, 7);
-        
+
         // Asserts
         Assert.That(goe.name, Is.EqualTo("steel"));
     }
@@ -149,14 +149,14 @@ public class GameObjectTests {
     public void TestGetRecipeFail() {
         // Serialize schema
         GameObjectsHandler goh = GameObjectsHandler.WithFilepath(getFilepath(itemSchemaV1));
-        
+
         // Create valid list of available objects
         List<RecipeElement> availables = new List<RecipeElement>();
         availables.Add(new RecipeElement(5, 1));
 
         // Obtain valid output
         GameObjectEntry goe = goh.GetRecipe(availables, 7);
-        
+
         // Asserts
         if (goe != null) {
             // Failure case, no objects are valid. Hence goe should be null

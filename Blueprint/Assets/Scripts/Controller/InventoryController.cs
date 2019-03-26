@@ -29,7 +29,7 @@ namespace Controller {
             firstUIUpdate = true;
             itemSlots = new Dictionary<int, InventorySlotController>();
         }
-        
+
         void Update() {
             if (firstUIUpdate) {
                 List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
@@ -37,12 +37,12 @@ namespace Controller {
                   itemSlots.Add(controller.getId(), controller);
                 }
                 firstUIUpdate = false;
-                
+
                 // *MUST* subscribe *AFTER* finishing configuring the UI.
                 GameManager.Instance().inventoryStore.Subscribe(this);
             }
         }
-        
+
         public void StateDidUpdate(InventoryState state) {
             inventoryContents = state.inventoryContents;
             RedrawInventory();
@@ -61,13 +61,13 @@ namespace Controller {
             foreach (KeyValuePair<int, InventorySlotController> slot in itemSlots) {
                 slot.Value.SetStoredItem(Optional<InventoryItem>.Empty());
             }
-            
+
             // Re-populate slots
             foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
                 foreach(HexLocation loc in element.Value) {
                     InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
                     itemSlots[loc.hexID].SetStoredItem(Optional<InventoryItem>.Of(item));
-                } 
+                }
             }
         }
     }

@@ -19,6 +19,8 @@ namespace Controller {
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
         private bool multiCanvas;
+        private PlayerMoveController playerMoveController;
+        private PlayerLookController playerLookController;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -28,6 +30,9 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+
+            playerMoveController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoveController>();
+            playerLookController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerLookController>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
@@ -63,28 +68,29 @@ namespace Controller {
         }
 
         private void OpenInventory() {
-            Time.timeScale = 0;
             inventoryCanvas.enabled = true;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
+            playerMoveController.active = false;
+            playerLookController.active = false;
         }
 
         private void OpenBlueprint() {
-            Time.timeScale = 0;
             blueprintCanvas.enabled = true;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
+            playerMoveController.active = false;
+            playerLookController.active = false;
         }
 
         // Playing state
         private void ContinueGame() {
-            Time.timeScale = 1;
             inventoryCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -92,6 +98,8 @@ namespace Controller {
             blueprintCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
+            playerMoveController.active = true;
+            playerLookController.active = true;
         }
 
         // Logout button from the pause menu
@@ -133,7 +141,6 @@ namespace Controller {
         }
 
         private void PauseGame() {
-            Time.timeScale = 0;
             pauseCanvas.enabled = true;
             exitCanvas.enabled = false;
             logoutCanvas.enabled = false;
@@ -141,6 +148,7 @@ namespace Controller {
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
+            playerLookController.active = false;
         }
 
         public void StateDidUpdate(UIState state) {

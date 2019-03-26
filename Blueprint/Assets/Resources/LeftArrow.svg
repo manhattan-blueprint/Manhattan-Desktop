@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="70.87"
+   height="79.048"
+   viewBox="0 0 70.87 79.048"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="LeftArrow.svg"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview14"
+     showgrid="false"
+     inkscape:zoom="2.9855279"
+     inkscape:cx="35.435001"
+     inkscape:cy="39.523998"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg12" />
+  <defs
+     id="defs4">
+    <clipPath
+       id="clip-path">
+      <path
+         id="Path_32"
+         data-name="Path 32"
+         d="M40.333-192.391l26.433,15.261a9,9,0,0,1,4.5,7.8v30.522a9,9,0,0,1-4.5,7.8L40.333-115.755a9,9,0,0,1-9,0L4.9-131.016a9,9,0,0,1-4.5-7.8v-30.522a9,9,0,0,1,4.5-7.8l26.433-15.261A9,9,0,0,1,40.333-192.391Z"
+         transform="translate(-0.397 193.597)"
+         fill="#092642"
+         clip-rule="evenodd" />
+    </clipPath>
+  </defs>
+  <g
+     id="Group_12"
+     data-name="Group 12"
+     transform="rotate(-180,111.4365,396.021)">
+    <g
+       id="Group_7"
+       data-name="Group 7"
+       transform="translate(152,713)"
+       clip-path="url(#clip-path)">
+      <path
+         id="Path_31"
+         data-name="Path 31"
+         d="m -4.6,-198.6 h 74.959 v 83.14 H -4.6 Z"
+         transform="translate(2.557,196.551)"
+         inkscape:connector-curvature="0"
+         style="fill:#092642" />
+    </g>
+    <line
+       id="Line_2"
+       data-name="Line 2"
+       x2="37"
+       transform="translate(169.5,752.5)"
+       x1="0"
+       y1="0"
+       y2="0"
+       style="fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:round" />
+    <line
+       id="Line_3"
+       data-name="Line 3"
+       x2="11"
+       y2="11"
+       transform="translate(195.5,741.5)"
+       x1="0"
+       y1="0"
+       style="fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:round" />
+    <line
+       id="Line_4"
+       data-name="Line 4"
+       y1="11"
+       x2="11"
+       transform="translate(195.5,752.5)"
+       x1="0"
+       y2="0"
+       style="fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:round" />
+  </g>
+</svg>

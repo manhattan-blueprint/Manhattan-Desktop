@@ -19,10 +19,10 @@ public class GameObjectsHandler {
 
     public static GameObjectsHandler WithRemoteSchema() {
         GameObjectsHandler goh = new GameObjectsHandler();
-        
+
         // Get schema
         BlueprintAPI api = BlueprintAPI.DefaultCredentials();
-        
+
         Task.Run(async () => {
             APIResult<string, JsonError> response = await api.AsyncGetItemSchema();
 
@@ -32,18 +32,18 @@ public class GameObjectsHandler {
             } else {
                 throw new InvalidDataException(response.GetError().error);
             }
-            
+
         }).GetAwaiter().GetResult();
 
         return goh;
     }
 
-    private static GameObjects parseJsonSchemaFromFile(string filepath) { 
+    private static GameObjects parseJsonSchemaFromFile(string filepath) {
         using (StreamReader r = new StreamReader(filepath)) {
             string json = r.ReadToEnd();
-            
+
             GameObjects returnObjects = JsonUtility.FromJson<GameObjects>(json);
-            
+
             return returnObjects;
         }
     }
@@ -53,12 +53,12 @@ public class GameObjectsHandler {
     public GameObjectEntry GetBlueprint(List<RecipeElement> availableItems, int targetItemId) {
         // Obtain blueprint from targetItemId
         GameObjectEntry goe = GameObjs.items.Find(item => item.item_id == targetItemId);
-        
+
         // ForEach item in the blueprint, check the required items are available
         foreach (RecipeElement item in goe.blueprint) {
             // Find recipe element in provided available elements
             RecipeElement available = availableItems.Find(itemToFind => itemToFind.item_id == item.item_id);
-            
+
             // If item is present
             if (available != null) {
                 // Is the required quantity available?
@@ -69,7 +69,7 @@ public class GameObjectsHandler {
                 // If item is not present
                 return null;
             }
-        }      
+        }
 
         return goe;
     }
@@ -77,18 +77,18 @@ public class GameObjectsHandler {
     // Given available items and a machineId
     // Returns possible object
     public GameObjectEntry GetRecipe(List<RecipeElement> inputItems, int machineId) {
-        // Find objects that can be produced by machineId 
+        // Find objects that can be produced by machineId
         List<GameObjectEntry> objects = GameObjs.items.FindAll(item => item.machine_id == machineId);
-        
+
         // Find the correct output item for given input items
         foreach (GameObjectEntry obj in objects) {
             Boolean correctItem = true;
-            
+
             // For each item in the object's recipe
             foreach (RecipeElement recipeItem in obj.recipe) {
                 // Is the required item present?
                 RecipeElement available = inputItems.Find(itemToFind => itemToFind.item_id == recipeItem.item_id);
-                
+
                 // If present
                 if (available != null) {
                     // Is the required quantity available?
@@ -101,7 +101,7 @@ public class GameObjectsHandler {
                     correctItem = false;
                 }
             }
-            
+
             // Success case
             if (correctItem) {
                 return obj;

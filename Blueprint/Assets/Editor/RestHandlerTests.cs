@@ -14,7 +14,7 @@ public class RestHandlerTests {
     private UserCredentials validUser = new UserCredentials("testplayer", "Player123");
     private UserCredentials validDev = new UserCredentials("testdev", "Dev123");
     private UserCredentials validLec = new UserCredentials("testlecturer", "Lecturer123");
-    
+
     // GETs data from jsonplaceholder, asserts it is correct
     [Test]
     public void TestPerformGET() {
@@ -52,18 +52,18 @@ public class RestHandlerTests {
 
         Assert.That(responseJson.value, Is.EqualTo("hello"));
     }
-   
+
     // Authenticates user with valid credentials, who is present in the db
-    // Is an example of HTTP error handling   
+    // Is an example of HTTP error handling
     [Test]
     public void TestValidAuthenticateUser() {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = validUser;
-        UserCredentials returnUser = null; 
-        
+        UserCredentials returnUser = null;
+
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
-            
+
             APIResult<UserCredentials, JsonError> response = await fetchingResponse;
 
             if (response.isSuccess()) {
@@ -74,30 +74,30 @@ public class RestHandlerTests {
             }
 
         }).GetAwaiter().GetResult();
-        
+
         // Check returned user is correct and contains access tokens
         Assert.That(returnUser.GetUsername(), Is.EqualTo(validUser.GetUsername()));
-        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));    
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));
         Assert.IsNotNull(returnUser.GetAccessToken());
         Assert.IsNotNull(returnUser.GetRefreshToken());
     }
-    
+
     // Attempts to authenticate user with invalid password
     // Will catch InvalidCredentialException thrown by AsyncAuthenticateUser
     [Test]
     public void TestInvalidAuthenticateUser() {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = new UserCredentials("test_invalid", "Invalid123");
-        
+
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
-            
+
             APIResult<UserCredentials, JsonError> response = await fetchingResponse;
 
             if (!response.isSuccess()) {
                 // Error case
                 JsonError error = response.GetError();
-                
+
                 Assert.That(error.error, Is.EqualTo("The credentials provided do not match any user"));
             } else {
                 Assert.Fail();
@@ -116,9 +116,9 @@ public class RestHandlerTests {
         Task.Run(async () => {
 
             try {
-                Task<APIResult<UserCredentials, JsonError>> fetchingResponse = 
+                Task<APIResult<UserCredentials, JsonError>> fetchingResponse =
                     blueprintApi.AsyncRegisterUser("adam" + random.Next(10000), "failure");
-                
+
                 APIResult<UserCredentials, JsonError> returnUser = await fetchingResponse;
 
                 // Failure case
@@ -131,11 +131,11 @@ public class RestHandlerTests {
 
         }).GetAwaiter().GetResult();
     }
-    
+
     // Attempts to register user with a valid password
     // Asserts return values are correct
     [Test]
-    public void TestRegisterUserValidPassword() {       
+    public void TestRegisterUserValidPassword() {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
         UserCredentials returnUser = null;
@@ -154,14 +154,14 @@ public class RestHandlerTests {
             }
 
         }).GetAwaiter().GetResult();
-        
+
         // Check returned user is correct and contains access tokens
         Assert.That(returnUser.GetUsername(), Is.EqualTo(username));
-        Assert.That(returnUser.GetPassword(), Is.EqualTo("Failure123"));    
+        Assert.That(returnUser.GetPassword(), Is.EqualTo("Failure123"));
         Assert.IsNotNull(returnUser.GetAccessToken());
         Assert.IsNotNull(returnUser.GetRefreshToken());
     }
-     
+
     // Attempts to register user with invalid password
     // Will catch InvalidCredentialException thrown by AsyncRegisterUser
     [Test]
@@ -169,13 +169,13 @@ public class RestHandlerTests {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         Random random = new Random();
         string username = "adam" + random.Next(10000);
-        
+
         Task.Run(async () => {
             try {
-                Task<APIResult<UserCredentials, JsonError>> fetchingResponse = 
+                Task<APIResult<UserCredentials, JsonError>> fetchingResponse =
                     blueprintApi.AsyncRegisterUser(username, "FAILURE123");
-                APIResult<UserCredentials, JsonError> response = await fetchingResponse;    
-                
+                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
+
                 // Failure case
                 // If here, exception has not been thrown
                 Assert.Fail();
@@ -191,15 +191,15 @@ public class RestHandlerTests {
     // Asserts returned tokens are not null
     [Test]
     public void TestRefreshTokens() {
-        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);      
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
-        
+
         // Authenticate user to gain tokens
-        Task.Run(async () => {             
+        Task.Run(async () => {
             APIResult<UserCredentials, JsonError> response = await blueprintApi.AsyncAuthenticateUser(validUser);
             user = response.GetSuccess();
         }).GetAwaiter().GetResult();
-        
+
         // Refresh tokens
         Task.Run(async () => {
             APIResult<ResponseAuthenticate, JsonError> response = await blueprintApi.AsyncRefreshTokens(user);
@@ -222,9 +222,9 @@ public class RestHandlerTests {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;
-        
+
         // Authenticate user to gain access token
-        Task.Run(async () => {             
+        Task.Run(async () => {
             APIResult<UserCredentials, JsonError> response = await blueprintApi.AsyncAuthenticateUser(validUser);
             user = response.GetSuccess();
         }).GetAwaiter().GetResult();
@@ -240,11 +240,11 @@ public class RestHandlerTests {
         }).GetAwaiter().GetResult();
 
         // Retrieve inventory of new user
-        Task.Run(async () => {            
+        Task.Run(async () => {
             APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(user);
             finalInventory = finalInventoryResponse.GetSuccess();
         }).GetAwaiter().GetResult();
-        
+
         Assert.That(finalInventory.items[0].item_id, Is.EqualTo(1));
         Assert.That(finalInventory.items[0].item_id, Is.GreaterThanOrEqualTo(1));
     }
@@ -284,9 +284,9 @@ public class RestHandlerTests {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = null;
         ResponseGetInventory finalInventory = null;
-        
+
         // Authenticate user to gain access token
-        Task.Run(async () => {             
+        Task.Run(async () => {
             APIResult<UserCredentials, JsonError> response = await blueprintApi.AsyncAuthenticateUser(validUser);
             user = response.GetSuccess();
         }).GetAwaiter().GetResult();
@@ -299,31 +299,31 @@ public class RestHandlerTests {
             ResponseGetInventory inventory = new ResponseGetInventory(entries);
             APIResult<Boolean, JsonError> response = await blueprintApi.AsyncAddToInventory(user, inventory);
         }).GetAwaiter().GetResult();
-        
+
         // Delete inventory and assert on response
         Task.Run(async () => {
             try {
                 APIResult<Boolean, JsonError> response = await blueprintApi.AsyncDeleteInventory(user);
-                
+
                 // Success case
             } catch (WebException e) {
                 // Failure case
                 Assert.Fail();
-            }    
+            }
         }).GetAwaiter().GetResult();
     }
-  
+
     [Test]
     public void TestBlueprintApiDefaultCredentialsConstructor() {
         BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
         UserCredentials user = null;
-        
+
         // Authenticate user
-        Task.Run(async () => {             
+        Task.Run(async () => {
             APIResult<UserCredentials, JsonError> response = await blueprintApi.AsyncAuthenticateUser(validUser);
             user = response.GetSuccess();
         }).GetAwaiter().GetResult();
-        
+
         Assert.That(user.GetUsername(), Is.EqualTo(validUser.GetUsername()));
     }
 
@@ -332,11 +332,11 @@ public class RestHandlerTests {
     public void TestAccountTypePlayer() {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = validUser;
-        UserCredentials returnUser = null; 
-        
+        UserCredentials returnUser = null;
+
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
-            
+
             APIResult<UserCredentials, JsonError> response = await fetchingResponse;
 
             if (response.isSuccess()) {
@@ -347,25 +347,25 @@ public class RestHandlerTests {
             }
 
         }).GetAwaiter().GetResult();
-        
+
         // Check returned user is correct and contains access tokens
         Assert.That(returnUser.GetUsername(), Is.EqualTo(validUser.GetUsername()));
-        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));    
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validUser.GetPassword()));
         Assert.IsNotNull(returnUser.GetAccessToken());
         Assert.IsNotNull(returnUser.GetRefreshToken());
         Assert.That(returnUser.GetAccountType(), Is.EqualTo("player"));
     }
-    
+
     // Authenticates the test developer account, asserts correct account_type returned
     [Test]
     public void TestAccountTypeDeveloper() {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = validDev;
-        UserCredentials returnUser = null; 
-        
+        UserCredentials returnUser = null;
+
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
-            
+
             APIResult<UserCredentials, JsonError> response = await fetchingResponse;
 
             if (response.isSuccess()) {
@@ -376,10 +376,10 @@ public class RestHandlerTests {
             }
 
         }).GetAwaiter().GetResult();
-        
+
         // Check returned user is correct and contains access tokens
         Assert.That(returnUser.GetUsername(), Is.EqualTo(validDev.GetUsername()));
-        Assert.That(returnUser.GetPassword(), Is.EqualTo(validDev.GetPassword()));    
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validDev.GetPassword()));
         Assert.IsNotNull(returnUser.GetAccessToken());
         Assert.IsNotNull(returnUser.GetRefreshToken());
         Assert.That(returnUser.GetAccountType(), Is.EqualTo("developer"));
@@ -390,11 +390,11 @@ public class RestHandlerTests {
     public void TestAccountTypeLecturer() {
         BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
         UserCredentials user = validLec;
-        UserCredentials returnUser = null; 
-        
+        UserCredentials returnUser = null;
+
         Task.Run(async () => {
             Task<APIResult<UserCredentials, JsonError>> fetchingResponse = blueprintApi.AsyncAuthenticateUser(user);
-            
+
             APIResult<UserCredentials, JsonError> response = await fetchingResponse;
 
             if (response.isSuccess()) {
@@ -405,29 +405,58 @@ public class RestHandlerTests {
             }
 
         }).GetAwaiter().GetResult();
-        
+
         // Check returned user is correct and contains access tokens
         Assert.That(returnUser.GetUsername(), Is.EqualTo(validLec.GetUsername()));
-        Assert.That(returnUser.GetPassword(), Is.EqualTo(validLec.GetPassword()));    
+        Assert.That(returnUser.GetPassword(), Is.EqualTo(validLec.GetPassword()));
         Assert.IsNotNull(returnUser.GetAccessToken());
         Assert.IsNotNull(returnUser.GetRefreshToken());
         Assert.That(returnUser.GetAccountType(), Is.EqualTo("lecturer"));
     }
-    
+
+    [Test]
+    public void UpdateLeaderboard() {
+        BlueprintAPI blueprintApi = BlueprintAPI.WithBaseUrl(baseUrl);
+        UserCredentials user = validUser;
+        string returnString = "";
+        Service.JsonError error = null;
+
+        Task.Run(async () => {
+            // Test with satellite dish (28).
+            Task<APIResult<string, JsonError>> fetchingResponse =
+                blueprintApi.AsyncAddToProgress(user, 28);
+
+            APIResult<string, JsonError> response = await fetchingResponse;
+
+            if (response.isSuccess()) {
+                // Success case
+                returnString = response.GetSuccess();
+            } else {
+                //error case
+                error = response.GetError();
+            }
+
+        }).GetAwaiter().GetResult();
+
+        // Check returned string is empty.
+        Assert.AreEqual(error, null);
+        Assert.AreEqual(returnString, "{}");
+    }
+
     // Blocked by user removal functionality
     /*[Test]
     public void TestRegisterUser_1() {
         var rest_handler = new RestHandler(baseUrl);
-        
+
         UserCredentials return_user = rest_handler.RegisterUser("adam", "test");
         //Debug.Log(return_user.getUsername() + return_user.getPassword() + return_user.getAccessToken() + return_user.getRefreshToken());
-       
+
         Assert.That(return_user.getUsername(), Is.EqualTo("adam"));
-        Assert.That(return_user.getPassword(), Is.EqualTo("test"));    
+        Assert.That(return_user.getPassword(), Is.EqualTo("test"));
         Assert.IsNotNull(return_user.getAccessToken());
         Assert.IsNotNull(return_user.getRefreshToken());
     }*/
-    
+
     // TEST CLASSES
     private class JsonPlaceholder {
         public int userId;
