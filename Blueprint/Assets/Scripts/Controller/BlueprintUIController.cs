@@ -6,8 +6,8 @@ using Model.BlueprintUI;
 
 namespace Controller {
     public class BlueprintUIController : MonoBehaviour {
-        private IBlueprintUIMode primaryResourceUI;         // Guidance
-        private IBlueprintUIMode craftableResourceUI;       //
+        private IBlueprintUIMode primaryResourceUI;
+        private IBlueprintUIMode craftableResourceUI;
         private IBlueprintUIMode machineryResourceUI;
         private IBlueprintUIMode blueprintResourceUI;
         private IBlueprintUIMode goalResourceUI;
@@ -134,6 +134,39 @@ namespace Controller {
 
                 default:
                     throw new Exception("Attempting to swap menu while in an unexpected state.");
+                    break;
+            }
+        }
+
+        public void RefreshMenu() {
+            switch (currentMenu) {
+                case CurrentMenu.Primary:
+                    primaryResourceUI.Hide();
+                    primaryResourceUI.Show();
+                    break;
+
+                case CurrentMenu.Craftable:
+                    craftableResourceUI.Hide();
+                    craftableResourceUI.Show();
+                    break;
+
+                case CurrentMenu.Machinery:
+                    machineryResourceUI.Hide();
+                    machineryResourceUI.Show();
+                    break;
+
+                case CurrentMenu.Blueprint:
+                    blueprintResourceUI.Hide();
+                    blueprintResourceUI.Show();
+                    break;
+
+                case CurrentMenu.Goal:
+                    goalResourceUI.Hide();
+                    goalResourceUI.Show();
+                    break;
+
+                default:
+                    throw new Exception("Attempting to refresh menu while in an unexpected state.");
                     break;
             }
         }

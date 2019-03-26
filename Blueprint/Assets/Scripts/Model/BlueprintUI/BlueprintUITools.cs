@@ -7,6 +7,7 @@ using Utils;
 using View;
 using Model.Action;
 using Service;
+using Controller;
 
 namespace Model.BlueprintUI {
     // Abstraction tools for creating the Blueprint UI
@@ -50,9 +51,12 @@ namespace Model.BlueprintUI {
             return false;
         }
 
+        public static string GetItemName(int id) {
+            return GameManager.Instance().goh.GameObjs.items.Find(x => x.item_id == id).name;
+        }
+
         // Process a craf (should already have checked for viability).
         public static void ProcessCraft(int resultID, GameObject availableBorder=null,
-                                        GameObject craftText=null,
                                         int resourceIDA=0, int resourceIDARequired=0,
                                         int resourceIDB=0, int resourceIDBRequired=0,
                                         int resourceIDC=0, int resourceIDCRequired=0) {
@@ -66,20 +70,19 @@ namespace Model.BlueprintUI {
                 GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(resourceIDC, resourceIDCRequired));
 
             // Add the item to inventory
-            string resourceName = GameManager.Instance().goh.GameObjs.items.Find(x => x.item_id == resultID).name;
-            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(resultID, 1, resourceName));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(resultID, 1, GetItemName(resultID)));
 
             // If crafting no longer viable then destroy the border indicating
             // craft is available.
             if (ViableCraft(resourceIDA, resourceIDARequired,
-                             resourceIDB, resourceIDBRequired,
-                             resourceIDC, resourceIDCRequired)) {
+                            resourceIDB, resourceIDBRequired,
+                            resourceIDC, resourceIDCRequired)) {
                 MonoBehaviour.Destroy(availableBorder);
             }
 
             BlueprintAPI.DefaultCredentials().AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
 
-            if (craftText) craftText.GetComponent<Text>().text = resourceName + " crafted!";
+            GameObject.Find("BlueprintUICanvas").GetComponent<BlueprintUIController>().RefreshMenu();
 
             return;
         }
@@ -87,6 +90,7 @@ namespace Model.BlueprintUI {
         ////////////////////////////////////////////////////////////////////////
         // Creating Unity containers
         ////////////////////////////////////////////////////////////////////////
+
         // Create a new GameObject for blueprint UI use.
         public static GameObject NewObject(Transform parent, List<GameObject> objList, Vector2 position) {
             GameObject obj = new GameObject();
@@ -206,6 +210,7 @@ namespace Model.BlueprintUI {
         ////////////////////////////////////////////////////////////////////////
         // Less abstract resource drawing.
         ////////////////////////////////////////////////////////////////////////
+
         // Create a dark border around a hexagon.
         public static void NewMachineBorder(Transform parent, List<GameObject> objList, float x, float y, float scale) {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
@@ -278,17 +283,18 @@ namespace Model.BlueprintUI {
             if (ViableCraft(resourceIDA, resourceIDARequired,
                              resourceIDB, resourceIDBRequired,
                              resourceIDC, resourceIDCRequired)) {
-                GameObject craftText = NewText(parent, objList, new Vector2(0.5f, 0.1f),
-                    20, "", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
 
                 GameObject craftButton = NewButton(parent, objList,
                     new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
 
                 craftButton.GetComponent<Button>().onClick.AddListener(
-                    delegate{ProcessCraft(resultID, craftButton, craftText,
+                    delegate{ProcessCraft(resultID, craftButton,
                                           resourceIDA, resourceIDARequired,
                                           resourceIDB, resourceIDBRequired,
                                           resourceIDC, resourceIDCRequired);});
+
+                NewText(parent, objList, new Vector2(0.5f, 0.1f),
+                    20, GetItemName(resultID) + " crafted!", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
             }
             else {
                 GameObject craftButton = NewButton(parent, objList,
@@ -338,17 +344,19 @@ namespace Model.BlueprintUI {
             if (ViableCraft(resourceIDA, resourceIDARequired,
                             resourceIDB, resourceIDBRequired,
                             resourceIDC, resourceIDCRequired)) {
-                GameObject craftText = NewText(parent, objList, new Vector2(0.5f, 0.1f),
-                    20, "", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
 
                 GameObject craftButton = NewButton(parent, objList,
                     new Vector2(x + scale * 1.2f, y), scale * 1.1f, Resources.Load<Sprite>("slot_border_highlight"));
 
                 craftButton.GetComponent<Button>().onClick.AddListener(
-                delegate{ProcessCraft(resultID, craftButton, craftText,
+                delegate{ProcessCraft(resultID, craftButton,
                                       resourceIDA, resourceIDARequired,
                                       resourceIDB, resourceIDBRequired,
                                       resourceIDC, resourceIDCRequired);});
+
+                NewText(parent, objList, new Vector2(0.5f, 0.1f),
+                    20, GetItemName(resultID) + " crafted!", new Color(245.0f/255.0f, 245.0f/255.0f, 245.0f/255.0f));
+
             }
             else {
                 GameObject craftButton = NewButton(parent, objList,
