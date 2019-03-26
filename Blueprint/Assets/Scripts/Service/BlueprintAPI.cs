@@ -250,8 +250,8 @@ namespace Service {
                 return new APIResult<string, JsonError>(error);
             }
         }
-
-        public async Task<APIResult<string, JsonError>> AsyncAddToProgress(UserCredentials user, int id) {
+        
+        public async Task<APIResult<Boolean, JsonError>> AsyncAddToProgress(UserCredentials user, int id) {
 
             string json = JsonUtility.ToJson(new PayloadLeaderboard(id));
 
@@ -259,13 +259,13 @@ namespace Service {
                 string response = await rs.PerformAsyncPost(leaderboardEndpoint, json, user.GetAccessToken());
 
                 // Return APIResult:string in success case
-                return new APIResult<string, JsonError>(response);
+                return new APIResult<Boolean, JsonError>(true);
             } catch (WebException e) {
                 JsonError error = new JsonError();
                 error.error = e.Message;
 
                 // Return APIResult:JsonError in failure case
-                return new APIResult<string, JsonError>(error);
+                return new APIResult<Boolean, JsonError>(error);
             }
         }
 
