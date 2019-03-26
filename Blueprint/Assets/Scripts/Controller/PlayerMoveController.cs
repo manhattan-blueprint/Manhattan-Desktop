@@ -11,20 +11,18 @@ namespace Controller {
         private float movementSpeed = 6.0f;
         private const float jumpMultiplier = 6.0f;
 
-        private float timer = 0.0f;
-        private float bobbingSpeed = 0.18f;
-        private float bobbingAmount = 0.2f;
-        private float midpoint = 2.0f;
+        public bool active;
 
         private CharacterController charController;
         private bool isJumping;
 
         private void Awake() {
             charController = GetComponent<CharacterController>();
+            active = true;
         }
 
         private void Update() {
-            PlayerMovement();
+            if (active) PlayerMovement();
         }
 
         private void PlayerMovement() {

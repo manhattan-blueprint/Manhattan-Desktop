@@ -115,6 +115,7 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             if (current == UIState.OpenUI.Playing) {
                 state.Selected = UIState.OpenUI.Machine;
+                state.SelectedMachineLocation = machine.machinePosition;
             }
         }
 

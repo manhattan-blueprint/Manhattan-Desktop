@@ -53,12 +53,24 @@ namespace Controller {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
                 if (!Physics.Raycast(ray, out hit)) return;
-                HexCell hc = hit.transform.parent.gameObject.GetComponent<HexCell>();
-                if (hc == null) return;
-                GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
+
+                // If we hit a machine, go to machine UI
+                MachinePlaceable mp = hit.transform.gameObject.GetComponent<MachinePlaceable>();
+                if (mp != null) {
+                    // Calculate where the machine is
+                    HexCell parentHex = mp.transform.parent.gameObject.GetComponent<HexCell>();
+                    GameManager.Instance().uiStore.Dispatch(new OpenMachineUI(parentHex.getPosition()));
+                    return;
+                }
+
+                // Otherwise try and place an object in that spot
+                HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
+                if (hc != null) {
+                    GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
+                }
             }
 
-
+            
             // Pick up item
             if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -69,8 +81,14 @@ namespace Controller {
                 if (p == null) return;
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
+
                 GameManager.Instance().mapStore.Dispatch(new CollectItem(hc.getPosition()));
                 holdInitiated = false;
+
+                if (p is MachinePlaceable) {
+                    GameManager.Instance().machineStore.Dispatch(new RemoveMachine(hc.getPosition()));
+                }
+
             } else if (Input.GetMouseButtonDown(leftButton)) {
                 holdInitiated = true;
             } else if (Input.GetMouseButton(leftButton)) {

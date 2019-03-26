@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -60,6 +60,9 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         visibleMenu = VisibleMenu.SplashScreen;
         isMessageErrorStyle = false;
         toLaunch = false;
+        animating = false;
+
+        Time.timeScale = 1;
 
         sp = this.gameObject.AddComponent<ScreenProportions>();
 
@@ -87,7 +90,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
 
     void Update() {
         if (animating) return;
-
+        
         switch (visibleMenu) {
             case VisibleMenu.SplashScreen:
                 if (Input.GetKeyDown(KeyCode.Space)) {
