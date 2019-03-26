@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Model.State;
 using Model.Redux;
+using Model.Action;
 
 namespace View {
     public class Highlight : MonoBehaviour, Subscriber<UIState>{
@@ -15,6 +16,7 @@ namespace View {
             GameManager.Instance().uiStore.Subscribe(this);
             paused = false;
             initialColor = rend.material.color;
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(1, 20, "wood"));
         }
 
         public Color GetColor() {
@@ -27,12 +29,12 @@ namespace View {
             }
         }
 
-        private void OnMouseDown() {
-            if (!paused) {
-              if (!holdable) return;
-              rend.material.color = Color.yellow;
-            }
-        }
+        // private void OnMouseDown() {
+        //     if (!paused) {
+        //       if (!holdable) return;
+        //       rend.material.color = Color.yellow;
+        //     }
+        // }
 
         void OnMouseExit() {
             if (!paused) {
