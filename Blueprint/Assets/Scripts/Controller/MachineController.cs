@@ -29,6 +29,10 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         
         GameManager.Instance().uiStore.Subscribe(this);
         GameManager.Instance().machineStore.Subscribe(this);
+        
+        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(11, 10, "Furnace"));
+        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(4, 10, "Iron ore"));
+        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(1, 10, "Wood"));
     }
     
     public void StateDidUpdate(MachineState state) {

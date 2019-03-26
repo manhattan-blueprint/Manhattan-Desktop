@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Model.Action;
 using Model.State;
 using NUnit.Framework;
@@ -344,7 +345,7 @@ namespace Tests {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1, "wood"));
 
-            foreach (KeyValuePair<int, List<HexLocation> > item in this.gameManager.inventoryStore.GetState().inventoryContents) {
+            foreach (KeyValuePair<int, List<HexLocation>> item in this.gameManager.inventoryStore.GetState().inventoryContents) {
                 //Success case
                 if (item.Key == 1) {
                     Assert.AreEqual(1, item.Value[0].quantity);
