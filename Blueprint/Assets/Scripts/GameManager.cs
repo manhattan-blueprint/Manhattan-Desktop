@@ -56,18 +56,17 @@ public class GameManager {
 
         BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
-        // TODO: FIX ALL THIS
+        // TODO: FIX ALL THIS (by moving API to coroutines)
         
-        // Load desktop state and then player backpack
         Task.Run(async () => {
             
             // Load desktop state
             APIResult<GameState, JsonError> finalGameStateResponse = await blueprintApi.AsyncGetState(credentials);
             if (finalGameStateResponse.isSuccess()) {
                 GameState remoteGameState = finalGameStateResponse.GetSuccess();
-                mapStore.ConfigureState(remoteGameState.mapState);
-                heldItemStore.ConfigureState(remoteGameState.heldItemState);
-                inventoryStore.ConfigureState(remoteGameState.inventoryState);
+                mapStore.SetState(remoteGameState.mapState);
+                heldItemStore.SetState(remoteGameState.heldItemState);
+                inventoryStore.SetState(remoteGameState.inventoryState);
             } else {
                 // TODO: Do something with this error
                 JsonError error = finalGameStateResponse.GetError();
@@ -75,7 +74,10 @@ public class GameManager {
             
             // Load player backpack into inventory
             APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(credentials);
+            
+            // Delete backpack contents from server
             APIResult<Boolean, JsonError> finalDeleteInventoryResponse = await blueprintApi.AsyncDeleteInventory(credentials);
+            
             if (finalInventoryResponse.isSuccess()) {
                 ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
                 foreach (InventoryEntry entry in remoteInv.items) {

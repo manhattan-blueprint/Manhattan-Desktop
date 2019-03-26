@@ -13,7 +13,7 @@ namespace Model.State {
         public int inventorySize = 0;
         
         public InventoryState() {
-            inventoryContents = new Dictionary<int, List<HexLocation>>();
+            inventoryContents = new Dictionary<int, List<HexLocation>>(); 
         }
     }
 }

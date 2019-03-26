@@ -2,7 +2,7 @@ using System;
 using Model.State;
 using UnityEngine;
 
-/* Wrapper for the states to transfer to/from the server */
+/* Wrapper for states to transfer to/from the server */
 namespace Model {
     [Serializable]
     public class GameState {

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 using Controller;
 using Model;
-using Model.Action;
 
 namespace Model {
     [Serializable]

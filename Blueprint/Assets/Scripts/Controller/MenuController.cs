@@ -187,23 +187,27 @@ namespace Controller {
                   break;
               case UIState.OpenUI.Login:
                   GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
-                                                      GameManager.Instance().heldItemStore.GetState(),
-                                                      GameManager.Instance().inventoryStore.GetState());
+                                                            GameManager.Instance().heldItemStore.GetState(),
+                                                            GameManager.Instance().inventoryStore.GetState());
                   
+                  // TODO: Replace when we move the API from async to coroutines
                   BlueprintAPI.DefaultCredentials()
                       .AsyncAddState(GameManager.Instance().GetUserCredentials(), logoutGameState);
                   
+                  // Reset timescale so welcome/login UI works when the main menu scene is reloaded
                   Time.timeScale = 1;
                   GameManager.Instance().ResetGame();
                   SceneManager.LoadScene(SceneMapping.MainMenu);
                   break;
               case UIState.OpenUI.Exit:
                   GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
-                      GameManager.Instance().heldItemStore.GetState(),
-                      GameManager.Instance().inventoryStore.GetState());
+                                                          GameManager.Instance().heldItemStore.GetState(),
+                                                          GameManager.Instance().inventoryStore.GetState());
                   
+                  // TODO: Replace when we move the API from async to coroutines
                   BlueprintAPI.DefaultCredentials()
                       .AsyncAddState(GameManager.Instance().GetUserCredentials(), exitGameState);
+                  
                   multiCanvas = false;
                   ExitPrompt();
                   break;

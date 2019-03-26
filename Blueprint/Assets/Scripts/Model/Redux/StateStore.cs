@@ -33,7 +33,7 @@ namespace Model.Redux {
             return state;
         }
 
-        public void ConfigureState(S state) {
+        public void SetState(S state) {
             this.state = state;
         }
     }
