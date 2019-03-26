@@ -11,18 +11,15 @@ namespace Controller {
         private float movementSpeed = 6.0f;
         private const float jumpMultiplier = 6.0f;
 
-        public bool active;
-
         private CharacterController charController;
         private bool isJumping;
 
         private void Awake() {
             charController = GetComponent<CharacterController>();
-            active = true;
         }
 
         private void Update() {
-            if (active) PlayerMovement();
+            PlayerMovement();
         }
 
         private void PlayerMovement() {

@@ -64,7 +64,7 @@ namespace Controller {
                 }
 
                 // Otherwise try and place an object in that spot
-                HexCell hc = hit.transform.gameObject.GetComponent<HexCell>();
+                HexCell hc = hit.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc != null) {
                     GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
                 }
