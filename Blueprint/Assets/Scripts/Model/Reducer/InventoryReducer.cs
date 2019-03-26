@@ -149,8 +149,9 @@ namespace Model.Reducer {
                 if (swapItemLocations.sourceItem.IsPresent() && swapItemLocations.destinationItem.IsPresent()) {
                     // Items are of the same type
                     if (swapItemLocations.sourceItem.Get().GetId() == swapItemLocations.destinationItem.Get().GetId()) {
-                        
-                        foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItem.Get().GetId()]) {
+
+                        foreach (HexLocation hexLocation in state.inventoryContents[
+                            swapItemLocations.destinationItem.Get().GetId()]) {
                             // Find the destination hexLocation, add the source quantity 
                             if (hexLocation.hexID == swapItemLocations.destinationHexID) {
                                 hexLocation.quantity += swapItemLocations.sourceItem.Get().GetQuantity();
@@ -158,13 +159,14 @@ namespace Model.Reducer {
                         }
 
                         // Remove the source stack
-                        List<HexLocation> hexLocations = state.inventoryContents[swapItemLocations.sourceItem.Get().GetId()];
+                        List<HexLocation> hexLocations =
+                            state.inventoryContents[swapItemLocations.sourceItem.Get().GetId()];
                         for (int i = 0; i < hexLocations.Count(); i++) {
                             if (hexLocations[i].hexID == swapItemLocations.sourceHexID) {
                                 hexLocations.RemoveAt(i);
                             }
                         }
-                        
+
                         return;
                     }
                 } 

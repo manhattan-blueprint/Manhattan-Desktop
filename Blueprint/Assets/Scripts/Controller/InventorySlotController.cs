@@ -8,7 +8,6 @@ using Model.Reducer;
 using Model.Redux;
 using Model.State;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.UIElements;
@@ -21,8 +20,9 @@ namespace Controller {
         private bool mouseOver;
         internal Optional<InventoryItem> storedItem;
         private GameObject highlightObject;
-        private float slotHeight;
-        private float slotWidth;
+        public float slotHeight;
+        public float slotWidth;
+        public float originalSlotHeight;
         private GameManager gameManager;
         private AssetManager assetManager;
         private float mouseEntryTime;
@@ -39,9 +39,15 @@ namespace Controller {
             rolloverObject = GameObject.Find(this.transform.parent.name + "/Rollover");
             slotHeight = (transform as RectTransform).rect.height;
             slotWidth = (transform as RectTransform).rect.width;
+            originalSlotHeight = slotHeight;
             storedItem = Optional<InventoryItem>.Empty();
             gameManager = GameManager.Instance();
             assetManager = AssetManager.Instance();
+
+            if (this is MachineSlotController) {
+                slotHeight += Screen.height/14;
+                slotWidth  += Screen.height/14;
+            }
                 
             // Item image and quantity
             GameObject newGO = new GameObject("Icon" + id);
@@ -133,7 +139,7 @@ namespace Controller {
                     
                 image.enabled = true;
                 text.enabled = true;
-                image.transform.localPosition = new Vector3(0, slotHeight/8, 0);
+                image.transform.localPosition = new Vector3(0, originalSlotHeight/8, 0);
             }
         }
 
@@ -143,7 +149,7 @@ namespace Controller {
             Text text = textObj.AddComponent<Text>();
 
             text.font = assetManager.FontHelveticaNeueBold;
-            text.transform.localPosition = new Vector3(0, -slotHeight/6, 0);
+            text.transform.localPosition = new Vector3(0, -originalSlotHeight/6, 0);
             text.color = assetManager.ColourOffWhite;
             text.alignment = TextAnchor.MiddleCenter; 
             text.text = "";
@@ -185,32 +191,45 @@ namespace Controller {
                 MachineController machineController = GameObject.Find("MachineCanvas").GetComponent<MachineController>();
                 // If being added from a machine, decrement the machine's inputs
                 // Or in the other cases, add to Inventory, remove from Machine slots
-                if (source.name == "OutputSlot") {
-                    gameManager.machineStore.Dispatch(new ConsumeInputs(machineController.machineLocation));
+                if (source.name == "OutputSlot") {                   
 
                     Optional<InventoryItem> item = gameManager.machineStore.GetState().grid[machineController.machineLocation].output;
-                    gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(),
-                        item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                    // If the target slot is non-empty and not of the same type
+                    if (!source.storedItem.IsPresent() || source.storedItem.Get().GetId() == item.Get().GetId()) {
+                        gameManager.machineStore.Dispatch(new ConsumeInputs(machineController.machineLocation));
+                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(),
+                            item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                    } else {
+                        Optional<InventoryItem> temp = destination.storedItem;
+                        destination.SetStoredItem(source.storedItem);
+                        source.SetStoredItem(temp);
+                    }
                     
                 } else if (source.name == "InputSlot0") {
-                    GameObject.Find("InputSlot0").GetComponent<InventorySlotController>()
-                        .SetStoredItem(Optional<InventoryItem>.Empty());
-
                     Optional<InventoryItem> item = gameManager.machineStore.GetState().grid[machineController.machineLocation].leftInput;
-                    gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(),
-                        item.Get().GetQuantity(), item.Get().GetName(), destination.id));
                     
-                    gameManager.machineStore.Dispatch(new ClearLeftInput(machineController.machineLocation));
+                    if (!source.storedItem.IsPresent()) {
+                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                        gameManager.machineStore.Dispatch(new ClearLeftInput(machineController.machineLocation));
+                    } else {
+                        gameManager.machineStore.Dispatch(new SetLeftInput(machineController.machineLocation, source.storedItem.Get()));
+                        gameManager.inventoryStore.Dispatch(new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), 
+                            source.storedItem.Get().GetQuantity(), destination.id));
+                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                    }
                     
                 } else if (source.name == "InputSlot1") {
-                    GameObject.Find("InputSlot1").GetComponent<InventorySlotController>()
-                        .SetStoredItem(Optional<InventoryItem>.Empty());
-                    
                     Optional<InventoryItem> item = gameManager.machineStore.GetState().grid[machineController.machineLocation].rightInput;
-                    gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(),
-                        item.Get().GetQuantity(), item.Get().GetName(), destination.id));
                     
-                    gameManager.machineStore.Dispatch(new ClearRightInput(machineController.machineLocation));
+                    if (!source.storedItem.IsPresent()) {
+                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                        gameManager.machineStore.Dispatch(new ClearRightInput(machineController.machineLocation));
+                    } else {
+                        gameManager.machineStore.Dispatch(new SetRightInput(machineController.machineLocation, source.storedItem.Get()));
+                        gameManager.inventoryStore.Dispatch(new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), 
+                            source.storedItem.Get().GetQuantity(), destination.id));
+                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                    }
                     
                 } else if (source.name == "FuelSlot") {
                     GameObject.Find("FuelSlot").GetComponent<InventorySlotController>()

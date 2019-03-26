@@ -12,6 +12,8 @@ namespace Model.Action {
         void visit(ClearLeftInput clearLeftInput);
         void visit(ClearRightInput clearRightInput);
         void visit(ClearFuel clearFuel);
+        void visit(SetInputs setInputs);
+        void visit(SetAll setAll);
     }
 
     public abstract class MachineAction : Action {
@@ -76,6 +78,41 @@ namespace Model.Action {
         }
     }
     
+    public class SetInputs : MachineAction {
+        public readonly Vector2 machineLocation;
+        public readonly Optional<InventoryItem> left;
+        public readonly Optional<InventoryItem> right;
+
+        public SetInputs(Vector2 machineLocation, Optional<InventoryItem> left, Optional<InventoryItem> right) {
+            this.machineLocation = machineLocation;
+            this.left = left;
+            this.right = right;
+        }
+
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    public class SetAll : MachineAction {
+        public readonly Vector2 machineLocation;
+        public readonly Optional<InventoryItem> left;
+        public readonly Optional<InventoryItem> right;
+        public readonly Optional<InventoryItem> fuel;
+
+        public SetAll(Vector2 machineLocation, Optional<InventoryItem> left, 
+            Optional<InventoryItem> right, Optional<InventoryItem> fuel) {
+            this.machineLocation = machineLocation;
+            this.left = left;
+            this.right = right;
+            this.fuel = fuel;
+        }
+
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
     public class ClearLeftInput: MachineAction {
         public readonly Vector2 machineLocation;
 
@@ -115,9 +152,9 @@ namespace Model.Action {
     /* Call when item is dropped on fuel */
     public class SetFuel : MachineAction {
         public readonly Vector2 machineLocation;
-        public readonly InventoryItem item;
+        public readonly Optional<InventoryItem> item;
 
-        public SetFuel(Vector2 machineLocation, InventoryItem item) {
+        public SetFuel(Vector2 machineLocation, Optional<InventoryItem> item) {
             this.machineLocation = machineLocation;
             this.item = item;
         }

@@ -74,6 +74,29 @@ namespace Model.Reducer {
             }
             machine.rightInput = Optional<InventoryItem>.Of(setRightInput.item);
         }
+        
+        public void visit(SetInputs setInputs) {
+            if (!state.grid.ContainsKey(setInputs.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location");
+            }
+
+            Machine machine = state.grid[setInputs.machineLocation];
+            
+            machine.leftInput = setInputs.left;
+            machine.rightInput = setInputs.right;
+        }
+        
+        public void visit(SetAll setAll) {
+            if (!state.grid.ContainsKey(setAll.machineLocation)) {
+                throw new Exception("Machine does not exist at the given location");
+            }
+
+            Machine machine = state.grid[setAll.machineLocation];
+            
+            machine.leftInput =  setAll.left;
+            machine.rightInput = setAll.right;
+            machine.fuel = setAll.fuel;
+        }
 
         public void visit(SetFuel setFuel) {
             if (!state.grid.ContainsKey(setFuel.machineLocation)) {
@@ -84,7 +107,8 @@ namespace Model.Reducer {
             if (machine.fuel.IsPresent()) {
                 // TODO: Do something with the current value? Add to inventory?
             }
-            machine.fuel = Optional<InventoryItem>.Of(setFuel.item);
+            
+            machine.fuel = setFuel.item;
         }
 
         public void visit(ClearLeftInput clearLeftInput) {

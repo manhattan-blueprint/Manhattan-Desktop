@@ -73,7 +73,7 @@ namespace Tests {
             Assert.That(!gameManager.machineStore.GetState().grid[location].fuel.IsPresent());
             
             InventoryItem fuel = new InventoryItem("Dobby's Sock", 16, 1);
-            gameManager.machineStore.Dispatch(new SetFuel(location, fuel));
+            gameManager.machineStore.Dispatch(new SetFuel(location, Optional<InventoryItem>.Of(fuel)));
             Assert.That(gameManager.machineStore.GetState().grid[location].fuel.IsPresent());
             Assert.That(gameManager.machineStore.GetState().grid[location].fuel.Get().GetId(), Is.EqualTo(fuel.GetId()));
             Assert.That(gameManager.machineStore.GetState().grid[location].fuel.Get().GetQuantity(), Is.EqualTo(fuel.GetQuantity()));
