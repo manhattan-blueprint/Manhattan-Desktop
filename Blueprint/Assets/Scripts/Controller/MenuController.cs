@@ -112,6 +112,7 @@ namespace Controller {
 
         // Playing state
         private void ContinueGame() {
+            Time.timeScale = 1;
             inventoryCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
