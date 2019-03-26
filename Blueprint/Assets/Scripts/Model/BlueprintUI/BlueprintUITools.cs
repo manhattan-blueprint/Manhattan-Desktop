@@ -253,9 +253,12 @@ namespace Model.BlueprintUI {
             Vector2 position = sp.ToV(new Vector2(x, y));
             float relativeSize = sp.ToH(scale);
 
-            New2D(parent, objList, position, relativeSize, Resources.Load<Sprite>("inventory_slot"));
-            New2D(parent, objList, position, relativeSize * 0.7f, AssetManager.Instance().GetItemTexture(id, "Models/2D/"));
-            NewInfoNumber(parent, objList, position, relativeSize, id, required);
+            GameObject slot = New2D(parent, objList, position, relativeSize, Resources.Load<Sprite>("inventory_slot"));
+
+            GameObject resource = New2D(parent, objList, position, relativeSize * 0.7f, AssetManager.Instance().GetItemTexture(id, "Models/2D/"));
+            // resource.GetComponent<Image>().raycastTarget = false;
+            GameObject infoNumber = NewInfoNumber(parent, objList, position, relativeSize, id, required);
+            // infoNumber.GetComponent<Text>().raycastTarget = false;
         }
 
         ////////////////////////////////////////////////////////////////////////
