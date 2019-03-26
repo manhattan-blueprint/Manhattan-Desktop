@@ -29,10 +29,6 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         
         GameManager.Instance().uiStore.Subscribe(this);
         GameManager.Instance().machineStore.Subscribe(this);
-        
-        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(11, 10, "Furnace"));
-        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(4, 10, "Iron ore"));
-        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(1, 10, "Wood"));
     }
     
     public void StateDidUpdate(MachineState state) {
@@ -77,7 +73,6 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     public void StateDidUpdate(UIState state) {
         if (state.Selected != UIState.OpenUI.Machine) return;
         this.machineLocation = state.SelectedMachineLocation;
-        Debug.Log("Showing for " + machineLocation);
     }
 
     private void populateOutputSlot(Optional<InventoryItem> item) {
