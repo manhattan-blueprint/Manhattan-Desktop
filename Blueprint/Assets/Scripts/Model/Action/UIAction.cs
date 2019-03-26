@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Model.Action {
     public interface UIVisitor {
         void visit(CloseUI close);
@@ -47,6 +49,12 @@ namespace Model.Action {
     }
 
     public class OpenMachineUI : UIAction {
+        public readonly Vector2 machinePosition;
+
+        public OpenMachineUI(Vector2 machinePosition) {
+            this.machinePosition = machinePosition;
+        }
+        
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

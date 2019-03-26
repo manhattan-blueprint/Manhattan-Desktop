@@ -29,20 +29,21 @@ namespace Controller {
             firstUIUpdate = true;
             itemSlots = new Dictionary<int, InventorySlotController>();
         }
-        
+
         void Update() {
             if (firstUIUpdate) {
-                List<InventorySlotController> allSlots = GameObject.Find("InventoryUICanvas").GetComponentsInChildren<InventorySlotController>().ToList();
+                List<InventorySlotController> allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+                
                 foreach (InventorySlotController controller in allSlots) {
                   itemSlots.Add(controller.getId(), controller);
                 }
                 firstUIUpdate = false;
-                
+
                 // *MUST* subscribe *AFTER* finishing configuring the UI.
                 GameManager.Instance().inventoryStore.Subscribe(this);
             }
         }
-        
+
         public void StateDidUpdate(InventoryState state) {
             inventoryContents = state.inventoryContents;
             RedrawInventory();
@@ -52,7 +53,7 @@ namespace Controller {
             return GameManager.Instance().goh.GameObjs.items[id - 1].name;
         }
 
-        public int GetItemType(int id) {
+        public GameObjectEntry.ItemType GetItemType(int id) {
             return GameManager.Instance().goh.GameObjs.items[id - 1].type;
         }
 
@@ -61,13 +62,13 @@ namespace Controller {
             foreach (KeyValuePair<int, InventorySlotController> slot in itemSlots) {
                 slot.Value.SetStoredItem(Optional<InventoryItem>.Empty());
             }
-            
+
             // Re-populate slots
             foreach (KeyValuePair<int, List<HexLocation>> element in inventoryContents) {
                 foreach(HexLocation loc in element.Value) {
                     InventoryItem item = new InventoryItem(GetItemName(element.Key), element.Key, loc.quantity);
                     itemSlots[loc.hexID].SetStoredItem(Optional<InventoryItem>.Of(item));
-                } 
+                }
             }
         }
     }

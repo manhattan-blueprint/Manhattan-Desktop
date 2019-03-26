@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model;
+using Model.Action;
 using Model.Redux;
 using Model.State;
 using Quaternion = UnityEngine.Quaternion;
@@ -137,7 +138,7 @@ namespace Controller {
             }
 	
             // Draw things in new but not in old
-            foreach (Vector3 newObjectPosition in inNewNotInOld) {
+            foreach (Vector2 newObjectPosition in inNewNotInOld) {
                 MapObject mapObject = newObjects[newObjectPosition];
                 GameObject original = AssetManager.Instance().GetModel(mapObject.GetID());
 
@@ -148,6 +149,13 @@ namespace Controller {
                 GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, 90, 0)); 
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
+
+                GameObjectEntry entry = GameManager.Instance().goh.GameObjs.items
+                    .Find(x => x.item_id == mapObject.GetID());
+                
+                if (entry.type == GameObjectEntry.ItemType.BlueprintCraftedMachine) {
+                    GameManager.Instance().machineStore.Dispatch(new AddMachine(newObjectPosition, mapObject.GetID())); 
+                }
             }
 	
             // Remove things in old but not in new

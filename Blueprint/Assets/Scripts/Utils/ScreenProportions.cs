@@ -28,5 +28,10 @@ namespace Utils {
         public Vector3 ToV(Vector3 decVector) {
             return new Vector3(decVector.x * width, decVector.y * height, 0.0f);
         }
+
+        // Converts a vector full of decimals to the proportional width in the screen
+        public Vector2 ToV(Vector2 decVector) {
+            return new Vector3(decVector.x * width, decVector.y * height);
+        }
     }
 }
