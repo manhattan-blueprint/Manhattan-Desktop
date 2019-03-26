@@ -18,13 +18,13 @@ namespace Model.BlueprintUI {
         }
 
         void IBlueprintUIMode.OnShow() {
-            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.225f, 0.7f, 0.12f, 11, 2, 4, 3, 4);
-            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.325f, 0.45f, 0.12f, 20, 11, 1, 13, 2, 19, 1);
-            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.225f, 0.2f, 0.12f, 26, 19, 1, 23, 1, 22, 2);
+            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.275f, 0.7f, 0.12f, 11, 2, 4, 3, 4);
+            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.275f, 0.4f, 0.12f, 20, 11, 1, 13, 2, 19, 1);
+            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.275f, 0.1f, 0.12f, 26, 19, 1, 23, 1, 22, 2);
 
-            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.575f, 0.7f, 0.12f, 22, 21, 1, 6, 1);
-            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.675f, 0.45f, 0.12f, 29, 19, 1, 22, 2, 7, 1);
-            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.575f, 0.2f, 0.12f, 25, 19, 1, 16, 6, 17, 6);
+            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.675f, 0.7f, 0.12f, 22, 21, 1, 6, 1);
+            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.675f, 0.4f, 0.12f, 29, 19, 1, 22, 2, 7, 1);
+            BlueprintUITools.NewCraftable(BlueprintUICanvas.transform, CanvasObjects, 0.675f, 0.1f, 0.12f, 25, 19, 1, 16, 6, 17, 6);
 
             BlueprintUITools.CreateInfoText(BlueprintUICanvas.transform, CanvasObjects,
                 "Click on the highlighted items to craft them once you have the required ingredients");

@@ -198,7 +198,7 @@ namespace Model.BlueprintUI {
             Text text = obj.AddComponent<Text>();
             text.text = infoText;
             text.alignment = TextAnchor.MiddleCenter;
-            text.fontSize = fontSize;
+            text.fontSize = (int)sp.ToH(fontSize / 1000.0f);
             text.font = Resources.Load<Font>("Fonts/HelveticaNeueMedium");
             text.color = color;
             obj.transform.position = relativePosition;
@@ -390,9 +390,12 @@ namespace Model.BlueprintUI {
             Text newText = title.AddComponent<Text>();
             newText.text = titleText;
             newText.alignment = TextAnchor.MiddleCenter;
-            newText.fontSize = 80;
+            newText.fontSize = (int)sp.ToH(0.09f);
             newText.font = Resources.Load<Font>("Fonts/MeckaBleckaRegular");
-            newText.color = new Color(9.0f/255.0f, 38.0f/255.0f, 66.0f/255.0f);
+            newText.color = new Color(52.0f/255.0f, 119.0f/255.0f, 168.0f/255.0f);
+            Outline outline = title.AddComponent<Outline>();
+            outline.effectDistance = new Vector2(1.0f, 1.0f);
+            outline.effectColor = new Color(9.0f/255.0f, 38.0f/255.0f, 66.0f/255.0f);
             title.transform.position = sp.ToV(new Vector2(0.5f, 0.9f));
             (title.transform as RectTransform).sizeDelta = new Vector2(sp.ToH(1.0f), sp.ToH(0.2f));
             objList.Add(title);
