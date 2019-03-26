@@ -8,8 +8,13 @@ namespace Controller {
         [SerializeField] private AnimationCurve jumpFalloff;
         private const string horizontalInputName = "Horizontal";
         private const string verticalInputName = "Vertical";
-        private const float movementSpeed = 6.0f;
+        private float movementSpeed = 6.0f;
         private const float jumpMultiplier = 6.0f;
+
+        private float timer = 0.0f;
+        private float bobbingSpeed = 0.18f;
+        private float bobbingAmount = 0.2f;
+        private float midpoint = 2.0f;
 
         private CharacterController charController;
         private bool isJumping;
@@ -28,6 +33,12 @@ namespace Controller {
 
             Vector3 forwardMovement = transform.forward * vertInput;
             Vector3 rightMovement = transform.right * horizInput;
+
+            if (Input.GetKey(KeyMapping.Sprint)) {
+              movementSpeed = 9.5f;
+            } else {
+              movementSpeed = 6.0f;
+            }
 
             // applies delta time so don't need to multiply above
             charController.SimpleMove(forwardMovement + rightMovement);
