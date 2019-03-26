@@ -225,6 +225,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
             try {
                 APIResult<UserCredentials, JsonError> response = await fetchingResponse;
                 returnUser = response.GetSuccess();
+                GameManager.Instance().SetUserCredentials(returnUser);
                 if (response.isSuccess()) {
                     toLaunch = true;
                 } else {
