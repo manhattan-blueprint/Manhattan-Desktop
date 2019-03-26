@@ -13,7 +13,7 @@ using Vector3 = UnityEngine.Vector3;
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
     public class HexMapController : MonoBehaviour, Subscriber<MapState> {
-        private int gridSize = 16;
+        private int gridSize = 18;
         private float previousX = 0;
         private float previousZ = 0;
         
@@ -23,34 +23,37 @@ namespace Controller {
         private void Start() {
             this.grid = new Dictionary<Vector2, GameObject>();
             this.objectsPlaced = new Dictionary<Vector2, GameObject>();
-            drawMap(gridSize);
+            drawMap();
             
             GameManager.Instance().mapStore.Subscribe(this);
         }
-        private void drawMap(int layers) {
+        private void drawMap() {
             GameObject hexTile = Resources.Load("hex_cell") as GameObject;
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
             // Draw origin hexagon
-            GameObject cell = Instantiate(hexTile, Vector3.zero, rotation);
+            GameObject cell = Instantiate(hexTile, new Vector3(0, -0.5f, 0), rotation);
             cell.transform.parent = this.gameObject.transform;
             Vector2 position = new Vector2(0, 0);
             cell.AddComponent<HexCell>().setPosition(position);
+            
             grid.Add(position, cell);
-           
-            for (int l = 1; l < layers; l++) {
+          
+            
+            for (int l = 1; l < gridSize; l++) {
                 // Move to correct layer, top left of origin
-                cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, 0f, l * 1.5f), rotation);
+                
+                cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, -0.5f, l * 1.5f), rotation);
                 position = new Vector2(-l, l);
-                cell.AddComponent<HexCell>().setPosition(position);
                 cell.transform.parent = this.gameObject.transform;
+                cell.AddComponent<HexCell>().setPosition(position);
                 grid.Add(position, cell);
                 
                 setPreviousCoords(cell);
 
                 // Move right
                 for (int i = 1; i < l + 1; i++) {
-                    cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3), 0f, previousZ), rotation);
+                    cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3), -0.5f, previousZ), rotation);
                     position = new Vector2(-l + i, l);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
@@ -60,7 +63,7 @@ namespace Controller {
 
                 // Move bottom right
                 for (int i = 1; i < l + 1; i++) {
-                    cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, 0f, previousZ - i * 1.5f), rotation);
+                    cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(i, l-i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
@@ -70,7 +73,7 @@ namespace Controller {
 
                 // Move bottom left
                 for (int i = 1; i < l + 1; i++) {
-                    cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, 0f, previousZ - i * 1.5f), rotation);
+                    cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(l, -i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
@@ -80,7 +83,7 @@ namespace Controller {
 
                 // Move left
                 for (int i = 1; i < l + 1; i++) {
-                    cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3), 0f, previousZ), rotation);
+                    cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3), -0.5f, previousZ), rotation);
                     position = new Vector2(l-i, -l);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
@@ -90,7 +93,7 @@ namespace Controller {
                 
                 // Move top left
                 for (int i = 1; i < l + 1; i++) {
-                    cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, 0f, previousZ + i * 1.5f), rotation);
+                    cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-i, -l + i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;
@@ -100,7 +103,7 @@ namespace Controller {
                 
                 // Move top right, avoiding overlapping with l - 1
                 for (int i = 1; i < l; i++) {
-                    cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, 0f, previousZ + i * 1.5f), rotation);
+                    cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-l, i);
                     cell.AddComponent<HexCell>().setPosition(position);
                     cell.transform.parent = this.gameObject.transform;

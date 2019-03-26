@@ -26,12 +26,12 @@ public class GameObjectsHandler {
             } else {
                 throw new InvalidDataException(response.GetError().error);
             }
-            
+
         }).GetAwaiter().GetResult();
         return goh;
     }
 
-    private static GameObjects parseJsonSchemaFromFile(string filepath) { 
+    private static GameObjects parseJsonSchemaFromFile(string filepath) {
         using (StreamReader r = new StreamReader(filepath)) {
             string json = r.ReadToEnd();
             GameObjects returnObjects = JsonUtility.FromJson<GameObjects>(json);
@@ -51,7 +51,7 @@ public class GameObjectsHandler {
             if (available == null || available.quantity < item.quantity) {
                 return Optional<GameObjectEntry>.Empty();
             }
-        }      
+        }
 
         return Optional<GameObjectEntry>.Of(entry);
     }
@@ -71,7 +71,7 @@ public class GameObjectsHandler {
                     correctItem = false;
                 }
             }
-            
+
             // Success case
             if (correctItem) {
                 return Optional<GameObjectEntry>.Of(obj);

@@ -29,7 +29,7 @@ public class GameObjectTests {
             Assert.That(entry.type, Is.EqualTo(GameObjectEntry.ItemType.PrimaryResource));
         }
     }
-    
+
     // Serializes a single GameObjectEntry containing a recipe list
     [Test]
     public void TestSerializeSingleItemWithList() {
@@ -56,7 +56,7 @@ public class GameObjectTests {
         
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(16));
-        
+
         Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
         Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("wood"));
         Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(GameObjectEntry.ItemType.PrimaryResource));
@@ -77,7 +77,7 @@ public class GameObjectTests {
         
         //Assert fields are correct
         Assert.That(goh.GameObjs.items.Count, Is.EqualTo(32));
-        
+
         Assert.That(goh.GameObjs.items[0].item_id, Is.EqualTo(1));
         Assert.That(goh.GameObjs.items[0].name, Is.EqualTo("Wood"));
         Assert.That(goh.GameObjs.items[0].type, Is.EqualTo(GameObjectEntry.ItemType.PrimaryResource));
@@ -106,9 +106,9 @@ public class GameObjectTests {
         } catch (InvalidDataException e) {
             // Exception thrown, failure case
             Assert.Fail();
-        } 
+        }
     }
-    
+
     // Asserts that correct exception is thrown for invalid blueprint retrieval
     [Test]
     public void TestGetSingleElementBlueprintFail() {
@@ -125,7 +125,7 @@ public class GameObjectTests {
             // Failure case
             // GetBlueprint returns non-null object where null expected
             Assert.Fail();
-        } 
+        }
     }
 
     // Asserts that a recipe is correctly returned

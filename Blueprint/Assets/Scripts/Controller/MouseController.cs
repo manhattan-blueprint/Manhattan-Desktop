@@ -41,10 +41,10 @@ namespace Controller {
             float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
             if (scrollDelta > threshold) {
                 // Scroll Up 
-                GameManager.Instance().heldItemStore.Dispatch(new RotateHeldItemForward());
+                GameManager.Instance().heldItemStore.Dispatch(new RotateHeldItemBackward());
             } else if (scrollDelta < -threshold) {
                 // Scroll down
-                GameManager.Instance().heldItemStore.Dispatch(new RotateHeldItemBackward());
+                GameManager.Instance().heldItemStore.Dispatch(new RotateHeldItemForward());
             }
             
             

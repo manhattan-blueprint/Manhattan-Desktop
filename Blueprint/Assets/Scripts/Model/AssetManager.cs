@@ -9,22 +9,22 @@ namespace Model {
         public readonly Font FontHelveticaNeueBold = Resources.Load("Fonts/HelveticaNeueBold", typeof(Font)) as Font;
         public readonly Color ColourOffWhite = new Color32(245, 245, 245, 255);
         public readonly int QuantityFieldFontSize = (int) Mathf.Round(Screen.height/50);
-        
+
         public readonly Sprite backgroundSprite = Resources.Load("inventory_slot", typeof(Sprite)) as Sprite;
         public readonly Sprite highlightSprite = Resources.Load("slot_border_highlight", typeof(Sprite)) as Sprite;
         public readonly Sprite borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
         public readonly Sprite outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
-    
+
         private AssetManager() { }
-    
+
         public static AssetManager Instance() {
             if (instance == null) {
                 instance = new AssetManager();
             }
-            
+
             return instance;
         }
-    
+
         // Get the associated model for a given ID
         public GameObject GetModel(int id) {
             String baseLocation = "Models/3D/";
@@ -36,7 +36,7 @@ namespace Model {
             }
             return gameObject;
         }
-        
+
         // Get the associated UI sprite for a given item ID
         public Sprite GetItemSprite(int id) {
             String baseLocation = "Models/2D/";
@@ -48,6 +48,18 @@ namespace Model {
             }
 
             return sprite;
+        }
+
+        // Get the associated UI sprite for a given item ID
+        public Texture GetItemTexture(int id, string path="") {
+            Texture texture = Resources.Load(path + "sprite_" + id, typeof(Texture)) as Texture;
+
+            // Load default if object sprite doesn't exist
+            if (texture == null) {
+                texture = Resources.Load("sprite_default", typeof(Texture)) as Texture;
+            }
+
+            return texture;
         }
     }
 }

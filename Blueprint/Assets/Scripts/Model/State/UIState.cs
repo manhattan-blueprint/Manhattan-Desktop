@@ -27,7 +27,11 @@ namespace Model.State {
         public Vector2 SelectedMachineLocation;
 
         public UIState() {
+#if UNITY_EDITOR
             this.Selected = OpenUI.Playing;
+#else
+            this.Selected = OpenUI.Login;
+#endif
         }
     }
 }
