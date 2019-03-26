@@ -69,6 +69,18 @@ namespace Model.Reducer {
             }
         }
         
+        public void visit(SplitInventoryStack splitStackAction) {
+            int firstEmptySlot = getFirstEmptySlot();
+            int newQuantity = (int) splitStackAction.count / 2;
+
+            if (firstEmptySlot < state.inventorySize-1 && newQuantity > 0) {
+                visit(new RemoveItemFromStackInventory(splitStackAction.item, newQuantity, splitStackAction.hexID));
+                
+                HexLocation item = new HexLocation(firstEmptySlot, newQuantity);
+                state.inventoryContents[splitStackAction.item].Add(item);
+            }
+        }
+        
         public void visit(AddItemToInventoryAtHex addItemToInventoryAction) {
             // Cases:
             //     Not in inventory - create new stack

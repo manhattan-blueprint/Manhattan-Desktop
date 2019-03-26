@@ -9,6 +9,7 @@ namespace Model.Action {
         void visit(RemoveHeldItem anotherInventoryAction);
         void visit(SetInventorySize anotherInventoryAction);
         void visit(AddItemToInventoryAtHex anotherInventoryAction);
+        void visit(SplitInventoryStack anotherInventoryAction);
     }
 
     public abstract class InventoryAction : Action {
@@ -56,6 +57,22 @@ namespace Model.Action {
             this.item = item;
             this.count = count;
             this.name = name;
+            this.hexID = hexID;
+        }
+
+        public override void Accept(InventoryVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    public class SplitInventoryStack : InventoryAction {
+        public readonly int item;
+        public readonly int count;
+        public readonly int hexID;
+        
+        public SplitInventoryStack(int item, int count, int hexID) {
+            this.item = item;
+            this.count = count;
             this.hexID = hexID;
         }
 
