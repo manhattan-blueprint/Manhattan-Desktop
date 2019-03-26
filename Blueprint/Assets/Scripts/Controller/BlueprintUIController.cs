@@ -30,14 +30,14 @@ namespace Controller {
         void Start() {
             primaryResourceUI = new PrimaryResourceUI();
             primaryResourceUI.Initialize(gameObject, "Primary Resources");
-            craftableResourceUI = new CraftableResourceUI();
-            craftableResourceUI.Initialize(gameObject, "Craftable Resources");
             machineryResourceUI = new MachineryResourceUI();
             machineryResourceUI.Initialize(gameObject, "Machine Craftables");
-            blueprintResourceUI = new BlueprintResourceUI();
-            blueprintResourceUI.Initialize(gameObject, "Blueprints");
             goalResourceUI = new GoalResourceUI();
             goalResourceUI.Initialize(gameObject, "Final Goal");
+            craftableResourceUI = new CraftableResourceUI();
+            craftableResourceUI.Initialize(gameObject, "Blueprints 1");
+            blueprintResourceUI = new BlueprintResourceUI();
+            blueprintResourceUI.Initialize(gameObject, "Blueprints 2");
             currentMenu = CurrentMenu.Primary;
             visible = false;
 
@@ -85,30 +85,30 @@ namespace Controller {
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
-                    craftableResourceUI.Show();
-                    currentMenu = CurrentMenu.Craftable;
-                    break;
-
-                case CurrentMenu.Craftable:
-                    craftableResourceUI.Hide();
                     machineryResourceUI.Show();
                     currentMenu = CurrentMenu.Machinery;
                     break;
 
                 case CurrentMenu.Machinery:
                     machineryResourceUI.Hide();
-                    blueprintResourceUI.Show();
-                    currentMenu = CurrentMenu.Blueprint;
-                    break;
-
-                case CurrentMenu.Blueprint:
-                    blueprintResourceUI.Hide();
                     goalResourceUI.Show();
                     currentMenu = CurrentMenu.Goal;
                     break;
 
                 case CurrentMenu.Goal:
                     goalResourceUI.Hide();
+                    craftableResourceUI.Show();
+                    currentMenu = CurrentMenu.Craftable;
+                    break;
+
+                case CurrentMenu.Craftable:
+                    craftableResourceUI.Hide();
+                    blueprintResourceUI.Show();
+                    currentMenu = CurrentMenu.Blueprint;
+                    break;
+
+                case CurrentMenu.Blueprint:
+                    blueprintResourceUI.Hide();
                     primaryResourceUI.Show();
                     currentMenu = CurrentMenu.Primary;
                     break;
@@ -124,32 +124,32 @@ namespace Controller {
             switch (currentMenu) {
                 case CurrentMenu.Primary:
                     primaryResourceUI.Hide();
-                    goalResourceUI.Show();
-                    currentMenu = CurrentMenu.Goal;
-                    break;
-
-                case CurrentMenu.Craftable:
-                    craftableResourceUI.Hide();
-                    primaryResourceUI.Show();
-                    currentMenu = CurrentMenu.Primary;
+                    blueprintResourceUI.Show();
+                    currentMenu = CurrentMenu.Blueprint;
                     break;
 
                 case CurrentMenu.Machinery:
                     machineryResourceUI.Hide();
-                    craftableResourceUI.Show();
-                    currentMenu = CurrentMenu.Craftable;
-                    break;
-
-                case CurrentMenu.Blueprint:
-                    blueprintResourceUI.Hide();
-                    machineryResourceUI.Show();
-                    currentMenu = CurrentMenu.Machinery;
+                    primaryResourceUI.Show();
+                    currentMenu = CurrentMenu.Primary;
                     break;
 
                 case CurrentMenu.Goal:
                     goalResourceUI.Hide();
-                    blueprintResourceUI.Show();
-                    currentMenu = CurrentMenu.Blueprint;
+                    machineryResourceUI.Show();
+                    currentMenu = CurrentMenu.Machinery;
+                    break;
+
+                case CurrentMenu.Craftable:
+                    craftableResourceUI.Hide();
+                    goalResourceUI.Show();
+                    currentMenu = CurrentMenu.Goal;
+                    break;
+
+                case CurrentMenu.Blueprint:
+                    blueprintResourceUI.Hide();
+                    craftableResourceUI.Show();
+                    currentMenu = CurrentMenu.Craftable;
                     break;
 
                 default:
