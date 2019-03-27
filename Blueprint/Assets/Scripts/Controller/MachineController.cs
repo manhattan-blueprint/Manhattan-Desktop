@@ -43,11 +43,6 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         // Check the fuel is present otherwise don't bother checking what we can make
         if (!machine.HasFuel()) {
             return;
-        } else if (machine.fuel.Get().GetQuantity() <= 0) {
-            machine.fuel = Optional<InventoryItem>.Empty();
-            refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
-            return;
-        }
 
         // Check if anything can be made
         Optional<GameObjectEntry> possibleOutput = GameManager.Instance().goh.GetRecipe(machine.GetInputs(), machine.id);
