@@ -5,8 +5,9 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Model.State {
+    [Serializable]
     public class MapState {
-        private Dictionary<Vector2, MapObject> grid;
+        [SerializeField] private Dictionary<Vector2, MapObject> grid;
 
         public MapState() {
             grid = new Dictionary<Vector2, MapObject>();

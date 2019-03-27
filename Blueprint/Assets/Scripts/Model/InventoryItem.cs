@@ -1,12 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Model {
+    [Serializable]
     public class InventoryItem {
-        private string name;
-        private int id;
-        private int quantity;
+        [SerializeField] private string name;
+        [SerializeField] private int id;
+        [SerializeField] private int quantity;
     
         public InventoryItem(string name, int id, int quantity) {
             this.name = name;

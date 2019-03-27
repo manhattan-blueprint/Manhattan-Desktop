@@ -1,6 +1,13 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Model.Action;
+using Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -233,10 +240,30 @@ namespace Controller {
                   ExitPrompt();
                   break;
               case UIState.OpenUI.Login:
+                  GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                                                            GameManager.Instance().heldItemStore.GetState(),
+                                                            GameManager.Instance().inventoryStore.GetState(),
+                                                            GameManager.Instance().machineStore.GetState());
+                  
+                  // TODO: Replace when we move the API from async to coroutines
+                  BlueprintAPI.DefaultCredentials()
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), logoutGameState);
+                  
+                  // Reset timescale so welcome/login UI works when the main menu scene is reloaded
+                  Time.timeScale = 1;
+                  GameManager.Instance().ResetGame();
                   SceneManager.LoadScene(SceneMapping.MainMenu);
-                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Exit:
+                  GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                                                          GameManager.Instance().heldItemStore.GetState(),
+                                                          GameManager.Instance().inventoryStore.GetState(),
+                                                          GameManager.Instance().machineStore.GetState());
+                  
+                  // TODO: Replace when we move the API from async to coroutines
+                  BlueprintAPI.DefaultCredentials()
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), exitGameState);
+                  
                   multiCanvas = false;
                   ExitPrompt();
                   break;

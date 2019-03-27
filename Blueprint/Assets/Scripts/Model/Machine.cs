@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 
 namespace Model {
+    [Serializable]
     public class Machine {
         public readonly int id;
         public Optional<InventoryItem> leftInput;
