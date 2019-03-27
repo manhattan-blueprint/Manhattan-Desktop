@@ -1,6 +1,13 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Model.Action;
+using Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +21,7 @@ namespace Controller {
         private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
+        private Canvas bindingsCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
         private bool multiCanvas;
@@ -28,6 +36,7 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
 
@@ -39,10 +48,11 @@ namespace Controller {
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
+            bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
 
             multiCanvas = false;
-            
+
             GameManager.Instance().uiStore.Subscribe(this);
         }
 
@@ -50,7 +60,7 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
-                } else if (inventoryCanvas.enabled && !multiCanvas){
+                } else if (inventoryCanvas.enabled && !multiCanvas) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
@@ -64,34 +74,38 @@ namespace Controller {
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
-                } else if (blueprintCanvas.enabled && !multiCanvas){
+                } else if (blueprintCanvas.enabled && !multiCanvas) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            } 
+            } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
+                if (!bindingsCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
+                } else if (bindingsCanvas.enabled && !multiCanvas) {
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                }
+            }
         }
 
         private void OpenInventory() {
+            Time.timeScale = 0;
             inventoryCanvas.enabled = true;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
-            playerMoveController.active = false;
-            playerLookController.active = false;
         }
 
         private void OpenBlueprint() {
+            Time.timeScale = 0;
             blueprintCanvas.enabled = true;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
-            playerMoveController.active = false;
-            playerLookController.active = false;
         }
-        
+
         private void OpenMachine() {
             Time.timeScale = 0;
             machineCanvas.enabled = true;
@@ -103,19 +117,29 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
+        private void OpenBindings() {
+            Time.timeScale = 0;
+            bindingsCanvas.enabled = true;
+            pauseCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
+
         // Playing state
         private void ContinueGame() {
+            Time.timeScale = 1;
             inventoryCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
             machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
-            playerMoveController.active = true;
-            playerLookController.active = true;
         }
 
         // Logout button from the pause menu
@@ -157,6 +181,7 @@ namespace Controller {
         }
 
         private void PauseGame() {
+            Time.timeScale = 0;
             pauseCanvas.enabled = true;
             exitCanvas.enabled = false;
             logoutCanvas.enabled = false;
@@ -164,7 +189,6 @@ namespace Controller {
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
-            playerLookController.active = false;
         }
 
         // TODO: REFACTOR NOW WE DONT ALLOW MULTIPLE CANVAS
@@ -180,6 +204,9 @@ namespace Controller {
               case UIState.OpenUI.Blueprint:
                   multiCanvas = false;
                   OpenBlueprint();
+                  break;
+              case UIState.OpenUI.Bindings:
+                  OpenBindings();
                   break;
               case UIState.OpenUI.Machine:
                   multiCanvas = false;
@@ -212,10 +239,30 @@ namespace Controller {
                   ExitPrompt();
                   break;
               case UIState.OpenUI.Login:
+                  GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                                                            GameManager.Instance().heldItemStore.GetState(),
+                                                            GameManager.Instance().inventoryStore.GetState(),
+                                                            GameManager.Instance().machineStore.GetState());
+                  
+                  // TODO: Replace when we move the API from async to coroutines
+                  BlueprintAPI.DefaultCredentials()
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), logoutGameState);
+                  
+                  // Reset timescale so welcome/login UI works when the main menu scene is reloaded
+                  Time.timeScale = 1;
+                  GameManager.Instance().ResetGame();
                   SceneManager.LoadScene(SceneMapping.MainMenu);
-                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Exit:
+                  GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                                                          GameManager.Instance().heldItemStore.GetState(),
+                                                          GameManager.Instance().inventoryStore.GetState(),
+                                                          GameManager.Instance().machineStore.GetState());
+                  
+                  // TODO: Replace when we move the API from async to coroutines
+                  BlueprintAPI.DefaultCredentials()
+                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), exitGameState);
+                  
                   multiCanvas = false;
                   ExitPrompt();
                   break;

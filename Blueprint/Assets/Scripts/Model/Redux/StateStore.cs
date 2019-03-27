@@ -32,5 +32,10 @@ namespace Model.Redux {
         public S GetState() {
             return state;
         }
+
+        public void SetState(S state) {
+            this.state = state;
+            subscribers.ForEach(x => x.StateDidUpdate(this.state));
+        }
     }
 }

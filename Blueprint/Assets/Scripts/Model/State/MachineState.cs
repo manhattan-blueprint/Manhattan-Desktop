@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Model.State {
+    [Serializable]
     public class MachineState {
         public Dictionary<Vector2, Machine> grid;
 

@@ -22,6 +22,7 @@ namespace Model.State {
             InvLogout,
             BlueLogout,
             MachLogout,
+            Bindings,
         };
 
         public OpenUI Selected;

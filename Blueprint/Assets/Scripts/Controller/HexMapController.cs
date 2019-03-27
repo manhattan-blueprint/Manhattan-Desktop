@@ -118,7 +118,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Dictionary<Vector2, MapObject> newObjects = state.getObjects(); 
+            Dictionary<Vector2, MapObject> newObjects = state.getObjects();
             Dictionary<Vector2, MapObject>.KeyCollection newKeys = newObjects.Keys;
             Dictionary<Vector2, GameObject>.KeyCollection oldKeys = objectsPlaced.Keys;
 	

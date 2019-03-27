@@ -1,9 +1,10 @@
 using System;
+using UnityEngine;
 
 namespace Model {
-    
+    [Serializable]
     public class Optional<T> where T : class {
-        private T value;
+        [SerializeField] private T value;
         private Optional() { }
         
         public static Optional<T> Of(T value) {

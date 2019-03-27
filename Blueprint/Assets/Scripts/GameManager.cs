@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Controller;
+using Model;
 using Model.State;
 using Model.Action;
 using Model.Reducer;
 using Model.Redux;
 using Service;
 using Service.Response;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager {
     private static GameManager manager;
@@ -37,7 +35,7 @@ public class GameManager {
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
-
+        
         // Load item schema from server
         this.goh = GameObjectsHandler.FromRemote();
     }
@@ -55,9 +53,29 @@ public class GameManager {
 
         BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
-        // Load player inventory and then load world
+        // TODO: FIX ALL THIS (by moving API to coroutines)
         Task.Run(async () => {
+            
+            // Load desktop state
+            APIResult<GameState, JsonError> finalGameStateResponse = await blueprintApi.AsyncGetState(credentials);
+            if (finalGameStateResponse.isSuccess()) {
+                GameState remoteGameState = finalGameStateResponse.GetSuccess();
+                mapStore.SetState(remoteGameState.mapState);
+                heldItemStore.SetState(remoteGameState.heldItemState);
+                inventoryStore.SetState(remoteGameState.inventoryState);
+                machineStore.SetState(remoteGameState.machineState);
+                
+            } else {
+                // TODO: Do something with this error
+                JsonError error = finalGameStateResponse.GetError();
+            }
+            
+            // Load player backpack into inventory
             APIResult<ResponseGetInventory, JsonError> finalInventoryResponse = await blueprintApi.AsyncGetInventory(credentials);
+            
+            // Delete backpack contents from server
+            APIResult<Boolean, JsonError> finalDeleteInventoryResponse = await blueprintApi.AsyncDeleteInventory(credentials);
+            
             if (finalInventoryResponse.isSuccess()) {
                 ResponseGetInventory remoteInv = finalInventoryResponse.GetSuccess();
                 foreach (InventoryEntry entry in remoteInv.items) {
@@ -67,9 +85,15 @@ public class GameManager {
                 // Can't call a scene dispatch in an asynchronous function.
                 this.uiStore.Dispatch(new OpenPlayingUI());
             } else {
+                // TODO: Do something with this error
                 JsonError error = finalInventoryResponse.GetError();
             }
+            if (!finalDeleteInventoryResponse.isSuccess()) {
+                // TODO: Do something with this error
+                JsonError error = finalDeleteInventoryResponse.GetError();
+            }
         }).GetAwaiter().GetResult();
+        
     }
 
     public void ResetGame() {
