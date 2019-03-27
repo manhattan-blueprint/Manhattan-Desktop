@@ -9,11 +9,13 @@ namespace Model {
         public MapState mapState;
         public HeldItemState heldItemState;
         public InventoryState inventoryState;
+        public MachineState machineState;
 
-        public GameState(MapState mapState, HeldItemState heldItemState, InventoryState inventoryState) {
+        public GameState(MapState mapState, HeldItemState heldItemState, InventoryState inventoryState, MachineState machineState) {
             this.mapState = mapState;
             this.heldItemState = heldItemState;
             this.inventoryState = inventoryState;
+            this.machineState = machineState;
         }
     }
 }

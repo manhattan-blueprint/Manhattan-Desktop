@@ -36,9 +36,9 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
             return;
         }
         
-        populateOutputSlot(Optional<InventoryItem>.Empty());
         Machine machine = state.grid[machineLocation];
-        // TODO: Layout ui based on machine info (clear output)
+        refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
+        populateOutputSlot(Optional<InventoryItem>.Empty());
         
         // Check the fuel is present otherwise don't bother checking what we can make
         if (!machine.HasFuel()) {
@@ -73,6 +73,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     public void StateDidUpdate(UIState state) {
         if (state.Selected != UIState.OpenUI.Machine) return;
         this.machineLocation = state.SelectedMachineLocation;
+        StateDidUpdate(GameManager.Instance().machineStore.GetState());
     }
 
     private void populateOutputSlot(Optional<InventoryItem> item) {

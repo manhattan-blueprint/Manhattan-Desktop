@@ -35,6 +35,7 @@ namespace Model.Redux {
 
         public void SetState(S state) {
             this.state = state;
+            subscribers.ForEach(x => x.StateDidUpdate(this.state));
         }
     }
 }

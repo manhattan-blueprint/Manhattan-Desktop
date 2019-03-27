@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Controller;
-using FullSerializer;
 using Model;
 using Model.State;
 using Model.Action;
 using Model.Reducer;
 using Model.Redux;
 using Service;
-using Service.Request;
 using Service.Response;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager {
     private static GameManager manager;
@@ -41,7 +35,7 @@ public class GameManager {
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
-
+        
         // Load item schema from server
         this.goh = GameObjectsHandler.FromRemote();
     }
@@ -60,7 +54,6 @@ public class GameManager {
         BlueprintAPI blueprintApi = BlueprintAPI.DefaultCredentials();
 
         // TODO: FIX ALL THIS (by moving API to coroutines)
-        
         Task.Run(async () => {
             
             // Load desktop state
@@ -70,6 +63,8 @@ public class GameManager {
                 mapStore.SetState(remoteGameState.mapState);
                 heldItemStore.SetState(remoteGameState.heldItemState);
                 inventoryStore.SetState(remoteGameState.inventoryState);
+                machineStore.SetState(remoteGameState.machineState);
+                
             } else {
                 // TODO: Do something with this error
                 JsonError error = finalGameStateResponse.GetError();
@@ -93,12 +88,12 @@ public class GameManager {
                 // TODO: Do something with this error
                 JsonError error = finalInventoryResponse.GetError();
             }
-
             if (!finalDeleteInventoryResponse.isSuccess()) {
                 // TODO: Do something with this error
                 JsonError error = finalDeleteInventoryResponse.GetError();
             }
         }).GetAwaiter().GetResult();
+        
     }
 
     public void ResetGame() {

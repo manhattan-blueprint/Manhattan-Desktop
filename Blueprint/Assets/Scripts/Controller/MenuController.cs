@@ -222,7 +222,8 @@ namespace Controller {
               case UIState.OpenUI.Login:
                   GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
                                                             GameManager.Instance().heldItemStore.GetState(),
-                                                            GameManager.Instance().inventoryStore.GetState());
+                                                            GameManager.Instance().inventoryStore.GetState(),
+                                                            GameManager.Instance().machineStore.GetState());
                   
                   // TODO: Replace when we move the API from async to coroutines
                   BlueprintAPI.DefaultCredentials()
@@ -236,7 +237,8 @@ namespace Controller {
               case UIState.OpenUI.Exit:
                   GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
                                                           GameManager.Instance().heldItemStore.GetState(),
-                                                          GameManager.Instance().inventoryStore.GetState());
+                                                          GameManager.Instance().inventoryStore.GetState(),
+                                                          GameManager.Instance().machineStore.GetState());
                   
                   // TODO: Replace when we move the API from async to coroutines
                   BlueprintAPI.DefaultCredentials()
