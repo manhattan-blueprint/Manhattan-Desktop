@@ -60,7 +60,7 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
-                } else if (inventoryCanvas.enabled && !multiCanvas){
+                } else if (inventoryCanvas.enabled && !multiCanvas) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
@@ -74,18 +74,17 @@ namespace Controller {
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
-                } else if (blueprintCanvas.enabled && !multiCanvas){
+                } else if (blueprintCanvas.enabled && !multiCanvas) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            }
-              else if (Input.GetKeyDown(KeyMapping.Bindings)) {
+            } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
-                } else if (bindingsCanvas.enabled && !multiCanvas){
+                } else if (bindingsCanvas.enabled && !multiCanvas) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-              }
             }
+        }
 
         private void OpenInventory() {
             Time.timeScale = 0;
