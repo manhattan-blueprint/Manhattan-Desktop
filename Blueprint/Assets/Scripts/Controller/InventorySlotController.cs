@@ -183,6 +183,11 @@ namespace Controller {
             InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>();
             InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
+            if (source == destination) {
+                // Dragging to same slot
+                return;
+            }
+
             if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
                 if (destination.storedItem.IsPresent()) {
                     // Move to occupied slot
