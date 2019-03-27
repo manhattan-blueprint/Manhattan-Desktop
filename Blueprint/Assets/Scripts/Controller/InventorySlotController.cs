@@ -80,17 +80,25 @@ namespace Controller {
         }
 
         private void Update() {
-            if (mouseOver && (Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem.IsPresent()) {
+            if (mouseOver) {
+                if (Input.GetMouseButtonDown(1) && storedItem.IsPresent()) {
+                    // Split stack on right click
+                    InventoryItem stored = storedItem.Get();
+                    gameManager.inventoryStore.Dispatch(new SplitInventoryStack(stored.GetId(), stored.GetQuantity(), id));
+                };
 
-                if (!rolloverState) {
-                    rolloverState = true;
-                    rolloverObject.SetActive(true);
-                    rolloverPosition = Input.mousePosition;
-                    setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight/6, storedItem.Get().GetName());
-                } else if (Input.mousePosition != rolloverPosition) {
-                    rolloverObject.SetActive(false);
-                    rolloverState = false;
-                    mouseEntryTime = Time.realtimeSinceStartup;
+                if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem.IsPresent()) {
+                    if (!rolloverState) {
+                        rolloverState = true;
+                        rolloverObject.SetActive(true);
+                        rolloverPosition = Input.mousePosition;
+                        setRolloverLocation(Input.mousePosition.x, Input.mousePosition.y + slotHeight / 6,
+                            storedItem.Get().GetName());
+                    } else if (Input.mousePosition != rolloverPosition) {
+                        rolloverObject.SetActive(false);
+                        rolloverState = false;
+                        mouseEntryTime = Time.realtimeSinceStartup;
+                    }
                 }
             }
         }
