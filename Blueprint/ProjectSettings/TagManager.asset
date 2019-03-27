@@ -16,6 +16,7 @@ TagManager:
   - Logout
   - MachineInventory
   - Machine
+  - Bindings
   layers:
   - Default
   - TransparentFX

@@ -334,6 +334,25 @@ namespace Tests {
         }
 
         [Test]
+        public void TestLoginAndBindings() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBindingsUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Bindings));
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+
+        [Test]
+        public void TestPauseAndNotBindings() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenSettingsUI());
+            gameManager.uiStore.Dispatch(new OpenBindingsUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Pause));
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+
+        [Test]
         public void TestGameManagerExists() {
             Assert.NotNull(gameManager);
         }

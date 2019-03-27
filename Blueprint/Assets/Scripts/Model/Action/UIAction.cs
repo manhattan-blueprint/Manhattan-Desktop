@@ -7,6 +7,7 @@ namespace Model.Action {
         void visit(OpenPlayingUI playing);
         void visit(OpenInventoryUI inventory);
         void visit(OpenBlueprintUI blueprint);
+        void visit(OpenBindingsUI bindings);
         void visit(OpenMachineUI machine);
         void visit(OpenSettingsUI settings);
         void visit(Logout logout);
@@ -43,6 +44,12 @@ namespace Model.Action {
     }
 
     public class OpenBlueprintUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenBindingsUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

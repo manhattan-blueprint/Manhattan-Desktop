@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &3516429925163325584
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6844967159939363888}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: 3ff404ac3f0b647918dabbf49ce34b67, type: 3}
 --- !u!114 &5516495170943250298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26,9 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightColor: {r: 0.96815324, g: 1, b: 0, a: 0}
+  highlightColor: {r: 0.5218881, g: 0.6886792, b: 0.31185475, a: 1}
   holdable: 1
-  tempColor: {r: 1, g: 0, b: 0.87002325, a: 0}
+--- !u!64 &9207222352691601494
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6844967159939363890}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: 3ff404ac3f0b647918dabbf49ce34b67, type: 3}
 --- !u!1001 &6844967159939461778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90,12 +89,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 48275873166d44b819457e6f40040365, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff404ac3f0b647918dabbf49ce34b67, type: 3}
---- !u!1 &6844967159939363888 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100002, guid: 3ff404ac3f0b647918dabbf49ce34b67,
-    type: 3}
-  m_PrefabInstance: {fileID: 6844967159939461778}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6844967159939363890 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 3ff404ac3f0b647918dabbf49ce34b67,

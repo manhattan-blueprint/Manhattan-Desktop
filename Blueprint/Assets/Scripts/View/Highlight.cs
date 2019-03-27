@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Model.State;
 using Model.Redux;
+using Model.Action;
 
 namespace View {
     public class Highlight : MonoBehaviour, Subscriber<UIState>{
@@ -24,13 +25,6 @@ namespace View {
         void OnMouseEnter() {
             if (!paused) {
               rend.material.color = highlightColor;
-            }
-        }
-
-        private void OnMouseDown() {
-            if (!paused) {
-              if (!holdable) return;
-              rend.material.color = Color.yellow;
             }
         }
 
