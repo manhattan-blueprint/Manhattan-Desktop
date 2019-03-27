@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -60,6 +61,9 @@ namespace Model.BlueprintUI {
                                         int resourceIDA=0, int resourceIDARequired=0,
                                         int resourceIDB=0, int resourceIDBRequired=0,
                                         int resourceIDC=0, int resourceIDCRequired=0) {
+            
+            BlueprintAPI.DefaultCredentials()
+                .AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
 
             // Remove items from inventory
             if (resourceIDA > 0)
@@ -80,11 +84,8 @@ namespace Model.BlueprintUI {
                 MonoBehaviour.Destroy(availableBorder);
             }
 
-            BlueprintAPI.DefaultCredentials().AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
-
             GameObject.Find("BlueprintUICanvas").GetComponent<BlueprintUIController>().RefreshMenu(GetItemName(resultID) + " crafted!");
 
-            return;
         }
 
         ////////////////////////////////////////////////////////////////////////

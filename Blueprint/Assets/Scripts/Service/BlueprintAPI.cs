@@ -4,6 +4,9 @@ using System.Net;
 using System.Security.Authentication;
 using UnityEngine;
 using System.Threading.Tasks;
+using FullSerializer;
+using Model;
+using Model.State;
 using Service.Request;
 using Service.Response;
 
@@ -18,6 +21,7 @@ namespace Service {
         private const string inventoryEndpoint     = ":8001/api/v1/inventory";
         private const string itemSchemaEndpoint    = ":8003/api/v1/item-schema";
         private const string leaderboardEndpoint   = ":8003/api/v1/progress";
+        private const string desktopStateEndpoint  = ":8003/api/v1/progress/desktop-state";
         private const string defaultBaseUrl        = "http://smithwjv.ddns.net";
 
         // Enum
@@ -246,8 +250,8 @@ namespace Service {
                 return new APIResult<string, JsonError>(error);
             }
         }
-
-        public async Task<APIResult<string, JsonError>> AsyncAddToProgress(UserCredentials user, int id) {
+        
+        public async Task<APIResult<Boolean, JsonError>> AsyncAddToProgress(UserCredentials user, int id) {
 
             string json = JsonUtility.ToJson(new PayloadLeaderboard(id));
 
@@ -255,13 +259,97 @@ namespace Service {
                 string response = await rs.PerformAsyncPost(leaderboardEndpoint, json, user.GetAccessToken());
 
                 // Return APIResult:string in success case
-                return new APIResult<string, JsonError>(response);
+                return new APIResult<Boolean, JsonError>(true);
             } catch (WebException e) {
                 JsonError error = new JsonError();
                 error.error = e.Message;
 
                 // Return APIResult:JsonError in failure case
-                return new APIResult<string, JsonError>(error);
+                return new APIResult<Boolean, JsonError>(error);
+            }
+        }
+
+        public async Task<APIResult<Boolean, JsonError>> AsyncAddState(UserCredentials user, GameState gameState) {
+            
+            // Convert gameState to json string
+            fsSerializer serializer = new fsSerializer();
+            fsData data;
+            serializer.TrySerialize(gameState, out data).AssertSuccessWithoutWarnings();
+            string json = fsJsonPrinter.CompressedJson(data);
+            
+            try {
+                string response = await rs.PerformAsyncPost(desktopStateEndpoint, json, user.GetAccessToken());
+
+                // Return APIResult:Boolean in success case
+                return new APIResult<Boolean, JsonError>(true);
+            }
+            catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised) {
+                // If access token doesn't match a user, refresh tokens and retry
+                APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
+
+                try {
+                    string response =  await rs.PerformAsyncPost(desktopStateEndpoint, json,
+                        refreshedTokens.GetSuccess().access);
+
+                    // Return APIResult:Boolean in success case
+                    return new APIResult<Boolean, JsonError>(true);
+                }
+                catch (WebException f) {
+                    // Retrieve error payload from WebException
+                    JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+
+                    // Return APIResult:JsonError in error case
+                    return new APIResult<Boolean, JsonError>(error);
+                }
+            } catch (WebException e) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+                
+                // Return APIResult:JsonError in error case
+                return new APIResult<Boolean, JsonError>(error);
+            }
+        }
+
+        public async Task<APIResult<GameState, JsonError>> AsyncGetState(UserCredentials user) {
+            try {
+                string response = await rs.PerformAsyncGet(desktopStateEndpoint, user.GetAccessToken());
+
+                fsSerializer serializer = new fsSerializer();
+                fsData data = fsJsonParser.Parse(response);
+                GameState gameState = null;
+                serializer.TryDeserialize(data, ref gameState).AssertSuccessWithoutWarnings();
+
+                // Return APIResult:ResponseGetInventory in success case
+                return new APIResult<GameState, JsonError>(gameState);
+            } catch (WebException e) when (RetrieveHTTPCode(e) == (int) httpResponseCode.unauthorised){
+                // If access token doesn't match a user, refresh tokens and retry
+                APIResult<ResponseAuthenticate, JsonError> refreshedTokens = await AsyncRefreshTokens(user);
+
+                try {
+                    string response =
+                        await rs.PerformAsyncGet(desktopStateEndpoint, refreshedTokens.GetSuccess().access);
+
+                    fsSerializer serializer = new fsSerializer();
+                    fsData data = fsJsonParser.Parse(response);
+                    GameState gameState = null;
+                    serializer.TryDeserialize(data, ref gameState).AssertSuccessWithoutWarnings();
+
+                    // Return APIResult:ResponseGetInventory in success case
+                    return new APIResult<GameState, JsonError>(gameState);
+                }
+                catch (WebException f) {
+                    // Retrieve error payload from WebException
+                    JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(f));
+
+                    // Return APIResult:
+                    return new APIResult<GameState, JsonError>(error);
+                }
+            } catch (WebException e) {
+                // Retrieve error payload from WebException
+                JsonError error = JsonUtility.FromJson<JsonError>(retrieveErrorJson(e));
+                
+                // Return APIResult:JsonError in error case
+                return new APIResult<GameState, JsonError>(error);
             }
         }
 
