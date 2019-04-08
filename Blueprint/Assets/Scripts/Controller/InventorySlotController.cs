@@ -49,12 +49,22 @@ namespace Controller {
                 slotWidth  += Screen.height/14;
             }
                 
-            // Item image and quantity
             GameObject newGO = new GameObject("Icon" + id);
             newGO.transform.SetParent(gameObject.transform);
             newGO.AddComponent<InventorySlotDragHandler>();
-
-            setupImage(newGO);
+            
+            // Background (hitbox) image 
+            Image image = newGO.AddComponent<Image>();
+            (newGO.transform as RectTransform).sizeDelta = new Vector2(slotWidth, slotHeight);
+            image.transform.localPosition = new Vector3(0, 0, 0);
+            image.color = new Color(0, 0, 0, 0);
+            
+            // Sprite image
+            GameObject imageGO = new GameObject("Image" + id);
+            imageGO.transform.SetParent(newGO.transform);
+            
+            // Initialise image and text
+            setupImage(imageGO);
             setupText(this.gameObject);
 
             // Initialise rollover object
@@ -130,7 +140,7 @@ namespace Controller {
         public void SetStoredItem(Optional<InventoryItem> item) {
             this.storedItem = item;
             //TODO: GetChild(1) is a hack, fix it.
-            Image image = gameObject.transform.GetChild(1).GetComponent<Image>();
+            Image image = gameObject.transform.GetChild(1).GetComponentsInChildren<Image>()[1];
             Text text = gameObject.GetComponentInChildren<Text>();
 
             // TODO: sub-optimal, fix it. 
@@ -147,7 +157,6 @@ namespace Controller {
 
                 image.enabled = true;
                 text.enabled = true;
-                image.transform.localPosition = new Vector3(0, originalSlotHeight/8, 0);
             }
         }
 

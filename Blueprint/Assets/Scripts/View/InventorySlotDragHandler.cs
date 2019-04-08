@@ -13,7 +13,8 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
     public void OnDrag(PointerEventData eventData) {
         transform.parent.SetSiblingIndex(1);
         transform.position = Input.mousePosition;
-        Sprite originalImage = gameObject.GetComponent<Image>().sprite;
+        Sprite originalSprite = gameObject.transform.GetChild(0).GetComponent<Image>().sprite;
+        Image originalImage = gameObject.transform.GetChild(0).GetComponent<Image>();
         gameObject.transform.parent.GetComponentInChildren<Text>().text = "";
 
         // Foreground object
@@ -22,15 +23,17 @@ public class InventorySlotDragHandler : MonoBehaviour, IDragHandler, IEndDragHan
         RectTransform rect = transform as RectTransform;
         
         foregroundImage.enabled = true;
-        foregroundImage.sprite = originalImage;
-        foregroundImage.rectTransform.sizeDelta = new Vector2(rect.rect.width, rect.rect.height);
+        foregroundImage.sprite = originalSprite;
+        foregroundImage.rectTransform.sizeDelta = new Vector2((originalImage.transform as RectTransform).sizeDelta.x,
+            (originalImage.transform as RectTransform).sizeDelta.y);
+        originalImage.enabled = false;
         
         foregroundObject.transform.position = Input.mousePosition;
     }
 	
     public void OnEndDrag(PointerEventData eventData) {
         float slotHeight = (eventData.pointerEnter.transform.parent.transform as RectTransform).rect.height;
-        transform.localPosition = new Vector3(0, slotHeight/8, 0);
+        transform.localPosition = new Vector3(0, 0, 0);
         foregroundImage.enabled = false;
         GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>().RedrawInventory();
         GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>().RedrawInventory();
