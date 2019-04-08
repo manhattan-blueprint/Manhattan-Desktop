@@ -50,11 +50,11 @@ namespace Controller {
         }
 
         public string GetItemName(int id) {
-            return GameManager.Instance().goh.GameObjs.items[id - 1].name;
+            return GameManager.Instance().sm.GameObjs.items[id - 1].name;
         }
 
-        public GameObjectEntry.ItemType GetItemType(int id) {
-            return GameManager.Instance().goh.GameObjs.items[id - 1].type;
+        public SchemaItem.ItemType GetItemType(int id) {
+            return GameManager.Instance().sm.GameObjs.items[id - 1].type;
         }
 
         public void RedrawInventory() {

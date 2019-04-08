@@ -82,7 +82,7 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
     }
 
     public string GetItemName(int id) {
-        return GameManager.Instance().goh.GameObjs.items[id - 1].name;
+        return GameManager.Instance().sm.GameObjs.items[id - 1].name;
     }
 
     public void StateDidUpdate(InventoryState state) {

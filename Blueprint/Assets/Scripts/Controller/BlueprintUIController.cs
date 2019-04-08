@@ -115,7 +115,6 @@ namespace Controller {
 
                 default:
                     throw new Exception("Attempting to swap menu while in unexpected state.");
-                    break;
             }
         }
 
@@ -154,7 +153,6 @@ namespace Controller {
 
                 default:
                     throw new Exception("Attempting to swap menu while in an unexpected state.");
-                    break;
             }
         }
 
@@ -193,12 +191,11 @@ namespace Controller {
 
                 default:
                     throw new Exception("Attempting to refresh menu while in an unexpected state.");
-                    break;
             }
         }
 
         void EmptyText() {
-            infoText.text="";
+            infoText.text = "";
         }
     }
 }
