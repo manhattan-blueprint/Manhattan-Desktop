@@ -114,6 +114,7 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         SVGImage backgroundImage = rollover.AddComponent<SVGImage>();
         backgroundImage.sprite = Resources.Load("rolloverBox", typeof(Sprite)) as Sprite;
         (rollover.transform as RectTransform).sizeDelta = new Vector2(slotDimensionX/2, slotDimensionY/6);
+        backgroundImage.raycastTarget = false;
 
         GameObject text = new GameObject("Text");
         text.transform.parent = rollover.transform;
@@ -169,12 +170,12 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         border.sprite = getBorder(outerBorder);
         (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimensionX, slotDimensionY);
         (svgChild.transform as RectTransform).localScale = new Vector3(1.05f, 1.05f, 0.0f);
+        border.raycastTarget = false;
 
         InventorySlotController isc = go.AddComponent<InventorySlotController>();
         isc.setID(id);
 
         RectTransform rt = go.transform as RectTransform;
-        //rt.sizeDelta = new Vector2(slotDimension, slotDimension);
         rt.sizeDelta = new Vector2(slotDimensionX, slotDimensionY);
 
         id++;

@@ -182,6 +182,7 @@ namespace Controller {
             image.transform.localPosition = new Vector3(0, slotHeight/8, 0);
             image.enabled = false;
             image.rectTransform.sizeDelta = new Vector2(slotWidth/3, slotHeight/3);
+            image.raycastTarget = false;
             return image;
         }
 
