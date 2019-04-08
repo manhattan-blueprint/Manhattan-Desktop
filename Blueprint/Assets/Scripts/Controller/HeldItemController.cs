@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Controller;
 using Model;
 using Model.Action;
@@ -9,7 +10,8 @@ using UnityEngine.UI;
 
 public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Subscriber<HeldItemState> {
 
-    private readonly float slotDimension = Screen.width / 15;
+    private readonly float slotDimensionY = Screen.width / 15;
+    private readonly float slotDimensionX = (Screen.width / 15) * (float) Math.Sqrt(3) / 2;
     private readonly float tileYOffset = 1.35f;
     private Dictionary<int, HeldItemSlotController> heldItemControllers;
     private bool firstUIUpdate;
@@ -31,18 +33,18 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
 
     private void generateHotbar() {
         // 0.5 * slotdimension padding on x
-        double hotbarCenterX = Screen.width - 2 * slotDimension;
+        double hotbarCenterX = Screen.width - 2 * slotDimensionX;
         // 0.25 * slotdim padding on y
-        double hotbarCenterY = 1.75 * slotDimension;
+        double hotbarCenterY = 1.75 * slotDimensionY;
 
         // In order, starting from top left
         // Draw 0 last so the highlight is on top
-        newSlot(1, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY + (slotDimension / tileYOffset));
-        newSlot(2, (float) hotbarCenterX + slotDimension, (float) hotbarCenterY);
-        newSlot(3, (float) hotbarCenterX + slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset));
-        newSlot(4, (float) hotbarCenterX - slotDimension / 2, (float) hotbarCenterY - (slotDimension / tileYOffset));
-        newSlot(5, (float) hotbarCenterX - slotDimension, (float) hotbarCenterY);
-        newSlot(0, (float) hotbarCenterX - slotDimension / 2, (float) hotbarCenterY + (slotDimension / tileYOffset));
+        newSlot(1, (float) hotbarCenterX + slotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset));
+        newSlot(2, (float) hotbarCenterX + slotDimensionX, (float) hotbarCenterY);
+        newSlot(3, (float) hotbarCenterX + slotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset));
+        newSlot(4, (float) hotbarCenterX - slotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset));
+        newSlot(5, (float) hotbarCenterX - slotDimensionX, (float) hotbarCenterY);
+        newSlot(0, (float) hotbarCenterX - slotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset));
     }
 
     private void newSlot(int id, float x, float y) {
@@ -69,7 +71,7 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
             border.sprite = AssetManager.Instance().outerBorderSprite;
         }
 
-        (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimension, slotDimension);
+        (svgChild.transform as RectTransform).sizeDelta = new Vector2(slotDimensionX, slotDimensionY);
         (svgChild.transform as RectTransform).localScale = new Vector3(1.05f, 1.05f, 0.0f);
 
         HeldItemSlotController controller = go.AddComponent<HeldItemSlotController>();
@@ -78,7 +80,7 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         heldItemControllers.Add(id, controller);
 
         RectTransform rt = go.transform as RectTransform;
-        rt.sizeDelta = new Vector2(slotDimension, slotDimension);
+        rt.sizeDelta = new Vector2(slotDimensionX, slotDimensionY);
     }
 
     public string GetItemName(int id) {
