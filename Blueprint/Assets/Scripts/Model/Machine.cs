@@ -38,7 +38,7 @@ namespace Model {
         // For some machines this is the presence of a material (coal / wood)
         // For others it is connection of electricity
         public bool HasFuel() {
-            GameObjectEntry entry = GameManager.Instance().goh.GameObjs.items.Find(x => x.item_id == this.id);
+            SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == this.id);
             if (entry == null) return false;
           
             // If powered by electricity

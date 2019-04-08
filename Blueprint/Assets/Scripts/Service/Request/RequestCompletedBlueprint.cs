@@ -12,10 +12,10 @@ public class Item {
     }
 
     [Serializable]
-    public class PayloadLeaderboard {
+    public class RequestCompletedBlueprint {
         public List<Item> blueprints;
 
-        public PayloadLeaderboard(int id) {
+        public RequestCompletedBlueprint(int id) {
             blueprints = new List<Item>();
             blueprints.Add(new Item(id));
 		}

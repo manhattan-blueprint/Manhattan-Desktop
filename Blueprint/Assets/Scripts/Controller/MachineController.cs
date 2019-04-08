@@ -46,9 +46,9 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         }
 
         // Check if anything can be made
-        Optional<GameObjectEntry> possibleOutput = GameManager.Instance().goh.GetRecipe(machine.GetInputs(), machine.id);
+        Optional<SchemaItem> possibleOutput = GameManager.Instance().sm.GetRecipe(machine.GetInputs(), machine.id);
         if (possibleOutput.IsPresent()) {
-            GameObjectEntry output = possibleOutput.Get();
+            SchemaItem output = possibleOutput.Get();
             // This _should_ be an explicit state action, but that will cause this function to be called indefinitely
             // TODO: Think of a better way of doing this
             machine.output = Optional<InventoryItem>.Of(new InventoryItem(output.name, output.item_id, 1));    

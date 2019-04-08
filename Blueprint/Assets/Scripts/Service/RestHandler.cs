@@ -1,139 +1,171 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Service.Request;
+using Service.Response;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Service {
     public class RestHandler {
-        private string baseUrl;
-        private string passwordRegex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
+        struct ContentType {
+            public const string json = "application/json";
+        }
+        public delegate void Callback(APIResult<string, string> result);
+        public delegate void RefreshCallback(APIResult<AccessToken, string> result);
+        private readonly string refreshURL;
 
-        // Const
-        private const string httpPost = "POST";
-        private const string httpGet = "GET";
-        private const string httpDelete = "DELETE";
-        private const string JsonContentType = "application/json";
-        
-        // Constructor
-        public RestHandler(string baseUrl) {
-            this.baseUrl = baseUrl;
+        public RestHandler(string refreshURL) {
+            this.refreshURL = refreshURL; 
+        }
+       
+        // Perform a GET request to the provided URL
+        public IEnumerator requestGET(string url, Callback callback) {
+            return performGET(url, new Dictionary<string, string>(), callback);
         }
 
-        public bool CheckPasswordValid(string password) {
-            Regex rgx = new Regex(passwordRegex);
-            return rgx.IsMatch(password);
+        // Perform a GET request to the provided URL, using the access token for authentication
+        public IEnumerator requestAuthorizedGET(string url, AccessToken accessToken, Callback callback) {
+            Dictionary<string, string> headers = new Dictionary<string, string> {
+                {"Authorization", "Bearer " + accessToken.GetAccess()}
+            };
+            return performGET(url, headers, callback);
         }
 
-        public string PerformGET(string endpoint) {
-            string requestUrl = string.Concat(baseUrl, endpoint);
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(String.Format(requestUrl));
-
-            HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-            Stream stream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(stream);
-
-            string strResponse = reader.ReadToEnd();
-
-            reader.Close();
-            response.Close();
-            return strResponse;
+        // Perform a POST request to the provided URL
+        public IEnumerator requestPOST(string url, string json, Callback callback) {
+            return performPOST(url, json, new Dictionary<string, string>(), callback);
         }
 
-        public async Task<string> PerformAsyncGet(string endpoint, string accessToken) {
-            MemoryStream content = new MemoryStream();
-            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+        // Perform a POST request to the provided URL, using the access token for authentication
+        public IEnumerator requestAuthorizedPOST(string url, string json, AccessToken accessToken, Callback callback) {
+            Dictionary<string, string> headers = new Dictionary<string, string> {
+                {"Authorization", "Bearer " + accessToken.GetAccess()}
+            };
+            return performPOST(url, json, headers, callback);
+        }
 
-            webReq.Method = httpGet;
-            webReq.ContentType = JsonContentType;
-            webReq.Headers.Add("Authorization", "Bearer " + accessToken);
+        // Perform a DELETE request to the provided URL, using the access token for authentication
+        public IEnumerator requestAuthorizedDELETE(string url, AccessToken accessToken, Callback callback) {
+            Dictionary<string, string> headers = new Dictionary<string, string> {
+                {"Authorization", "Bearer " + accessToken.GetAccess()}
+            };
+            return performDELETE(url, headers, callback);
+        }
 
-            using (WebResponse response = await webReq.GetResponseAsync()) {
-                using (Stream responseStream = response.GetResponseStream()) {
-                    await responseStream.CopyToAsync(content);
+        // Internal method for performing a GET request
+        private IEnumerator performGET(string url, Dictionary<string, string> headers, Callback callback) {
+            using (UnityWebRequest w = UnityWebRequest.Get(url)) {
+                foreach (KeyValuePair<string, string> keyValuePair in headers) {
+                    w.SetRequestHeader(keyValuePair.Key, keyValuePair.Value);
+                }
+
+                yield return w.SendWebRequest();
+
+                if (w.isNetworkError || w.isHttpError) {
+                    callback(APIResult<string, string>.Error(w.downloadHandler.text));
+                } else if (w.responseCode == (int) HttpStatusCode.Unauthorized) {
+                    // If unauthorized, refresh tokens and reattempt using new token
+                    yield return refreshTokens(result => {
+                        if (result.isSuccess()) {
+                            headers["Authorization"] = "Bearer " + result.GetSuccess().GetAccess();
+                            performGET(url, headers, callback);
+                        } else {
+                            callback(APIResult<string, string>.Error("Invalid access & refresh token pair")); 
+                        }
+                    });
+                } else {
+                    callback(APIResult<string, string>.Success(w.downloadHandler.text));
                 }
             }
-
-            return Encoding.Default.GetString(content.ToArray());  
-        }
-        
-        public async Task<string> PerformAsyncGet(string endpoint) {
-            MemoryStream content = new MemoryStream();
-            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
-
-            webReq.Method = httpGet;
-            webReq.ContentType = JsonContentType;
-
-            using (WebResponse response = await webReq.GetResponseAsync()) {
-                using (Stream responseStream = response.GetResponseStream()) {
-                    await responseStream.CopyToAsync(content);
-                }
-            }
-
-            return Encoding.Default.GetString(content.ToArray());  
         }
 
-        public async Task<string> PerformAsyncPost(string endpoint, string postData) {
-            MemoryStream content = new MemoryStream();
-            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
-            byte[] payload = Encoding.ASCII.GetBytes(postData);
+        // Internal method for performing a POST request
+        private IEnumerator performPOST(string url, string body, Dictionary<string, string> headers, Callback callback) {
+            DownloadHandlerBuffer dh = new DownloadHandlerBuffer();
+            byte[] rawJSON = Encoding.UTF8.GetBytes(body);
+            UploadHandlerRaw uh = new UploadHandlerRaw(rawJSON) {
+                contentType = ContentType.json
+            };
 
-            webReq.Method = httpPost;
-            webReq.ContentType = JsonContentType;
-            webReq.ContentLength = payload.Length;
+            using (UnityWebRequest w = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST, dh, uh)) {
+                foreach (KeyValuePair<string, string> keyValuePair in headers) {
+                    w.SetRequestHeader(keyValuePair.Key, keyValuePair.Value);
+                }
 
-            using (Stream stream = webReq.GetRequestStream()) {
-                stream.Write(payload, 0, payload.Length);
-            }
+                yield return w.SendWebRequest();
 
-            using (WebResponse response = await webReq.GetResponseAsync()) {
-                using (Stream responseStream = response.GetResponseStream()) {
-                    await responseStream.CopyToAsync(content);
+                if (w.isNetworkError || w.isHttpError) {
+                    callback(APIResult<string, string>.Error(w.downloadHandler.text));
+                } else if (w.responseCode == (int) HttpStatusCode.Unauthorized) {
+                    // If unauthorized, refresh tokens and reattempt using new token
+                    yield return refreshTokens(result => {
+                        if (result.isSuccess()) {
+                            headers["Authorization"] = "Bearer " + result.GetSuccess().GetAccess();
+                            performPOST(url, body, headers, callback);
+                        } else {
+                            callback(APIResult<string, string>.Error("Invalid access & refresh token pair")); 
+                        }
+                    });
+                } else {
+                    callback(APIResult<string, string>.Success(w.downloadHandler.text));
                 }
             }
-
-            return Encoding.Default.GetString(content.ToArray());
         }
 
-        public async Task<string> PerformAsyncPost(string endpoint, string postData, string accessToken) {
-            MemoryStream content = new MemoryStream();
-            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
-            byte[] payload = Encoding.ASCII.GetBytes(postData);
+        // Internal method for performing a DELETE request
+        private IEnumerator performDELETE(string url, Dictionary<string, string> headers, Callback callback) {
+            using (UnityWebRequest w = UnityWebRequest.Delete(url)) {
+                foreach (KeyValuePair<string, string> keyValuePair in headers) {
+                    w.SetRequestHeader(keyValuePair.Key, keyValuePair.Value);
+                }
 
-            webReq.Method = httpPost;
-            webReq.ContentType = JsonContentType;
-            webReq.ContentLength = payload.Length;
-            webReq.Headers.Add("Authorization", "Bearer " + accessToken);
+                yield return w.SendWebRequest();
 
-            using (Stream stream = webReq.GetRequestStream()) {
-                stream.Write(payload, 0, payload.Length);
-            }
-
-            using (WebResponse response = await webReq.GetResponseAsync()) {
-                using (Stream responseStream = response.GetResponseStream()) {
-                    await responseStream.CopyToAsync(content);
+                if (w.isNetworkError || w.isHttpError) {
+                    callback(APIResult<string, string>.Error(w.downloadHandler.text));
+                } else if (w.responseCode == (int) HttpStatusCode.Unauthorized) {
+                    // If unauthorized, refresh tokens and reattempt using new token
+                    yield return refreshTokens(result => {
+                        if (result.isSuccess()) {
+                            headers["Authorization"] = "Bearer " + result.GetSuccess().GetAccess();
+                            performDELETE(url, headers, callback);
+                        } else {
+                            callback(APIResult<string, string>.Error("Invalid access & refresh token pair")); 
+                        }
+                    });
+                } else {
+                    callback(APIResult<string, string>.Success(""));
                 }
             }
-
-            return Encoding.Default.GetString(content.ToArray());
         }
 
-        public async Task<string> PerformAsyncDelete(string endpoint, string accessToken) {
-            MemoryStream content = new MemoryStream();
-            HttpWebRequest webReq = (HttpWebRequest) WebRequest.Create(string.Concat(baseUrl, endpoint));
+        // Internal method for refreshing access tokens
+        private IEnumerator refreshTokens(RefreshCallback callback) {
+            AccessToken current = GameManager.Instance().GetAccessToken();
+            RequestRefreshToken request = new RequestRefreshToken(current.GetRefresh());
+            string json = JsonUtility.ToJson(request);
+            
+            DownloadHandlerBuffer dh = new DownloadHandlerBuffer();
+            byte[] rawJSON = Encoding.UTF8.GetBytes(json);
+            UploadHandlerRaw uh = new UploadHandlerRaw(rawJSON) {
+                contentType = ContentType.json
+            };
 
-            webReq.Method = httpDelete;
-            webReq.ContentType = JsonContentType;
-            webReq.Headers.Add("Authorization", "Bearer " + accessToken);
-
-            using (WebResponse response = await webReq.GetResponseAsync()) {
-                using (Stream responseStream = response.GetResponseStream()) {
-                    await responseStream.CopyToAsync(content);
+            using (UnityWebRequest w = new UnityWebRequest(refreshURL, UnityWebRequest.kHttpVerbPOST, dh, uh)) {
+                yield return w.SendWebRequest();
+                if (w.isNetworkError || w.isHttpError || w.responseCode == (int) HttpStatusCode.Unauthorized) {
+                    callback(APIResult<AccessToken, string>.Error("Could not refresh tokens"));
+                } else {
+                    string response = w.downloadHandler.text;
+                    AccessToken token = JsonUtility.FromJson<AccessToken>(response);
+                    GameManager.Instance().SetAccessToken(token);
+                    callback(APIResult<AccessToken, string>.Success(token));
                 }
             }
-
-            return Encoding.Default.GetString(content.ToArray());  
         }
     }
 }

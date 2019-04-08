@@ -1,15 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
-using Model.Action;
 using Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
@@ -25,8 +23,6 @@ namespace Controller {
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
         private bool multiCanvas;
-        private PlayerMoveController playerMoveController;
-        private PlayerLookController playerLookController;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -39,9 +35,6 @@ namespace Controller {
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
-
-            playerMoveController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoveController>();
-            playerLookController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerLookController>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
@@ -194,80 +187,86 @@ namespace Controller {
         // TODO: REFACTOR NOW WE DONT ALLOW MULTIPLE CANVAS
         public void StateDidUpdate(UIState state) {
             switch (state.Selected) {
-              case UIState.OpenUI.Inventory:
-                  multiCanvas = false;
-                  OpenInventory();
-                  break;
-              case UIState.OpenUI.Playing:
-                  ContinueGame();
-                  break;
-              case UIState.OpenUI.Blueprint:
-                  multiCanvas = false;
-                  OpenBlueprint();
-                  break;
-              case UIState.OpenUI.Bindings:
-                  OpenBindings();
-                  break;
-              case UIState.OpenUI.Machine:
-                  multiCanvas = false;
-                  OpenMachine();
-                  break;
-              case UIState.OpenUI.Pause:
-                  multiCanvas = false;
-                  PauseGame();
-                  break;
-              case UIState.OpenUI.InvPause:
-              case UIState.OpenUI.BluePause:
-              case UIState.OpenUI.MachPause:
-                  multiCanvas = true;
-                  PauseGame();
-                  break;
-              case UIState.OpenUI.Logout:
-                  multiCanvas = false;
-                  LogoutPrompt();
-                  break;
-              case UIState.OpenUI.InvLogout:
-              case UIState.OpenUI.BlueLogout:
-              case UIState.OpenUI.MachLogout:
-                  multiCanvas = true;
-                  LogoutPrompt();
-                  break;
-              case UIState.OpenUI.InvExit:
-              case UIState.OpenUI.BlueExit:
-              case UIState.OpenUI.MachExit:
-                  multiCanvas = true;
-                  ExitPrompt();
-                  break;
-              case UIState.OpenUI.Login:
-                  GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
-                                                            GameManager.Instance().heldItemStore.GetState(),
-                                                            GameManager.Instance().inventoryStore.GetState(),
-                                                            GameManager.Instance().machineStore.GetState());
-                  
-                  // TODO: Replace when we move the API from async to coroutines
-                  BlueprintAPI.DefaultCredentials()
-                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), logoutGameState);
-                  
-                  // Reset timescale so welcome/login UI works when the main menu scene is reloaded
-                  Time.timeScale = 1;
-                  GameManager.Instance().ResetGame();
-                  SceneManager.LoadScene(SceneMapping.MainMenu);
-                  break;
-              case UIState.OpenUI.Exit:
-                  GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
-                                                          GameManager.Instance().heldItemStore.GetState(),
-                                                          GameManager.Instance().inventoryStore.GetState(),
-                                                          GameManager.Instance().machineStore.GetState());
-                  
-                  // TODO: Replace when we move the API from async to coroutines
-                  BlueprintAPI.DefaultCredentials()
-                      .AsyncAddState(GameManager.Instance().GetUserCredentials(), exitGameState);
-                  
-                  multiCanvas = false;
-                  ExitPrompt();
-                  break;
-              default:
-                  throw new System.Exception("Not in expected state.");
+                case UIState.OpenUI.Inventory:
+                    multiCanvas = false;
+                    OpenInventory();
+                    break;
+                case UIState.OpenUI.Playing:
+                    ContinueGame();
+                    break;
+                case UIState.OpenUI.Blueprint:
+                    multiCanvas = false;
+                    OpenBlueprint();
+                    break;
+                case UIState.OpenUI.Bindings:
+                    OpenBindings();
+                    break;
+                case UIState.OpenUI.Machine:
+                    multiCanvas = false;
+                    OpenMachine();
+                    break;
+                case UIState.OpenUI.Pause:
+                    multiCanvas = false;
+                    PauseGame();
+                    break;
+                case UIState.OpenUI.InvPause:
+                case UIState.OpenUI.BluePause:
+                case UIState.OpenUI.MachPause:
+                    multiCanvas = true;
+                    PauseGame();
+                    break;
+                case UIState.OpenUI.Logout:
+                    multiCanvas = false;
+                    LogoutPrompt();
+                    break;
+                case UIState.OpenUI.InvLogout:
+                case UIState.OpenUI.BlueLogout:
+                case UIState.OpenUI.MachLogout:
+                    multiCanvas = true;
+                    LogoutPrompt();
+                    break;
+                case UIState.OpenUI.InvExit:
+                case UIState.OpenUI.BlueExit:
+                case UIState.OpenUI.MachExit:
+                    multiCanvas = true;
+                    ExitPrompt();
+                    break;
+                case UIState.OpenUI.Login:
+                    GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                        GameManager.Instance().heldItemStore.GetState(),
+                        GameManager.Instance().inventoryStore.GetState(),
+                        GameManager.Instance().machineStore.GetState());
+
+                    StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), logoutGameState, result => {
+                        if (result.isSuccess()) {
+                            // Reset timescale so welcome/login UI works when the main menu scene is reloaded
+                            Time.timeScale = 1;
+                            GameManager.Instance().ResetGame();
+                            SceneManager.LoadScene(SceneMapping.MainMenu);
+                        } else {
+                            // TODO: Handle failure via UI?
+                            throw new Exception("Couldn't save game " + result.GetError());
+                        }
+                    }));
+                    break;
+                case UIState.OpenUI.Exit:
+                    GameState exitGameState = new GameState(GameManager.Instance().mapStore.GetState(),
+                        GameManager.Instance().heldItemStore.GetState(),
+                        GameManager.Instance().inventoryStore.GetState(),
+                        GameManager.Instance().machineStore.GetState());
+
+                    BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), exitGameState, result => {
+                        if (result.isSuccess()) {
+                            multiCanvas = false;
+                            ExitPrompt();
+                        } else {
+                            // TODO: Handle failure via UI?
+                        }
+                    });
+                    
+                    break;
+                default:
+                    throw new System.Exception("Not in expected state.");
             }
         }
     }

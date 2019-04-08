@@ -20,7 +20,7 @@ namespace Model.Reducer {
             if (state.getObjects().ContainsKey(collectItem.position)) {
                 MapObject obj = state.getObjects()[collectItem.position];
                
-                string name = GameManager.Instance().goh.GameObjs.items[obj.GetID() - 1].name;
+                string name = GameManager.Instance().sm.GameObjs.items[obj.GetID() - 1].name;
                 
                 state.removeObject(collectItem.position);
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));

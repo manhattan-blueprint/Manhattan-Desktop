@@ -150,10 +150,10 @@ namespace Controller {
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
 
-                GameObjectEntry entry = GameManager.Instance().goh.GameObjs.items
+                SchemaItem entry = GameManager.Instance().sm.GameObjs.items
                     .Find(x => x.item_id == mapObject.GetID());
                 
-                if (entry.type == GameObjectEntry.ItemType.BlueprintCraftedMachine) {
+                if (entry.type == SchemaItem.ItemType.BlueprintCraftedMachine) {
                     GameManager.Instance().machineStore.Dispatch(new AddMachine(newObjectPosition, mapObject.GetID())); 
                 }
             }
