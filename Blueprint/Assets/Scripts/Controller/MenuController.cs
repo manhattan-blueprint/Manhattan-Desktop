@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Collections;
 using Model;
 using Model.Action;
 using Model.Redux;
@@ -72,10 +73,17 @@ namespace Controller {
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
+                    StartCoroutine(BindingsDelay(0.4f));
                 } else if (bindingsCanvas.enabled && !multiCanvas) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
+            }
+        }
+
+        private IEnumerator BindingsDelay(float delay) {
+            yield return new WaitForSeconds(delay);
+            if (Input.GetKey(KeyMapping.Bindings)) {
+                GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
             }
         }
 
@@ -263,7 +271,7 @@ namespace Controller {
                             // TODO: Handle failure via UI?
                         }
                     });
-                    
+
                     break;
                 default:
                     throw new System.Exception("Not in expected state.");
