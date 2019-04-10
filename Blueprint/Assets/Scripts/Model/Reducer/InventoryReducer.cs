@@ -214,11 +214,20 @@ namespace Model.Reducer {
             
             foreach (KeyValuePair<int, List<HexLocation>> content in state.inventoryContents) {
                 foreach (HexLocation hexLocation in content.Value) {
+                    int itemID = content.Key;
                     // Only remove and place if quantity > 0 and there is not a item placed at this location
                     if (hexLocation.hexID == index && hexLocation.quantity > 0 &&
                             !GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(removeHeldItem.dropAt)) {
-                        visit(new RemoveItemFromStackInventory(content.Key, 1, index));
-                        GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, content.Key));
+                        visit(new RemoveItemFromStackInventory(itemID, 1, index));
+                        
+                        // Place item on map
+                        GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, itemID));
+                       
+                        // If is blueprint, also add to machine
+                        SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
+                        if (entry.type == SchemaItem.ItemType.BlueprintCraftedMachine) {
+                            GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
+                        }
                         return;
                     } 
                 }
