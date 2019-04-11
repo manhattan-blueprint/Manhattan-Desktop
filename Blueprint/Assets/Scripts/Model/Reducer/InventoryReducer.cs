@@ -2,6 +2,7 @@ using Model.Action;
 using Model.State;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -114,22 +115,33 @@ namespace Model.Reducer {
         }
 
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
+            // If item is present in inventory
+            if (!state.inventoryContents.ContainsKey(removeItemFromInventory.item)) return;
+            
             int leftToRemove = removeItemFromInventory.count; 
             
-            // If item is present in inventory
-            if (state.inventoryContents.ContainsKey(removeItemFromInventory.item)) {
-                // Iterate backwards through the stacks
-                for (int i = state.inventoryContents[removeItemFromInventory.item].Count-1; i >= 0; i--) {
-                    // If stack quantity > removal quantity
-                    if (state.inventoryContents[removeItemFromInventory.item][i].quantity > removeItemFromInventory.count) {
-                        state.inventoryContents[removeItemFromInventory.item][i].quantity -= removeItemFromInventory.count;
-                        leftToRemove = 0;
-                    } else {
-                        leftToRemove = leftToRemove - state.inventoryContents[removeItemFromInventory.item][i].quantity;
-                        state.inventoryContents[removeItemFromInventory.item].RemoveAt(i);
-                    }
+            // Iterate thought each stack, removing as needed
+            for (int i = 0; i < state.inventoryContents[removeItemFromInventory.item].Count; i++) {
+                if (leftToRemove == 0) break;
+                
+                // If are more in the stack than required, remove the required amount
+                if (state.inventoryContents[removeItemFromInventory.item][i].quantity > leftToRemove) {
+                    state.inventoryContents[removeItemFromInventory.item][i].quantity -= leftToRemove;
+                    leftToRemove = 0;
                     
-                } 
+                // If less in stack than left, remove all
+                } else {
+                    leftToRemove -= state.inventoryContents[removeItemFromInventory.item][i].quantity;
+                    state.inventoryContents[removeItemFromInventory.item][i].quantity = 0;
+                }
+            }
+           
+            // Now iterate over all stacks and clean up, removing key if necessary
+            state.inventoryContents[removeItemFromInventory.item] = 
+                state.inventoryContents[removeItemFromInventory.item].FindAll(x => x.quantity != 0);
+
+            if (state.inventoryContents[removeItemFromInventory.item].Count == 0) {
+                state.inventoryContents.Remove(removeItemFromInventory.item);
             }
         }
 
