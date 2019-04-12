@@ -20,12 +20,6 @@ namespace Controller {
 
         void Update() {
             // Need to make a menu visible if no menu is currently visible.
-            if (gameObject.GetComponent<Canvas>().enabled && !visible) {
-                visible = true;
-            }
-
-            if (!gameObject.GetComponent<Canvas>().enabled && visible)
-                visible = false;
 
             if (visible) {
             }
