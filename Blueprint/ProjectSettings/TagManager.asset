@@ -27,7 +27,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Demo Sprite
   - 
   - 
   - 
@@ -54,4 +54,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: DemoSprite
+    uniqueID: 179409413
     locked: 0

@@ -11,18 +11,25 @@ namespace Controller {
         private Boolean visible;
 
         void Start() {
-            visible = false;
-
-            // Create some ifno text between screens for when stuff is crafted.
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
             Vector2 relativePosition = sp.ToV(new Vector2(0.5f, 0.1f));
+
+            SetLowAlpha("TopItem");
+            SetLowAlpha("MidItem");
+            SetLowAlpha("BotItem");
+
+            // Extra comment for no reason.
         }
 
         void Update() {
-            // Need to make a menu visible if no menu is currently visible.
+        }
 
-            if (visible) {
-            }
+        // Finds an object by name, sets its alpha low.
+        private void SetLowAlpha(string name) {
+            Image image = GameObject.Find(name).GetComponent<Image>();
+            var color = image.color;
+            color.a = 0.2f;
+            image.color = color;
         }
     }
 }
