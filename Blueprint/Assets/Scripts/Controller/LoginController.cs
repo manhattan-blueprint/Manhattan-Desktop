@@ -10,12 +10,12 @@ using Service;
 using Service.Response;
 using Utils;
 
-public class MainMenu : MonoBehaviour, Subscriber<UIState> {
+public class LoginController: MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private Text infoMessage;
     [SerializeField] private GameObject fadeIn;
 
     [SerializeField] private GameObject splashScreen;
-    [SerializeField] private Text blueprintLogo;
+    [SerializeField] private SVGImage blueprintLogo;
     [SerializeField] private Text pressSpace;
 
     [SerializeField] private GameObject loginMenu;
@@ -23,12 +23,14 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private InputField loginPasswordInput;
     [SerializeField] private Button loginLoginButton;
     [SerializeField] private Button loginRegisterButton;
+    [SerializeField] private Text loginRegisterText;
 
     [SerializeField] private GameObject registerMenu;
     [SerializeField] private InputField registerUsernameInput;
     [SerializeField] private InputField registerPasswordInput;
     [SerializeField] private Button registerRegisterButton;
     [SerializeField] private Button registerBackButton;
+    [SerializeField] private Text registerLoginText;
 
     private int maxUsernameLength = 16;
     private string infoMessageText;
@@ -207,13 +209,18 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
             return;
         }
         
-        SetMessageInfo("Loading...");
+        loginLoginButton.gameObject.SetActive(false);
+        loginRegisterButton.gameObject.SetActive(false);
+        loginRegisterText.gameObject.SetActive(false);
         StartCoroutine(BlueprintAPI.Login(loginUsernameText, loginPasswordText, result => {
             if (result.isSuccess()) {
                 GameManager.Instance().SetAccessToken(result.GetSuccess());
                 PreloadGame();
             } else {
                 SetMessageError(result.GetError());
+                loginLoginButton.gameObject.SetActive(true);
+                loginRegisterButton.gameObject.SetActive(true);
+                loginRegisterText.gameObject.SetActive(true);
             }
         }));
     }
@@ -236,13 +243,18 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
             return;
         }
 
-        SetMessageInfo("Loading...");
+        registerRegisterButton.gameObject.SetActive(false);
+        registerBackButton.gameObject.SetActive(false);
+        registerLoginText.gameObject.SetActive(false);
         StartCoroutine(BlueprintAPI.Register(registerUsernameText, registerPasswordText, result => {
             if (result.isSuccess()) {
                 GameManager.Instance().SetAccessToken(result.GetSuccess());
                 PreloadGame();
             } else {
                 SetMessageError(result.GetError());
+                registerRegisterButton.gameObject.SetActive(true);
+                registerBackButton.gameObject.SetActive(true);
+                registerLoginText.gameObject.SetActive(true);
             }
         }));
     }
@@ -305,7 +317,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         obj.GetComponent<CanvasGroup>().interactable = false;
         triggerAnimating();
         animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Disappear, 0.3f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f, false);
+        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f);
     }
 
     // Make an object fade in and fly upwards.
@@ -314,7 +326,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         obj.GetComponent<CanvasGroup>().interactable = true;
         triggerAnimating();
         animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Appear, 0.3f, false, 0.0f, 0.2f);
-        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.9f, 0.0f)), 0.4f, false);
+        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.9f, 0.0f)), 0.4f);
     }
 
     private void triggerAnimating() {

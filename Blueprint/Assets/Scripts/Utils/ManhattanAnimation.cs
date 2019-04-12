@@ -14,9 +14,10 @@ namespace Utils {
     }
 
     // Makes an animation happen to an object, and then removes the component
-    // after. The component istherefore not removed if the animation is
+    // after. The component is therefore not removed if the animation is
     // indefinite.
     class ManhattanAnimation : MonoBehaviour {
+        private static int overshootAmount = 110;
         private IEnumerator timedCoroutine;
         private float overshoot;
         private float framePeriod;
@@ -37,7 +38,7 @@ namespace Utils {
 
             // Equal to 1 / (1 + sin(20)) degrees, for overshooting then returning
             // to the desired position.
-            overshoot = 1.0f / Mathf.Sin(120 * Mathf.Deg2Rad);
+            overshoot = 1.0f / Mathf.Sin(overshootAmount * Mathf.Deg2Rad);
 
             // Equivalent to 1 / 60.
             framePeriod = 1.0f / 60.0f;
@@ -93,9 +94,9 @@ namespace Utils {
 
             yield return new WaitForSeconds(delay);
 
-            for (float count = 0; count <= 120.0f; count += speed) {
+            for (float count = 0; count <= overshootAmount; count += speed) {
                 float speedModifier = Mathf.Sin(count * Mathf.Deg2Rad);
-
+                
                 gameObject.transform.position = originalPosition + overshoot * speedModifier * moveVector;
 
                 yield return new WaitForSeconds(framePeriod);
