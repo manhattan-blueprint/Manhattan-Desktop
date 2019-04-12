@@ -24,6 +24,9 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Machine:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
+                case UIState.OpenUI.Goal:
+                    state.Selected = UIState.OpenUI.Playing;
+                    break;
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
@@ -116,6 +119,14 @@ namespace Model.Reducer {
             if (current == UIState.OpenUI.Playing) {
                 state.Selected = UIState.OpenUI.Machine;
                 state.SelectedMachineLocation = machine.machinePosition;
+            }
+        }
+
+        public void visit(OpenGoalUI goal) {
+            // Update if exists or add new
+            UIState.OpenUI current = state.Selected;
+            if (current == UIState.OpenUI.Playing) {
+                state.Selected = UIState.OpenUI.Goal;
             }
         }
 

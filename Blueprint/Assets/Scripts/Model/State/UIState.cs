@@ -10,6 +10,7 @@ namespace Model.State {
             Inventory,
             Blueprint,
             Machine,
+            Goal,
             Pause,
             InvPause,
             BluePause,

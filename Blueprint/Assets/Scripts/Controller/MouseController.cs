@@ -48,7 +48,6 @@ namespace Controller {
             }
 
 
-            // Put down held item
             if (Input.GetMouseButtonDown(rightButton)) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
@@ -63,6 +62,13 @@ namespace Controller {
                     return;
                 }
 
+                // If we hit the goal, go to goal UI
+                CentralGoal gl = hit.transform.gameObject.GetComponent<CentralGoal>();
+                if (gl != null) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
+                    return;
+                }
+
                 // Otherwise try and place an object in that spot
                 HexCell hc = hit.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc != null) {
@@ -70,7 +76,7 @@ namespace Controller {
                 }
             }
 
-            
+
             // Pick up item
             if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));

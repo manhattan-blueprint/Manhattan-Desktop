@@ -9,6 +9,7 @@ namespace Model.Action {
         void visit(OpenBlueprintUI blueprint);
         void visit(OpenBindingsUI bindings);
         void visit(OpenMachineUI machine);
+        void visit(OpenGoalUI machine);
         void visit(OpenSettingsUI settings);
         void visit(Logout logout);
         void visit(Exit exit);
@@ -61,7 +62,13 @@ namespace Model.Action {
         public OpenMachineUI(Vector2 machinePosition) {
             this.machinePosition = machinePosition;
         }
-        
+
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenGoalUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

@@ -13,7 +13,7 @@ namespace Tests {
             this.gameManager = GameManager.Instance();
             gameManager.ResetGame();
         }
-        
+
           [Test]
         public void TestGameStartsInCorrectUIState() {
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Login));
@@ -69,6 +69,21 @@ namespace Tests {
         public void TestCloseMachineUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenMachineUI(new Vector2(0, 0)));
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+
+        [Test]
+        public void TestOpenGoalUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenGoalUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Goal));
+        }
+
+        [Test]
+        public void TestCloseGoalUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenGoalUI());
             gameManager.uiStore.Dispatch(new CloseUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
@@ -183,7 +198,7 @@ namespace Tests {
             gameManager.uiStore.Dispatch(new Logout());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.BlueLogout));
         }
-       
+
         [Test]
         public void TestCloseBlueLogoutUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
