@@ -17,6 +17,7 @@ TagManager:
   - MachineInventory
   - Machine
   - Bindings
+  - Goal
   layers:
   - Default
   - TransparentFX

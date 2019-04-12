@@ -22,6 +22,7 @@ namespace Controller {
         private Canvas bindingsCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
+        private Canvas goalCanvas;
         private bool multiCanvas;
 
         void Start() {
@@ -34,6 +35,7 @@ namespace Controller {
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
+            goalCanvas = GameObject.FindGameObjectWithTag("Goal").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
 
             inventoryCanvas.enabled = false;
@@ -43,6 +45,7 @@ namespace Controller {
             exitCanvas.enabled = false;
             bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
+            goalCanvas.enabled = false;
 
             multiCanvas = false;
 
@@ -102,6 +105,17 @@ namespace Controller {
         private void OpenMachine() {
             Time.timeScale = 0;
             machineCanvas.enabled = true;
+            machineInventoryCanvas.enabled = true;
+            pauseCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
+
+        private void OpenGoal() {
+            Time.timeScale = 0;
+            goalCanvas.enabled = true;
             machineInventoryCanvas.enabled = true;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
@@ -205,6 +219,10 @@ namespace Controller {
                     multiCanvas = false;
                     OpenMachine();
                     break;
+                case UIState.OpenUI.Goal:
+                    multiCanvas = false;
+                    OpenGoal();
+                    break;
                 case UIState.OpenUI.Pause:
                     multiCanvas = false;
                     PauseGame();
@@ -263,7 +281,7 @@ namespace Controller {
                             // TODO: Handle failure via UI?
                         }
                     });
-                    
+
                     break;
                 default:
                     throw new System.Exception("Not in expected state.");

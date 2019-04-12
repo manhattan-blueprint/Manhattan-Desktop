@@ -65,6 +65,7 @@ namespace Controller {
                 // If we hit the goal, go to goal UI
                 CentralGoal gl = hit.transform.gameObject.GetComponent<CentralGoal>();
                 if (gl != null) {
+                    Debug.Log("Central goal hit by raycast");
                     GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
                     return;
                 }

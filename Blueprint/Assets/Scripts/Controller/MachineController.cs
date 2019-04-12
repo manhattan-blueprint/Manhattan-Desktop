@@ -17,7 +17,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     private GameObject fuelSlot;
     private GameObject inputSlot0;
     private GameObject inputSlot1;
-    
+
     void Start() {
         machineInventoryCanvas = GameObject.Find("MachineInventoryCanvas");
         machineInventoryCanvas.GetComponent<CanvasScaler>().scaleFactor = 0.7f;
@@ -26,20 +26,20 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         fuelSlot = GameObject.Find("FuelSlot");
         inputSlot0 = GameObject.Find("InputSlot0");
         inputSlot1 = GameObject.Find("InputSlot1");
-        
+
         GameManager.Instance().uiStore.Subscribe(this);
         GameManager.Instance().machineStore.Subscribe(this);
     }
-    
+
     public void StateDidUpdate(MachineState state) {
         if (!state.grid.ContainsKey(machineLocation)) {
             return;
         }
-        
+
         Machine machine = state.grid[machineLocation];
         refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
         populateOutputSlot(Optional<InventoryItem>.Empty());
-        
+
         // Check the fuel is present otherwise don't bother checking what we can make
         if (!machine.HasFuel()) {
             return;
@@ -51,9 +51,9 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
             SchemaItem output = possibleOutput.Get();
             // This _should_ be an explicit state action, but that will cause this function to be called indefinitely
             // TODO: Think of a better way of doing this
-            machine.output = Optional<InventoryItem>.Of(new InventoryItem(output.name, output.item_id, 1));    
+            machine.output = Optional<InventoryItem>.Of(new InventoryItem(output.name, output.item_id, 1));
             // TODO: show output in output cell, fade opacity to 50% of inputs
-            
+
             populateOutputSlot(machine.output);
         }
 
@@ -66,7 +66,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         if (machine.fuel.IsPresent()) {
             fuelSlot.GetComponent<InventorySlotController>().SetStoredItem(machine.fuel);
         }
-        
+
         refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
     }
 
@@ -90,11 +90,11 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         inputSlot1.GetComponent<InventorySlotController>().SetStoredItem(right);
         fuelSlot.GetComponent<InventorySlotController>().SetStoredItem(fuel);
     }
-    
+
     // TODO
     // Increase quantity / split stacks?
     // Inv -> Machine : RemoveFromInv ] - This should be called from MachineSlotController
-    // Machine -> Inv : AddToInventoryPosition 
+    // Machine -> Inv : AddToInventoryPosition
     // On drag result : change opacity to 1, 'consume' inv inputs
     // Machine destruction w/ items, AddToInv
     // MachineInputSlotController & MachineOutputSlotController
