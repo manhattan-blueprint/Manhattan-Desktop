@@ -73,19 +73,16 @@ namespace Controller {
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
-                    StartCoroutine(BindingsDelay(0.4f));
-                } else if (bindingsCanvas.enabled && !multiCanvas) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
+                }
+            }
+
+            if (Input.GetKeyUp(KeyMapping.Bindings)) {
+                if (bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
-        }
-
-        private IEnumerator BindingsDelay(float delay) {
-            yield return new WaitForSeconds(delay);
-            if (Input.GetKey(KeyMapping.Bindings)) {
-                GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
-            }
-        }
+         }
 
         private void OpenInventory() {
             Time.timeScale = 0;
