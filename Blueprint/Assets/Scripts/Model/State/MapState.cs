@@ -23,7 +23,8 @@ namespace Model.State {
             grid.Remove(position);
         }
 
-        public void AddGoalItem(GoalPosition position) {
+        public void addGoalItem(GoalPosition position) {
+            Debug.Log("Adding goal position " + position);
             if (position == GoalPosition.Top)
                 goal.topInput = true;
             if (position == GoalPosition.Mid)

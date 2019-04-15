@@ -56,14 +56,17 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Goal goal = state.getGoal();
-            if (goal.topInput)
-                ActivateDish();
-            if (goal.midInput)
-                ActivateAntenna();
-            if (goal.botInput)
-                ActivateTransmitter();
             Debug.Log("Map state updated!");
+            Goal goal = state.getGoal();
+            if (goal.topInput == true)
+                SetAlpha("TopSlot/TopItem", 1.0f);
+                ActivateDish();
+            if (goal.midInput == true)
+                SetAlpha("TopSlot/TopItem", 1.0f);
+                ActivateAntenna();
+            if (goal.botInput == true)
+                SetAlpha("TopSlot/TopItem", 1.0f);
+                ActivateTransmitter();
 
             // Start completion animation of all done.
             if (goal.IsComplete()) {
@@ -93,6 +96,7 @@ namespace Controller {
         }
 
         public void ActivateDish() {
+            Debug.Log("Activating dish; placeholder for animation");
             dish.GetComponent<MeshRenderer>().enabled        = true;
             dishHolder1.GetComponent<MeshRenderer>().enabled = true;
             dishHolder2.GetComponent<MeshRenderer>().enabled = true;
@@ -101,6 +105,7 @@ namespace Controller {
         }
 
         public void ActivateAntenna() {
+            Debug.Log("Activating antenna; placeholder for animation");
             antenna1.GetComponent<MeshRenderer>().enabled = true;
             antenna2.GetComponent<MeshRenderer>().enabled = true;
             antenna3.GetComponent<MeshRenderer>().enabled = true;
@@ -110,6 +115,7 @@ namespace Controller {
         }
 
         public void ActivateTransmitter() {
+            Debug.Log("Activating transmitter; placeholder for animation");
             transmitterPlaced = true;
         }
 
@@ -122,7 +128,6 @@ namespace Controller {
         }
 
         public void SetSlotActive(string name) {
-            Debug.Log("Activating Mid Slot");
             Image image = GameObject.Find(name).GetComponent<Image>();
             // White give sprite default appearance.
             image.color = Color.white;

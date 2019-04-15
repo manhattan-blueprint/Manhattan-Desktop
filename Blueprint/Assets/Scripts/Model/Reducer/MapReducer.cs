@@ -10,6 +10,10 @@ namespace Model.Reducer {
             return this.state;
         }
 
+        public void visit(UpdateGoal updateGoal) {
+            state.addGoalItem(updateGoal.goalPosition);
+        }
+
         public void visit(PlaceItem placeItem) {
             if (!state.getObjects().ContainsKey(placeItem.position)) {
                 state.addObject(placeItem.position, placeItem.itemID);

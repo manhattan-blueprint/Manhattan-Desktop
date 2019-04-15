@@ -27,7 +27,6 @@ public class GoalSlotController : InventorySlotController, IDropHandler {
         InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>();
         InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
-
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
 
             // Don't move the item if item is incorrect.
@@ -61,20 +60,14 @@ public class GoalSlotController : InventorySlotController, IDropHandler {
             }
 
             if (slotType == GoalSlotType.TopSlot) {
-                goalUIController.SetAlpha("TopSlot/TopItem", 1.0f);
-                goalUIController.ActivateDish();
-                goalUIController.SetSlotActive("MidSlot");
+                GameManager.Instance().mapStore.Dispatch(new UpdateGoal(GoalPosition.Top));
             }
             if (slotType == GoalSlotType.MidSlot) {
-                goalUIController.SetAlpha("MidSlot/MidItem", 1.0f);
-                goalUIController.ActivateAntenna();
+                GameManager.Instance().mapStore.Dispatch(new UpdateGoal(GoalPosition.Mid));
             }
             if (slotType == GoalSlotType.BotSlot) {
-                goalUIController.SetAlpha("BotSlot/BotItem", 1.0f);
-                goalUIController.ActivateTransmitter();
+                GameManager.Instance().mapStore.Dispatch(new UpdateGoal(GoalPosition.Bot));
             }
-
-            // TODO: If all slots filled then start it spinning and congratulate for completing.
 
         } else {
             droppedObject.transform.parent.GetComponentInChildren<Text>().text =
