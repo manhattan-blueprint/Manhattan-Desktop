@@ -5,9 +5,13 @@ using UnityEngine;
 using Model.BlueprintUI;
 using UnityEngine.UI;
 using Utils;
+using Model;
+using Model.Action;
+using Model.Redux;
+using Model.State;
 
 namespace Controller {
-    public class GoalUIController : MonoBehaviour {
+    public class GoalUIController : MonoBehaviour, Subscriber<MapState> {
         private Boolean visible;
         private GameObject dish;
         private GameObject antenna1;
@@ -19,6 +23,7 @@ namespace Controller {
         private GameObject dishHolder1;
         private GameObject dishHolder2;
         private GameObject dishHolder3;
+        private bool transmitterPlaced;
 
         void Start() {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
@@ -41,20 +46,30 @@ namespace Controller {
 
             HideDish();
             HideAntenna();
-            // No hiding required for transmitter.
+            HideTransmitter();
 
-            // Color in middle slot as available if top slot used already.
-            GameObject topSlot = GameObject.Find("TopSlot");
-            if (topSlot == null)
-                Debug.Log("Error finding slot in inventory");
-            InventorySlotController topSlotController = topSlot.GetComponent<InventorySlotController>();
-            if (topSlotController.storedItem != null) {
-                SetSlotActive("MidSlot");
-            }
+            GameManager.Instance().mapStore.Subscribe(this);
         }
 
         void Update() {
 
+        }
+
+        public void StateDidUpdate(MapState state) {
+            Goal goal = state.getGoal();
+            if (goal.topInput)
+                ActivateDish();
+            if (goal.midInput)
+                ActivateAntenna();
+            if (goal.botInput)
+                ActivateTransmitter();
+            Debug.Log("Map state updated!");
+
+            // Start completion animation of all done.
+            if (goal.IsComplete()) {
+                // TODO: Insert animation.
+                Debug.Log("GAME COMPLETE");
+            }
         }
 
         public void HideDish() {
@@ -73,11 +88,16 @@ namespace Controller {
             antenna6.GetComponent<MeshRenderer>().enabled = false;
         }
 
+        public void HideTransmitter() {
+            transmitterPlaced = false;
+        }
+
         public void ActivateDish() {
             dish.GetComponent<MeshRenderer>().enabled        = true;
             dishHolder1.GetComponent<MeshRenderer>().enabled = true;
             dishHolder2.GetComponent<MeshRenderer>().enabled = true;
             dishHolder3.GetComponent<MeshRenderer>().enabled = true;
+            SetSlotActive("MidSlot");
         }
 
         public void ActivateAntenna() {
@@ -90,7 +110,7 @@ namespace Controller {
         }
 
         public void ActivateTransmitter() {
-            
+            transmitterPlaced = true;
         }
 
         // Finds an object by name, sets its alpha low.
