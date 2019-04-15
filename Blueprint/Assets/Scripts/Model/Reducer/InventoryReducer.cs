@@ -74,7 +74,7 @@ namespace Model.Reducer {
             int firstEmptySlot = getFirstEmptySlot();
             int newQuantity = (int) splitStackAction.count / 2;
 
-            if (firstEmptySlot < state.inventorySize-1 && newQuantity > 0) {
+            if (firstEmptySlot < state.inventorySize && newQuantity > 0 && firstEmptySlot > 0) {
                 visit(new RemoveItemFromStackInventory(splitStackAction.item, newQuantity, splitStackAction.hexID));
                 
                 HexLocation item = new HexLocation(firstEmptySlot, newQuantity);
