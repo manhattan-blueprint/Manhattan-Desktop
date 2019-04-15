@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Collections;
 using Model;
 using Model.Action;
 using Model.Redux;
@@ -71,11 +72,15 @@ namespace Controller {
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
-                } else if (bindingsCanvas.enabled) {
+                }
+            }
+
+            if (Input.GetKeyUp(KeyMapping.Bindings)) {
+                if (bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
-        }
+         }
 
         private void OpenInventory() {
             Time.timeScale = 0;
@@ -236,7 +241,7 @@ namespace Controller {
                             // TODO: Handle failure via UI?
                         }
                     });
-                    
+
                     break;
                 default:
                     throw new Exception("Not in expected state.");
