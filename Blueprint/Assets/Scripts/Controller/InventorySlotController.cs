@@ -15,10 +15,10 @@ using Image = UnityEngine.UI.Image;
 
 /* Attached to each slot in the inventory grid */
 namespace Controller {
-    public class InventorySlotController : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
+    public class InventorySlotController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
         internal int id;
         private bool mouseOver;
-        internal Optional<InventoryItem> storedItem;
+        public Optional<InventoryItem> storedItem;
         private GameObject highlightObject;
         public float slotHeight;
         public float slotWidth;
@@ -186,11 +186,11 @@ namespace Controller {
             return image;
         }
 
-        public void OnDrop(PointerEventData eventData) {
+        public void OnDrop(GameObject droppedObject) {
             RectTransform invPanel = transform as RectTransform;
-            GameObject droppedObject = eventData.pointerDrag;
+            //GameObject droppedObject = eventData.pointerDrag;
 
-            InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>();
+            InventorySlotController source = droppedObject.GetComponent<InventorySlotController>();
             InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
             if (source == destination) {
