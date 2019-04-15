@@ -234,13 +234,13 @@ namespace Controller {
                         GameManager.Instance().inventoryStore.GetState(),
                         GameManager.Instance().machineStore.GetState());
 
-                    BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), exitGameState, result => {
+                    StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), exitGameState, result => {
                         if (result.isSuccess()) {
                             ExitPrompt();
                         } else {
                             // TODO: Handle failure via UI?
                         }
-                    });
+                    }));
 
                     break;
                 default:
