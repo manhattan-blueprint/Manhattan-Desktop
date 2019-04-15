@@ -24,6 +24,15 @@ public class FuelElement {
     public FuelElement(int itemID) {
         this.item_id = itemID;
     }
+
+    public override bool Equals(object obj) {
+        FuelElement fuelElement = obj as FuelElement;
+        if (fuelElement != null) {
+            return item_id == fuelElement.item_id;
+        }
+
+        return false;
+    }
 }
 
 [Serializable]
