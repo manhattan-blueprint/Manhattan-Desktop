@@ -24,6 +24,8 @@ namespace Controller {
         private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
         private bool firstUIUpdate;
+        public bool DraggingInvItem = false;
+        public int DragDestination;
 
         public void Start() {
             firstUIUpdate = true;
