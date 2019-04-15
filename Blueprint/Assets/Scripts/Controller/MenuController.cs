@@ -23,7 +23,6 @@ namespace Controller {
         private Canvas bindingsCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
-        private bool multiCanvas;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -45,7 +44,6 @@ namespace Controller {
             bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
 
-            multiCanvas = false;
 
             GameManager.Instance().uiStore.Subscribe(this);
         }
@@ -54,11 +52,11 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
-                } else if (inventoryCanvas.enabled && !multiCanvas) {
+                } else if (inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
@@ -68,7 +66,7 @@ namespace Controller {
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
-                } else if (blueprintCanvas.enabled && !multiCanvas) {
+                } else if (blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
@@ -189,52 +187,28 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
-        // TODO: REFACTOR NOW WE DONT ALLOW MULTIPLE CANVAS
         public void StateDidUpdate(UIState state) {
             switch (state.Selected) {
                 case UIState.OpenUI.Inventory:
-                    multiCanvas = false;
                     OpenInventory();
                     break;
                 case UIState.OpenUI.Playing:
                     ContinueGame();
                     break;
                 case UIState.OpenUI.Blueprint:
-                    multiCanvas = false;
                     OpenBlueprint();
                     break;
                 case UIState.OpenUI.Bindings:
                     OpenBindings();
                     break;
                 case UIState.OpenUI.Machine:
-                    multiCanvas = false;
                     OpenMachine();
                     break;
                 case UIState.OpenUI.Pause:
-                    multiCanvas = false;
-                    PauseGame();
-                    break;
-                case UIState.OpenUI.InvPause:
-                case UIState.OpenUI.BluePause:
-                case UIState.OpenUI.MachPause:
-                    multiCanvas = true;
                     PauseGame();
                     break;
                 case UIState.OpenUI.Logout:
-                    multiCanvas = false;
                     LogoutPrompt();
-                    break;
-                case UIState.OpenUI.InvLogout:
-                case UIState.OpenUI.BlueLogout:
-                case UIState.OpenUI.MachLogout:
-                    multiCanvas = true;
-                    LogoutPrompt();
-                    break;
-                case UIState.OpenUI.InvExit:
-                case UIState.OpenUI.BlueExit:
-                case UIState.OpenUI.MachExit:
-                    multiCanvas = true;
-                    ExitPrompt();
                     break;
                 case UIState.OpenUI.Login:
                     GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
@@ -262,7 +236,6 @@ namespace Controller {
 
                     BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), exitGameState, result => {
                         if (result.isSuccess()) {
-                            multiCanvas = false;
                             ExitPrompt();
                         } else {
                             // TODO: Handle failure via UI?
@@ -271,7 +244,7 @@ namespace Controller {
 
                     break;
                 default:
-                    throw new System.Exception("Not in expected state.");
+                    throw new Exception("Not in expected state.");
             }
         }
     }
