@@ -27,22 +27,26 @@ public class GoalSlotController : InventorySlotController, IDropHandler {
         InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>();
         InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
+
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
 
-            // Don't move item if incorrect number.
+            // Don't move the item if item is incorrect.
             // TODO: Update to correct number once have items for testing in
             // inventory.
             if (slotType == GoalSlotType.TopSlot && source.storedItem.Get().GetId() != 28)
                 return;
-            if (slotType == GoalSlotType.MidSlot && source.storedItem.Get().GetId() != 30)
+            if (slotType == GoalSlotType.MidSlot && source.storedItem.Get().GetId() != 31)
                 return;
-            if (slotType == GoalSlotType.BotSlot && source.storedItem.Get().GetId() != 31)
+            if (slotType == GoalSlotType.BotSlot && source.storedItem.Get().GetId() != 30)
                 return;
 
             // Only move the item if there is not already one in the goal slot.
             if (!destination.storedItem.IsPresent()) {
                 destination.SetStoredItem(source.storedItem);
                 source.SetStoredItem(Optional<InventoryItem>.Empty());
+            }
+            else {
+                return;
             }
 
             // If not from the goal, remove from inventory
@@ -57,16 +61,17 @@ public class GoalSlotController : InventorySlotController, IDropHandler {
             }
 
             if (slotType == GoalSlotType.TopSlot) {
-                // TODO: Add dish
-                Debug.Log("SLOTTING TOP SLOT; SHOULD ANIMATE");
+                goalUIController.SetAlpha("TopSlot/TopItem", 1.0f);
+                goalUIController.ActivateDish();
+                goalUIController.SetSlotActive("MidSlot");
             }
             if (slotType == GoalSlotType.MidSlot) {
-                // TODO: Add circuit to side and make buzz?
-                Debug.Log("SLOTTING MID SLOT; SHOULD ANIMATE");
+                goalUIController.SetAlpha("MidSlot/MidItem", 1.0f);
+                goalUIController.ActivateAntenna();
             }
             if (slotType == GoalSlotType.BotSlot) {
-                // TODO:
-                Debug.Log("SLOTTING BOT SLOT; SHOULD ANIMATE");
+                goalUIController.SetAlpha("BotSlot/BotItem", 1.0f);
+                goalUIController.ActivateTransmitter();
             }
 
             // TODO: If all slots filled then start it spinning and congratulate for completing.

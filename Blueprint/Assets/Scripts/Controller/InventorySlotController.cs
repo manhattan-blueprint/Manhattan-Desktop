@@ -29,6 +29,7 @@ namespace Controller {
         private GameObject rolloverObject;
         private Vector3 rolloverPosition;
         private bool rolloverState;
+        private bool showQuantity;
 
         // EDITABLE
         // Time before rollover text shows (secs)

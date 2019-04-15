@@ -62,6 +62,7 @@ namespace Controller {
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
                 if (machineCanvas.enabled || inventoryCanvas.enabled ||
                     blueprintCanvas.enabled || goalCanvas.enabled) {
+                        goalCanvas.enabled = false;
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
