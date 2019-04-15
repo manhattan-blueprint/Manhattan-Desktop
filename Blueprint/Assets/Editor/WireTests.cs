@@ -169,5 +169,72 @@ namespace Tests {
             Assert.False(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
         }
 
+        [Test]
+        public void TestMultipleConnectedSolarPanels() {
+            Vector2 machineLocation = new Vector2(-5, 3); 
+            Vector2 solarLocation1 = new Vector2(-3, 1);
+            Vector2 solarLocation2 = new Vector2(-2, 1);
+            List<Vector2> wireLocations = new List<Vector2> {
+                new Vector2(-4, 2),
+                new Vector2(-3, 2)
+            };
+            GameManager.Instance().machineStore.Dispatch(new AddMachine(machineLocation, 26));
+            GameManager.Instance().mapStore.Dispatch(new PlaceItem(machineLocation, 26)); 
+            GameManager.Instance().mapStore.Dispatch(new PlaceItem(solarLocation1, 25));
+            GameManager.Instance().mapStore.Dispatch(new PlaceItem(solarLocation2, 25));
+            
+            // Shouldn't be connected before wires are placed
+            Assert.False(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
+            foreach (Vector2 wireLocation in wireLocations) {
+                GameManager.Instance().mapStore.Dispatch(new PlaceItem(wireLocation, 22));
+            }
+            // Should be connected
+            Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
+            
+            // Remove solar panel
+            GameManager.Instance().mapStore.Dispatch(new CollectItem(solarLocation1));
+            
+            // Should still be connected to other solar panel
+            Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
+        }
+
+        [Test]
+        public void TestDoubleCycle() {
+            Vector2 machineLocation = new Vector2(3, -3);
+            List<Vector2> wireLocations = new List<Vector2> {
+                new Vector2(0, 1),
+                new Vector2(1, 0),
+                new Vector2(1, -1),
+                new Vector2(0, -1),
+                new Vector2(-1, 0),
+                new Vector2(-1, 1),
+                new Vector2(-1, 2),
+                new Vector2(0, 2),
+                new Vector2(1, 1),
+                new Vector2(2, 0),
+                new Vector2(2, -1),
+                new Vector2(2, -2),
+                new Vector2(1, -2),
+                new Vector2(0, -2),
+                new Vector2(-1, -1),
+                new Vector2(-2, 0),
+                new Vector2(-2, 1),
+                new Vector2(-2, 2),
+                new Vector2(-1, 2)
+            };
+            Vector2 solarLocation = new Vector2(0, 0);
+            
+            GameManager.Instance().machineStore.Dispatch(new AddMachine(machineLocation, 26));
+            GameManager.Instance().mapStore.Dispatch(new PlaceItem(machineLocation, 26)); 
+            GameManager.Instance().mapStore.Dispatch(new PlaceItem(solarLocation, 25));
+            // Shouldn't be connected before wires are placed
+            Assert.False(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
+            
+            foreach (Vector2 wireLocation in wireLocations) {
+                GameManager.Instance().mapStore.Dispatch(new PlaceItem(wireLocation, 22));
+            }
+            // should be connected
+            Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
+        }
     }
 }
