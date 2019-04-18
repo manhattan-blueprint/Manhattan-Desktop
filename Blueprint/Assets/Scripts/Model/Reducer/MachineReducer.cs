@@ -152,6 +152,8 @@ namespace Model.Reducer {
 
         public void visit(UpdateConnected updateConnected) {
             foreach (KeyValuePair<Vector2, Machine> keyValuePair in state.grid) {
+                // Clear considered for every machine
+                this.consideredConnected = new HashSet<Vector2>();
                 SchemaItem item = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == keyValuePair.Value.id);
                 // If contains electricity
                 if (item.fuel.Contains(new FuelElement(32))) {

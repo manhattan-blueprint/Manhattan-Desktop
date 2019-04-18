@@ -236,5 +236,48 @@ namespace Tests {
             // should be connected
             Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
         }
+
+        [Test]
+        // This originated from @adam-c-fox's PR comment
+        public void TestCrossover() {
+            List<Vector2> machineLocations = new List<Vector2> {
+                new Vector2(1, -1),
+                new Vector2(1, 2)
+            };
+            
+            List<Vector2> wireLocations = new List<Vector2> {
+                new Vector2(-2, 3),
+                new Vector2(-1, 2),
+                new Vector2(0, 2),
+                new Vector2(0,1),
+                new Vector2(1, 0),
+                new Vector2(-1, 1),
+                new Vector2(-2, 1),
+            };
+            
+            List<Vector2> solarLocations = new List<Vector2> {
+                new Vector2(-2, 0),
+                new Vector2(-3, 3)
+            };
+
+            foreach (Vector2 machineLocation in machineLocations) {
+                GameManager.Instance().machineStore.Dispatch(new AddMachine(machineLocation, 29));
+                GameManager.Instance().mapStore.Dispatch(new PlaceItem(machineLocation, 25));
+            }
+            
+            foreach (Vector2 solarLocation in solarLocations) {
+                GameManager.Instance().mapStore.Dispatch(new PlaceItem(solarLocation, 25));
+            }
+            
+            Assert.False(GameManager.Instance().machineStore.GetState().grid[machineLocations[0]].HasFuel());
+            Assert.False(GameManager.Instance().machineStore.GetState().grid[machineLocations[1]].HasFuel());
+            
+            foreach (Vector2 wireLocation in wireLocations) {
+                GameManager.Instance().mapStore.Dispatch(new PlaceItem(wireLocation, 22));
+            }
+            
+            Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocations[0]].HasFuel());
+            Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocations[1]].HasFuel());
+        }
     }
 }
