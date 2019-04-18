@@ -37,14 +37,16 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         // 0.25 * slotdim padding on y
         double hotbarCenterY = 1.75 * slotDimensionY;
 
+        float localSlotDimensionX = slotDimensionX * 0.98f; 
+
         // In order, starting from top left
         // Draw 0 last so the highlight is on top
-        newSlot(1, (float) hotbarCenterX + slotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset));
-        newSlot(2, (float) hotbarCenterX + slotDimensionX, (float) hotbarCenterY);
-        newSlot(3, (float) hotbarCenterX + slotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset));
-        newSlot(4, (float) hotbarCenterX - slotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset));
-        newSlot(5, (float) hotbarCenterX - slotDimensionX, (float) hotbarCenterY);
-        newSlot(0, (float) hotbarCenterX - slotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset));
+        newSlot(1, (float) hotbarCenterX + localSlotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset));
+        newSlot(2, (float) hotbarCenterX + localSlotDimensionX, (float) hotbarCenterY);
+        newSlot(3, (float) hotbarCenterX + localSlotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset));
+        newSlot(4, (float) hotbarCenterX - localSlotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset));
+        newSlot(5, (float) hotbarCenterX - localSlotDimensionX, (float) hotbarCenterY);
+        newSlot(0, (float) hotbarCenterX - localSlotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset));
     }
 
     private void newSlot(int id, float x, float y) {
