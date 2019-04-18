@@ -42,15 +42,16 @@ public class GameManager {
     public void ConfigureGame(SchemaItems schemaItems, GameState gameState, List<InventoryEntry> inventoryEntries) {
         this.sm = new SchemaManager(schemaItems);
             
-        // Calculate the number of inventory slots and set inventory size, i.e. 3n^2 - 3n + 1 + numberOfHeldItem slots - 1 for zero indexing
-        inventoryStore.Dispatch(
-            new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
-
         mapStore.SetState(gameState.mapState);
         heldItemStore.SetState(gameState.heldItemState);
         inventoryStore.SetState(gameState.inventoryState);
         machineStore.SetState(gameState.machineState);
 
+        // Calculate the number of inventory slots and set inventory size, i.e. 3n^2 - 3n + 1 + numberOfHeldItem slots - 1 for zero indexing
+        // This must be done after setting state, overriding any previous value
+        inventoryStore.Dispatch(
+            new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
+            
         foreach (InventoryEntry entry in inventoryEntries) {
             inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity,
                 sm.GameObjs.items[entry.item_id - 1].name));

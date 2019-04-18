@@ -17,5 +17,13 @@ namespace Model {
             this.inventoryState = inventoryState;
             this.machineState = machineState;
         }
+
+        // Required when game state is created from empty JSON
+        public GameState() {
+            this.mapState = new MapState();
+            this.heldItemState = new HeldItemState();
+            this.inventoryState = new InventoryState();
+            this.machineState = new MachineState();
+        }
     }
 }
