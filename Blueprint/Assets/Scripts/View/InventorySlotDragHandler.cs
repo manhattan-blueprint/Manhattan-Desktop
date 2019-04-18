@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Controller;
 using Model;
+using Model.Action;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -13,6 +14,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     private Image foregroundImage;
     private bool mouseOver = false;
     private bool dragging = false;
+    private bool splitting = false;
     private GraphicRaycaster raycaster;
     private EventSystem eventSystem;
     private GameObject dragObject;
@@ -30,6 +32,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
 
     private void Update() {
         
+        // DRAG
         // When left mouse button is down
         if (Input.GetMouseButtonDown(0)) {
             
@@ -50,10 +53,21 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 }
 
                 if (isc != null) {
-                    isc.OnDrop(dragObject);
+                    if (!splitting) {
+                        isc.OnDrop(dragObject);
+                    } else {
+                        InventoryItem item = inventorySlotController.storedItem.Get();
+                        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), item.GetQuantity(), item.GetName(), isc.id));
+                    }
+                    
                     inventoryController.DragDestination = isc.id;
                 }
-                endDrag();
+
+                if (!splitting) {
+                    endDrag();
+                } else {
+                    endSplit();
+                } 
             }
             
             // Begin drag behaviour
@@ -69,8 +83,21 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
             }
         }
 
+        // SPLIT
+        // When right mouse button is down
+        if (Input.GetMouseButtonDown(1) && mouseOver) {
+            InventoryItem item = inventorySlotController.storedItem.Get();
+            int newQuantity = (int) item.GetQuantity() / 2;
+            
+            // Remove drag quantity from source hex
+            GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(item.GetId(), newQuantity, inventorySlotController.id));
+
+            beginSplit();
+        }
+
         // Icon follows mouse when left mouse button not down
-        if (dragging && !mouseOver) {
+        //if (dragging && !mouseOver) {
+        if (dragging) {
             foregroundObject.transform.position = Input.mousePosition;
         }
     }
@@ -94,12 +121,47 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         foregroundImage.sprite = originalSprite;
         foregroundImage.rectTransform.sizeDelta = new Vector2((originalImage.transform as RectTransform).sizeDelta.x,
             (originalImage.transform as RectTransform).sizeDelta.y);
+        foregroundImage.color = new Color(foregroundImage.color.r, foregroundImage.color.g, foregroundImage.color.b, 1.0f);
         originalImage.enabled = false;
 
         dragObject = gameObject.transform.parent.gameObject;
     }
 
     private void endDrag() {
+        dragging = false;
+        inventoryController.DraggingInvItem = false;
+        
+        transform.localPosition = new Vector3(0, 0, 0);
+        foregroundImage.enabled = false;
+        GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>().RedrawInventory();
+        GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>().RedrawInventory();
+    }
+
+    private void beginSplit() {
+        splitting = true;
+        dragging = true;
+        inventoryController.DraggingInvItem = true;
+                
+        transform.parent.SetSiblingIndex(1);
+        Sprite originalSprite = gameObject.transform.GetChild(0).GetComponent<Image>().sprite;
+        Image originalImage = gameObject.transform.GetChild(0).GetComponent<Image>();
+
+        // Foreground object
+        foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
+        foregroundImage = foregroundObject.GetComponent<Image>();
+        RectTransform rect = transform as RectTransform;
+        
+        foregroundImage.enabled = true;
+        foregroundImage.sprite = originalSprite;
+        foregroundImage.rectTransform.sizeDelta = new Vector2((originalImage.transform as RectTransform).sizeDelta.x,
+            (originalImage.transform as RectTransform).sizeDelta.y);
+        foregroundImage.color = new Color(foregroundImage.color.r, foregroundImage.color.g, foregroundImage.color.b, 0.5f);
+
+        dragObject = gameObject.transform.parent.gameObject;
+    }
+    
+    private void endSplit() {
+        splitting = false;
         dragging = false;
         inventoryController.DraggingInvItem = false;
         

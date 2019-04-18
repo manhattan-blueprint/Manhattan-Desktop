@@ -10,7 +10,6 @@ using Model.State;
 using UnityEditor;
 using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
-using UnityEngine.Experimental.UIElements;
 using Image = UnityEngine.UI.Image;
 
 /* Attached to each slot in the inventory grid */
@@ -91,12 +90,6 @@ namespace Controller {
 
         private void Update() {
             if (mouseOver) {
-                if (Input.GetMouseButtonDown(1) && storedItem.IsPresent()) {
-                    // Split stack on right click
-                    InventoryItem stored = storedItem.Get();
-                    gameManager.inventoryStore.Dispatch(new SplitInventoryStack(stored.GetId(), stored.GetQuantity(), id));
-                };
-
                 if ((Time.realtimeSinceStartup - rolloverTime) > mouseEntryTime && storedItem.IsPresent()) {
                     if (!rolloverState) {
                         rolloverState = true;
