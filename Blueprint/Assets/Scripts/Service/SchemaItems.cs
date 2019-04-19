@@ -2,8 +2,8 @@
 using System;
 
 [Serializable]
-public class GameObjects {
-    public List<GameObjectEntry> items;
+public class SchemaItems {
+    public List<SchemaItem> items;
 }
 
 [Serializable]
@@ -27,7 +27,7 @@ public class FuelElement {
 }
 
 [Serializable]
-public class GameObjectEntry {
+public class SchemaItem {
     public enum ItemType {
         PrimaryResource = 1,
         BlueprintCraftedMachine= 2,

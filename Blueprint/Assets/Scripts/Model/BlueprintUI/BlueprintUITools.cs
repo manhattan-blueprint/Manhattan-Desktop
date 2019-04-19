@@ -53,7 +53,7 @@ namespace Model.BlueprintUI {
         }
 
         public static string GetItemName(int id) {
-            return GameManager.Instance().goh.GameObjs.items.Find(x => x.item_id == id).name;
+            return GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == id).name;
         }
 
         // Process a craf (should already have checked for viability).
@@ -61,9 +61,9 @@ namespace Model.BlueprintUI {
                                         int resourceIDA=0, int resourceIDARequired=0,
                                         int resourceIDB=0, int resourceIDBRequired=0,
                                         int resourceIDC=0, int resourceIDCRequired=0) {
-            
-            BlueprintAPI.DefaultCredentials()
-                .AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
+            // TODO: This needs rethinking as needs to be in a monobehaviour 
+//            BlueprintAPI.DefaultCredentials()
+//                .AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
 
             // Remove items from inventory
             if (resourceIDA > 0)

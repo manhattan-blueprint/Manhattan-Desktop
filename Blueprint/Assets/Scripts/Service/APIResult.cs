@@ -12,15 +12,17 @@ namespace Service {
     public class APIResult<S, T> {
         private S success;
         private T error;
-
-        public APIResult(S success) {
-            this.success = success;
+        
+        public static APIResult<S, T> Success(S value) {
+            return new APIResult<S, T> { success = value };
+        }
+        
+        public static APIResult<S, T> Error(T value) {
+            return new APIResult<S, T> { error = value };
         }
 
-        public APIResult(T error) {
-            this.error = error;
-        }
-
+        private APIResult() { }
+        
         public bool isSuccess() {
             return success != null;
         }

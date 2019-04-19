@@ -150,12 +150,6 @@ namespace Controller {
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
 
-                GameObjectEntry entry = GameManager.Instance().goh.GameObjs.items
-                    .Find(x => x.item_id == mapObject.GetID());
-                
-                if (entry.type == GameObjectEntry.ItemType.BlueprintCraftedMachine) {
-                    GameManager.Instance().machineStore.Dispatch(new AddMachine(newObjectPosition, mapObject.GetID())); 
-                }
             }
 	
             // Remove things in old but not in new

@@ -1,28 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using System;
+using System.Text.RegularExpressions;
 using UnityEngine.UI;
-using UnityEditor;
-using System.Threading.Tasks;
 using Controller;
-using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
 using Service;
 using Service.Response;
 using Utils;
-using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour, Subscriber<UIState> {
+public class LoginController: MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private Text infoMessage;
     [SerializeField] private GameObject fadeIn;
 
     [SerializeField] private GameObject splashScreen;
-    [SerializeField] private Text blueprintLogo;
+    [SerializeField] private SVGImage blueprintLogo;
     [SerializeField] private Text pressSpace;
 
     [SerializeField] private GameObject loginMenu;
@@ -30,21 +23,23 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
     [SerializeField] private InputField loginPasswordInput;
     [SerializeField] private Button loginLoginButton;
     [SerializeField] private Button loginRegisterButton;
+    [SerializeField] private Text loginRegisterText;
 
     [SerializeField] private GameObject registerMenu;
     [SerializeField] private InputField registerUsernameInput;
     [SerializeField] private InputField registerPasswordInput;
     [SerializeField] private Button registerRegisterButton;
     [SerializeField] private Button registerBackButton;
+    [SerializeField] private Text registerLoginText;
 
-    private int maxUsernameLength;
-    private BlueprintAPI api;
+    private int maxUsernameLength = 16;
     private string infoMessageText;
     private bool isMessageErrorStyle;
     private VisibleMenu visibleMenu;
     private bool toLaunch;
     private ScreenProportions sp;
     private ManhattanAnimation animationManager;
+    private string passwordRegex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
 
     // Used to prevent the user from interacting during animation to prevent unexpected errors.
     private bool animating;
@@ -61,7 +56,6 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         isMessageErrorStyle = false;
         toLaunch = false;
         animating = false;
-
         Time.timeScale = 1;
 
         sp = this.gameObject.AddComponent<ScreenProportions>();
@@ -74,9 +68,6 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         // Fade whole menu fade in
         animationManager.StartAppearanceAnimation(fadeIn.gameObject,
             Anim.Disappear, 2.0f, true, 1.0f, 0.5f);
-
-        maxUsernameLength = 16;
-        api = BlueprintAPI.WithBaseUrl("http://smithwjv.ddns.net");
 
         GameManager.Instance().uiStore.Subscribe(this);
     }
@@ -143,6 +134,11 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
                 break;
         }
 
+        if (toLaunch) {
+            toLaunch = false;
+            GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
+        }
+
         // As the API call is running on a separate thread and Unity is not
         // technically thread safe, the actual game object has to be modified
         // here rather than doing it straight from the separate thread.
@@ -153,93 +149,114 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
             infoMessage.color = Color.blue;
             infoMessage.text = infoMessageText;
         }
-
-        if (toLaunch) {
-            toLaunch = false;
-            GameManager.Instance().StartGame();
-        }
     }
 
-    // API call from login menu.
+    private void PreloadGame() {
+        AccessToken accessToken = GameManager.Instance().GetAccessToken();
+        // Fetch desktop state
+        StartCoroutine(BlueprintAPI.GetGameState(accessToken, desktopResult => {
+            if (!desktopResult.isSuccess()) {
+                SetMessageError("Could not load saved game: " + desktopResult.GetError());
+                return;
+            }
+
+            // Fetch inventory
+            StartCoroutine(BlueprintAPI.GetInventory(accessToken, inventoryResult => {
+                if (!inventoryResult.isSuccess()) {
+                    SetMessageError("Could not fetch inventory: " + inventoryResult.GetError());
+                    return;
+                }
+
+                // Delete inventory
+                StartCoroutine(BlueprintAPI.DeleteInventory(accessToken, deleteResult => {
+                    if (!deleteResult.isSuccess()) {
+                        SetMessageError("Could not remove inventory: " + deleteResult.GetError());
+                        return;
+                    }
+                    
+                    // Fetch schema
+                    StartCoroutine(BlueprintAPI.GetSchema(schemaResult => {
+                        if (!schemaResult.isSuccess()) {
+                            SetMessageError("Could not fetch schema: " + schemaResult.GetError());
+                            return;
+                        }
+
+                        GameManager.Instance()
+                            .ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess(), inventoryResult.GetSuccess().items);
+                        toLaunch = true;
+                    }));
+                }));
+            }));
+        }));
+    }
+
     public void OnLoginClick() {
         if (animating) return;
         SetMessageClear();
         string loginUsernameText = loginUsernameInput.text;
         string loginPasswordText = loginPasswordInput.text;
 
-        // Validate user input
+        // Validate username
         if (string.IsNullOrWhiteSpace(loginUsernameText) ||
             loginUsernameText.Length > maxUsernameLength) {
             SetMessageError("Invalid username\nMust be between 1 and 16 characters");
-            isMessageErrorStyle = true;
             return;
-        } else if (string.IsNullOrWhiteSpace(loginPasswordText))  {
+        } 
+        
+        // Validate password
+        if (string.IsNullOrWhiteSpace(loginPasswordText))  {
             SetMessageError("Please enter a non-empty password");
             return;
         }
-
-        UserCredentials userCredentials = new UserCredentials(loginUsernameText, loginPasswordText);
-        UserCredentials returnUser;
-
-        Task.Run( async () => {
-            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncAuthenticateUser(userCredentials);
-            SetMessageInfo("Loading . . .");
-
-            try {
-                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
-                returnUser = response.GetSuccess();
-                GameManager.Instance().SetUserCredentials(returnUser);
-                if (response.isSuccess()) {
-                    toLaunch = true;
-                } else {
-                    SetMessageError(response.GetError().error);
-                }
-            } catch (Exception e) {
-                SetMessageError(e.Message);
-                if (String.Equals(e.Message, "Password invalid"))
-                    SetMessageError("Incorrect password");
+        
+        loginLoginButton.gameObject.SetActive(false);
+        loginRegisterButton.gameObject.SetActive(false);
+        loginRegisterText.gameObject.SetActive(false);
+        StartCoroutine(BlueprintAPI.Login(loginUsernameText, loginPasswordText, result => {
+            if (result.isSuccess()) {
+                GameManager.Instance().SetAccessToken(result.GetSuccess());
+                PreloadGame();
+            } else {
+                SetMessageError(result.GetError());
+                loginLoginButton.gameObject.SetActive(true);
+                loginRegisterButton.gameObject.SetActive(true);
+                loginRegisterText.gameObject.SetActive(true);
             }
-        }).GetAwaiter().GetResult();
+        }));
     }
 
-    // API call from the register menu.
     public void OnRegisterClick() {
         if (animating) return;
         SetMessageClear();
         string registerUsernameText = registerUsernameInput.text;
         string registerPasswordText = registerPasswordInput.text;
 
-        // Validate user input
+        // Validate username
         if (string.IsNullOrWhiteSpace(registerUsernameText) ||
             registerUsernameText.Length > maxUsernameLength) {
             SetMessageError("Invalid username\nMust have between 1 and 16 characters");
             return;
-        } else if (string.IsNullOrWhiteSpace(registerPasswordText)) {
-            SetMessageError("Please enter a non-empty password");
+        } 
+        
+        if (string.IsNullOrWhiteSpace(registerPasswordText) || !new Regex(passwordRegex).IsMatch(registerPasswordText)) {
+            SetMessageError("Your password must be between 5 and 16 characters, with at least 1 number, 1 uppercase and 1 lowercase letter.");
             return;
         }
 
-        UserCredentials returnUser;
-
-        Task.Run(async () => {
-            Task<APIResult<UserCredentials, JsonError>> fetchingResponse = api.AsyncRegisterUser(registerUsernameText, registerPasswordText);
-            SetMessageInfo("Loading . . .");
-
-            try {
-                APIResult<UserCredentials, JsonError> response = await fetchingResponse;
-                returnUser = response.GetSuccess();
-                GameManager.Instance().SetUserCredentials(returnUser);
-                if (response.isSuccess()) {
-                    toLaunch = true;
-                } else {
-                    SetMessageError(response.GetError().error);
-                }
-            } catch (Exception e) {
-                SetMessageError(e.Message);
-                if (String.Equals(e.Message, "Password invalid"))
-                    SetMessageError("Password must contain between 5 and 24\ncharacters, have at least one upper and\nlower case letter, and at least one number");
+        registerRegisterButton.gameObject.SetActive(false);
+        registerBackButton.gameObject.SetActive(false);
+        registerLoginText.gameObject.SetActive(false);
+        StartCoroutine(BlueprintAPI.Register(registerUsernameText, registerPasswordText, result => {
+            if (result.isSuccess()) {
+                GameManager.Instance().SetAccessToken(result.GetSuccess());
+                PreloadGame();
+            } else {
+                SetMessageError(result.GetError());
+                registerRegisterButton.gameObject.SetActive(true);
+                registerBackButton.gameObject.SetActive(true);
+                registerLoginText.gameObject.SetActive(true);
             }
-        }).GetAwaiter().GetResult();
+        }));
     }
 
     // Splash screen is only accessible from the login menu.
@@ -260,8 +277,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         loginUsernameInput.Select();
     }
 
-    // Login menu is accessible from either the splash screen or the register
-    // menu.
+    // Login menu is accessible from either the splash screen or the register menu.
     public void ToLoginMenu() {
         if (animating) return;
         switch(visibleMenu) {
@@ -301,7 +317,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         obj.GetComponent<CanvasGroup>().interactable = false;
         triggerAnimating();
         animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Disappear, 0.3f, false, 0.0f, 0.0f);
-        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f, false);
+        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, -0.9f, 0.0f)), 0.4f);
     }
 
     // Make an object fade in and fly upwards.
@@ -310,7 +326,7 @@ public class MainMenu : MonoBehaviour, Subscriber<UIState> {
         obj.GetComponent<CanvasGroup>().interactable = true;
         triggerAnimating();
         animationManager.StartAppearanceAnimation(obj.gameObject, Anim.Appear, 0.3f, false, 0.0f, 0.2f);
-        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.9f, 0.0f)), 0.4f, false);
+        animationManager.StartMovementAnimation(obj.gameObject, Anim.MoveToDecelerate, sp.ToV(new Vector3(0.0f, 0.9f, 0.0f)), 0.4f);
     }
 
     private void triggerAnimating() {

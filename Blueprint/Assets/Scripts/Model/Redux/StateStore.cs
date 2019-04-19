@@ -16,7 +16,11 @@ namespace Model.Redux {
 
         public void Dispatch(A action) {
             this.state = reducer.Reduce(state, action);
-            subscribers.ForEach(x => x.StateDidUpdate(this.state));
+            // Create a copy of subscribers to avoid side effects of manipulating subscribers
+            // during any `StateDidUpdate` calls
+            foreach (Subscriber<S> subscriber in subscribers.ToArray()) {
+                subscriber.StateDidUpdate(state);
+            }
         }
 
         public void Subscribe(Subscriber<S> subscriber) {
@@ -35,7 +39,11 @@ namespace Model.Redux {
 
         public void SetState(S state) {
             this.state = state;
-            subscribers.ForEach(x => x.StateDidUpdate(this.state));
+            // Create a copy of subscribers to avoid side effects of manipulating subscribers
+            // during any `StateDidUpdate` calls
+            foreach (Subscriber<S> subscriber in subscribers.ToArray()) {
+                subscriber.StateDidUpdate(this.state);
+            }
         }
     }
 }
