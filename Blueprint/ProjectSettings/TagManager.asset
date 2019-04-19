@@ -17,6 +17,7 @@ TagManager:
   - MachineInventory
   - Machine
   - Bindings
+  - Gate
   layers:
   - Default
   - TransparentFX

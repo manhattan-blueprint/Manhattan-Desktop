@@ -21,6 +21,7 @@ namespace Controller {
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
         private Canvas bindingsCanvas;
+        private Canvas gateCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
 
@@ -33,11 +34,13 @@ namespace Controller {
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
+            gateCanvas = GameObject.FindGameObjectWithTag("Gate").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            gateCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
@@ -123,6 +126,10 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
+        private void OpenGate() {
+            gateCanvas.enabled = true;
+        }
+
         // Playing state
         private void ContinueGame() {
             Time.timeScale = 1;
@@ -132,6 +139,7 @@ namespace Controller {
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             bindingsCanvas.enabled = false;
+            gateCanvas.enabled = false;
             machineCanvas.enabled = false;
             machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
@@ -200,6 +208,9 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Bindings:
                     OpenBindings();
+                    break;
+                case UIState.OpenUI.Gate:
+                    OpenGate();
                     break;
                 case UIState.OpenUI.Machine:
                     OpenMachine();

@@ -21,6 +21,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Machine:
                 case UIState.OpenUI.Pause:
                 case UIState.OpenUI.Bindings:
+                case UIState.OpenUI.Gate:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.Logout:
@@ -85,6 +86,17 @@ namespace Model.Reducer {
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUI");
+            }
+        }
+
+        public void visit(OpenGateUI blueprint) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Gate;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenGateUI");
             }
         }
 
