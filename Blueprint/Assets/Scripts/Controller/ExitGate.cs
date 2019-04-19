@@ -5,6 +5,6 @@ using UnityEngine;
 public class ExitGate : MonoBehaviour
 {
   void OnTriggerEnter(Collider other) {
-          Debug.Log("Its a hit!");
+          Debug.Log("Show gate UI!");
        }
 }
