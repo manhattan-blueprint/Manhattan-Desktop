@@ -9,6 +9,7 @@ namespace Model {
         public Optional<InventoryItem> rightInput;
         public Optional<InventoryItem> fuel;
         public Optional<InventoryItem> output;
+        private bool hasElectricity;
 
         public Machine(int id) {
             this.id = id;
@@ -43,8 +44,7 @@ namespace Model {
           
             // If powered by electricity
             if (entry.fuel.Contains(new FuelElement(32))) {
-                // TODO: compute if connected
-                return true;
+                return hasElectricity;
             }
             
             // If powered by some other fuel
@@ -54,6 +54,10 @@ namespace Model {
             
             // Find any fuel in the schema that matches the fuel in the machine
             return entry.fuel.Find(x => x.item_id == fuel.Get().GetId()) != null;
+        }
+
+        public void SetHasElectricity(bool hasElectricity) {
+            this.hasElectricity = hasElectricity;
         }
     }
 }

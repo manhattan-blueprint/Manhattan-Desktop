@@ -24,6 +24,5 @@ namespace Model.State {
         public Dictionary<Vector2, MapObject> getObjects() {
             return grid;
         }
-
     }
 }
