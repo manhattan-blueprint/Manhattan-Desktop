@@ -8,16 +8,16 @@ using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MachineSlotController : InventorySlotController, IDropHandler {
+public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
     private MachineController MachineController = null;
 
-    public new void OnDrop(PointerEventData eventData) {
+    public new void OnDrop(GameObject droppedObject) {
         RectTransform invPanel = transform as RectTransform;
-        GameObject droppedObject = eventData.pointerDrag;
+        //GameObject droppedObject = eventData.pointerDrag;
         if (MachineController == null) loadMachineController();
 
-        InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>(); 
+        InventorySlotController source = droppedObject.GetComponent<InventorySlotController>(); 
         InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition) 
@@ -36,7 +36,7 @@ public class MachineSlotController : InventorySlotController, IDropHandler {
             }
 
             // If not from a machine, remove from inventory
-            if (droppedObject.transform.parent.GetComponent<MachineSlotController>() == null) {
+            if (droppedObject.GetComponent<MachineSlotController>() == null) {
                 if (source.storedItem.IsPresent()) {
                     GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(), 
                         source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));

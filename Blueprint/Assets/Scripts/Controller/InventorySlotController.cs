@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,6 +47,11 @@ namespace Controller {
             if (this is MachineSlotController) {
                 slotHeight += Screen.height/14;
                 slotWidth  += Screen.height/14;
+                
+                if (gameObject.name == "InputSlot0") id = Int32.MaxValue;
+                if (gameObject.name == "InputSlot1") id = Int32.MaxValue-1;
+                if (gameObject.name == "FuelSlot") id = Int32.MaxValue-2;
+                if (gameObject.name == "OutputSlot") id = Int32.MaxValue-3;
             }
                 
             GameObject newGO = new GameObject("Icon" + id);
