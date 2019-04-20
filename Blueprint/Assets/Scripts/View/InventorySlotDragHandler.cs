@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Controller;
 using Model;
 using Model.Action;
@@ -16,6 +18,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     private bool dragging = false;
     private bool splitting = false;
     private GraphicRaycaster raycaster;
+    private GraphicRaycaster secondaryCanvasRaycaster;
     private EventSystem eventSystem;
     private GameObject dragObject;
     private InventoryController inventoryController;
@@ -23,6 +26,14 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
 
     private void Start() {
         raycaster = GetComponentInParent<GraphicRaycaster>();
+
+        Transform parentCanvasObject = gameObject.transform.parent.parent; 
+        if (parentCanvasObject.name == "MachineInventoryCanvas") {
+            secondaryCanvasRaycaster = GameObject.Find("MachineCanvas").GetComponent<GraphicRaycaster>();
+        } else if (parentCanvasObject.name == "MachineCanvas") {
+            secondaryCanvasRaycaster = GameObject.Find("MachineInventoryCanvas").GetComponent<GraphicRaycaster>();
+        }
+
         eventSystem = GetComponent<EventSystem>();
         inventoryController = GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>();
         inventorySlotController = gameObject.transform.parent.GetComponent<InventorySlotController>();
@@ -43,6 +54,11 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 ped.position = Input.mousePosition;
                 List<RaycastResult> results = new List<RaycastResult>();
                 raycaster.Raycast(ped, results);
+                
+                // If no results, try secondary canvas
+                if (results.Count == 0) {
+                   secondaryCanvasRaycaster.Raycast(ped, results); 
+                } 
 
                 // Drop over slot?  
                 InventorySlotController isc = null;
@@ -54,7 +70,11 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
 
                 if (isc != null) {
                     if (!splitting) {
-                        isc.OnDrop(dragObject);
+                        if (isc is MachineSlotController) {
+                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject);
+                        } else {
+                            isc.OnDrop(dragObject);
+                        }
                     } else {
                         InventoryItem item = inventorySlotController.storedItem.Get();
                         GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), item.GetQuantity(), item.GetName(), isc.id));
@@ -78,7 +98,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
             }
 
             // Reset drag destination once object has been placed
-            if (inventorySlotController.id == inventoryController.DragDestination) {
+            if (mouseOver && inventorySlotController.id == inventoryController.DragDestination) {
                 inventoryController.DragDestination = -1;
             }
         }
