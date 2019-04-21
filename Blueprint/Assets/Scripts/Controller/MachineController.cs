@@ -80,9 +80,9 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         outputSlot.GetComponent<MachineSlotController>().SetStoredItem(item);
 
         // Make output slot image translucent
-        Color temp = outputSlot.GetComponentsInChildren<Image>()[1].color;
+        Color temp = outputSlot.GetComponentsInChildren<Image>()[2].color;
         temp.a = 0.5f;
-        outputSlot.GetComponentsInChildren<Image>()[1].color = temp;
+        outputSlot.GetComponentsInChildren<Image>()[2].color = temp;
     }
 
     private void refreshInputSlots(Optional<InventoryItem> left, Optional<InventoryItem> right, Optional<InventoryItem> fuel) {
