@@ -5,6 +5,7 @@ using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UI;
@@ -34,6 +35,14 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     public void StateDidUpdate(MachineState state) {
         if (!state.grid.ContainsKey(machineLocation)) {
             return;
+        }
+        
+        // If a machine uses electricity, hide the fuel slot
+        // 26 : Welder
+        // 29 : Circuit Printer
+        int id = state.grid[machineLocation].id;
+        if (id == 26 || id == 29) {
+            fuelSlot.SetActive(false);
         }
         
         Machine machine = state.grid[machineLocation];
