@@ -237,6 +237,11 @@ namespace Utils {
         private IEnumerator Appear(float time, float delay) {
             if (gameObject.GetComponent<CanvasGroup>() != null)
                 gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
+            if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                color.a = 0f;
+                gameObject.GetComponent<SpriteRenderer>().color = color;
+            }
 
             float speed = (framePeriod * 90.0f) / time;
 
@@ -250,6 +255,11 @@ namespace Utils {
 
                 if (gameObject.GetComponent<CanvasGroup>() != null)
                     gameObject.GetComponent<CanvasGroup>().alpha = alphaModifier;
+                if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                    Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
             }
             Destroy(this);
         }

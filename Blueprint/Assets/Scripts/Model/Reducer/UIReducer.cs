@@ -2,6 +2,7 @@ using System;
 using Model.Action;
 using Model.State;
 using UnityEngine;
+using Controller;
 
 namespace Model.Reducer {
     public class UIReducer : Reducer<UIState, UIAction>, UIVisitor {
@@ -132,6 +133,8 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Logout;
+                    GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+                    GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to Logout");

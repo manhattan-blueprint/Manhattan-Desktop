@@ -157,11 +157,16 @@ namespace Controller {
 
         private IEnumerator SpinDish() {
             float spinSpeed = 0.0f;
+            GameObject blackOverlay = GameObject.Find("GameoverOverlay");
+            ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
+            animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
 
             // Disable mouse and keyboard.
+            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
+            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
 
             // Create astronaut.
-            Vector3 astronoautPos = camera.transform.position - Camera.main.transform.forward;
+            Vector3 astronoautPos = camera.transform.position - Camera.main.transform.forward * 0.6f;
             astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
             GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
             astronaut.transform.LookAt(Vector3.zero);
@@ -176,10 +181,14 @@ namespace Controller {
                 dishHolder.transform.RotateAround(Vector3.zero, Vector3.up, spinSpeed);
 
                 // Make camera zoom out and spin.
-                camera.transform.position += new Vector3(0.0f, spinSpeed / 22.0f, 0.0f);
-                camera.transform.position -= Camera.main.transform.forward * spinSpeed / 22.0f;
+                camera.transform.position += new Vector3(0.0f, spinSpeed / 40.0f, 0.0f);
+                camera.transform.position -= Camera.main.transform.forward * spinSpeed / 30.0f;
                 camera.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-                camera.transform.RotateAround(Vector3.zero, Vector3.up, - spinSpeed / 6.0f);
+                camera.transform.RotateAround(Vector3.zero, Vector3.up, - spinSpeed / 5.0f);
+
+                // Make black overlay follow in front of camera
+                blackOverlay.transform.LookAt(camera.transform.position);
+                blackOverlay.transform.position = camera.transform.position + Camera.main.transform.forward;
             }
         }
     }
