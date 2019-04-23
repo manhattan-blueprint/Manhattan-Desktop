@@ -12,17 +12,8 @@ namespace Model.State {
             Machine,
             Goal,
             Pause,
-            InvPause,
-            BluePause,
-            MachPause,
             Exit,
-            InvExit,
-            BlueExit,
-            MachExit,
             Logout,
-            InvLogout,
-            BlueLogout,
-            MachLogout,
             Bindings,
         };
 

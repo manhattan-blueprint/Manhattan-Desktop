@@ -14,6 +14,7 @@ namespace Model.Action {
         void visit(ClearFuel clearFuel);
         void visit(SetInputs setInputs);
         void visit(SetAll setAll);
+        void visit(UpdateConnected updateConnected);
     }
 
     public abstract class MachineAction : Action {
@@ -171,6 +172,12 @@ namespace Model.Action {
             this.machineLocation = machineLocation;
         }
 
+        public override void Accept(MachineVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class UpdateConnected : MachineAction {
         public override void Accept(MachineVisitor visitor) {
             visitor.visit(this);
         }

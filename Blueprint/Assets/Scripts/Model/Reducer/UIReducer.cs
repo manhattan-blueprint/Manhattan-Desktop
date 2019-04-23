@@ -1,3 +1,4 @@
+using System;
 using Model.Action;
 using Model.State;
 
@@ -16,109 +17,87 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Inventory:
-                    state.Selected = UIState.OpenUI.Playing;
-                    break;
                 case UIState.OpenUI.Blueprint:
-                    state.Selected = UIState.OpenUI.Playing;
-                    break;
                 case UIState.OpenUI.Machine:
-                    state.Selected = UIState.OpenUI.Playing;
-                    break;
                 case UIState.OpenUI.Goal:
-                    state.Selected = UIState.OpenUI.Playing;
-                    break;
                 case UIState.OpenUI.Pause:
-                    state.Selected = UIState.OpenUI.Playing;
-                    break;
                 case UIState.OpenUI.Bindings:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
-                case UIState.OpenUI.InvPause:
-                    state.Selected = UIState.OpenUI.Inventory;
-                    break;
-                case UIState.OpenUI.BluePause:
-                    state.Selected = UIState.OpenUI.Blueprint;
-                    break;
-                case UIState.OpenUI.MachPause:
-                    state.Selected = UIState.OpenUI.Machine;
-                    break;
                 case UIState.OpenUI.Logout:
-                    state.Selected = UIState.OpenUI.Pause;
-                    break;
-                case UIState.OpenUI.InvLogout:
-                    state.Selected = UIState.OpenUI.InvPause;
-                    break;
-                case UIState.OpenUI.BlueLogout:
-                    state.Selected = UIState.OpenUI.BluePause;
-                    break;
-                case UIState.OpenUI.MachLogout:
-                    state.Selected = UIState.OpenUI.MachPause;
-                    break;
                 case UIState.OpenUI.Exit:
                     state.Selected = UIState.OpenUI.Pause;
                     break;
-                case UIState.OpenUI.InvExit:
-                    state.Selected = UIState.OpenUI.InvPause;
-                    break;
-                case UIState.OpenUI.BlueExit:
-                    state.Selected = UIState.OpenUI.BluePause;
-                    break;
-                case UIState.OpenUI.MachExit:
-                    state.Selected = UIState.OpenUI.MachPause;
-                    break;
                 default:
-                    break;
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to CloseUI");
             }
         }
 
         public void visit(OpenLoginUI login) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Welcome || current == UIState.OpenUI.Logout
-                || current == UIState.OpenUI.InvLogout || current == UIState.OpenUI.BlueLogout
-                || current == UIState.OpenUI.MachLogout) {
-                state.Selected = UIState.OpenUI.Login;
+            switch (current) {
+                case UIState.OpenUI.Welcome:
+                case UIState.OpenUI.Logout:
+                    state.Selected = UIState.OpenUI.Login;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenLoginUI");
             }
         }
 
         public void visit(OpenPlayingUI playing) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Login) {
-                state.Selected = UIState.OpenUI.Playing;
+            switch (current) {
+                case UIState.OpenUI.Login:
+                    state.Selected = UIState.OpenUI.Playing;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenPlayingUI");
             }
         }
 
         public void visit(OpenInventoryUI inventory) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Playing) {
-                state.Selected = UIState.OpenUI.Inventory;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Inventory;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenInventoryUI");
             }
         }
 
         public void visit(OpenBlueprintUI blueprint) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Playing) {
-                state.Selected = UIState.OpenUI.Blueprint;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Blueprint;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBlueprintUI");
             }
         }
 
         public void visit(OpenBindingsUI blueprint) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Playing) {
-                state.Selected = UIState.OpenUI.Bindings;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Bindings;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUI");
             }
         }
 
         public void visit(OpenMachineUI machine) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Playing) {
-                state.Selected = UIState.OpenUI.Machine;
-                state.SelectedMachineLocation = machine.machinePosition;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Machine;
+                    state.SelectedMachineLocation = machine.machinePosition;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMachineUI");
             }
         }
 
@@ -131,45 +110,15 @@ namespace Model.Reducer {
         }
 
         public void visit(OpenSettingsUI settings) {
-            // Update if exists or add new
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
-                    state.Selected = UIState.OpenUI.Pause;
-                    break;
-                case UIState.OpenUI.Inventory:
-                    state.Selected = UIState.OpenUI.InvPause;
-                    break;
-                case UIState.OpenUI.Blueprint:
-                    state.Selected = UIState.OpenUI.BluePause;
-                    break;
-                case UIState.OpenUI.Machine:
-                    state.Selected = UIState.OpenUI.MachPause;
-                    break;
                 case UIState.OpenUI.Exit:
-                    state.Selected = UIState.OpenUI.Pause;
-                    break;
-                case UIState.OpenUI.InvExit:
-                    state.Selected = UIState.OpenUI.InvPause;
-                    break;
-                case UIState.OpenUI.BlueExit:
-                    state.Selected = UIState.OpenUI.BluePause;
-                    break;
-                case UIState.OpenUI.MachExit:
-                    state.Selected = UIState.OpenUI.MachPause;
-                    break;
                 case UIState.OpenUI.Logout:
                     state.Selected = UIState.OpenUI.Pause;
                     break;
-                case UIState.OpenUI.InvLogout:
-                    state.Selected = UIState.OpenUI.InvPause;
-                    break;
-                case UIState.OpenUI.BlueLogout:
-                    state.Selected = UIState.OpenUI.BluePause;
-                    break;
-                case UIState.OpenUI.MachLogout:
-                    state.Selected = UIState.OpenUI.MachPause;
-                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenSettingsUI");
             }
         }
 
@@ -179,15 +128,8 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Logout;
                     break;
-                case UIState.OpenUI.InvPause:
-                    state.Selected = UIState.OpenUI.InvLogout;
-                    break;
-                case UIState.OpenUI.BluePause:
-                    state.Selected = UIState.OpenUI.BlueLogout;
-                    break;
-                case UIState.OpenUI.MachPause:
-                    state.Selected = UIState.OpenUI.MachLogout;
-                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to Logout");
             }
         }
 
@@ -197,15 +139,8 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Exit;
                     break;
-                case UIState.OpenUI.InvPause:
-                    state.Selected = UIState.OpenUI.InvExit;
-                    break;
-                case UIState.OpenUI.BluePause:
-                    state.Selected = UIState.OpenUI.BlueExit;
-                    break;
-                case UIState.OpenUI.MachPause:
-                    state.Selected = UIState.OpenUI.MachExit;
-                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to Exit");
             }
         }
     }

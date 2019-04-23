@@ -17,6 +17,7 @@ namespace Model.Reducer {
         public void visit(PlaceItem placeItem) {
             if (!state.getObjects().ContainsKey(placeItem.position)) {
                 state.addObject(placeItem.position, placeItem.itemID);
+                GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
             }
         }
 
@@ -28,6 +29,7 @@ namespace Model.Reducer {
                 
                 state.removeObject(collectItem.position);
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
+                GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
             }
         }
     }
