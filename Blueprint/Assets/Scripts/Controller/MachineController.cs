@@ -11,13 +11,19 @@ using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscriber<UIState> {
-    // TODO: avoid making this public
     public Vector2 machineLocation;
     private GameObject machineInventoryCanvas;
     private GameObject outputSlot;
     private GameObject fuelSlot;
     private GameObject inputSlot0;
     private GameObject inputSlot1;
+    
+    private Image fuelIcon;
+    private bool isElectrical = false;
+    private Sprite unpoweredElectrical;
+    private Sprite poweredElectrical;
+    private Sprite unpoweredFuel;
+    private Sprite poweredFuel;
     
     void Start() {
         machineInventoryCanvas = GameObject.Find("MachineInventoryCanvas");
@@ -27,6 +33,12 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         fuelSlot = GameObject.Find("FuelSlot");
         inputSlot0 = GameObject.Find("InputSlot0");
         inputSlot1 = GameObject.Find("InputSlot1");
+        fuelIcon = GameObject.Find("FuelIcon").GetComponent<Image>();
+        
+        unpoweredElectrical = Resources.Load("lightning-bolt", typeof(Sprite)) as Sprite;
+        poweredElectrical = Resources.Load("lightning-bolt-powered", typeof(Sprite)) as Sprite;
+        unpoweredFuel = Resources.Load("fuel-unpowered", typeof(Sprite)) as Sprite;
+        poweredFuel = Resources.Load("fuel-powered", typeof(Sprite)) as Sprite;
         
         GameManager.Instance().uiStore.Subscribe(this);
         GameManager.Instance().machineStore.Subscribe(this);
@@ -37,12 +49,16 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
             return;
         }
         
-        // If a machine uses electricity, hide the fuel slot
+        // Is the machine powered by electricity? 
         // 26 : Welder
         // 29 : Circuit Printer
         int id = state.grid[machineLocation].id;
         if (id == 26 || id == 29) {
+            isElectrical = true;
             fuelSlot.SetActive(false);
+        } else {
+            isElectrical = false;
+            fuelSlot.SetActive(true);
         }
         
         Machine machine = state.grid[machineLocation];
@@ -51,7 +67,19 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         
         // Check the fuel is present otherwise don't bother checking what we can make
         if (!machine.HasFuel()) {
+            if (isElectrical) {
+                fuelIcon.sprite = unpoweredElectrical; 
+            } else {
+                fuelIcon.sprite = unpoweredFuel;
+            }
+            
             return;
+        } else {
+            if (isElectrical) {
+                fuelIcon.sprite = poweredElectrical; 
+            } else {
+                fuelIcon.sprite = poweredFuel;
+            }
         }
 
         // Check if anything can be made
@@ -99,12 +127,4 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         inputSlot1.GetComponent<InventorySlotController>().SetStoredItem(right);
         fuelSlot.GetComponent<InventorySlotController>().SetStoredItem(fuel);
     }
-    
-    // TODO
-    // Increase quantity / split stacks?
-    // Inv -> Machine : RemoveFromInv ] - This should be called from MachineSlotController
-    // Machine -> Inv : AddToInventoryPosition 
-    // On drag result : change opacity to 1, 'consume' inv inputs
-    // Machine destruction w/ items, AddToInv
-    // MachineInputSlotController & MachineOutputSlotController
 }
