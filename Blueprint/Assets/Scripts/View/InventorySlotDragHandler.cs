@@ -71,13 +71,19 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 if (isc != null) {
                     if (!splitting) {
                         if (isc is MachineSlotController) {
-                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject);
+                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, false);
                         } else {
                             isc.OnDrop(dragObject);
                         }
                     } else {
                         InventoryItem item = inventorySlotController.storedItem.Get();
-                        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), item.GetQuantity(), item.GetName(), isc.id));
+                        
+                        if (isc is MachineSlotController) {
+                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, true);
+                        } else {
+                            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), item.GetQuantity(), item.GetName(), isc.id));
+                        }
+
                     }
                     
                     inventoryController.DragDestination = isc.id;

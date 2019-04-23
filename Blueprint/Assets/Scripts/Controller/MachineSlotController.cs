@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Model;
@@ -12,7 +13,7 @@ public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
     private MachineController MachineController = null;
 
-    public new void OnDrop(GameObject droppedObject) {
+    public new void OnDrop(GameObject droppedObject, bool splitting) {
         RectTransform invPanel = transform as RectTransform;
         //GameObject droppedObject = eventData.pointerDrag;
         if (MachineController == null) loadMachineController();
@@ -42,8 +43,10 @@ public class MachineSlotController : InventorySlotController {
                         source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));
                 }
                 
-                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(
+                if (!splitting) {
+                    GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(
                     destination.storedItem.Get().GetId(), destination.storedItem.Get().GetQuantity(), source.id));
+                }
             }
 
             // Add to correct element of machine
