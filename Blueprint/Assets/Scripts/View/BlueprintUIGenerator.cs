@@ -62,6 +62,19 @@ public class BlueprintUIGenerator : MonoBehaviour {
         addPrimaryCell("silicaOre", 9, (float) primaryCellWidth * 2, primaryCellHeight * -3);
         addPrimaryCell("quartz", 10, (float) (primaryCellWidth * 3.5), primaryCellHeight * -3);
         
+        addBlueprintCell("furnace", primaryCellWidth * 7, 0);
+        addBlueprintCell("machineBase", primaryCellWidth * 11, (float) (primaryCellHeight * 2.5));
+        addBlueprintCell("fibreglass", primaryCellWidth * 11, (float) (primaryCellHeight * -2.5));
+        addBlueprintCell("wireDrawer", primaryCellWidth * 15, (float) (primaryCellHeight * 2.5));
+        addBlueprintCell("solarPanel", primaryCellWidth * 15, (float) (primaryCellHeight * -2.5));
+        addBlueprintCell("copperCoil", primaryCellWidth * 19, (float) (primaryCellHeight * 2.5));
+        addBlueprintCell("insulatedWire", primaryCellWidth * 19, (float) (primaryCellHeight * -2.5));
+        addBlueprintCell("welder", primaryCellWidth * 23, (float) (primaryCellHeight * 2.5));
+        addBlueprintCell("motor", primaryCellWidth * 23, 0);
+        addBlueprintCell("circuitPrinter", primaryCellWidth * 23, (float) (primaryCellHeight * -2.5));
+        addBlueprintCell("satelliteDish", primaryCellWidth * 27, (float) (primaryCellHeight * 2.5));
+        addBlueprintCell("transmitterReceiver", primaryCellWidth * 27, (float) (primaryCellHeight * -2.5));
+
         // Attach content to scroll rect
         scrollSR.content = contentContainer.GetComponent<RectTransform>();
     }
@@ -88,6 +101,18 @@ public class BlueprintUIGenerator : MonoBehaviour {
         spriteRT.localPosition = new Vector2(0, 0);
         sprite.AddComponent(typeof(Image));
         sprite.GetComponent<Image>().sprite = AssetManager.Instance().GetItemSprite(id);
+    }
+
+    private void addBlueprintCell(string name, float xPos, float yPos) {
+        GameObject cell = new GameObject(name + "Cell");
+        cell.transform.SetParent(contentContainer.transform);
+        cell.AddComponent(typeof(RectTransform));
+        RectTransform cellRT = cell.GetComponent<RectTransform>();
+        cellRT.pivot = new Vector2(0.5f, 0.5f);
+        cellRT.sizeDelta = new Vector2(primaryCellWidth * 2, primaryCellHeight * 2);
+        cellRT.localPosition = new Vector2(xPos, yPos);
+        cell.AddComponent(typeof(SVGImage));
+        cell.GetComponent<SVGImage>().sprite = AssetManager.Instance().blueprintUICellDark;
     }
     
 }
