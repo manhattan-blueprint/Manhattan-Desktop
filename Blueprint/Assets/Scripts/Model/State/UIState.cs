@@ -15,6 +15,7 @@ namespace Model.State {
             Logout,
             Bindings,
             Gate,
+            Mouse,
         };
 
         public OpenUI Selected;
