@@ -212,7 +212,6 @@ namespace Utils {
 
                 gameObject.transform.localScale = size * originalSize;
             }
-            Destroy(this);
         }
 
         private IEnumerator Grow(float time, float targetSize, float delay) {
@@ -247,6 +246,11 @@ namespace Utils {
                 color.a = 0f;
                 gameObject.GetComponent<TextMesh>().color = color;
             }
+            if (gameObject.GetComponent<SVGImage>() != null) {
+                Color color = gameObject.GetComponent<SVGImage>().color;
+                color.a = 0f;
+                gameObject.GetComponent<SVGImage>().color = color;
+            }
 
             float speed = (framePeriod * 90.0f) / time;
 
@@ -270,6 +274,11 @@ namespace Utils {
                     color.a = alphaModifier;
                     gameObject.GetComponent<TextMesh>().color = color;
                 }
+                if (gameObject.GetComponent<SVGImage>() != null) {
+                    Color color = gameObject.GetComponent<SVGImage>().color;
+                    color.a = 0f;
+                    gameObject.GetComponent<SVGImage>().color = color;
+                }
             }
             Destroy(this);
         }
@@ -287,6 +296,16 @@ namespace Utils {
 
                 if (gameObject.GetComponent<CanvasGroup>() != null)
                     gameObject.GetComponent<CanvasGroup>().alpha = alphaModifier;
+                if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                    Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<TextMesh>() != null) {
+                    Color color = gameObject.GetComponent<TextMesh>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMesh>().color = color;
+                }
             }
             Destroy(this);
         }

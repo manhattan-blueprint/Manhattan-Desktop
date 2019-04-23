@@ -157,16 +157,23 @@ namespace Controller {
             float spinSpeed = 0.0f;
             ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
 
-            // Close held item UI.
-            GameObject.FindGameObjectWithTag("Held").GetComponent<Canvas>().enabled = false;
-
             // Make black overlay appear.
             GameObject blackOverlay = GameObject.Find("GameoverOverlay");
             animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
             GameObject signalSent = GameObject.Find("SignalSent");
             animationManager.StartAppearanceAnimation(signalSent, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
+            animationManager.StartAppearanceAnimation(signalSent, Anim.Disappear, 3.0f, true, 0.0f, 30.0f);
             GameObject willRespond = GameObject.Find("WillRespond");
             animationManager.StartAppearanceAnimation(willRespond, Anim.Appear, 3.0f, true, 0.0f, 20.0f);
+            animationManager.StartAppearanceAnimation(willRespond, Anim.Disappear, 3.0f, true, 0.0f, 30.0f);
+
+            GameObject names = GameObject.Find("Names");
+            animationManager.StartAppearanceAnimation(names, Anim.Appear, 3.0f, true, 0.0f, 34.0f);
+            animationManager.StartAppearanceAnimation(names, Anim.Disappear, 3.0f, true, 0.0f, 47.0f);
+
+            GameObject blueprintText = GameObject.Find("GameoverBlueprintText");
+            animationManager.StartAppearanceAnimation(blueprintText, Anim.Grow, 3.0f, false, 1.0f, 53.0f);
+            blueprintText.transform.localScale = Vector3.zero;
 
             // Disable mouse and keyboard.
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
@@ -179,6 +186,10 @@ namespace Controller {
             astronaut.transform.LookAt(Vector3.zero);
 
             while (true) {
+                // Make sure held item UI is closed.
+                GameObject.FindGameObjectWithTag("Held").GetComponent<Canvas>().enabled = false;
+                GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>().enabled = false;
+
                 if (spinSpeed < 6.0f)
                     spinSpeed += 0.005f;
 
@@ -200,6 +211,10 @@ namespace Controller {
                 signalSent.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
                 willRespond.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
                 willRespond.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
+                names.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
+                names.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
+                blueprintText.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
+                blueprintText.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
             }
         }
     }
