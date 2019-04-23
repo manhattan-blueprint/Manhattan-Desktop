@@ -232,14 +232,15 @@ namespace Model.Reducer {
                             !GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(removeHeldItem.dropAt)) {
                         visit(new RemoveItemFromStackInventory(itemID, 1, index));
                         
-                        // Place item on map
-                        GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, itemID));
-                       
-                        // If is blueprint, also add to machine
+                        // If is blueprint, add to machine _before_ the map state, to correctly trigger update
+                        // of connected status
                         SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
                         if (entry.type == SchemaItem.ItemType.BlueprintCraftedMachine) {
                             GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
                         }
+                        
+                        // Place item on map
+                        GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, itemID));
                         return;
                     } 
                 }

@@ -56,6 +56,8 @@ public class GameManager {
             inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity,
                 sm.GameObjs.items[entry.item_id - 1].name));
         }
+        // Update which machines are connected when loading from save state
+        machineStore.Dispatch(new UpdateConnected());
     }
 
     public void ResetGame() {
