@@ -22,7 +22,7 @@ namespace Model.State {
         public Vector2 SelectedMachineLocation;
 
         public UIState() {
-            this.Selected = OpenUI.Playing;
+            this.Selected = OpenUI.Login;
         }
     }
 }
