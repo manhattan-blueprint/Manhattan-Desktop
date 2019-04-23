@@ -26,7 +26,7 @@ namespace Controller {
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
         private Image cursor;
-        private Image rmb;
+        private SVGImage rmb;
         private const int rightButton = 1;
 
         void Start() {
@@ -42,7 +42,7 @@ namespace Controller {
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
             cursor = GameObject.Find("Cursor Image").GetComponent<Image>();
-            rmb = GameObject.Find("RMB Image").GetComponent<Image>();
+            rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
 
             // TO DO FIND MOUSE ICON AND SWITCH IT WITH CURSOR
 

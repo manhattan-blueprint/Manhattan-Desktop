@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f0221ce30b1a97640b5c6752b14dc61d
+guid: 216eda3d1f29d4dd08a3b8db1e9c946a
 ScriptedImporter:
   fileIDToRecycleName:
-    100002: gameObject/RMB
-    400002: gameObject/RMB/Transform
-    21200002: gameObject/RMB/SpriteRenderer
+    100000: gameObject/mouse-right-new
+    400000: gameObject/mouse-right-new/Transform
+    21200000: gameObject/mouse-right-new/SpriteRenderer
     21300000: sprite
     100100000: gameObject
   externalObjects: {}
@@ -51,5 +51,5 @@ ScriptedImporter:
         y: 0
         width: 0
         height: 0
-      spriteID: 3654a86e32c057d68bf1dbef8b0c6c94
+      spriteID: c46386a1ae5f30ba0b78abf47a94457a
     PhysicsOutlines: []
