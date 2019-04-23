@@ -14,6 +14,8 @@ namespace Controller {
     public class GoalUIController : MonoBehaviour, Subscriber<MapState> {
         private Boolean visible;
         private GameObject dish;
+        private GameObject dishHolder;
+        private GameObject bigDish;
         private GameObject antenna1;
         private GameObject antenna2;
         private GameObject antenna3;
@@ -23,7 +25,9 @@ namespace Controller {
         private GameObject dishHolder1;
         private GameObject dishHolder2;
         private GameObject dishHolder3;
+        private GameObject camera;
         private bool transmitterPlaced;
+        private Goal goal;
 
         void Start() {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
@@ -33,7 +37,10 @@ namespace Controller {
             SetAlpha("MidItem", 0.2f);
             SetAlpha("BotItem", 0.2f);
 
-            dish        = GameObject.Find("BigDish");
+            camera      = GameObject.Find("PlayerCamera");
+            dish        = GameObject.Find("Dish");
+            dishHolder  = GameObject.Find("DishHolder");
+            bigDish     = GameObject.Find("BigDish");
             dishHolder1 = GameObject.Find("DishHolder1");
             dishHolder2 = GameObject.Find("DishHolder2");
             dishHolder3 = GameObject.Find("DishHolder3");
@@ -56,7 +63,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Goal goal = state.getGoal();
+            goal = state.getGoal();
             if (goal.topInput == true) {
                 SetAlpha("TopSlot/TopItem", 1.0f);
                 ActivateDish();
@@ -71,14 +78,22 @@ namespace Controller {
             }
 
             // Start completion animation of all done.
-            if (goal.IsComplete()) {
-                // TODO: Insert animation.
-                Debug.Log("GAME COMPLETE");
-            }
+            if (goal.IsComplete())
+                StartWinAnimation();
+        }
+
+        public bool CheckPlaced(GoalPosition position) {
+            if (position == GoalPosition.Top)
+                return goal.topInput;
+            if (position == GoalPosition.Mid)
+                return goal.midInput;
+            if (position == GoalPosition.Bot)
+                return goal.botInput;
+            return false;
         }
 
         public void HideDish() {
-            dish.GetComponent<MeshRenderer>().enabled        = false;
+            bigDish.GetComponent<MeshRenderer>().enabled        = false;
             dishHolder1.GetComponent<MeshRenderer>().enabled = false;
             dishHolder2.GetComponent<MeshRenderer>().enabled = false;
             dishHolder3.GetComponent<MeshRenderer>().enabled = false;
@@ -98,8 +113,7 @@ namespace Controller {
         }
 
         public void ActivateDish() {
-            Debug.Log("Activating dish; placeholder for animation");
-            dish.GetComponent<MeshRenderer>().enabled        = true;
+            bigDish.GetComponent<MeshRenderer>().enabled        = true;
             dishHolder1.GetComponent<MeshRenderer>().enabled = true;
             dishHolder2.GetComponent<MeshRenderer>().enabled = true;
             dishHolder3.GetComponent<MeshRenderer>().enabled = true;
@@ -107,17 +121,16 @@ namespace Controller {
         }
 
         public void ActivateAntenna() {
-            Debug.Log("Activating antenna; placeholder for animation");
             antenna1.GetComponent<MeshRenderer>().enabled = true;
             antenna2.GetComponent<MeshRenderer>().enabled = true;
             antenna3.GetComponent<MeshRenderer>().enabled = true;
             antenna4.GetComponent<MeshRenderer>().enabled = true;
             antenna5.GetComponent<MeshRenderer>().enabled = true;
             antenna6.GetComponent<MeshRenderer>().enabled = true;
+            SetSlotActive("BotSlot");
         }
 
         public void ActivateTransmitter() {
-            Debug.Log("Activating transmitter; placeholder for animation");
             transmitterPlaced = true;
         }
 
@@ -133,6 +146,41 @@ namespace Controller {
             Image image = GameObject.Find(name).GetComponent<Image>();
             // White give sprite default appearance.
             image.color = Color.white;
+        }
+
+        private void StartWinAnimation() {
+            Debug.Log("GAME COMPLETE. CONGRATULATIONS. ASK WILL FOR CAKE.");
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+            IEnumerator timedCoroutine = SpinDish();
+            StartCoroutine(timedCoroutine);
+        }
+
+        private IEnumerator SpinDish() {
+            float spinSpeed = 0.0f;
+
+            // Disable mouse and keyboard.
+
+            // Create astronaut.
+            Vector3 astronoautPos = camera.transform.position - Camera.main.transform.forward;
+            astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
+            GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
+            astronaut.transform.LookAt(Vector3.zero);
+
+            while (true) {
+                if (spinSpeed < 6.0f)
+                    spinSpeed += 0.005f;
+
+                // Make dish spin.
+                yield return new WaitForSeconds(1.0f / 60.0f);
+                dish.transform.RotateAround(Vector3.zero, Vector3.up, spinSpeed);
+                dishHolder.transform.RotateAround(Vector3.zero, Vector3.up, spinSpeed);
+
+                // Make camera zoom out and spin.
+                camera.transform.position += new Vector3(0.0f, spinSpeed / 22.0f, 0.0f);
+                camera.transform.position -= Camera.main.transform.forward * spinSpeed / 22.0f;
+                camera.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
+                camera.transform.RotateAround(Vector3.zero, Vector3.up, - spinSpeed / 6.0f);
+            }
         }
     }
 }

@@ -34,14 +34,22 @@ public class GoalSlotController : InventorySlotController, IDropHandler {
             // inventory.
             if (slotType == GoalSlotType.TopSlot && source.storedItem.Get().GetId() != 28)
                 return;
-            if (slotType == GoalSlotType.MidSlot && source.storedItem.Get().GetId() != 31)
-                return;
-            if (slotType == GoalSlotType.BotSlot && source.storedItem.Get().GetId() != 30)
-                return;
+            if (slotType == GoalSlotType.MidSlot) {
+                if (source.storedItem.Get().GetId() != 31)
+                    return;
+                if (!goalUIController.CheckPlaced(GoalPosition.Top))
+                    return;
+            }
+            if (slotType == GoalSlotType.BotSlot) {
+                if (source.storedItem.Get().GetId() != 30)
+                    return;
+                if (!goalUIController.CheckPlaced(GoalPosition.Mid))
+                    return;
+            }
 
             // Only move the item if there is not already one in the goal slot.
             if (!destination.storedItem.IsPresent()) {
-                destination.SetStoredItem(source.storedItem);
+                destination.storedItem = source.storedItem;
                 source.SetStoredItem(Optional<InventoryItem>.Empty());
             }
             else {

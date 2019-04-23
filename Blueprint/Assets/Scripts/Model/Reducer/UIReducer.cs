@@ -16,7 +16,6 @@ namespace Model.Reducer {
 
         public void visit(CloseUI closeUI) {
             UIState.OpenUI current = state.Selected;
-            Debug.Log("Closing UI on state " + current);
             switch (current) {
                 case UIState.OpenUI.Inventory:
                 case UIState.OpenUI.Blueprint:
@@ -108,7 +107,6 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
-                    Debug.Log("Opening goal UI");
                     state.Selected = UIState.OpenUI.Goal;
                     break;
                 default:

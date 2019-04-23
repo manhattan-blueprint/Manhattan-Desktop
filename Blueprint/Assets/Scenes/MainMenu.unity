@@ -443,7 +443,7 @@ MonoBehaviour:
   loginLoginButton: {fileID: 755326906}
   loginRegisterButton: {fileID: 273723707}
   loginRegisterText: {fileID: 2101636557}
-  registerMenu: {fileID: 2101636555}
+  registerMenu: {fileID: 1038742241}
   registerUsernameInput: {fileID: 1839443631}
   registerPasswordInput: {fileID: 1356241362}
   registerRegisterButton: {fileID: 1320491340}
