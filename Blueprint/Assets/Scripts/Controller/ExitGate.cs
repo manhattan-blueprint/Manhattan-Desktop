@@ -6,13 +6,11 @@ using Model.Action;
 using Model.Redux;
 using Model.State;
 
-public class ExitGate : MonoBehaviour
-{
+public class ExitGate : MonoBehaviour {
   void OnTriggerEnter(Collider other) {
           GameManager.Instance().uiStore.Dispatch(new OpenMouseUI());
-       }
+  }
   void OnTriggerExit(Collider other) {
        GameManager.Instance().uiStore.Dispatch(new CloseUI());
-    }
-
+  }
 }
