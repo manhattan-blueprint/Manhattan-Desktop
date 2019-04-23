@@ -25,7 +25,6 @@ namespace Controller {
         private GameObject dishHolder1;
         private GameObject dishHolder2;
         private GameObject dishHolder3;
-        private GameObject camera;
         private bool transmitterPlaced;
         private Goal goal;
 
@@ -37,7 +36,6 @@ namespace Controller {
             SetAlpha("MidItem", 0.2f);
             SetAlpha("BotItem", 0.2f);
 
-            camera      = GameObject.Find("PlayerCamera");
             dish        = GameObject.Find("Dish");
             dishHolder  = GameObject.Find("DishHolder");
             bigDish     = GameObject.Find("BigDish");
@@ -157,16 +155,25 @@ namespace Controller {
 
         private IEnumerator SpinDish() {
             float spinSpeed = 0.0f;
-            GameObject blackOverlay = GameObject.Find("GameoverOverlay");
             ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
+
+            // Close held item UI.
+            GameObject.FindGameObjectWithTag("Held").GetComponent<Canvas>().enabled = false;
+
+            // Make black overlay appear.
+            GameObject blackOverlay = GameObject.Find("GameoverOverlay");
             animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
+            GameObject signalSent = GameObject.Find("SignalSent");
+            animationManager.StartAppearanceAnimation(signalSent, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
+            GameObject willRespond = GameObject.Find("WillRespond");
+            animationManager.StartAppearanceAnimation(willRespond, Anim.Appear, 3.0f, true, 0.0f, 20.0f);
 
             // Disable mouse and keyboard.
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
             GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
 
             // Create astronaut.
-            Vector3 astronoautPos = camera.transform.position - Camera.main.transform.forward * 0.6f;
+            Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
             astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
             GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
             astronaut.transform.LookAt(Vector3.zero);
@@ -181,14 +188,18 @@ namespace Controller {
                 dishHolder.transform.RotateAround(Vector3.zero, Vector3.up, spinSpeed);
 
                 // Make camera zoom out and spin.
-                camera.transform.position += new Vector3(0.0f, spinSpeed / 40.0f, 0.0f);
-                camera.transform.position -= Camera.main.transform.forward * spinSpeed / 30.0f;
-                camera.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-                camera.transform.RotateAround(Vector3.zero, Vector3.up, - spinSpeed / 5.0f);
+                Camera.main.transform.position += new Vector3(0.0f, spinSpeed / 40.0f, 0.0f);
+                Camera.main.transform.position -= Camera.main.transform.forward * spinSpeed / 30.0f;
+                Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
+                Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, - spinSpeed / 5.0f);
 
-                // Make black overlay follow in front of camera
-                blackOverlay.transform.LookAt(camera.transform.position);
-                blackOverlay.transform.position = camera.transform.position + Camera.main.transform.forward;
+                // Make Gameover overlay etc follow in front of camera
+                blackOverlay.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+                blackOverlay.transform.LookAt(Camera.main.transform.position);
+                signalSent.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
+                signalSent.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
+                willRespond.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
+                willRespond.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
             }
         }
     }

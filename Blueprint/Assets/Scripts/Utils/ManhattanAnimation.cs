@@ -242,6 +242,11 @@ namespace Utils {
                 color.a = 0f;
                 gameObject.GetComponent<SpriteRenderer>().color = color;
             }
+            if (gameObject.GetComponent<TextMesh>() != null) {
+                Color color = gameObject.GetComponent<TextMesh>().color;
+                color.a = 0f;
+                gameObject.GetComponent<TextMesh>().color = color;
+            }
 
             float speed = (framePeriod * 90.0f) / time;
 
@@ -259,6 +264,11 @@ namespace Utils {
                     Color color = gameObject.GetComponent<SpriteRenderer>().color;
                     color.a = alphaModifier;
                     gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<TextMesh>() != null) {
+                    Color color = gameObject.GetComponent<TextMesh>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMesh>().color = color;
                 }
             }
             Destroy(this);
