@@ -15,13 +15,14 @@ namespace Model {
         public readonly Sprite borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
         public readonly Sprite outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
 
-        public readonly Sprite blueprintUIBackground =
-            Resources.Load("UI/blueprint-ui-background", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUIBackground = Resources.Load("UI/blueprint-ui-background", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintUICellPrimary = Resources.Load("UI/blueprint-ui-cell-primary", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintUICellPrimaryHighlight = Resources.Load("UI/blueprint-ui-cell-primary-hl", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintUICellDark = Resources.Load("UI/blueprint-ui-cell-dark", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintUICellDarkHighlight = Resources.Load("UI/blueprint-ui-cell-dark-hl", typeof(Sprite)) as Sprite;
 
+        public readonly Sprite outlineFurnace = Resources.Load("UI/outlines/furnace", typeof(Sprite)) as Sprite;
+        
         private AssetManager() { }
 
         public static AssetManager Instance() {
@@ -52,6 +53,18 @@ namespace Model {
             // Load default if object sprite doesn't exist
             if (sprite == null) {
                 sprite = Resources.Load(baseLocation + "sprite_default", typeof(Sprite)) as Sprite;
+            }
+
+            return sprite;
+        }
+
+        public Sprite GetBlueprintOutline(int id) {
+            String baseLocation = "UI/outlines/";
+            Sprite sprite = Resources.Load(baseLocation + "outline_" + id, typeof(Sprite)) as Sprite;
+            
+            // Load default if object sprite doesn't exist
+            if (sprite == null) {
+                sprite = Resources.Load("Models/2D/sprite_default", typeof(Sprite)) as Sprite;
             }
 
             return sprite;
