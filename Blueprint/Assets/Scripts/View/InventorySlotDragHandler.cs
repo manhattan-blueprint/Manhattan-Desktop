@@ -105,12 +105,12 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
 
         // SPLIT
         // When right mouse button is down
-        if (Input.GetMouseButtonDown(1) && mouseOver) {
-            InventoryItem item = inventorySlotController.storedItem.Get();
-            int newQuantity = (int) item.GetQuantity() / 2;
+        InventoryItem currentItem = inventorySlotController.storedItem.Get();
+        if (Input.GetMouseButtonDown(1) && mouseOver && currentItem.GetQuantity() > 1) {
+            int newQuantity = (int) currentItem.GetQuantity() / 2;
             
             // Remove drag quantity from source hex
-            GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(item.GetId(), newQuantity, inventorySlotController.id));
+            GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(currentItem.GetId(), newQuantity, inventorySlotController.id));
 
             beginSplit();
         }
