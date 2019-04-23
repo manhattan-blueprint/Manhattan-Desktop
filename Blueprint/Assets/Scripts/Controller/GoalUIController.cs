@@ -56,7 +56,6 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Debug.Log("Map state updated!");
             Goal goal = state.getGoal();
             if (goal.topInput == true) {
                 SetAlpha("TopSlot/TopItem", 1.0f);

@@ -59,7 +59,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || goalCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
@@ -147,6 +147,7 @@ namespace Controller {
             blueprintCanvas.enabled = false;
             bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
+            goalCanvas.enabled = false;
             machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
@@ -219,7 +220,6 @@ namespace Controller {
                     OpenMachine();
                     break;
                 case UIState.OpenUI.Goal:
-                    multiCanvas = false;
                     OpenGoal();
                     break;
                 case UIState.OpenUI.Pause:

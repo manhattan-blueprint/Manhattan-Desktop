@@ -1,6 +1,7 @@
 using System;
 using Model.Action;
 using Model.State;
+using UnityEngine;
 
 namespace Model.Reducer {
     public class UIReducer : Reducer<UIState, UIAction>, UIVisitor {
@@ -15,6 +16,7 @@ namespace Model.Reducer {
 
         public void visit(CloseUI closeUI) {
             UIState.OpenUI current = state.Selected;
+            Debug.Log("Closing UI on state " + current);
             switch (current) {
                 case UIState.OpenUI.Inventory:
                 case UIState.OpenUI.Blueprint:
@@ -104,8 +106,13 @@ namespace Model.Reducer {
         public void visit(OpenGoalUI goal) {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
-            if (current == UIState.OpenUI.Playing) {
-                state.Selected = UIState.OpenUI.Goal;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    Debug.Log("Opening goal UI");
+                    state.Selected = UIState.OpenUI.Goal;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMachineUI");
             }
         }
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -443,7 +443,7 @@ MonoBehaviour:
   loginLoginButton: {fileID: 755326906}
   loginRegisterButton: {fileID: 273723707}
   loginRegisterText: {fileID: 2101636557}
-  registerMenu: {fileID: 1038742241}
+  registerMenu: {fileID: 2101636555}
   registerUsernameInput: {fileID: 1839443631}
   registerPasswordInput: {fileID: 1356241362}
   registerRegisterButton: {fileID: 1320491340}

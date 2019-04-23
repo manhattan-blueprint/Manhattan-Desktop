@@ -82,10 +82,6 @@ namespace Model.Reducer {
             }
 
             Machine machine = state.grid[setInputs.machineLocation];
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
             machine.leftInput = setInputs.left;
             machine.rightInput = setInputs.right;
         }
@@ -96,10 +92,6 @@ namespace Model.Reducer {
             }
 
             Machine machine = state.grid[setAll.machineLocation];
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
             machine.leftInput =  setAll.left;
             machine.rightInput = setAll.right;
             machine.fuel = setAll.fuel;
@@ -111,13 +103,6 @@ namespace Model.Reducer {
             }
 
             Machine machine = state.grid[setFuel.machineLocation];
-<<<<<<< HEAD
-            if (machine.fuel.IsPresent()) {
-                // TODO: Do something with the current value? Add to inventory?
-            }
-
-=======
->>>>>>> develop
             machine.fuel = setFuel.item;
         }
 
