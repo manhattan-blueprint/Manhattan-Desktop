@@ -188,7 +188,6 @@ namespace Controller {
         }
 
         public void OnDrop(GameObject droppedObject) {
-            Debug.Log("isc OnDrop");
             RectTransform invPanel = transform as RectTransform;
             //GameObject droppedObject = eventData.pointerDrag;
 
