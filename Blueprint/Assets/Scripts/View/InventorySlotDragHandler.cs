@@ -24,6 +24,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     private InventoryController inventoryController;
     private InventoryController machineInventoryController;
     private InventorySlotController inventorySlotController;
+    private int newQuantity;
 
     private void Start() {
         raycaster = GetComponentInParent<GraphicRaycaster>();
@@ -52,7 +53,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         // When left mouse button is down
         if (Input.GetMouseButtonDown(0)) {
             // End drag behaviour
-            if (dragging && !mouseOver) {
+            if (dragging) {
                 // Raycast to determine new slot
                 PointerEventData ped = new PointerEventData(eventSystem);
                 ped.position = Input.mousePosition;
@@ -74,18 +75,38 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
 
                 if (isc != null) {
                     if (!splitting) {
+                        // Dragging
                         if (isc is MachineSlotController) {
                             isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, false);
                         } else {
                             isc.OnDrop(dragObject);
                         }
                     } else {
+                        // Splitting 
                         InventoryItem item = inventorySlotController.storedItem.Get();
                         
                         if (isc is MachineSlotController) {
+                            // Into machine
                             isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, true);
                         } else {
-                            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), item.GetQuantity(), item.GetName(), isc.id));
+                            // Into inventory slot
+                            if (isc.storedItem.IsPresent()) {
+                                InventoryItem originalItem = inventorySlotController.storedItem.Get();
+                                
+                                // Into occupied slot...
+                                if (isc.storedItem.Get().GetId() == inventorySlotController.storedItem.Get().GetId()) {
+                                    // ... of the same type 
+                                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
+                                    newQuantity, originalItem.GetName(), isc.id));
+                                } else {
+                                    // ... of a different type
+                                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
+                                    newQuantity, originalItem.GetName(), inventorySlotController.id));
+                                }
+                            } else {
+                                // Into unoccupied slot
+                                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), newQuantity, item.GetName(), isc.id));
+                            }
                         }
                     }
                     
@@ -116,10 +137,11 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         // When right mouse button is down
         InventoryItem currentItem = inventorySlotController.storedItem.Get();
         if (Input.GetMouseButtonDown(1) && mouseOver && currentItem.GetQuantity() > 1) {
-            int newQuantity = (int) currentItem.GetQuantity() / 2;
+            newQuantity = (int) currentItem.GetQuantity() / 2;
             
             // Remove drag quantity from source hex
-            GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(currentItem.GetId(), newQuantity, inventorySlotController.id));
+            GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(currentItem.GetId(), 
+            newQuantity, inventorySlotController.id));
 
             beginSplit();
         }

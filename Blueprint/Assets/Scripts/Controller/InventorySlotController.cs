@@ -152,6 +152,7 @@ namespace Controller {
                 image.enabled = false;
                 text.enabled = false;
             } else {
+                image.sprite = null;
                 image.sprite = assetManager.GetItemSprite(item.Get().GetId());
                 text.text = item.Get().GetQuantity().ToString();
 

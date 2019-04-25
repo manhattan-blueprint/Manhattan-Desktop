@@ -47,7 +47,10 @@ namespace Controller {
 
 
             // Put down held item
-            if (Input.GetMouseButtonDown(rightButton) && GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Machine) {
+            if (Input.GetMouseButtonDown(rightButton) && 
+                GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Machine && 
+                GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Inventory) {
+                
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
                 if (!Physics.Raycast(ray, out hit)) return;
