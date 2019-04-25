@@ -23,6 +23,9 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Bindings:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
+                case UIState.OpenUI.BlueprintTemplate:
+                    state.Selected = UIState.OpenUI.Blueprint;
+                    break;
                 case UIState.OpenUI.Logout:
                 case UIState.OpenUI.Exit:
                     state.Selected = UIState.OpenUI.Pause;
@@ -70,6 +73,7 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
+                case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
                     break;
                 default:
@@ -77,7 +81,18 @@ namespace Model.Reducer {
             }
         }
 
-        public void visit(OpenBindingsUI blueprint) {
+        public void visit(OpenBlueprintTemplateUI blueprintTemplate) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Blueprint:
+                    state.Selected = UIState.OpenUI.BlueprintTemplate;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBlueprintTemplateUI");
+            }
+        }
+
+        public void visit(OpenBindingsUI bindings) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:

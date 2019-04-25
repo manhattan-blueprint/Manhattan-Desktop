@@ -17,6 +17,7 @@ TagManager:
   - MachineInventory
   - Machine
   - Bindings
+  - BlueprintTemplate
   layers:
   - Default
   - TransparentFX

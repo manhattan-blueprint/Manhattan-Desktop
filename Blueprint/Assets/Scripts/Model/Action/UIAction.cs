@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace Model.Action {
@@ -7,6 +8,7 @@ namespace Model.Action {
         void visit(OpenPlayingUI playing);
         void visit(OpenInventoryUI inventory);
         void visit(OpenBlueprintUI blueprint);
+        void visit(OpenBlueprintTemplateUI blueprintTemplate);
         void visit(OpenBindingsUI bindings);
         void visit(OpenMachineUI machine);
         void visit(OpenSettingsUI settings);
@@ -44,6 +46,12 @@ namespace Model.Action {
     }
 
     public class OpenBlueprintUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenBlueprintTemplateUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

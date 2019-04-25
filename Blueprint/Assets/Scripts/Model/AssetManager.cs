@@ -21,6 +21,9 @@ namespace Model {
         public readonly Sprite blueprintUICellDark = Resources.Load("UI/blueprint-ui-cell-dark", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintUICellDarkHighlight = Resources.Load("UI/blueprint-ui-cell-dark-hl", typeof(Sprite)) as Sprite;
 
+        public readonly Sprite blueprintTemplateBackground =
+            Resources.Load("UI/blueprint-template-background", typeof(Sprite)) as Sprite;
+
         public readonly Sprite outlineFurnace = Resources.Load("UI/outlines/furnace", typeof(Sprite)) as Sprite;
         
         private AssetManager() { }

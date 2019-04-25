@@ -9,6 +9,7 @@ namespace Model.State {
             Playing,
             Inventory,
             Blueprint,
+            BlueprintTemplate,
             Machine,
             Pause,
             Exit,

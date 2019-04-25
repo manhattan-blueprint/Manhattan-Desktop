@@ -20,6 +20,7 @@ namespace Controller {
         private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
+        private Canvas blueprintTemplateCanvas;
         private Canvas bindingsCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
@@ -32,12 +33,14 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            blueprintTemplateCanvas = GameObject.FindGameObjectWithTag("BlueprintTemplate").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            blueprintTemplateCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
@@ -56,7 +59,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
@@ -64,7 +67,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
-                if (!blueprintCanvas.enabled) {
+                if (!blueprintCanvas.enabled && !blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
@@ -95,11 +98,17 @@ namespace Controller {
         private void OpenBlueprint() {
             Time.timeScale = 0;
             blueprintCanvas.enabled = true;
+            blueprintTemplateCanvas.enabled = false;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
+        }
+
+        private void OpenBlueprintTemplate() {
+            blueprintTemplateCanvas.enabled = true;
+            blueprintCanvas.enabled = false;
         }
 
         private void OpenMachine() {
@@ -197,6 +206,9 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Blueprint:
                     OpenBlueprint();
+                    break;
+                case UIState.OpenUI.BlueprintTemplate:
+                    OpenBlueprintTemplate();
                     break;
                 case UIState.OpenUI.Bindings:
                     OpenBindings();
