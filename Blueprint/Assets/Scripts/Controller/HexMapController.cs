@@ -6,7 +6,6 @@ using Model;
 using Model.Redux;
 using Model.State;
 using Quaternion = UnityEngine.Quaternion;
-using Random = System.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
