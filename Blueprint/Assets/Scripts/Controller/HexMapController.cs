@@ -11,7 +11,7 @@ using Vector3 = UnityEngine.Vector3;
 
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
-    public class HexMapController : MonoBehaviour, Subscriber<MapState> {
+    public class HexMapController : MonoBehaviour, Subscriber<MapState>, Subscriber<MachineState> {
         [SerializeField] private Material wireMaterial;
         private int gridSize = 18;
         private float previousX = 0;
@@ -28,6 +28,7 @@ namespace Controller {
             drawMap();
             
             GameManager.Instance().mapStore.Subscribe(this);
+            GameManager.Instance().machineStore.Subscribe(this);
         }
         
         private void drawMap() {
@@ -165,17 +166,39 @@ namespace Controller {
             wires.ForEach(Destroy);
             wires.Clear();
             foreach (WirePath path in state.GetWirePaths()) {
-                Vector3 startReal = grid[path.start].transform.position;
-                Vector3 endReal = grid[path.end].transform.position;
+                // Convert grid coordinate to real world coordinates
+                Vector3 startWorld = grid[path.start].transform.position;
+                Vector3 endWorld = grid[path.end].transform.position;
                 
                 GameObject lineObject = new GameObject("Line");
                 LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
                 lineRenderer.widthMultiplier = 0.1f;
                 lineRenderer.positionCount = 2;
-                lineRenderer.SetPosition(0, new Vector3(startReal.x, 0.1f, startReal.z));
-                lineRenderer.SetPosition(1, new Vector3(endReal.x, 0.1f, endReal.z));
+                lineRenderer.SetPosition(0, new Vector3(startWorld.x, 0.1f, startWorld.z));
+                lineRenderer.SetPosition(1, new Vector3(endWorld.x, 0.1f, endWorld.z));
                 lineRenderer.material = wireMaterial;
                 wires.Add(lineObject);
+            }
+
+        }
+
+        public void StateDidUpdate(MachineState state) {
+            foreach (KeyValuePair<Vector2, Machine> kvp in GameManager.Instance().machineStore.GetState().grid) {
+                if (!objectsPlaced.ContainsKey(kvp.Key)) continue;
+                
+                Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
+                foreach (Light light in lights) {
+                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
+                }
+
+                ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();
+                foreach (ParticleSystem system in particleSystems) {
+                    if (kvp.Value.HasFuel()) {
+                        system.Play();
+                    } else {
+                        system.Pause();
+                    }
+                }
             }
         }
     }
