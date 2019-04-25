@@ -7,6 +7,7 @@ using Model.Redux;
 using Model.State;
 using Service;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
@@ -21,8 +22,12 @@ namespace Controller {
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
         private Canvas bindingsCanvas;
+        private Canvas gateCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
+        private Image cursor;
+        private SVGImage rmb;
+        private const int rightButton = 1;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -33,17 +38,23 @@ namespace Controller {
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
+            gateCanvas = GameObject.FindGameObjectWithTag("Gate").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
+            cursor = GameObject.Find("Cursor Image").GetComponent<Image>();
+            rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
+
+            // TO DO FIND MOUSE ICON AND SWITCH IT WITH CURSOR
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            gateCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
             bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
-
+            rmb.enabled = false;
 
             GameManager.Instance().uiStore.Subscribe(this);
         }
@@ -56,7 +67,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || gateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
@@ -73,7 +84,11 @@ namespace Controller {
                 if (!bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
                 }
-            }
+            } else if (Input.GetMouseButtonDown(rightButton)) {
+                if (rmb.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
+                }
+              }
 
             if (Input.GetKeyUp(KeyMapping.Bindings)) {
                 if (bindingsCanvas.enabled) {
@@ -123,6 +138,10 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
+        private void OpenGate() {
+            gateCanvas.enabled = true;
+        }
+
         // Playing state
         private void ContinueGame() {
             Time.timeScale = 1;
@@ -132,10 +151,13 @@ namespace Controller {
             pauseCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             bindingsCanvas.enabled = false;
+            gateCanvas.enabled = false;
             machineCanvas.enabled = false;
             machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
+            rmb.enabled = false;
+            cursor.enabled = true;
         }
 
         // Logout button from the pause menu
@@ -176,6 +198,12 @@ namespace Controller {
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
+        private void EnableMouse() {
+            gateCanvas.enabled = false;
+            cursor.enabled = false;
+            rmb.enabled = true;
+        }
+
         private void PauseGame() {
             Time.timeScale = 0;
             pauseCanvas.enabled = true;
@@ -200,6 +228,12 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Bindings:
                     OpenBindings();
+                    break;
+                case UIState.OpenUI.Gate:
+                    OpenGate();
+                    break;
+                case UIState.OpenUI.Mouse:
+                    EnableMouse();
                     break;
                 case UIState.OpenUI.Machine:
                     OpenMachine();

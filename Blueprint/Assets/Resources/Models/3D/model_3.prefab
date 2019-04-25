@@ -1,17 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &1991550249741222866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7180380388497972960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8cbd08b630b4e3495e511454c347f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &4557460504583256071
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -26,6 +14,32 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 0d31439402fb646df852f44c046d83e7, type: 3}
+--- !u!114 &1991550249741222866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180380388497972960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8cbd08b630b4e3495e511454c347f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2759309755498212565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180380388497972960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1586682f879ab461c8343cc0742dd03c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 1, g: 0, b: 0, a: 0}
+  model: 1
 --- !u!1001 &7180380388498069570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83,15 +97,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0d31439402fb646df852f44c046d83e7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0d31439402fb646df852f44c046d83e7, type: 3}
       propertyPath: m_LocalScale.y
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0d31439402fb646df852f44c046d83e7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d31439402fb646df852f44c046d83e7, type: 3}

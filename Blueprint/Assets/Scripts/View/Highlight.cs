@@ -6,10 +6,10 @@ using Model.Action;
 namespace View {
     public class Highlight : MonoBehaviour, Subscriber<UIState>{
         [SerializeField] private Color highlightColor;
-        [SerializeField] private bool holdable;
         private Color initialColor;
         private Renderer rend;
         private bool paused;
+        [SerializeField] private bool model;
 
         void Start () {
             rend = GetComponent<Renderer>();
@@ -24,6 +24,12 @@ namespace View {
 
         void OnMouseEnter() {
             if (!paused) {
+              if (model) {
+                Debug.Log("Hello");
+                foreach (var component in GetComponents<Component>()) {
+                  Debug.Log(component.GetType());
+                }
+              }
               rend.material.color = highlightColor;
             }
         }
