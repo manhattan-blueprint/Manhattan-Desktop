@@ -179,10 +179,15 @@ namespace Controller {
                 lineRenderer.material = wireMaterial;
                 wires.Add(lineObject);
             }
-
+            
+            updateMachineLights();
         }
 
         public void StateDidUpdate(MachineState state) {
+            updateMachineLights();
+        }
+
+        private void updateMachineLights() {
             foreach (KeyValuePair<Vector2, Machine> kvp in GameManager.Instance().machineStore.GetState().grid) {
                 if (!objectsPlaced.ContainsKey(kvp.Key)) continue;
                 
