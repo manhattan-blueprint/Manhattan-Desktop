@@ -90,12 +90,4 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         inputSlot1.GetComponent<InventorySlotController>().SetStoredItem(right);
         fuelSlot.GetComponent<InventorySlotController>().SetStoredItem(fuel);
     }
-    
-    // TODO
-    // Increase quantity / split stacks?
-    // Inv -> Machine : RemoveFromInv ] - This should be called from MachineSlotController
-    // Machine -> Inv : AddToInventoryPosition 
-    // On drag result : change opacity to 1, 'consume' inv inputs
-    // Machine destruction w/ items, AddToInv
-    // MachineInputSlotController & MachineOutputSlotController
 }
