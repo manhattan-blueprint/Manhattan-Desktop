@@ -50,11 +50,6 @@ namespace Model.Reducer {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
             }
 
-            if (machine.output.IsPresent()) {
-                InventoryItem item = machine.output.Get();
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
-            }
-
             state.grid.Remove(removeMachine.machineLocation);
             visit(new UpdateConnected());
         }
