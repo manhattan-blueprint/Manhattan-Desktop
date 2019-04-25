@@ -13,6 +13,8 @@ using Debug = UnityEngine.Debug;
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
     public class MenuController : MonoBehaviour, Subscriber<UIState> {
+        public bool gameOver;
+        public bool gameOverExitable;
         private Canvas inventoryCanvas;
         private Canvas heldCanvas;
         private Canvas cursorCanvas;
@@ -47,11 +49,24 @@ namespace Controller {
             machineCanvas.enabled = false;
             goalCanvas.enabled = false;
 
+            gameOver = false;
+            gameOverExitable = false;
 
             GameManager.Instance().uiStore.Subscribe(this);
         }
 
         void Update() {
+            if (gameOver) {
+                if (gameOverExitable) {
+                    if (Input.GetKeyDown(KeyMapping.Pause)) {
+                        GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
+                        gameOver = false;
+                        gameOverExitable = false;
+                    }
+                }
+                return;
+            }
+
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
@@ -83,7 +98,22 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
-         }
+        }
+
+        public void GameOver() {
+            gameOver = true;
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+            heldCanvas.enabled = false;
+            cursorCanvas.enabled = false;
+            pauseCanvas.enabled = false;
+            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
+            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
+            Invoke("GameOverMakeExitable", 40.0f);
+        }
+
+        private void GameOverMakeExitable() {
+            gameOverExitable = true;
+        }
 
         private void OpenInventory() {
             Time.timeScale = 0;

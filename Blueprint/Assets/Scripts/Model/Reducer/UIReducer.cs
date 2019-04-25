@@ -38,6 +38,7 @@ namespace Model.Reducer {
         public void visit(OpenLoginUI login) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
+                case UIState.OpenUI.Playing:
                 case UIState.OpenUI.Welcome:
                 case UIState.OpenUI.Logout:
                     state.Selected = UIState.OpenUI.Login;

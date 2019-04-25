@@ -12,7 +12,6 @@ using Model.State;
 
 namespace Controller {
     public class GoalUIController : MonoBehaviour, Subscriber<MapState> {
-        private Boolean visible;
         private GameObject dish;
         private GameObject dishHolder;
         private GameObject bigDish;
@@ -74,10 +73,6 @@ namespace Controller {
                 SetAlpha("BotSlot/BotItem", 1.0f);
                 ActivateTransmitter();
             }
-
-            // Start completion animation of all done.
-            if (goal.IsComplete())
-                StartWinAnimation();
         }
 
         public bool CheckPlaced(GoalPosition position) {
@@ -146,18 +141,17 @@ namespace Controller {
             image.color = Color.white;
         }
 
-        private void StartWinAnimation() {
+        public void StartWinAnimation() {
             Debug.Log("GAME COMPLETE. CONGRATULATIONS. ASK WILL FOR CAKE.");
-            GameManager.Instance().uiStore.Dispatch(new CloseUI());
             IEnumerator timedCoroutine = SpinDish();
             StartCoroutine(timedCoroutine);
         }
 
         private IEnumerator SpinDish() {
             float spinSpeed = 0.0f;
+
             ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
 
-            // Make black overlay appear.
             GameObject blackOverlay = GameObject.Find("GameoverOverlay");
             animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
             GameObject signalSent = GameObject.Find("SignalSent");
@@ -175,10 +169,6 @@ namespace Controller {
             animationManager.StartAppearanceAnimation(blueprintText, Anim.Grow, 3.0f, false, 1.0f, 53.0f);
             blueprintText.transform.localScale = Vector3.zero;
 
-            // Disable mouse and keyboard.
-            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
-            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
-
             // Create astronaut.
             Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
             astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
@@ -186,10 +176,6 @@ namespace Controller {
             astronaut.transform.LookAt(Vector3.zero);
 
             while (true) {
-                // Make sure held item UI is closed.
-                GameObject.FindGameObjectWithTag("Held").GetComponent<Canvas>().enabled = false;
-                GameObject.FindGameObjectWithTag("Cursor").GetComponent<Canvas>().enabled = false;
-
                 if (spinSpeed < 6.0f)
                     spinSpeed += 0.005f;
 

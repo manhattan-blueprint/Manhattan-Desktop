@@ -77,6 +77,11 @@ public class GoalSlotController : InventorySlotController, IDropHandler {
                 GameManager.Instance().mapStore.Dispatch(new UpdateGoal(GoalPosition.Bot));
             }
 
+            if (GameManager.Instance().mapStore.GetState().getGoal().IsComplete()) {
+                GameObject.Find("MenuController").GetComponent<MenuController>().GameOver();
+                goalUIController.StartWinAnimation();
+            }
+
         } else {
             droppedObject.transform.parent.GetComponentInChildren<Text>().text =
                 source.storedItem.Get().GetQuantity().ToString();
