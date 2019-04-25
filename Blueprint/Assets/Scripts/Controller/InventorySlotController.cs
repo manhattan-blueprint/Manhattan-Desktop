@@ -20,8 +20,8 @@ namespace Controller {
         private bool mouseOver;
         public Optional<InventoryItem> storedItem;
         private GameObject highlightObject;
-        public float slotHeight;
-        public float slotWidth;
+        private float slotHeight;
+        private float slotWidth;
         public float originalSlotHeight;
         private GameManager gameManager;
         private AssetManager assetManager;
@@ -29,6 +29,7 @@ namespace Controller {
         private GameObject rolloverObject;
         private Vector3 rolloverPosition;
         private bool rolloverState;
+        private Text rolloverObjectText;
 
         // EDITABLE
         // Time before rollover text shows (secs)
@@ -75,6 +76,7 @@ namespace Controller {
             // Initialise rollover object
             rolloverObject.GetComponentInChildren<Text>().font = assetManager.FontHelveticaNeueBold;
             rolloverObject.GetComponentInChildren<Text>().alignment = TextAnchor.MiddleCenter;
+            rolloverObjectText = rolloverObject.GetComponentInChildren<Text>();
         }
 
         public void OnPointerEnter(PointerEventData pointerEventData) {
@@ -114,12 +116,11 @@ namespace Controller {
 
         private void setRolloverLocation(float x, float y, string inputText) {
             rolloverObject.transform.position = new Vector2(x, y);
-            Text text = rolloverObject.GetComponentInChildren<Text>();
-            text.text = inputText;
+            rolloverObjectText.text = inputText;
 
             // Set box to width of word
             RectTransform rect = rolloverObject.transform as RectTransform;
-            rect.sizeDelta = new Vector2(text.preferredWidth + slotWidth/8, slotHeight/5);
+            rect.sizeDelta = new Vector2(rolloverObjectText.preferredWidth + slotWidth/8, slotHeight/5);
         }
 
         private void setHighlightLocation(float x, float y) {

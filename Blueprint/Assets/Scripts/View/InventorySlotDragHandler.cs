@@ -22,6 +22,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     private EventSystem eventSystem;
     private GameObject dragObject;
     private InventoryController inventoryController;
+    private InventoryController machineInventoryController;
     private InventorySlotController inventorySlotController;
 
     private void Start() {
@@ -34,22 +35,22 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
             secondaryCanvasRaycaster = GameObject.Find("MachineInventoryCanvas").GetComponent<GraphicRaycaster>();
         }
 
+        // Retrieve components
         eventSystem = GetComponent<EventSystem>();
         inventoryController = GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>();
+        machineInventoryController = GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>();
         inventorySlotController = gameObject.transform.parent.GetComponent<InventorySlotController>();
-
-        if (inventorySlotController.id == 0) inventoryController.DragDestination = -1;
-        
         foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
         foregroundImage = foregroundObject.GetComponent<Image>();
+
+        // Reset DragDestination
+        if (inventorySlotController.id == 0) inventoryController.DragDestination = -1;
     }
 
     private void Update() {
-        
         // DRAG
         // When left mouse button is down
         if (Input.GetMouseButtonDown(0)) {
-            
             // End drag behaviour
             if (dragging && !mouseOver) {
                 // Raycast to determine new slot
@@ -86,7 +87,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                         } else {
                             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.GetId(), item.GetQuantity(), item.GetName(), isc.id));
                         }
-
                     }
                     
                     inventoryController.DragDestination = isc.id;
@@ -125,7 +125,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         }
 
         // Icon follows mouse when left mouse button not down
-        //if (dragging && !mouseOver) {
         if (dragging) {
             foregroundObject.transform.position = Input.mousePosition;
         }
@@ -160,8 +159,9 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         
         transform.localPosition = new Vector3(0, 0, 0);
         foregroundImage.enabled = false;
-        GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>().RedrawInventory();
-        GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>().RedrawInventory();
+        
+        inventoryController.RedrawInventory();
+        machineInventoryController.RedrawInventory();
     }
 
     private void beginSplit() {
@@ -188,13 +188,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     
     private void endSplit() {
         splitting = false;
-        dragging = false;
-        inventoryController.DraggingInvItem = false;
-        
-        transform.localPosition = new Vector3(0, 0, 0);
-        foregroundImage.enabled = false;
-        GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>().RedrawInventory();
-        GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>().RedrawInventory();
+        endDrag();
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData) {
