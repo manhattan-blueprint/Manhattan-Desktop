@@ -12,7 +12,7 @@ using Vector3 = UnityEngine.Vector3;
 
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
-    public class HexMapController : MonoBehaviour, Subscriber<MapState>, Subscriber<MachineState> {
+    public class HexMapController : MonoBehaviour, Subscriber<MapState> {
         [SerializeField] private Material wireMaterial;
         private int gridSize = 18;
         private float previousX = 0;
@@ -29,8 +29,8 @@ namespace Controller {
             drawMap();
             
             GameManager.Instance().mapStore.Subscribe(this);
-            GameManager.Instance().machineStore.Subscribe(this);
         }
+        
         private void drawMap() {
             GameObject hexTile = Resources.Load("hex_cell") as GameObject;
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
@@ -123,7 +123,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Dictionary<Vector2, MapObject> newObjects = state.getObjects();
+            Dictionary<Vector2, MapObject> newObjects = state.GetObjects();
             Dictionary<Vector2, MapObject>.KeyCollection newKeys = newObjects.Keys;
             Dictionary<Vector2, GameObject>.KeyCollection oldKeys = objectsPlaced.Keys;
 	
@@ -162,37 +162,23 @@ namespace Controller {
                 Destroy(objectsPlaced[oldObject]);
                 objectsPlaced.Remove(oldObject);
             }
-        }
-
-        public void StateDidUpdate(MachineState state) {
-            Debug.Log("State did update with " + state.electricityPaths.Count + "sets of paths");
+            
+            // Draw wires
             wires.ForEach(Destroy);
             wires.Clear();
-            foreach (List<Vector2> pathList in state.electricityPaths) {
-
-                for (int i = 0; i < pathList.Count - 1; i++) {
-                    Vector2 start = pathList[i];
-                    Vector2 end = pathList[i + 1];
-                    GameObject startParent = grid[start];
-                    GameObject endParent = grid[end];
-                    Vector3 startReal = startParent.transform.position;
-                    Vector3 endReal = endParent.transform.position;
-                    Debug.Log(startReal);
-                    Debug.Log(endReal);
-                    
-                    GameObject lineObject = new GameObject("Line-" + i);
-                    LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
-                    lineRenderer.widthMultiplier = 0.1f;
-                    lineRenderer.positionCount = 2;
-                    lineRenderer.SetPosition(0, new Vector3(startReal.x, 0.1f, startReal.z));
-                    lineRenderer.SetPosition(1, new Vector3(endReal.x, 0.1f, endReal.z));
-                    lineRenderer.material = wireMaterial;
-                    wires.Add(lineObject);
-                }
-                            
-                            
+            foreach (WirePath path in state.GetWirePaths()) {
+                Vector3 startReal = grid[path.start].transform.position;
+                Vector3 endReal = grid[path.end].transform.position;
+                
+                GameObject lineObject = new GameObject("Line");
+                LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
+                lineRenderer.widthMultiplier = 0.1f;
+                lineRenderer.positionCount = 2;
+                lineRenderer.SetPosition(0, new Vector3(startReal.x, 0.1f, startReal.z));
+                lineRenderer.SetPosition(1, new Vector3(endReal.x, 0.1f, endReal.z));
+                lineRenderer.material = wireMaterial;
+                wires.Add(lineObject);
             }
-
         }
     }
 }

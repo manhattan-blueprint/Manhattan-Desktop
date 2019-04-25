@@ -11,11 +11,9 @@ namespace Model.Reducer {
     public class MachineReducer: Reducer<MachineState, MachineAction>, MachineVisitor {
         private MachineState state;
         private HashSet<Vector2> consideredConnected;
-        private List<Vector2> electricityPath;
         
         public MachineState Reduce(MachineState current, MachineAction action) {
             this.consideredConnected = new HashSet<Vector2>();
-            this.electricityPath = new List<Vector2>();
             this.state = current; 
             action.Accept(this);
             return this.state;
@@ -58,6 +56,7 @@ namespace Model.Reducer {
             }
 
             state.grid.Remove(removeMachine.machineLocation);
+            visit(new UpdateConnected());
         }
 
         public void visit(SetLeftInput setLeftInput) {
@@ -153,18 +152,13 @@ namespace Model.Reducer {
         }
 
         public void visit(UpdateConnected updateConnected) {
-            this.state.electricityPaths = new List<List<Vector2>>();
             foreach (KeyValuePair<Vector2, Machine> keyValuePair in state.grid) {
                 // Clear considered and path for every machine
                 this.consideredConnected = new HashSet<Vector2>();
-                this.electricityPath = new List<Vector2>();
                 SchemaItem item = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == keyValuePair.Value.id);
                 // If contains electricity
                 if (item.fuel.Contains(new FuelElement(32))) {
-                    bool isConnected = this.isConnected(keyValuePair.Key);
-                    state.grid[keyValuePair.Key].SetHasElectricity(isConnected);
-                    
-                    if (isConnected) state.electricityPaths.Add(electricityPath);
+                    state.grid[keyValuePair.Key].SetHasElectricity(isConnected(keyValuePair.Key));
                 }
             }
         }
@@ -172,25 +166,22 @@ namespace Model.Reducer {
 
         private bool isConnected(Vector2 location) {
             consideredConnected.Add(location);
-            electricityPath.Add(location);
             bool connected = false;
             foreach (Vector2 neighbour in location.HexNeighbours()) {
                 // If we've already done it, don't bother doing again (avoids cycles)
                 if (consideredConnected.Contains(neighbour)) continue;
                 consideredConnected.Add(neighbour);
                 
-                if (!GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(neighbour)) continue;
-                int neighbourID = GameManager.Instance().mapStore.GetState().getObjects()[neighbour].GetID();
+                if (!GameManager.Instance().mapStore.GetState().GetObjects().ContainsKey(neighbour)) continue;
+                int neighbourID = GameManager.Instance().mapStore.GetState().GetObjects()[neighbour].GetID();
 
                 // If is a solar panel
                 if (neighbourID == 25) {
-                    electricityPath.Add(neighbour);
                     return true;
                 } 
                 
                 // If is a wire 
                 if (neighbourID == 22) {
-                    electricityPath.Add(neighbour);
                     connected = connected || isConnected(neighbour);
                 }
             }
