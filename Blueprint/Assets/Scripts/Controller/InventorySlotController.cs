@@ -188,6 +188,7 @@ namespace Controller {
         }
 
         public void OnDrop(GameObject droppedObject) {
+            Debug.Log("isc OnDrop");
             RectTransform invPanel = transform as RectTransform;
             //GameObject droppedObject = eventData.pointerDrag;
 
@@ -236,10 +237,15 @@ namespace Controller {
                         gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
                         gameManager.machineStore.Dispatch(new ClearLeftInput(machineController.machineLocation));
                     } else {
-                        gameManager.machineStore.Dispatch(new SetLeftInput(machineController.machineLocation, source.storedItem.Get()));
-                        gameManager.inventoryStore.Dispatch(new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), 
-                            source.storedItem.Get().GetQuantity(), destination.id));
-                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                        if (source.storedItem.Get().GetId() == destination.storedItem.Get().GetId()) {
+                            gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                            gameManager.machineStore.Dispatch(new ClearLeftInput(machineController.machineLocation));
+                        } else {
+                            gameManager.machineStore.Dispatch(new SetLeftInput(machineController.machineLocation, source.storedItem.Get()));
+                            gameManager.inventoryStore.Dispatch(new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), 
+                                source.storedItem.Get().GetQuantity(), destination.id));
+                            gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                        }
                     }
                     
                 } else if (source.name == "InputSlot1") {
@@ -249,10 +255,15 @@ namespace Controller {
                         gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
                         gameManager.machineStore.Dispatch(new ClearRightInput(machineController.machineLocation));
                     } else {
-                        gameManager.machineStore.Dispatch(new SetRightInput(machineController.machineLocation, source.storedItem.Get()));
-                        gameManager.inventoryStore.Dispatch(new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), 
-                            source.storedItem.Get().GetQuantity(), destination.id));
-                        gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                        if (source.storedItem.Get().GetId() == destination.storedItem.Get().GetId()) {
+                            gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                            gameManager.machineStore.Dispatch(new ClearRightInput(machineController.machineLocation));
+                        } else {
+                            gameManager.machineStore.Dispatch(new SetRightInput(machineController.machineLocation, source.storedItem.Get()));
+                            gameManager.inventoryStore.Dispatch(new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), 
+                                source.storedItem.Get().GetQuantity(), destination.id));
+                            gameManager.inventoryStore.Dispatch(new AddItemToInventoryAtHex(item.Get().GetId(), item.Get().GetQuantity(), item.Get().GetName(), destination.id));
+                        }
                     }
                     
                 } else if (source.name == "FuelSlot") {
