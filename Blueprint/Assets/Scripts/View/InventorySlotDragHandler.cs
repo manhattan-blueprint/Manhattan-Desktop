@@ -39,6 +39,9 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         inventorySlotController = gameObject.transform.parent.GetComponent<InventorySlotController>();
 
         if (inventorySlotController.id == 0) inventoryController.DragDestination = -1;
+        
+        foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
+        foregroundImage = foregroundObject.GetComponent<Image>();
     }
 
     private void Update() {
@@ -138,18 +141,16 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         Image originalImage = gameObject.transform.GetChild(0).GetComponent<Image>();
         gameObject.transform.parent.GetComponentInChildren<Text>().text = "";
 
-        // Foreground object
-        foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
-        foregroundImage = foregroundObject.GetComponent<Image>();
         RectTransform rect = transform as RectTransform;
-        
         foregroundImage.enabled = true;
-        foregroundImage.sprite = originalSprite;
         foregroundImage.rectTransform.sizeDelta = new Vector2((originalImage.transform as RectTransform).sizeDelta.x,
             (originalImage.transform as RectTransform).sizeDelta.y);
-        foregroundImage.color = new Color(foregroundImage.color.r, foregroundImage.color.g, foregroundImage.color.b, 1.0f);
         originalImage.enabled = false;
 
+        // NOTE: unloading & reloading sprite solves resizing issues
+        foregroundImage.sprite = null;
+        foregroundImage.sprite = originalSprite;
+        
         dragObject = gameObject.transform.parent.gameObject;
     }
 
@@ -173,16 +174,15 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         Image originalImage = gameObject.transform.GetChild(0).GetComponent<Image>();
 
         // Foreground object
-        foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
-        foregroundImage = foregroundObject.GetComponent<Image>();
         RectTransform rect = transform as RectTransform;
-        
         foregroundImage.enabled = true;
-        foregroundImage.sprite = originalSprite;
         foregroundImage.rectTransform.sizeDelta = new Vector2((originalImage.transform as RectTransform).sizeDelta.x,
             (originalImage.transform as RectTransform).sizeDelta.y);
-        foregroundImage.color = new Color(foregroundImage.color.r, foregroundImage.color.g, foregroundImage.color.b, 0.5f);
-
+        
+        // NOTE: unloading & reloading sprite solves resizing issues
+        foregroundImage.sprite = null;
+        foregroundImage.sprite = originalSprite;
+        
         dragObject = gameObject.transform.parent.gameObject;
     }
     
