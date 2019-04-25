@@ -154,7 +154,6 @@ namespace Controller {
                 GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, 90, 0)); 
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
-
             }
 	
             // Remove things in old but not in new

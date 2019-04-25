@@ -1,5 +1,6 @@
 using Model.Action;
 using Model.State;
+using Service.Request;
 using UnityEngine;
 using Utils;
 
@@ -16,26 +17,33 @@ namespace Model.Reducer {
             if (!state.GetObjects().ContainsKey(placeItem.position)) {
                 state.AddObject(placeItem.position, placeItem.itemID);
 
-                SchemaItem.ItemType type = GameManager.Instance().sm.GameObjs.items
-                    .Find(x => x.item_id == placeItem.itemID).type;
+                SchemaItem item = GameManager.Instance().sm.GameObjs.items
+                    .Find(x => x.item_id == placeItem.itemID);
                 
                 // If solar panel, wire or machine, do wires
-                if (placeItem.itemID == 25 || placeItem.itemID == 22 || type == SchemaItem.ItemType.BlueprintCraftedMachine) {
+                if (placeItem.itemID == 25 
+                    || placeItem.itemID == 22 
+                    || (item.type == SchemaItem.ItemType.BlueprintCraftedMachine && item.fuel.Contains(new FuelElement(32)))) {
                     foreach (Vector2 hexNeighbour in placeItem.position.HexNeighbours()) {
                         // If neighbour is empty, skip
                         if (!state.GetObjects().ContainsKey(hexNeighbour)) continue;
                         
                         int neighbourID = state.GetObjects()[hexNeighbour].GetID();
-                        SchemaItem.ItemType neighbourType = GameManager.Instance().sm.GameObjs.items
-                            .Find(x => x.item_id == neighbourID).type;
+                        SchemaItem neighbour = GameManager.Instance().sm.GameObjs.items
+                            .Find(x => x.item_id == neighbourID);
                        
                         // If solar and solar, don't connect
                         if (neighbourID == 25 && placeItem.itemID == 25) continue;
                         // If machine and machine, don't connect
-                        if (type == SchemaItem.ItemType.BlueprintCraftedMachine && neighbourType == SchemaItem.ItemType.BlueprintCraftedMachine) continue;
+                        if (item.type == SchemaItem.ItemType.BlueprintCraftedMachine 
+                            && !neighbour.fuel.Contains(new FuelElement(32)) 
+                            && neighbour.type == SchemaItem.ItemType.BlueprintCraftedMachine
+                            && !item.fuel.Contains(new FuelElement(32))) continue;
                         
-                        // If solar, wire or machine, continue
-                        if (neighbourID == 25 || neighbourID == 22 || neighbourType == SchemaItem.ItemType.BlueprintCraftedMachine) {
+                        // If solar, wire or electricity powered machine, continue
+                        if (neighbourID == 25 
+                            || neighbourID == 22 
+                            || (neighbour.type == SchemaItem.ItemType.BlueprintCraftedMachine && neighbour.fuel.Contains(new FuelElement(32)))) {
                             state.AddWirePath(new WirePath(placeItem.position, hexNeighbour));
                         } 
                     }
