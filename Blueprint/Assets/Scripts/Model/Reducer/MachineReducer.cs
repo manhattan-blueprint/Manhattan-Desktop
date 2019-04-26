@@ -152,7 +152,7 @@ namespace Model.Reducer {
                 this.consideredConnected = new HashSet<Vector2>();
                 SchemaItem item = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == keyValuePair.Value.id);
                 // If contains electricity
-                if (item.fuel.Contains(new FuelElement(32))) {
+                if (item.isPoweredByElectricity()) {
                     state.grid[keyValuePair.Key].SetHasElectricity(isConnected(keyValuePair.Key));
                 }
             }

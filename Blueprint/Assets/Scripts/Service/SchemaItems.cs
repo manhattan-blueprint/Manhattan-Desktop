@@ -52,5 +52,13 @@ public class SchemaItem {
     public List<RecipeElement> blueprint;
     public List<RecipeElement> recipe;
     public List<FuelElement> fuel;
+
+    public bool isMachine() {
+        return type == ItemType.BlueprintCraftedMachine;
+    }
+
+    public bool isPoweredByElectricity() {
+        return fuel.Contains(new FuelElement(32));
+    }
 }
 

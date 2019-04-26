@@ -20,29 +20,23 @@ namespace Model.Reducer {
                     .Find(x => x.item_id == placeItem.itemID);
                 
                 // If solar panel, wire or machine, do wires
-                if (placeItem.itemID == 25 
-                    || placeItem.itemID == 22 
-                    || (item.type == SchemaItem.ItemType.BlueprintCraftedMachine && item.fuel.Contains(new FuelElement(32)))) {
+                if (placeItem.itemID == 25  || placeItem.itemID == 22 || (item.isMachine() && item.isPoweredByElectricity())) {
                     foreach (Vector2 hexNeighbour in placeItem.position.HexNeighbours()) {
                         // If neighbour is empty, skip
                         if (!state.GetObjects().ContainsKey(hexNeighbour)) continue;
                         
                         int neighbourID = state.GetObjects()[hexNeighbour].GetID();
+                        
                         SchemaItem neighbour = GameManager.Instance().sm.GameObjs.items
                             .Find(x => x.item_id == neighbourID);
                        
                         // If solar and solar, don't connect
                         if (neighbourID == 25 && placeItem.itemID == 25) continue;
                         // If machine and machine, don't connect
-                        if (item.type == SchemaItem.ItemType.BlueprintCraftedMachine 
-                            && !neighbour.fuel.Contains(new FuelElement(32)) 
-                            && neighbour.type == SchemaItem.ItemType.BlueprintCraftedMachine
-                            && !item.fuel.Contains(new FuelElement(32))) continue;
+                        if (item.isMachine() && neighbour.isMachine()) continue;
                         
                         // If solar, wire or electricity powered machine, continue
-                        if (neighbourID == 25 
-                            || neighbourID == 22 
-                            || (neighbour.type == SchemaItem.ItemType.BlueprintCraftedMachine && neighbour.fuel.Contains(new FuelElement(32)))) {
+                        if (neighbourID == 25 || neighbourID == 22 || (neighbour.isMachine() && neighbour.isPoweredByElectricity())) {
                             state.AddWirePath(new WirePath(placeItem.position, hexNeighbour));
                         } 
                     }
