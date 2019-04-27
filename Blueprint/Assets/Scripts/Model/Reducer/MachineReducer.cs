@@ -51,6 +51,7 @@ namespace Model.Reducer {
             }
 
             state.grid.Remove(removeMachine.machineLocation);
+            visit(new UpdateConnected());
         }
 
         public void visit(SetLeftInput setLeftInput) {
@@ -147,11 +148,11 @@ namespace Model.Reducer {
 
         public void visit(UpdateConnected updateConnected) {
             foreach (KeyValuePair<Vector2, Machine> keyValuePair in state.grid) {
-                // Clear considered for every machine
+                // Clear considered and path for every machine
                 this.consideredConnected = new HashSet<Vector2>();
                 SchemaItem item = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == keyValuePair.Value.id);
                 // If contains electricity
-                if (item.fuel.Contains(new FuelElement(32))) {
+                if (item.isPoweredByElectricity()) {
                     state.grid[keyValuePair.Key].SetHasElectricity(isConnected(keyValuePair.Key));
                 }
             }
@@ -166,8 +167,8 @@ namespace Model.Reducer {
                 if (consideredConnected.Contains(neighbour)) continue;
                 consideredConnected.Add(neighbour);
                 
-                if (!GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(neighbour)) continue;
-                int neighbourID = GameManager.Instance().mapStore.GetState().getObjects()[neighbour].GetID();
+                if (!GameManager.Instance().mapStore.GetState().GetObjects().ContainsKey(neighbour)) continue;
+                int neighbourID = GameManager.Instance().mapStore.GetState().GetObjects()[neighbour].GetID();
 
                 // If is a solar panel
                 if (neighbourID == 25) {

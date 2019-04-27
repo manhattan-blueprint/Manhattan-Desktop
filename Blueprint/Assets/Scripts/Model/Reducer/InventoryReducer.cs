@@ -229,13 +229,13 @@ namespace Model.Reducer {
                     int itemID = content.Key;
                     // Only remove and place if quantity > 0 and there is not a item placed at this location
                     if (hexLocation.hexID == index && hexLocation.quantity > 0 &&
-                            !GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(removeHeldItem.dropAt)) {
+                            !GameManager.Instance().mapStore.GetState().GetObjects().ContainsKey(removeHeldItem.dropAt)) {
                         visit(new RemoveItemFromStackInventory(itemID, 1, index));
                         
                         // If is blueprint, add to machine _before_ the map state, to correctly trigger update
                         // of connected status
                         SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
-                        if (entry.type == SchemaItem.ItemType.BlueprintCraftedMachine) {
+                        if (entry.isMachine()) {
                             GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
                         }
                         
