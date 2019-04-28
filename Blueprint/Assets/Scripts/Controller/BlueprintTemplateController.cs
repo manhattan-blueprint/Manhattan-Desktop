@@ -4,6 +4,9 @@ using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using Service;
+using Service.Request;
+using Service.Response;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -116,14 +119,39 @@ namespace Controller {
 
         // Craft a blueprint, quantities already validated
         public void onCraftClick() {
+            string name = GameManager.Instance().sm.GameObjs.items
+                .Find(x => x.item_id == currentSI.item_id)
+                .name;
             for (int i = 0; i < currentSI.blueprint.Count; i++) {
                 GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(currentSI.blueprint[i].item_id,
                     currentSI.blueprint[i].quantity));
             }
-            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(currentSI.item_id, 1,
-                GameManager.Instance().sm.GameObjs.items
-                .Find(x => x.item_id == currentSI.item_id)
-                .name));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(currentSI.item_id, 1, name));
+            
+            // Update progress
+            if (!GameManager.Instance().completedBlueprints.Contains(new Item(currentSI.item_id))) {
+                AccessToken accessToken = GameManager.Instance().GetAccessToken();
+                StartCoroutine(BlueprintAPI.AddCompletedBlueprints(accessToken,
+                    new RequestCompletedBlueprint(currentSI.item_id),
+                    blueprintsResult => {
+                        if (!blueprintsResult.isSuccess()) {
+                            // TODO: Handle error
+                        } else {
+                            GameManager.Instance().completedBlueprints.Add(new Item(currentSI.item_id));
+                            
+                            // Update Blueprint tree graphics in a naughty way
+                            GameObject cell = GameObject.Find(name + "BlueprintCell");
+                            cell.GetComponent<Image>().sprite = AssetManager.Instance().blueprintUICellPrimary;
+                            SpriteState ss = new SpriteState();
+                            ss.highlightedSprite = AssetManager.Instance().blueprintUICellPrimaryHighlight;
+                            cell.GetComponent<Button>().spriteState = ss;
+
+                            GameObject sprite = GameObject.Find(name + "BlueprintSprite");
+                            sprite.GetComponent<Image>().sprite =
+                                AssetManager.Instance().GetItemSprite(currentSI.item_id);
+                        }
+                }));
+            }
         }
     }
 }
