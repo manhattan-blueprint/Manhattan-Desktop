@@ -52,6 +52,11 @@ namespace Model.Action {
     }
 
     public class OpenBlueprintTemplateUI : UIAction {
+        public readonly int id;
+
+        public OpenBlueprintTemplateUI(int id) {
+            this.id = id;
+        }
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

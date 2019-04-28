@@ -82,6 +82,7 @@ namespace Model.Reducer {
         }
 
         public void visit(OpenBlueprintTemplateUI blueprintTemplate) {
+            state.SelectedBlueprintID = blueprintTemplate.id;
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Blueprint:

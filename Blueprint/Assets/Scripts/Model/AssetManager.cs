@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using TMPro;
 using UnityEngine;
 
 namespace Model {
     public class AssetManager {
         private static AssetManager instance;
         public readonly Font FontHelveticaNeueBold = Resources.Load("Fonts/HelveticaNeueBold", typeof(Font)) as Font;
+        public readonly TMP_FontAsset FontHelveticaNeueMedium = Resources.Load("Fonts/HelveticaNeueMedium SDF", typeof(TMP_FontAsset)) as TMP_FontAsset;
         public readonly Color ColourOffWhite = new Color32(245, 245, 245, 255);
         public readonly int QuantityFieldFontSize = (int) Mathf.Round(Screen.height/50);
 
@@ -23,8 +26,8 @@ namespace Model {
 
         public readonly Sprite blueprintTemplateBackground =
             Resources.Load("UI/blueprint-template-background", typeof(Sprite)) as Sprite;
-
-        public readonly Sprite outlineFurnace = Resources.Load("UI/outlines/furnace", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateCross = Resources.Load("UI/cross", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateTick = Resources.Load("UI/tick", typeof(Sprite)) as Sprite;
         
         private AssetManager() { }
 

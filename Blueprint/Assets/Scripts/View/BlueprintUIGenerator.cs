@@ -170,6 +170,6 @@ public class BlueprintUIGenerator : MonoBehaviour {
     private void loadBlueprintTemplate(int id) {
         // This probably has side effects ngl
         EventSystem.current.SetSelectedGameObject(null);
-        GameManager.Instance().uiStore.Dispatch(new OpenBlueprintTemplateUI());
+        GameManager.Instance().uiStore.Dispatch(new OpenBlueprintTemplateUI(id));
     }
 }
