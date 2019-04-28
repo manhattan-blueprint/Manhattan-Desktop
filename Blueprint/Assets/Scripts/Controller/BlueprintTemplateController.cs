@@ -24,10 +24,17 @@ namespace Controller {
         private List<TextMeshProUGUI> componentQuantities;
         private List<Image> componentChecks;
         private Button componentsButton;
+        private List<Image> usesLeft;
+        private List<Image> usesMiddle;
+        private List<Image> usesRight;
+        private List<Image> usesPlus;
+        private List<Image> usesEquals;
+        private GameObject uses;
 
         void Start() {
             title   = GameObject.Find("TemplateTitle");
             outline = GameObject.Find("TemplateOutline");
+            uses = GameObject.Find("TemplateUses");
             componentNames = new List<TextMeshProUGUI>();
             componentNames.Add(GameObject.Find("TemplateComponentNameOne").GetComponent<TextMeshProUGUI>());
             componentNames.Add(GameObject.Find("TemplateComponentNameTwo").GetComponent<TextMeshProUGUI>());
@@ -41,6 +48,41 @@ namespace Controller {
             componentChecks.Add(GameObject.Find("TemplateComponentCheckTwo").GetComponent<Image>());
             componentChecks.Add(GameObject.Find("TemplateComponentCheckThree").GetComponent<Image>());
             componentsButton = GameObject.Find("TemplateComponentsButton").GetComponent<Button>();
+            usesLeft = new List<Image>();
+            usesLeft.Add(GameObject.Find("TemplateUsesOneImageLeft").GetComponent<Image>());
+            usesLeft.Add(GameObject.Find("TemplateUsesTwoImageLeft").GetComponent<Image>());
+            usesLeft.Add(GameObject.Find("TemplateUsesThreeImageLeft").GetComponent<Image>());
+            usesLeft.Add(GameObject.Find("TemplateUsesFourImageLeft").GetComponent<Image>());
+            usesLeft.Add(GameObject.Find("TemplateUsesFiveImageLeft").GetComponent<Image>());
+            usesLeft.Add(GameObject.Find("TemplateUsesSixImageLeft").GetComponent<Image>());
+            usesMiddle = new List<Image>();
+            usesMiddle.Add(GameObject.Find("TemplateUsesOneImageMiddle").GetComponent<Image>());
+            usesMiddle.Add(GameObject.Find("TemplateUsesTwoImageMiddle").GetComponent<Image>());
+            usesMiddle.Add(GameObject.Find("TemplateUsesThreeImageMiddle").GetComponent<Image>());
+            usesMiddle.Add(GameObject.Find("TemplateUsesFourImageMiddle").GetComponent<Image>());
+            usesMiddle.Add(GameObject.Find("TemplateUsesFiveImageMiddle").GetComponent<Image>());
+            usesMiddle.Add(GameObject.Find("TemplateUsesSixImageMiddle").GetComponent<Image>());
+            usesRight = new List<Image>();
+            usesRight.Add(GameObject.Find("TemplateUsesOneImageRight").GetComponent<Image>());
+            usesRight.Add(GameObject.Find("TemplateUsesTwoImageRight").GetComponent<Image>());
+            usesRight.Add(GameObject.Find("TemplateUsesThreeImageRight").GetComponent<Image>());
+            usesRight.Add(GameObject.Find("TemplateUsesFourImageRight").GetComponent<Image>());
+            usesRight.Add(GameObject.Find("TemplateUsesFiveImageRight").GetComponent<Image>());
+            usesRight.Add(GameObject.Find("TemplateUsesSixImageRight").GetComponent<Image>());
+            usesPlus = new List<Image>();
+            usesPlus.Add(GameObject.Find("TemplateUsesOnePlus").GetComponent<Image>());
+            usesPlus.Add(GameObject.Find("TemplateUsesTwoPlus").GetComponent<Image>());
+            usesPlus.Add(GameObject.Find("TemplateUsesThreePlus").GetComponent<Image>());
+            usesPlus.Add(GameObject.Find("TemplateUsesFourPlus").GetComponent<Image>());
+            usesPlus.Add(GameObject.Find("TemplateUsesFivePlus").GetComponent<Image>());
+            usesPlus.Add(GameObject.Find("TemplateUsesSixPlus").GetComponent<Image>());
+            usesEquals = new List<Image>();
+            usesEquals.Add(GameObject.Find("TemplateUsesOneEquals").GetComponent<Image>());
+            usesEquals.Add(GameObject.Find("TemplateUsesTwoEquals").GetComponent<Image>());
+            usesEquals.Add(GameObject.Find("TemplateUsesThreeEquals").GetComponent<Image>());
+            usesEquals.Add(GameObject.Find("TemplateUsesFourEquals").GetComponent<Image>());
+            usesEquals.Add(GameObject.Find("TemplateUsesFiveEquals").GetComponent<Image>());
+            usesEquals.Add(GameObject.Find("TemplateUsesSixEquals").GetComponent<Image>());
             GameManager.Instance().uiStore.Subscribe(this);
             GameManager.Instance().inventoryStore.Subscribe(this);
         }
@@ -55,8 +97,43 @@ namespace Controller {
             title.GetComponent<TextMeshProUGUI>().text = currentSI.name;
             outline.GetComponent<Image>().sprite = AssetManager.Instance().GetBlueprintOutline(currentID);
 
-            int quantityComplete = 0;
+            int use = 0;
+            //uses.GetComponentInChildren<Renderer>().enabled = true;
+            
+            // Find uses
+            for (int i = 0; i < GameManager.Instance().sm.GameObjs.items.Count; i++) {
+                SchemaItem usesSI = GameManager.Instance().sm.GameObjs.items[i];
+                if (usesSI.machine_id == currentID) {
+                    if (usesSI.recipe.Count == 2) {
+                        usesLeft[use].enabled = true;
+                        usesLeft[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
+                        usesPlus[use].enabled = true;
+                        usesMiddle[use].enabled = true;
+                        usesMiddle[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[1].item_id);
+                        usesEquals[use].enabled = true;
+                    } else {
+                        usesLeft[use].enabled = false;
+                        usesPlus[use].enabled = false;
+                        usesMiddle[use].enabled = true;
+                        usesMiddle[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
+                        usesEquals[use].enabled = true;
+                    }
+                    usesRight[use].enabled = true;
+                    usesRight[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.item_id);
+                    use++;
+                }
+            }
+            
+            // Erase the rest
+            for (int i = use; i < 6; i++) {
+                usesLeft[i].enabled = false;
+                usesPlus[i].enabled = false;
+                usesMiddle[i].enabled = false;
+                usesEquals[i].enabled = false;
+                usesRight[i].enabled = false;
+            }
 
+            // Fill in component names
             for (int i = 0; i < 3; i++) {
                 if (i < currentSI.blueprint.Count) {
                     RecipeElement currentRE = currentSI.blueprint[i];
@@ -65,6 +142,7 @@ namespace Controller {
                         .name;
                 }
             }
+            
             updateComponents();
         }
 
