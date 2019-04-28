@@ -9,6 +9,7 @@ using Service.Request;
 using Service.Response;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Controller {
@@ -152,6 +153,11 @@ namespace Controller {
                         }
                 }));
             }
+        }
+
+        public void onBackClick() {
+            EventSystem.current.SetSelectedGameObject(null);
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
     }
 }
