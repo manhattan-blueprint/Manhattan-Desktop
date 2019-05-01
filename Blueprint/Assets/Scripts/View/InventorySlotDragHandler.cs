@@ -207,7 +207,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     }
 
     private void beginSplit() {
-        Debug.Log("beginSplit");
         splitting = true;
         dragging = true;
         inventoryController.DraggingInvItem = true;
