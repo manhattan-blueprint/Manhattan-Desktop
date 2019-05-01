@@ -138,7 +138,7 @@ namespace Model.Reducer {
                     state.Selected = UIState.OpenUI.Goal;
                     break;
                 default:
-                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMachineUI");
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenGoalUI");
             }
         }
 

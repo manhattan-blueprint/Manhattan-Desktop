@@ -77,15 +77,12 @@ namespace Model.Action {
             this.machinePosition = machinePosition;
         }
 
-<<<<<<< HEAD
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
 
     public class OpenGoalUI : UIAction {
-=======
->>>>>>> develop
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

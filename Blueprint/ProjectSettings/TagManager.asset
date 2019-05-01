@@ -4,24 +4,20 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Inventory
-  - Placed
-  - Map
-  - Cursor
-  - Held
-  - Pause
-  - MenuButton
-  - Exit
-  - Blueprint
   - Logout
-  - MachineInventory
-  - Machine
+  - Blueprint
+  - MenuButton
+  - Inventory
+  - Map
+  - Exit
   - Bindings
-<<<<<<< HEAD
-  - Goal
-=======
+  - Pause
   - Gate
->>>>>>> develop
+  - Held
+  - Machine
+  - Cursor
+  - MachineInventory
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -31,7 +27,7 @@ TagManager:
   - UI
   - 
   - 
-  - Demo Sprite
+  - 
   - 
   - 
   - 
@@ -58,7 +54,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: DemoSprite
-    uniqueID: 179409413
     locked: 0
