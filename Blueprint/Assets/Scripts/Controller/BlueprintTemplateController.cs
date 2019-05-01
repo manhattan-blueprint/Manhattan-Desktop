@@ -24,17 +24,38 @@ namespace Controller {
         private List<TextMeshProUGUI> componentQuantities;
         private List<Image> componentChecks;
         private Button componentsButton;
+        private TextMeshProUGUI usesTitle;
+        private Image usesTable;
         private List<Image> usesLeft;
         private List<Image> usesMiddle;
         private List<Image> usesRight;
+        private List<TextMeshProUGUI> usesLeftQuantities;
+        private List<TextMeshProUGUI> usesMiddleQuantities;
         private List<Image> usesPlus;
         private List<Image> usesEquals;
         private GameObject uses;
+        private TextMeshProUGUI easterEggName;
+        private Dictionary<int, string> easterEggNameDict;
 
         void Start() {
+            easterEggNameDict = new Dictionary<int, string> {{11, "Ben Lee"},
+                {19, "Will JV Smith"},
+                {18, "Jay Lees"},
+                {20, "Adam Fox"},
+                {25, "Andrei Nitu"},
+                {23, "Elias K R"},
+                {22, "Ben Lee"},
+                {24, "Will JV Smith"},
+                {26, "Jay Lees"},
+                {29, "Adam Fox"},
+                {28, "Andrei Nitu"},
+                {31, "Elias K R"}
+            };
+            
             title   = GameObject.Find("TemplateTitle");
             outline = GameObject.Find("TemplateOutline");
-            uses = GameObject.Find("TemplateUses");
+            uses    = GameObject.Find("TemplateUses");
+            easterEggName = GameObject.Find("TemplateEasterEggName").GetComponent<TextMeshProUGUI>();
             componentNames = new List<TextMeshProUGUI>();
             componentNames.Add(GameObject.Find("TemplateComponentNameOne").GetComponent<TextMeshProUGUI>());
             componentNames.Add(GameObject.Find("TemplateComponentNameTwo").GetComponent<TextMeshProUGUI>());
@@ -48,6 +69,8 @@ namespace Controller {
             componentChecks.Add(GameObject.Find("TemplateComponentCheckTwo").GetComponent<Image>());
             componentChecks.Add(GameObject.Find("TemplateComponentCheckThree").GetComponent<Image>());
             componentsButton = GameObject.Find("TemplateComponentsButton").GetComponent<Button>();
+            usesTitle = GameObject.Find("TemplateUsesTitle").GetComponent<TextMeshProUGUI>();
+            usesTable = GameObject.Find("TemplateUsesTable").GetComponent<Image>();
             usesLeft = new List<Image>();
             usesLeft.Add(GameObject.Find("TemplateUsesOneImageLeft").GetComponent<Image>());
             usesLeft.Add(GameObject.Find("TemplateUsesTwoImageLeft").GetComponent<Image>());
@@ -69,6 +92,20 @@ namespace Controller {
             usesRight.Add(GameObject.Find("TemplateUsesFourImageRight").GetComponent<Image>());
             usesRight.Add(GameObject.Find("TemplateUsesFiveImageRight").GetComponent<Image>());
             usesRight.Add(GameObject.Find("TemplateUsesSixImageRight").GetComponent<Image>());
+            usesLeftQuantities = new List<TextMeshProUGUI>();
+            usesLeftQuantities.Add(GameObject.Find("TemplateUsesOneLeftQuantity").GetComponent<TextMeshProUGUI>());
+            usesLeftQuantities.Add(GameObject.Find("TemplateUsesTwoLeftQuantity").GetComponent<TextMeshProUGUI>());
+            usesLeftQuantities.Add(GameObject.Find("TemplateUsesThreeLeftQuantity").GetComponent<TextMeshProUGUI>());
+            usesLeftQuantities.Add(GameObject.Find("TemplateUsesFourLeftQuantity").GetComponent<TextMeshProUGUI>());
+            usesLeftQuantities.Add(GameObject.Find("TemplateUsesFiveLeftQuantity").GetComponent<TextMeshProUGUI>());
+            usesLeftQuantities.Add(GameObject.Find("TemplateUsesSixLeftQuantity").GetComponent<TextMeshProUGUI>());
+            usesMiddleQuantities = new List<TextMeshProUGUI>();
+            usesMiddleQuantities.Add(GameObject.Find("TemplateUsesOneMiddleQuantity").GetComponent<TextMeshProUGUI>());
+            usesMiddleQuantities.Add(GameObject.Find("TemplateUsesTwoMiddleQuantity").GetComponent<TextMeshProUGUI>());
+            usesMiddleQuantities.Add(GameObject.Find("TemplateUsesThreeMiddleQuantity").GetComponent<TextMeshProUGUI>());
+            usesMiddleQuantities.Add(GameObject.Find("TemplateUsesFourMiddleQuantity").GetComponent<TextMeshProUGUI>());
+            usesMiddleQuantities.Add(GameObject.Find("TemplateUsesFiveMiddleQuantity").GetComponent<TextMeshProUGUI>());
+            usesMiddleQuantities.Add(GameObject.Find("TemplateUsesSixMiddleQuantity").GetComponent<TextMeshProUGUI>());
             usesPlus = new List<Image>();
             usesPlus.Add(GameObject.Find("TemplateUsesOnePlus").GetComponent<Image>());
             usesPlus.Add(GameObject.Find("TemplateUsesTwoPlus").GetComponent<Image>());
@@ -98,24 +135,30 @@ namespace Controller {
             outline.GetComponent<Image>().sprite = AssetManager.Instance().GetBlueprintOutline(currentID);
 
             int use = 0;
-            //uses.GetComponentInChildren<Renderer>().enabled = true;
             
-            // Find uses
+            // Find recipes
             for (int i = 0; i < GameManager.Instance().sm.GameObjs.items.Count; i++) {
                 SchemaItem usesSI = GameManager.Instance().sm.GameObjs.items[i];
                 if (usesSI.machine_id == currentID) {
                     if (usesSI.recipe.Count == 2) {
                         usesLeft[use].enabled = true;
                         usesLeft[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
+                        usesLeftQuantities[use].enabled = true;
+                        usesLeftQuantities[use].text = usesSI.recipe[0].quantity.ToString();
                         usesPlus[use].enabled = true;
                         usesMiddle[use].enabled = true;
                         usesMiddle[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[1].item_id);
+                        usesMiddleQuantities[use].enabled = true;
+                        usesMiddleQuantities[use].text = usesSI.recipe[1].quantity.ToString();
                         usesEquals[use].enabled = true;
                     } else {
                         usesLeft[use].enabled = false;
+                        usesLeftQuantities[use].enabled = false;
                         usesPlus[use].enabled = false;
                         usesMiddle[use].enabled = true;
                         usesMiddle[use].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
+                        usesMiddleQuantities[use].enabled = true;
+                        usesMiddleQuantities[use].text = usesSI.recipe[0].quantity.ToString();
                         usesEquals[use].enabled = true;
                     }
                     usesRight[use].enabled = true;
@@ -127,10 +170,21 @@ namespace Controller {
             // Erase the rest
             for (int i = use; i < 6; i++) {
                 usesLeft[i].enabled = false;
+                usesLeftQuantities[i].enabled = false;
                 usesPlus[i].enabled = false;
                 usesMiddle[i].enabled = false;
+                usesMiddleQuantities[i].enabled = false;
                 usesEquals[i].enabled = false;
                 usesRight[i].enabled = false;
+            }
+            
+            // Hide recipes table if no recipes
+            if (use == 0) {
+                usesTitle.enabled = false;
+                usesTable.enabled = false;
+            } else {
+                usesTitle.enabled = true;
+                usesTable.enabled = true;
             }
 
             // Fill in component names
@@ -142,6 +196,9 @@ namespace Controller {
                         .name;
                 }
             }
+            
+            // Change easter egg name
+            easterEggName.text = easterEggNameDict[currentID];
             
             updateComponents();
         }
@@ -157,7 +214,7 @@ namespace Controller {
                 if (i < currentSI.blueprint.Count) {
                     RecipeElement currentRE = currentSI.blueprint[i];
                     int acquired = getQuantity(currentRE.item_id);
-                    componentQuantities[i].text = acquired + "/" + currentRE.quantity;
+                    componentQuantities[i].text = acquired + " / " + currentRE.quantity;
                     componentChecks[i].enabled = true;
                     if (acquired >= currentRE.quantity) {
                         componentChecks[i].sprite = AssetManager.Instance().blueprintTemplateTick;
