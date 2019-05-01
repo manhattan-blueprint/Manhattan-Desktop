@@ -28,6 +28,8 @@ namespace Controller {
         private Image cursor;
         private SVGImage rmb;
         private const int rightButton = 1;
+        private bool watchingIntro;
+        private bool introComplete;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -39,6 +41,7 @@ namespace Controller {
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             gateCanvas = GameObject.FindGameObjectWithTag("Gate").GetComponent<Canvas>();
+            introCanvas = GameObject.FindGameObjectWithTag("IntroCanvas").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
             cursor = GameObject.Find("Cursor Image").GetComponent<Image>();
@@ -49,6 +52,7 @@ namespace Controller {
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             gateCanvas.enabled = false;
+            introCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
@@ -88,7 +92,7 @@ namespace Controller {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
                 }
-              }
+            }
 
             if (Input.GetKeyUp(KeyMapping.Bindings)) {
                 if (bindingsCanvas.enabled) {
@@ -158,6 +162,21 @@ namespace Controller {
             heldCanvas.enabled = true;
             rmb.enabled = false;
             cursor.enabled = true;
+        }
+
+        public void WatchIntro() {
+            watchingIntro = true;
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+            heldCanvas.enabled = false;
+            cursorCanvas.enabled = false;
+            pauseCanvas.enabled = false;
+            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
+            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
+            Invoke("IntroComplete", 30.0f);
+        }
+
+        public void IntroComplete() {
+          introComplete = true;
         }
 
         // Logout button from the pause menu

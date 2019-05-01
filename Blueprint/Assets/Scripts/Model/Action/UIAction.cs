@@ -10,6 +10,7 @@ namespace Model.Action {
         void visit(OpenBindingsUI bindings);
         void visit(OpenMouseUI mouse);
         void visit(OpenGateUI gate);
+        void visit(OpenIntroUI intro);
         void visit(OpenMachineUI machine);
         void visit(OpenSettingsUI settings);
         void visit(Logout logout);
@@ -64,6 +65,12 @@ namespace Model.Action {
     }
 
     public class OpenGateUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenIntroUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

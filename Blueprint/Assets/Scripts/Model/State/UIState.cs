@@ -16,10 +16,12 @@ namespace Model.State {
             Bindings,
             Gate,
             Mouse,
+            Intro,
         };
 
         public OpenUI Selected;
         public Vector2 SelectedMachineLocation;
+        public bool IntroComplete;
 
         public UIState() {
             this.Selected = OpenUI.Login;

@@ -22,6 +22,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Pause:
                 case UIState.OpenUI.Bindings:
                 case UIState.OpenUI.Mouse:
+                case UIState.OpenUI.Intro:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.Gate:
@@ -111,6 +112,17 @@ namespace Model.Reducer {
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenGateUI");
+            }
+        }
+
+        public void visit(OpenIntroUI intro) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Intro;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenIntroUI");
             }
         }
 
