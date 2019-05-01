@@ -189,7 +189,6 @@ namespace Controller {
 
         public void OnDrop(GameObject droppedObject) {
             RectTransform invPanel = transform as RectTransform;
-            //GameObject droppedObject = eventData.pointerDrag;
 
             InventorySlotController source = droppedObject.GetComponent<InventorySlotController>();
             InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();

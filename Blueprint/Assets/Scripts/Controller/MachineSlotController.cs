@@ -15,7 +15,6 @@ public class MachineSlotController : InventorySlotController {
 
     public new void OnDrop(GameObject droppedObject, bool splitting) {
         RectTransform invPanel = transform as RectTransform;
-        //GameObject droppedObject = eventData.pointerDrag;
         if (MachineController == null) loadMachineController();
 
         InventorySlotController source = droppedObject.GetComponent<InventorySlotController>(); 
