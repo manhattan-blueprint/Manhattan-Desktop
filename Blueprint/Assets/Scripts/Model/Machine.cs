@@ -43,7 +43,7 @@ namespace Model {
             if (entry == null) return false;
           
             // If powered by electricity
-            if (entry.fuel.Contains(new FuelElement(32))) {
+            if (entry.isPoweredByElectricity()) {
                 return hasElectricity;
             }
             
