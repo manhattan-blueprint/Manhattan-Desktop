@@ -17,7 +17,11 @@ TagManager:
   - MachineInventory
   - Machine
   - Bindings
+<<<<<<< HEAD
   - Goal
+=======
+  - Gate
+>>>>>>> develop
   layers:
   - Default
   - TransparentFX

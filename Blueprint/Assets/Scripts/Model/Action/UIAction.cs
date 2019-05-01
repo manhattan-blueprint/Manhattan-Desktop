@@ -8,6 +8,8 @@ namespace Model.Action {
         void visit(OpenInventoryUI inventory);
         void visit(OpenBlueprintUI blueprint);
         void visit(OpenBindingsUI bindings);
+        void visit(OpenMouseUI mouse);
+        void visit(OpenGateUI gate);
         void visit(OpenMachineUI machine);
         void visit(OpenGoalUI machine);
         void visit(OpenSettingsUI settings);
@@ -56,6 +58,18 @@ namespace Model.Action {
         }
     }
 
+    public class OpenMouseUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenGateUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
     public class OpenMachineUI : UIAction {
         public readonly Vector2 machinePosition;
 
@@ -63,12 +77,15 @@ namespace Model.Action {
             this.machinePosition = machinePosition;
         }
 
+<<<<<<< HEAD
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
 
     public class OpenGoalUI : UIAction {
+=======
+>>>>>>> develop
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

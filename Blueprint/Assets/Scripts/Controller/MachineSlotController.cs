@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Model;
@@ -8,16 +9,15 @@ using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MachineSlotController : InventorySlotController, IDropHandler {
+public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
-    private MachineController MachineController = null;
+    internal MachineController MachineController = null;
 
-    public new void OnDrop(PointerEventData eventData) {
+    public new void OnDrop(GameObject droppedObject, bool splitting) {
         RectTransform invPanel = transform as RectTransform;
-        GameObject droppedObject = eventData.pointerDrag;
         if (MachineController == null) loadMachineController();
 
-        InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>();
+        InventorySlotController source = droppedObject.GetComponent<InventorySlotController>(); 
         InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)
@@ -36,14 +36,16 @@ public class MachineSlotController : InventorySlotController, IDropHandler {
             }
 
             // If not from a machine, remove from inventory
-            if (droppedObject.transform.parent.GetComponent<MachineSlotController>() == null) {
+            if (droppedObject.GetComponent<MachineSlotController>() == null) {
                 if (source.storedItem.IsPresent()) {
                     GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(),
                         source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));
                 }
-
-                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(
+                
+                if (!splitting) {
+                    GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(
                     destination.storedItem.Get().GetId(), destination.storedItem.Get().GetQuantity(), source.id));
+                }
             }
 
             // Add to correct element of machine

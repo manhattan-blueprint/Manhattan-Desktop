@@ -21,7 +21,6 @@ namespace Controller {
 
         private RaycastHit hit;
         private Text txt;
-        private InventoryController inventory;
         private float timer;
         private string index;
         private HexMapController hexMapController;
@@ -29,7 +28,6 @@ namespace Controller {
         private bool holdInitiated;
 
         void Start() {
-            inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
             hexMapController = GameObject.FindGameObjectWithTag("Map").GetComponent<HexMapController>();
             timer = 0.0f;
             holdInitiated = false;
@@ -48,7 +46,11 @@ namespace Controller {
             }
 
 
-            if (Input.GetMouseButtonDown(rightButton)) {
+            // Put down held item
+            if (Input.GetMouseButtonDown(rightButton) && 
+                GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Machine && 
+                GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Inventory) {
+                
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
                 if (!Physics.Raycast(ray, out hit)) return;
