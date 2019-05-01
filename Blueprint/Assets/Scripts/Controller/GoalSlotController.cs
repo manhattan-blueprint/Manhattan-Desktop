@@ -14,13 +14,13 @@ public enum GoalSlotType {
     BotSlot
 }
 
-public class GoalSlotController : InventorySlotController, IDropHandler {
+public class GoalSlotController : InventorySlotController {
     [SerializeField] private GoalSlotType slotType;
-    private GoalUIController goalUIController = null;
+    internal GoalUIController goalUIController = null;
 
-    public new void OnDrop(PointerEventData eventData) {
+    public new void OnDrop(GameObject droppedObject, bool splitting) {
+        Debug.Log("OBJECT DROPPED ON GOAL SLOT CONTROLLER");
         RectTransform invPanel = transform as RectTransform;
-        GameObject droppedObject = eventData.pointerDrag;
         if (goalUIController == null)
             goalUIController = GameObject.Find("GoalUICanvas").GetComponent<GoalUIController>();
 
