@@ -18,6 +18,8 @@ public class OpeningScene : MonoBehaviour
   void Start() {
     dishBase = GameObject.Find("Beacon");
     introCompletionCheck = GameManager.Instance().uiStore.GetState().IntroComplete;
+    Debug.Log(introCompletionCheck);
+    Debug.Log("Hello");
     if (!introCompletionCheck) {
       GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
       introAnimation();
@@ -52,22 +54,17 @@ public class OpeningScene : MonoBehaviour
             yield return new WaitForSeconds(1.0f / 60.0f);
 
             // Make camera zoom out and spin.
-            Camera.main.transform.position += new Vector3(0.0f, 0.1, 0.0f);
-            Camera.main.transform.position -= Camera.main.transform.forward * 0.15;
+            Camera.main.transform.position += new Vector3(0.0f, 0.1f, 0.0f);
+            Camera.main.transform.position -= Camera.main.transform.forward * 0.15f;
             Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, - 0.15);
+            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, - 0.15f);
 
             // Make Gameover overlay etc follow in front of camera
-            blackOverlay.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-            blackOverlay.transform.LookAt(Camera.main.transform.position);
-            signalSent.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
-            signalSent.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
-            willRespond.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
-            willRespond.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
-            names.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
-            names.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
-            blueprintText.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
-            blueprintText.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
+            story1.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
+            story1.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
+
+            fadeOverlay.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+            fadeOverlay.transform.LookAt(Camera.main.transform.position);
         }
     }
 }

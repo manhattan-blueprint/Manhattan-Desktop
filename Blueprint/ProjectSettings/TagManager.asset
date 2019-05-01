@@ -18,6 +18,7 @@ TagManager:
   - Machine
   - Bindings
   - Gate
+  - Intro
   layers:
   - Default
   - TransparentFX

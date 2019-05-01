@@ -120,6 +120,7 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Playing:
                     state.Selected = UIState.OpenUI.Intro;
+                    state.IntroComplete = true;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenIntroUI");

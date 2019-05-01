@@ -22,6 +22,7 @@ namespace Controller {
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
         private Canvas bindingsCanvas;
+        private Canvas introCanvas;
         private Canvas gateCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
@@ -40,7 +41,7 @@ namespace Controller {
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             gateCanvas = GameObject.FindGameObjectWithTag("Gate").GetComponent<Canvas>();
-            introCanvas = GameObject.FindGameObjectWithTag("IntroCanvas").GetComponent<Canvas>();
+            introCanvas = GameObject.FindGameObjectWithTag("Intro").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
             cursor = GameObject.Find("Cursor Image").GetComponent<Image>();

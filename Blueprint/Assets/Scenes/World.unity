@@ -10754,8 +10754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1fa06b330dfc415bbbee2e18a963166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOver: 0
-  gameOverExitable: 0
 --- !u!4 &242548016
 Transform:
   m_ObjectHideFlags: 0
@@ -11898,9 +11896,10 @@ GameObject:
   - component: {fileID: 264031924}
   - component: {fileID: 264031923}
   - component: {fileID: 264031922}
+  - component: {fileID: 264031925}
   m_Layer: 5
-  m_Name: IntroScene
-  m_TagString: Untagged
+  m_Name: IntroCanvas
+  m_TagString: Intro
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11986,6 +11985,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &264031925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264031920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b373a5677a8bb9faf97266ad03613d8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &267689085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29898,6 +29909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 572df26db4e5244eea62960fa4844a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wireMaterial: {fileID: 0}
 --- !u!4 &623768141
 Transform:
   m_ObjectHideFlags: 0
@@ -37294,8 +37306,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767499402}
-  m_LocalRotation: {x: -0.084499314, y: 0.52053136, z: 0.05186407, w: 0.8480667}
-  m_LocalPosition: {x: -22.360352, y: -9.930857, z: -53.65897}
+  m_LocalRotation: {x: -0.111838266, y: 0.086341046, z: 0.009754555, w: 0.9899204}
+  m_LocalPosition: {x: 487.8441, y: -161.86345, z: -679.26575}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1296119724}
@@ -78694,8 +78706,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1621908879}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-  m_LocalPosition: {x: 5.56, y: -2.9599998, z: -5.9}
+  m_LocalRotation: {x: -0.111838266, y: 0.086341046, z: 0.009754555, w: 0.9899204}
+  m_LocalPosition: {x: 481.90408, y: -155.24255, z: -642.9257}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -87712,7 +87724,7 @@ GameObject:
   - component: {fileID: 1821524459}
   - component: {fileID: 1821524457}
   m_Layer: 5
-  m_Name: Story
+  m_Name: Story1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87757,25 +87769,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "On a routine solo trip from planet to planet across your home galaxy, your
-    ship suddenly loses power. Drifting through space with no means of communicating
-    your ship is pulled into the gravitational field of a nearby planet and your ship
-    begins to plummet to the surface...\n\nYou awaken on the shore of a large lake,
-    you must have passed out during descent on account of the G-forces. Your ship
-    is a wreck but you are seemingly uninjured, and more importantly alive...\n\nYour
-    helmet, so designed to help you survive in alien atmosphere is cracked but you
-    are breathing fine. This atmosphere must be highly similar to that of your home
-    planet. Stepping out onto the shore and scanning the distant horizon you spot
-    a large, dome-like structure, breaking through the trees around it. You see no
-    other choice but to journey to the dome...\n\nEntering the dome you are greeted
-    with silence. The dome's walls stand firm, the glass panes whole and no tell of
-    how long this space had been abandoned, if it truly is. In the centre of the dome,
-    in the shadow of a large metal frame, lay scattered pages, arranged in some order
-    and yet clearly strewn in a hurried fashion.\n\n\x13Taking one page from its resting
-    place, you realise these are blueprints! Carefully placing the page back in its
-    place and inspecting each other in turn, repeating the same process, you find
-    blueprints ranging from the most primitive of tool to machines beyond your understanding...
-    Why are these here? What is this place?...\n\nGame begins...\n"
+  m_text: Hello
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -87803,7 +87797,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 62.2
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -87844,12 +87838,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1821524457}
-    characterCount: 1502
+    characterCount: 5
     spriteCount: 0
-    spaceCount: 266
-    wordCount: 261
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
-    lineCount: 14
+    lineCount: 1
     pageCount: 1
     materialCount: 1
   m_havePropertiesChanged: 0
