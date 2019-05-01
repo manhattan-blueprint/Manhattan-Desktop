@@ -18,7 +18,10 @@ public class OpeningScene : MonoBehaviour
   void Start() {
     dishBase = GameObject.Find("Beacon");
     introCompletionCheck = GameManager.Instance().uiStore.GetState().IntroComplete;
-    if (!introCompletionCheck) introAnimation();
+    if (!introCompletionCheck) {
+      GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
+      introAnimation();
+    }
   }
 
   private void introAnimation() {

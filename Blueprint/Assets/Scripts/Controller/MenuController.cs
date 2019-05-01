@@ -29,7 +29,6 @@ namespace Controller {
         private SVGImage rmb;
         private const int rightButton = 1;
         private bool watchingIntro;
-        private bool introComplete;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -91,6 +90,10 @@ namespace Controller {
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
+                }
+            } else if (GameManager.Instance().uiStore.GetState().IntroComplete) {
+                if (!watchingIntro) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
                 }
             }
 
@@ -176,7 +179,7 @@ namespace Controller {
         }
 
         public void IntroComplete() {
-          introComplete = true;
+          watchingIntro = false;
         }
 
         // Logout button from the pause menu
@@ -262,6 +265,9 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Logout:
                     LogoutPrompt();
+                    break;
+                case UIState.OpenUI.Intro:
+                    WatchIntro();
                     break;
                 case UIState.OpenUI.Login:
                     GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
