@@ -111,6 +111,13 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                     }
                     
                     inventoryController.DragDestination = isc.id;
+                } else {
+                    // Drop item outside the inventory while splitting
+                    if (splitting) {
+                        InventoryItem originalItem = inventorySlotController.storedItem.Get();
+                        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
+                            newQuantity, originalItem.GetName(), inventorySlotController.id));
+                    }
                 }
 
                 if (!splitting) {
