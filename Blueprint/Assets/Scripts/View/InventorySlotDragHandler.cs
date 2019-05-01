@@ -139,9 +139,29 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         if (Input.GetMouseButtonDown(1) && mouseOver && currentItem.GetQuantity() > 1 && !inventoryController.DraggingInvItem) {
             newQuantity = (int) currentItem.GetQuantity() / 2;
             
-            // Remove drag quantity from source hex
-            GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(currentItem.GetId(), 
-            newQuantity, inventorySlotController.id));
+            if (inventorySlotController is MachineSlotController) {
+                Vector2 machineLocation = (inventorySlotController as MachineSlotController).MachineController
+                    .machineLocation;
+                currentItem.SetQuantity(currentItem.GetQuantity() - newQuantity);
+                
+                if (gameObject.transform.parent.name == "InputSlot0") {
+                    GameManager.Instance().machineStore.Dispatch(new SetLeftInput(machineLocation, currentItem));
+                    inventorySlotController.SetStoredItem(Optional<InventoryItem>.Of(currentItem)); 
+                } else if (gameObject.transform.parent.name == "InputSlot1") {
+                    GameManager.Instance().machineStore.Dispatch(new SetRightInput(machineLocation, currentItem));
+                    inventorySlotController.SetStoredItem(Optional<InventoryItem>.Of(currentItem)); 
+                } else if (gameObject.transform.parent.name == "FuelSlot") {
+                    GameManager.Instance().machineStore
+                        .Dispatch(new SetFuel(machineLocation, Optional<InventoryItem>.Of(currentItem)));
+                    inventorySlotController.SetStoredItem(Optional<InventoryItem>.Of(currentItem));
+                }
+
+            } else {
+                // Remove drag quantity from source hex
+                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(currentItem.GetId(), 
+                newQuantity, inventorySlotController.id));
+            }
+            
 
             beginSplit();
         }
@@ -187,6 +207,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     }
 
     private void beginSplit() {
+        Debug.Log("beginSplit");
         splitting = true;
         dragging = true;
         inventoryController.DraggingInvItem = true;

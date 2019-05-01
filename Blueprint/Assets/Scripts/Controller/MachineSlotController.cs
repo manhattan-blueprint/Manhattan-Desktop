@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
-    private MachineController MachineController = null;
+    internal MachineController MachineController = null;
 
     public new void OnDrop(GameObject droppedObject, bool splitting) {
         RectTransform invPanel = transform as RectTransform;
