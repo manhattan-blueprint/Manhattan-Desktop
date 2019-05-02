@@ -22,9 +22,9 @@ public class GoalSlotController : InventorySlotController {
         Debug.Log("OBJECT DROPPED ON GOAL SLOT CONTROLLER");
         RectTransform invPanel = transform as RectTransform;
         if (goalUIController == null)
-            goalUIController = GameObject.Find("GoalUICanvas").GetComponent<GoalUIController>();
+            goalUIController = GameObject.Find("GoalCanvas").GetComponent<GoalUIController>();
 
-        InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>();
+        InventorySlotController source = droppedObject.transform.GetComponent<InventorySlotController>();
         InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
