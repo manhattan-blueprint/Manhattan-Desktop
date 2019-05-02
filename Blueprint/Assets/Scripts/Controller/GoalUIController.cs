@@ -163,10 +163,10 @@ namespace Controller {
 
             GameObject names = GameObject.Find("Names");
             animationManager.StartAppearanceAnimation(names, Anim.Appear, 3.0f, true, 0.0f, 34.0f);
-            animationManager.StartAppearanceAnimation(names, Anim.Disappear, 3.0f, true, 0.0f, 47.0f);
+            animationManager.StartAppearanceAnimation(names, Anim.Disappear, 3.0f, true, 0.0f, 44.0f);
 
             GameObject blueprintText = GameObject.Find("GameoverBlueprintText");
-            animationManager.StartAppearanceAnimation(blueprintText, Anim.Grow, 3.0f, false, 1.0f, 53.0f);
+            animationManager.StartAppearanceAnimation(blueprintText, Anim.Grow, 3.0f, false, 1.0f, 54.0f);
             blueprintText.transform.localScale = Vector3.zero;
 
             // Create astronaut.

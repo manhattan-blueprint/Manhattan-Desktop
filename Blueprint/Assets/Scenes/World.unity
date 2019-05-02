@@ -26641,7 +26641,7 @@ TextMesh:
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 4
-  m_Alignment: 0
+  m_Alignment: 1
   m_TabSize: 4
   m_FontSize: 50
   m_FontStyle: 0
@@ -29454,7 +29454,7 @@ Transform:
   m_GameObject: {fileID: 584225921}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -429.99084, y: -243.90822, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 1342463189}
   m_RootOrder: 3
@@ -38221,8 +38221,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767499402}
-  m_LocalRotation: {x: -0.29294574, y: 0.0045986534, z: 0.0014087743, w: 0.956117}
-  m_LocalPosition: {x: -3.2323027, y: -693.74005, z: -1048.3253}
+  m_LocalRotation: {x: -0.21998842, y: 0.22898813, z: 0.05320775, w: 0.9467516}
+  m_LocalPosition: {x: -90.290405, y: -113.40336, z: -224.76122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1296119724}
@@ -79587,8 +79587,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1621908879}
-  m_LocalRotation: {x: -0.29294574, y: 0.0045986534, z: 0.0014087743, w: 0.956117}
-  m_LocalPosition: {x: -9.172303, y: -687.11914, z: -1011.98535}
+  m_LocalRotation: {x: -0.21998842, y: 0.22898813, z: 0.05320775, w: 0.9467516}
+  m_LocalPosition: {x: -96.23041, y: -106.78246, z: -188.42122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -84910,7 +84910,7 @@ Transform:
   m_GameObject: {fileID: 1757523432}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -424.4, y: -1231, z: 2.5999985}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalScale: {x: 0.014, y: 0.014, z: 0.014}
   m_Children: []
   m_Father: {fileID: 1342463189}
   m_RootOrder: 6
@@ -84945,7 +84945,7 @@ TextMesh:
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 4
-  m_Alignment: 0
+  m_Alignment: 1
   m_TabSize: 4
   m_FontSize: 50
   m_FontStyle: 0
@@ -85127,7 +85127,7 @@ TextMesh:
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 4
-  m_Alignment: 0
+  m_Alignment: 1
   m_TabSize: 4
   m_FontSize: 50
   m_FontStyle: 0

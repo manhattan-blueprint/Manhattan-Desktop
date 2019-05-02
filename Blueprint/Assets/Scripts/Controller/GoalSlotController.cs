@@ -19,7 +19,6 @@ public class GoalSlotController : InventorySlotController {
     internal GoalUIController goalUIController = null;
 
     public new void OnDrop(GameObject droppedObject, bool splitting) {
-        Debug.Log("OBJECT DROPPED ON GOAL SLOT CONTROLLER");
         RectTransform invPanel = transform as RectTransform;
         if (goalUIController == null)
             goalUIController = GameObject.Find("GoalCanvas").GetComponent<GoalUIController>();
