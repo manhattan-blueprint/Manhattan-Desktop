@@ -118,6 +118,8 @@ namespace Controller {
 
         private void ToMainMenu() {
             GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         private void OpenInventory() {
