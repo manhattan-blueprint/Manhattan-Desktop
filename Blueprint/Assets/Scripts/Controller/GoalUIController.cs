@@ -61,15 +61,15 @@ namespace Controller {
 
         public void StateDidUpdate(MapState state) {
             goal = state.getGoal();
-            if (goal.topInput == true) {
+            if (goal.topInput) {
                 SetAlpha("TopSlot/TopItem", 1.0f);
                 ActivateDish();
             }
-            if (goal.midInput == true) {
+            if (goal.midInput) {
                 SetAlpha("MidSlot/MidItem", 1.0f);
                 ActivateAntenna();
             }
-            if (goal.botInput == true) {
+            if (goal.botInput) {
                 SetAlpha("BotSlot/BotItem", 1.0f);
                 ActivateTransmitter();
             }
@@ -86,7 +86,7 @@ namespace Controller {
         }
 
         public void HideDish() {
-            bigDish.GetComponent<MeshRenderer>().enabled        = false;
+            bigDish.GetComponent<MeshRenderer>().enabled = false;
             dishHolder1.GetComponent<MeshRenderer>().enabled = false;
             dishHolder2.GetComponent<MeshRenderer>().enabled = false;
             dishHolder3.GetComponent<MeshRenderer>().enabled = false;
@@ -106,7 +106,7 @@ namespace Controller {
         }
 
         public void ActivateDish() {
-            bigDish.GetComponent<MeshRenderer>().enabled        = true;
+            bigDish.GetComponent<MeshRenderer>().enabled = true;
             dishHolder1.GetComponent<MeshRenderer>().enabled = true;
             dishHolder2.GetComponent<MeshRenderer>().enabled = true;
             dishHolder3.GetComponent<MeshRenderer>().enabled = true;
@@ -142,7 +142,6 @@ namespace Controller {
         }
 
         public void StartWinAnimation() {
-            Debug.Log("GAME COMPLETE. CONGRATULATIONS. ASK WILL FOR CAKE.");
             IEnumerator timedCoroutine = SpinDish();
             StartCoroutine(timedCoroutine);
         }
@@ -153,21 +152,16 @@ namespace Controller {
             ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
 
             GameObject blackOverlay = GameObject.Find("GameoverOverlay");
-            animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
+            animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 3.0f, true, 0.0f, 11.0f);
             GameObject signalSent = GameObject.Find("SignalSent");
-            animationManager.StartAppearanceAnimation(signalSent, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
-            animationManager.StartAppearanceAnimation(signalSent, Anim.Disappear, 3.0f, true, 0.0f, 30.0f);
+            animationManager.StartAppearanceAnimation(signalSent, Anim.Appear, 2.0f, true, 0.0f, 12.0f);
+            animationManager.StartAppearanceAnimation(signalSent, Anim.Disappear, 1.5f, true, 0.0f, 18.0f);
             GameObject willRespond = GameObject.Find("WillRespond");
-            animationManager.StartAppearanceAnimation(willRespond, Anim.Appear, 3.0f, true, 0.0f, 20.0f);
-            animationManager.StartAppearanceAnimation(willRespond, Anim.Disappear, 3.0f, true, 0.0f, 30.0f);
+            animationManager.StartAppearanceAnimation(willRespond, Anim.Appear, 2.0f, true, 0.0f, 14.0f);
+            animationManager.StartAppearanceAnimation(willRespond, Anim.Disappear, 1.5f, true, 0.0f, 18.0f);
 
             GameObject names = GameObject.Find("Names");
-            animationManager.StartAppearanceAnimation(names, Anim.Appear, 3.0f, true, 0.0f, 34.0f);
-            animationManager.StartAppearanceAnimation(names, Anim.Disappear, 3.0f, true, 0.0f, 44.0f);
-
-            GameObject blueprintText = GameObject.Find("GameoverBlueprintText");
-            animationManager.StartAppearanceAnimation(blueprintText, Anim.Grow, 3.0f, false, 1.0f, 54.0f);
-            blueprintText.transform.localScale = Vector3.zero;
+            animationManager.StartAppearanceAnimation(names, Anim.Appear, 3.0f, true, 0.0f, 21.0f);
 
             // Create astronaut.
             Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
@@ -199,8 +193,6 @@ namespace Controller {
                 willRespond.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
                 names.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
                 names.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
-                blueprintText.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.9f;
-                blueprintText.transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 2.0f);
             }
         }
     }

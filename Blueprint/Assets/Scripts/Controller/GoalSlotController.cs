@@ -29,8 +29,6 @@ public class GoalSlotController : InventorySlotController {
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)) {
 
             // Don't move the item if item is incorrect.
-            // TODO: Update to correct number once have items for testing in
-            // inventory.
             if (slotType == GoalSlotType.TopSlot && source.storedItem.Get().GetId() != 28)
                 return;
             if (slotType == GoalSlotType.MidSlot) {

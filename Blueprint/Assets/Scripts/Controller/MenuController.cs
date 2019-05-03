@@ -15,7 +15,6 @@ using Debug = UnityEngine.Debug;
 namespace Controller {
     public class MenuController : MonoBehaviour, Subscriber<UIState> {
         public bool gameOver;
-        public bool gameOverExitable;
         private Canvas inventoryCanvas;
         private Canvas heldCanvas;
         private Canvas cursorCanvas;
@@ -48,8 +47,6 @@ namespace Controller {
             cursor = GameObject.Find("Cursor Image").GetComponent<Image>();
             rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
 
-            // TO DO FIND MOUSE ICON AND SWITCH IT WITH CURSOR
-
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
             gateCanvas.enabled = false;
@@ -61,7 +58,6 @@ namespace Controller {
             goalCanvas.enabled = false;
 
             gameOver = false;
-            gameOverExitable = false;
             rmb.enabled = false;
 
             GameManager.Instance().uiStore.Subscribe(this);
@@ -69,13 +65,6 @@ namespace Controller {
 
         void Update() {
             if (gameOver) {
-                if (gameOverExitable) {
-                    if (Input.GetKeyDown(KeyMapping.Pause)) {
-                        GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
-                        gameOver = false;
-                        gameOverExitable = false;
-                    }
-                }
                 return;
             }
 
@@ -124,11 +113,11 @@ namespace Controller {
             pauseCanvas.enabled = false;
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
             GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
-            Invoke("GameOverMakeExitable", 40.0f);
+            Invoke("ToMainMenu", 30.0f);
         }
 
-        private void GameOverMakeExitable() {
-            gameOverExitable = true;
+        private void ToMainMenu() {
+            GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
         }
 
         private void OpenInventory() {
