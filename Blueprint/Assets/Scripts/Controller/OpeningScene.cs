@@ -18,30 +18,49 @@ public class OpeningScene : MonoBehaviour
   void Start() {
     dishBase = GameObject.Find("Beacon");
     introCompletionCheck = GameManager.Instance().uiStore.GetState().IntroComplete;
-    Debug.Log(introCompletionCheck);
-    Debug.Log("Hello");
     if (!introCompletionCheck) {
       GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
       introAnimation();
     }
   }
 
+  float currCountdownValue;
+  public IEnumerator StartCountdown(float countdownValue = 10)
+  {
+      currCountdownValue = countdownValue;
+      while (currCountdownValue > 0)
+      {
+          Debug.Log("Countdown: " + currCountdownValue);
+          yield return new WaitForSeconds(1.0f);
+          currCountdownValue--;
+      }
+      // if (currCountdownValue > 10) // set a boolean false
+      // if (currCountdownValue > 20) // set a boolean false
+      // if (currCountdownValue > 30) // set a boolean false
+  }
+
   private void introAnimation() {
        IEnumerator timedCoroutine = worldPanning();
        StartCoroutine(timedCoroutine);
+       StartCoroutine(StartCountdown());
   }
+
 
   private IEnumerator worldPanning() {
         float spinSpeed = 0.0f;
 
         ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
 
+        GameObject fadeOverlay = GameObject.Find("FadeOverlay");
+        Debug.Log(fadeOverlay);
+        // time to do, delay
+        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Appear, 1.0f, true, 0.0f, 3.0f);
+        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Disappear, 1.0f, true, 0.0f, 6.0f);
+
         GameObject story1 = GameObject.Find("Story1");
-        animationManager.StartAppearanceAnimation(story1, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
+        animationManager.StartAppearanceAnimation(story1, Anim.Appear, 3.0f, true, 0.0f, 3.0f);
         animationManager.StartAppearanceAnimation(story1, Anim.Disappear, 3.0f, true, 0.0f, 30.0f);
 
-        GameObject fadeOverlay = GameObject.Find("FadeOverlay");
-        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Appear, 3.0f, true, 0.0f, 13.0f);
 
         // Create astronaut.
         // Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
@@ -50,7 +69,6 @@ public class OpeningScene : MonoBehaviour
         // astronaut.transform.LookAt(Vector3.zero);
 
         while (true) {
-
             yield return new WaitForSeconds(1.0f / 60.0f);
 
             // Make camera zoom out and spin.
