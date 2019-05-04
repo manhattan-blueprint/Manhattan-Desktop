@@ -93,7 +93,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
                 }
             } else if (GameManager.Instance().uiStore.GetState().IntroComplete) {
-                if (!watchingIntro) {
+                if (!GameManager.Instance().uiStore.GetState().IntroComplete) {
                     GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
                 }
             }
@@ -166,21 +166,20 @@ namespace Controller {
             heldCanvas.enabled = true;
             rmb.enabled = false;
             cursor.enabled = true;
+            introCanvas.enabled = false;
+            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
         }
 
         public void WatchIntro() {
+            int time = introCanvas.GetComponent<OpeningScene>().GetIntroTime();
             watchingIntro = true;
-            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+            introCanvas.enabled = true;
             heldCanvas.enabled = false;
             cursorCanvas.enabled = false;
             pauseCanvas.enabled = false;
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
             GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
-            Invoke("IntroComplete", 30.0f);
-        }
-
-        public void IntroComplete() {
-          watchingIntro = false;
         }
 
         // Logout button from the pause menu
@@ -239,6 +238,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(UIState state) {
+            Debug.Log(state.Selected);
             switch (state.Selected) {
                 case UIState.OpenUI.Inventory:
                     OpenInventory();
