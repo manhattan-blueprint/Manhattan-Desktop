@@ -24,6 +24,15 @@ public class FuelElement {
     public FuelElement(int itemID) {
         this.item_id = itemID;
     }
+
+    public override bool Equals(object obj) {
+        FuelElement fuelElement = obj as FuelElement;
+        if (fuelElement != null) {
+            return item_id == fuelElement.item_id;
+        }
+
+        return false;
+    }
 }
 
 [Serializable]
@@ -43,5 +52,13 @@ public class SchemaItem {
     public List<RecipeElement> blueprint;
     public List<RecipeElement> recipe;
     public List<FuelElement> fuel;
+
+    public bool isMachine() {
+        return type == ItemType.BlueprintCraftedMachine;
+    }
+
+    public bool isPoweredByElectricity() {
+        return fuel.Contains(new FuelElement(32));
+    }
 }
 

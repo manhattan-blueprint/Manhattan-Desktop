@@ -12,7 +12,17 @@ ModelImporter:
     2300000: Diamond_Ore
     3300000: Diamond_Ore
     4300000: Diamond_Ore
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Diamond3
+    second: {fileID: 2100000, guid: 349bf6a98a978924ea366ab88239bac1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: iron_ore1_RockTexture
+    second: {fileID: 2100000, guid: 5eddc6afdfc7f68e686117116e6c27df, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

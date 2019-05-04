@@ -11,10 +11,13 @@ namespace Model.State {
             Blueprint,
             BlueprintTemplate,
             Machine,
+            Goal,
             Pause,
             Exit,
             Logout,
             Bindings,
+            Gate,
+            Mouse,
         };
 
         public OpenUI Selected;

@@ -21,7 +21,6 @@ namespace Controller {
 
         private RaycastHit hit;
         private Text txt;
-        private InventoryController inventory;
         private float timer;
         private string index;
         private HexMapController hexMapController;
@@ -29,7 +28,6 @@ namespace Controller {
         private bool holdInitiated;
 
         void Start() {
-            inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
             hexMapController = GameObject.FindGameObjectWithTag("Map").GetComponent<HexMapController>();
             timer = 0.0f;
             holdInitiated = false;
@@ -49,7 +47,10 @@ namespace Controller {
 
 
             // Put down held item
-            if (Input.GetMouseButtonDown(rightButton)) {
+            if (Input.GetMouseButtonDown(rightButton) && 
+                GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Machine && 
+                GameManager.Instance().uiStore.GetState().Selected != UIState.OpenUI.Inventory) {
+                
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
                 hit = new RaycastHit();
                 if (!Physics.Raycast(ray, out hit)) return;
@@ -59,18 +60,25 @@ namespace Controller {
                 if (mp != null) {
                     // Calculate where the machine is
                     HexCell parentHex = mp.transform.parent.gameObject.GetComponent<HexCell>();
-                    GameManager.Instance().uiStore.Dispatch(new OpenMachineUI(parentHex.getPosition()));
+                    GameManager.Instance().uiStore.Dispatch(new OpenMachineUI(parentHex.GetPosition()));
+                    return;
+                }
+
+                // If we hit the goal, go to goal UI
+                CentralGoal gl = hit.transform.gameObject.GetComponent<CentralGoal>();
+                if (gl != null) {
+                    GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
                     return;
                 }
 
                 // Otherwise try and place an object in that spot
                 HexCell hc = hit.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc != null) {
-                    GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.getPosition()));
+                    GameManager.Instance().inventoryStore.Dispatch(new RemoveHeldItem(hc.GetPosition()));
                 }
             }
 
-            
+
             // Pick up item
             if (Input.GetMouseButton(leftButton) && timer > holdLength && holdInitiated) {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -82,11 +90,11 @@ namespace Controller {
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
 
-                GameManager.Instance().mapStore.Dispatch(new CollectItem(hc.getPosition()));
+                GameManager.Instance().mapStore.Dispatch(new CollectItem(hc.GetPosition()));
                 holdInitiated = false;
 
                 if (p is MachinePlaceable) {
-                    GameManager.Instance().machineStore.Dispatch(new RemoveMachine(hc.getPosition()));
+                    GameManager.Instance().machineStore.Dispatch(new RemoveMachine(hc.GetPosition()));
                 }
 
             } else if (Input.GetMouseButtonDown(leftButton)) {

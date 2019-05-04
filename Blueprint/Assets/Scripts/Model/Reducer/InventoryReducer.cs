@@ -74,7 +74,7 @@ namespace Model.Reducer {
             int firstEmptySlot = getFirstEmptySlot();
             int newQuantity = (int) splitStackAction.count / 2;
 
-            if (firstEmptySlot < state.inventorySize-1 && newQuantity > 0) {
+            if (firstEmptySlot < state.inventorySize && newQuantity > 0 && firstEmptySlot > 0) {
                 visit(new RemoveItemFromStackInventory(splitStackAction.item, newQuantity, splitStackAction.hexID));
                 
                 HexLocation item = new HexLocation(firstEmptySlot, newQuantity);
@@ -229,17 +229,18 @@ namespace Model.Reducer {
                     int itemID = content.Key;
                     // Only remove and place if quantity > 0 and there is not a item placed at this location
                     if (hexLocation.hexID == index && hexLocation.quantity > 0 &&
-                            !GameManager.Instance().mapStore.GetState().getObjects().ContainsKey(removeHeldItem.dropAt)) {
+                            !GameManager.Instance().mapStore.GetState().GetObjects().ContainsKey(removeHeldItem.dropAt)) {
                         visit(new RemoveItemFromStackInventory(itemID, 1, index));
+                        
+                        // If is blueprint, add to machine _before_ the map state, to correctly trigger update
+                        // of connected status
+                        SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
+                        if (entry.isMachine()) {
+                            GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
+                        }
                         
                         // Place item on map
                         GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, itemID));
-                       
-                        // If is blueprint, also add to machine
-                        SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
-                        if (entry.type == SchemaItem.ItemType.BlueprintCraftedMachine) {
-                            GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
-                        }
                         return;
                     } 
                 }

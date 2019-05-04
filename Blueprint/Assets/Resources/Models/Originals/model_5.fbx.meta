@@ -12,7 +12,17 @@ ModelImporter:
     2300000: Copper_Ore
     3300000: Copper_Ore
     4300000: Copper_Ore
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Copper_Ore1
+    second: {fileID: 2100000, guid: 5cf3eee51dfbcbbbcb68a20b51db0541, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: iron_ore1_RockTexture
+    second: {fileID: 2100000, guid: e48483bc2cb040a27bb9b755c6d7c803, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

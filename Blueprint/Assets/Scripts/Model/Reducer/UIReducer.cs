@@ -1,6 +1,8 @@
 using System;
 using Model.Action;
 using Model.State;
+using UnityEngine;
+using Controller;
 
 namespace Model.Reducer {
     public class UIReducer : Reducer<UIState, UIAction>, UIVisitor {
@@ -19,12 +21,17 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Inventory:
                 case UIState.OpenUI.Blueprint:
                 case UIState.OpenUI.Machine:
+                case UIState.OpenUI.Goal:
                 case UIState.OpenUI.Pause:
                 case UIState.OpenUI.Bindings:
+                case UIState.OpenUI.Mouse:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
+                    break;
+                case UIState.OpenUI.Gate:
+                    state.Selected = UIState.OpenUI.Mouse;
                     break;
                 case UIState.OpenUI.Logout:
                 case UIState.OpenUI.Exit:
@@ -38,6 +45,7 @@ namespace Model.Reducer {
         public void visit(OpenLoginUI login) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
+                case UIState.OpenUI.Playing:
                 case UIState.OpenUI.Welcome:
                 case UIState.OpenUI.Logout:
                     state.Selected = UIState.OpenUI.Login;
@@ -104,6 +112,28 @@ namespace Model.Reducer {
             }
         }
 
+        public void visit(OpenMouseUI mouse) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Mouse;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMouseUI");
+            }
+        }
+
+        public void visit(OpenGateUI gate) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Mouse:
+                    state.Selected = UIState.OpenUI.Gate;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenGateUI");
+            }
+        }
+
         public void visit(OpenMachineUI machine) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
@@ -113,6 +143,18 @@ namespace Model.Reducer {
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMachineUI");
+            }
+        }
+
+        public void visit(OpenGoalUI goal) {
+            // Update if exists or add new
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Goal;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenGoalUI");
             }
         }
 
@@ -134,6 +176,8 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Logout;
+                    GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+                    GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to Logout");

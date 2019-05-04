@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model;
-using Model.Action;
 using Model.Redux;
 using Model.State;
 using Quaternion = UnityEngine.Quaternion;
@@ -12,21 +11,26 @@ using Vector3 = UnityEngine.Vector3;
 
 /* Attached to MapGenerator and spawns map onto scene */
 namespace Controller {
-    public class HexMapController : MonoBehaviour, Subscriber<MapState> {
+    public class HexMapController : MonoBehaviour, Subscriber<MapState>, Subscriber<MachineState> {
+        [SerializeField] private Material wireMaterial;
         private int gridSize = 18;
         private float previousX = 0;
         private float previousZ = 0;
         
         private Dictionary<Vector2, GameObject> grid;
         private Dictionary<Vector2, GameObject> objectsPlaced;
+        private List<GameObject> wires;
         
         private void Start() {
             this.grid = new Dictionary<Vector2, GameObject>();
             this.objectsPlaced = new Dictionary<Vector2, GameObject>();
+            this.wires = new List<GameObject>();
             drawMap();
             
             GameManager.Instance().mapStore.Subscribe(this);
+            GameManager.Instance().machineStore.Subscribe(this);
         }
+        
         private void drawMap() {
             GameObject hexTile = Resources.Load("hex_cell") as GameObject;
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
@@ -35,7 +39,7 @@ namespace Controller {
             GameObject cell = Instantiate(hexTile, new Vector3(0, -0.5f, 0), rotation);
             cell.transform.parent = this.gameObject.transform;
             Vector2 position = new Vector2(0, 0);
-            cell.AddComponent<HexCell>().setPosition(position);
+            cell.AddComponent<HexCell>().SetPosition(position);
             
             grid.Add(position, cell);
           
@@ -46,7 +50,7 @@ namespace Controller {
                 cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, -0.5f, l * 1.5f), rotation);
                 position = new Vector2(-l, l);
                 cell.transform.parent = this.gameObject.transform;
-                cell.AddComponent<HexCell>().setPosition(position);
+                cell.AddComponent<HexCell>().SetPosition(position);
                 grid.Add(position, cell);
                 
                 setPreviousCoords(cell);
@@ -55,7 +59,7 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3), -0.5f, previousZ), rotation);
                     position = new Vector2(-l + i, l);
-                    cell.AddComponent<HexCell>().setPosition(position);
+                    cell.AddComponent<HexCell>().SetPosition(position);
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -65,7 +69,7 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(i, l-i);
-                    cell.AddComponent<HexCell>().setPosition(position);
+                    cell.AddComponent<HexCell>().SetPosition(position);
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -75,7 +79,7 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(l, -i);
-                    cell.AddComponent<HexCell>().setPosition(position);
+                    cell.AddComponent<HexCell>().SetPosition(position);
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -85,7 +89,7 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3), -0.5f, previousZ), rotation);
                     position = new Vector2(l-i, -l);
-                    cell.AddComponent<HexCell>().setPosition(position);
+                    cell.AddComponent<HexCell>().SetPosition(position);
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -95,7 +99,7 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-i, -l + i);
-                    cell.AddComponent<HexCell>().setPosition(position);
+                    cell.AddComponent<HexCell>().SetPosition(position);
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -105,11 +109,12 @@ namespace Controller {
                 for (int i = 1; i < l; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-l, i);
-                    cell.AddComponent<HexCell>().setPosition(position);
+                    cell.AddComponent<HexCell>().SetPosition(position);
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
             } 
+            
         }
         
         private void setPreviousCoords(GameObject go) {
@@ -118,7 +123,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(MapState state) {
-            Dictionary<Vector2, MapObject> newObjects = state.getObjects();
+            Dictionary<Vector2, MapObject> newObjects = state.GetObjects();
             Dictionary<Vector2, MapObject>.KeyCollection newKeys = newObjects.Keys;
             Dictionary<Vector2, GameObject>.KeyCollection oldKeys = objectsPlaced.Keys;
 	
@@ -149,13 +154,56 @@ namespace Controller {
                 GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, 90, 0)); 
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
-
             }
 	
             // Remove things in old but not in new
             foreach (Vector3 oldObject in inOldNotInNew) {
                 Destroy(objectsPlaced[oldObject]);
                 objectsPlaced.Remove(oldObject);
+            }
+            
+            // Draw wires
+            wires.ForEach(Destroy);
+            wires.Clear();
+            foreach (WirePath path in state.GetWirePaths()) {
+                // Convert grid coordinate to real world coordinates
+                Vector3 startWorld = grid[path.start].transform.position;
+                Vector3 endWorld = grid[path.end].transform.position;
+                
+                GameObject lineObject = new GameObject("Line");
+                LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
+                lineRenderer.widthMultiplier = 0.1f;
+                lineRenderer.positionCount = 2;
+                lineRenderer.SetPosition(0, new Vector3(startWorld.x, 0.1f, startWorld.z));
+                lineRenderer.SetPosition(1, new Vector3(endWorld.x, 0.1f, endWorld.z));
+                lineRenderer.material = wireMaterial;
+                wires.Add(lineObject);
+            }
+            
+            updateMachineLights();
+        }
+
+        public void StateDidUpdate(MachineState state) {
+            updateMachineLights();
+        }
+
+        private void updateMachineLights() {
+            foreach (KeyValuePair<Vector2, Machine> kvp in GameManager.Instance().machineStore.GetState().grid) {
+                if (!objectsPlaced.ContainsKey(kvp.Key)) continue;
+                
+                Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
+                foreach (Light light in lights) {
+                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
+                }
+
+                ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();
+                foreach (ParticleSystem system in particleSystems) {
+                    if (kvp.Value.HasFuel()) {
+                        system.Play();
+                    } else {
+                        system.Pause();
+                    }
+                }
             }
         }
     }

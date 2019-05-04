@@ -14,7 +14,7 @@ namespace Tests {
             this.gameManager = GameManager.Instance();
             gameManager.ResetGame();
         }
-        
+
         [Test]
         public void TestGameManagerExists() {
             Assert.NotNull(gameManager);
@@ -80,6 +80,21 @@ namespace Tests {
         }
 
         [Test]
+        public void TestOpenGoalUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenGoalUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Goal));
+        }
+
+        [Test]
+        public void TestCloseGoalUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenGoalUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+
+        [Test]
         public void TestOpenPlaySettingsUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
@@ -102,7 +117,7 @@ namespace Tests {
                 gameManager.uiStore.Dispatch(new OpenSettingsUI());
                 Assert.Fail("Exception wasn't thrown");
             } catch {
-                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Inventory)); 
+                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Inventory));
             }
         }
 
@@ -114,7 +129,7 @@ namespace Tests {
                 gameManager.uiStore.Dispatch(new OpenSettingsUI());
                 Assert.Fail("Exception wasn't thrown");
             } catch {
-                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Blueprint)); 
+                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Blueprint));
             }
         }
 
@@ -126,10 +141,10 @@ namespace Tests {
                 gameManager.uiStore.Dispatch(new OpenSettingsUI());
                 Assert.Fail("Exception wasn't thrown");
             } catch {
-                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Machine)); 
+                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Machine));
             }
         }
-        
+
         [Test]
         public void TestOpenBindingSettingsUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
@@ -138,7 +153,7 @@ namespace Tests {
                 gameManager.uiStore.Dispatch(new OpenSettingsUI());
                 Assert.Fail("Exception wasn't thrown");
             } catch {
-                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Bindings)); 
+                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Bindings));
             }
         }
 
@@ -165,6 +180,23 @@ namespace Tests {
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             gameManager.uiStore.Dispatch(new Exit());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Exit));
+        }
+
+        [Test]
+        public void TestOpenGateUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenMouseUI());
+            gameManager.uiStore.Dispatch(new OpenGateUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Gate));
+        }
+
+        [Test]
+        public void TestCloseGateUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenMouseUI());
+            gameManager.uiStore.Dispatch(new OpenGateUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Mouse));
         }
 
         [Test]
