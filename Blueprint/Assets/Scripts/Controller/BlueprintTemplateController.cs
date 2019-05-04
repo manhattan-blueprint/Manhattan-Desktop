@@ -27,17 +27,17 @@ namespace Controller {
             {31, "Component of the communication beacon"}
         };
         private readonly Dictionary<int, string> developerNameDict = new Dictionary<int, string> {
-            {11, "Ben Lee"},
-            {19, "Will JV Smith"},
-            {18, "Jay Lees"},
-            {20, "Adam Fox"},
-            {25, "Andrei Nitu"},
+            {11, "Will JV Smith"},
+            {19, "Jay Lees"},
+            {18, "Adam fox"},
+            {20, "Andrei Nitu"},
+            {25, "Ben Lee"},
             {23, "Elias K R"},
-            {22, "Ben Lee"},
-            {24, "Will JV Smith"},
-            {26, "Jay Lees"},
-            {29, "Adam Fox"},
-            {28, "Andrei Nitu"},
+            {22, "Will JV Smith"},
+            {24, "Jay Lees"},
+            {26, "Adam Fox"},
+            {29, "Andrei Nitu"},
+            {28, "Ben Lee"},
             {31, "Elias K R"}
         };
         
@@ -256,6 +256,7 @@ namespace Controller {
         }
 
         public void onBackClick() {
+            // This probably has side effects ngl
             EventSystem.current.SetSelectedGameObject(null);
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
