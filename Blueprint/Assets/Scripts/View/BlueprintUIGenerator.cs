@@ -7,6 +7,7 @@ using Model;
 using Model.Action;
 using Service.Request;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
@@ -118,6 +119,16 @@ public class BlueprintUIGenerator : MonoBehaviour {
         addBlueprintCell(28, scaleUnit * 32, (float) (scaleUnit * 2.5));
         addBlueprintCell(31, scaleUnit * 32, (float) (scaleUnit * -2.5));
         
+        // Add beacon outline
+        GameObject beaconOutline = new GameObject("BeaconSprite");
+        beaconOutline.transform.SetParent(contentContainer.transform);
+        RectTransform beaconRT = (RectTransform) beaconOutline.AddComponent(typeof(RectTransform));
+        beaconRT.pivot = new Vector2(0.5f, 0.5f);
+        beaconRT.sizeDelta = new Vector2(primaryCellDimension * 5, primaryCellDimension * 5);
+        beaconRT.localPosition = new Vector2(scaleUnit * 36, 0);
+        Image beaconImage = (Image) beaconOutline.AddComponent(typeof(Image));
+        beaconImage.sprite = AssetManager.Instance().blueprintBeacon;
+         
         // Make tooltip appear on top
         tooltip.transform.SetAsLastSibling();
 

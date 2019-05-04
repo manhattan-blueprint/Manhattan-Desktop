@@ -28,6 +28,7 @@ namespace Model {
             Resources.Load("UI/blueprint-template-background", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintTemplateCross = Resources.Load("UI/cross", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintTemplateTick = Resources.Load("UI/tick", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintBeacon = Resources.Load("UI/outlines/beacon", typeof(Sprite)) as Sprite;
         
         private AssetManager() { }
 
