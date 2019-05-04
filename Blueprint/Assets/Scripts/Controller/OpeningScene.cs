@@ -19,11 +19,14 @@ public class OpeningScene : MonoBehaviour
     private GameObject forestPath;
     private GameObject pondPath;
     private GameObject mountainWater;
+    private GameObject deleteTrees;
+
     private int mountainSceneTime = 20;
     private int forestSceneTime = 15;
     private int pondSceneTime = 25;
     private int beaconSceneTime = 15;
     private int totalIntroTime;
+
     private bool play = true;
     private GameObject player;
     private float currCountdownValue;
@@ -38,6 +41,7 @@ public class OpeningScene : MonoBehaviour
 
         dishBase = GameObject.Find("Beacon");
         mountainWater = GameObject.Find("MountainWater");
+        deleteTrees = GameObject.Find("DeleteTrees");
         player = GameObject.Find("Player");
 
         mountainPath = GameObject.Find("MountainPath");
@@ -56,9 +60,14 @@ public class OpeningScene : MonoBehaviour
 
         introCompletionCheck = GameManager.Instance().uiStore.GetState().IntroComplete;
         if (!introCompletionCheck) {
-          GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
-          introAnimation();
+            Invoke("intro",0.001f);
         }
+    }
+
+    private void intro()
+    {
+        GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
+        introAnimation();
     }
 
     public int GetIntroTime() {
@@ -98,6 +107,8 @@ public class OpeningScene : MonoBehaviour
         mountainPath.GetComponent<CPC_CameraPath>().PlayPath(mountainSceneTime);
         yield return new WaitForSeconds(mountainSceneTime);
         enableText(story1, false);
+        Destroy(mountainWater);
+        Destroy(deleteTrees);
 
         enableText(story2, true);
         forestPath.GetComponent<CPC_CameraPath>().PlayPath(forestSceneTime);
