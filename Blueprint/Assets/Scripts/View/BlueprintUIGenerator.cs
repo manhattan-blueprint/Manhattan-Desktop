@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Model;
 using Model.Action;
 using Service.Request;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
@@ -22,6 +23,8 @@ public class BlueprintUIGenerator : MonoBehaviour {
     private float scrollSensitivity = 24f;
     private GameObject scrollContainer;
     private GameObject contentContainer;
+    private GameObject tooltip;
+    private TextMeshProUGUI tooltipText;
     
     void Start() {
         scaleUnit = Screen.height / scale;
@@ -54,6 +57,12 @@ public class BlueprintUIGenerator : MonoBehaviour {
         contentRT.localPosition = new Vector2(0, 0);
         contentContainer.AddComponent(typeof(SVGImage));
         contentContainer.GetComponent<SVGImage>().sprite = AssetManager.Instance().blueprintUIBackground;
+        
+        // Move tooltip into scroll container, cheers Unity
+        tooltip = GameObject.Find("BTooltip");
+        tooltip.transform.SetParent(contentContainer.transform);
+        tooltipText = GameObject.Find("BTooltipText").GetComponent<TextMeshProUGUI>();
+        tooltip.SetActive(false);
         
         // Add primary resource cells
         addPrimaryCell(1,  (float) (scaleUnit * 1.5), scaleUnit * 3);
@@ -108,6 +117,9 @@ public class BlueprintUIGenerator : MonoBehaviour {
         
         addBlueprintCell(28, scaleUnit * 32, (float) (scaleUnit * 2.5));
         addBlueprintCell(31, scaleUnit * 32, (float) (scaleUnit * -2.5));
+        
+        // Make tooltip appear on top
+        tooltip.transform.SetAsLastSibling();
 
         // Attach content to scroll rect
         scrollSR.content = contentContainer.GetComponent<RectTransform>();
@@ -123,6 +135,11 @@ public class BlueprintUIGenerator : MonoBehaviour {
         cellRT.localPosition = new Vector2(xPos, yPos);
         cell.AddComponent(typeof(Image));
         cell.GetComponent<Image>().sprite = AssetManager.Instance().blueprintUICellPrimary;
+        Tooltip cellTooltip = (Tooltip) cell.AddComponent(typeof(Tooltip));
+        cellTooltip.tooltip = tooltip;
+        cellTooltip.tooltipText = tooltipText;
+        cellTooltip.tooltipText.fontSize = scaleUnit / 4;
+        cellTooltip.text = name;
         
         GameObject sprite = new GameObject(name + "Sprite");
         sprite.transform.SetParent(cell.transform);

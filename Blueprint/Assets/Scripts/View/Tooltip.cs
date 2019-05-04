@@ -6,13 +6,9 @@ using UnityEngine.EventSystems;
 
 public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
-    [SerializeField] private GameObject tooltip;
-    private TextMeshProUGUI tooltipText;
+    public GameObject tooltip;
     public string text = "";
-
-    void Start() {
-        tooltipText = tooltip.GetComponentInChildren<TextMeshProUGUI>();
-    }
+    public TextMeshProUGUI tooltipText;
     
     public void OnPointerEnter(PointerEventData eventData) {
         tooltipText.text = text;
