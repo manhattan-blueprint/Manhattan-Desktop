@@ -160,32 +160,17 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
                 return;
             }
 
-            // Fetch inventory
-            StartCoroutine(BlueprintAPI.GetInventory(accessToken, inventoryResult => {
-                if (!inventoryResult.isSuccess()) {
-                    SetMessageError("Could not fetch inventory: " + inventoryResult.GetError());
+
+                    
+            // Fetch schema
+            StartCoroutine(BlueprintAPI.GetSchema(schemaResult => {
+                if (!schemaResult.isSuccess()) {
+                    SetMessageError("Could not fetch schema: " + schemaResult.GetError());
                     return;
                 }
 
-                // Delete inventory
-                StartCoroutine(BlueprintAPI.DeleteInventory(accessToken, deleteResult => {
-                    if (!deleteResult.isSuccess()) {
-                        SetMessageError("Could not remove inventory: " + deleteResult.GetError());
-                        return;
-                    }
-                    
-                    // Fetch schema
-                    StartCoroutine(BlueprintAPI.GetSchema(schemaResult => {
-                        if (!schemaResult.isSuccess()) {
-                            SetMessageError("Could not fetch schema: " + schemaResult.GetError());
-                            return;
-                        }
-
-                        GameManager.Instance()
-                            .ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess(), inventoryResult.GetSuccess().items);
-                        toLaunch = true;
-                    }));
-                }));
+                GameManager.Instance().ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess());
+                toLaunch = true;
             }));
         }));
     }

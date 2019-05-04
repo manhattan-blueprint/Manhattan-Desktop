@@ -39,7 +39,7 @@ public class GameManager {
         return manager;
     }
 
-    public void ConfigureGame(SchemaItems schemaItems, GameState gameState, List<InventoryEntry> inventoryEntries) {
+    public void ConfigureGame(SchemaItems schemaItems, GameState gameState) {
         this.sm = new SchemaManager(schemaItems);
             
         mapStore.SetState(gameState.mapState);
@@ -52,10 +52,6 @@ public class GameManager {
         inventoryStore.Dispatch(
             new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
             
-        foreach (InventoryEntry entry in inventoryEntries) {
-            inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity,
-                sm.GameObjs.items[entry.item_id - 1].name));
-        }
         // Update which machines are connected when loading from save state
         machineStore.Dispatch(new UpdateConnected());
     }

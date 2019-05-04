@@ -74,7 +74,7 @@ namespace Model.BlueprintUI {
                 GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(resourceIDC, resourceIDCRequired));
 
             // Add the item to inventory
-            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(resultID, 1, GetItemName(resultID)));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(resultID, 1));
 
             // If crafting no longer viable then destroy the border indicating
             // craft is available.

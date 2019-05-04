@@ -37,17 +37,17 @@ namespace Model.Reducer {
             // Add items within the machine back to the inventory
             if (machine.leftInput.IsPresent()) {
                 InventoryItem item = machine.leftInput.Get();
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity()));
             }
 
             if (machine.rightInput.IsPresent()) {
                 InventoryItem item = machine.rightInput.Get();
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity()));
             }
 
             if (machine.fuel.IsPresent()) {
                 InventoryItem item = machine.fuel.Get();
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity(), item.GetName()));
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(item.GetId(), item.GetQuantity()));
             }
 
             state.grid.Remove(removeMachine.machineLocation);
