@@ -61,6 +61,9 @@ namespace Controller {
         [SerializeField] private List<TextMeshProUGUI> recipesQuantityLeft;
         [SerializeField] private List<TextMeshProUGUI> recipesQuantityMiddle;
         [SerializeField] private Image                 recipesBox;
+        [SerializeField] private List<Tooltip>         recipesTooltipLeft;
+        [SerializeField] private List<Tooltip>         recipesTooltipMiddle;
+        [SerializeField] private List<Tooltip>         recipesTooltipRight;
         
         // Notes box UI elements
         [SerializeField] private TextMeshProUGUI notesTitle;
@@ -97,12 +100,16 @@ namespace Controller {
                         recipesItemLeft[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
                         recipesItemMiddle[recipeIndex].enabled = true;
                         recipesItemMiddle[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[1].item_id);
-                        recipesQuantityMiddle[recipeIndex].enabled = true;
-                        recipesQuantityMiddle[recipeIndex].text = usesSI.recipe[1].quantity.ToString();
                         recipesQuantityLeft[recipeIndex].enabled = true;
                         recipesQuantityLeft[recipeIndex].text = usesSI.recipe[0].quantity.ToString();
+                        recipesQuantityMiddle[recipeIndex].enabled = true;
+                        recipesQuantityMiddle[recipeIndex].text = usesSI.recipe[1].quantity.ToString();
                         recipesPlus[recipeIndex].enabled = true;
                         recipesEquals[recipeIndex].enabled = true;
+                        recipesTooltipLeft[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
+                            .Find(x => x.item_id == usesSI.recipe[0].item_id).name;
+                        recipesTooltipMiddle[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
+                            .Find(x => x.item_id == usesSI.recipe[1].item_id).name;
                     } else {
                         // Recipe requires one input item
                         recipesItemLeft[recipeIndex].enabled = false;
@@ -113,9 +120,13 @@ namespace Controller {
                         recipesQuantityMiddle[recipeIndex].text = usesSI.recipe[0].quantity.ToString();
                         recipesPlus[recipeIndex].enabled = false;
                         recipesEquals[recipeIndex].enabled = true;
+                        recipesTooltipMiddle[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
+                            .Find(x => x.item_id == usesSI.recipe[0].item_id).name;
                     }
                     recipesItemRight[recipeIndex].enabled = true;
                     recipesItemRight[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.item_id);
+                    recipesTooltipRight[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
+                        .Find(x => x.item_id == usesSI.item_id).name;
                     recipeIndex++;
                 }
             }
