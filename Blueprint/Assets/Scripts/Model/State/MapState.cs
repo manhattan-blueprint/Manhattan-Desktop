@@ -8,10 +8,12 @@ namespace Model.State {
     [Serializable]
     public class MapState {
         [SerializeField] private Dictionary<Vector2, MapObject> grid;
+        [SerializeField] private Goal goal;
         [SerializeField] private List<WirePath> wirePaths;
 
         public MapState() {
             grid = new Dictionary<Vector2, MapObject>();
+            goal = new Goal();
             wirePaths = new List<WirePath>();
         }
 
@@ -23,6 +25,23 @@ namespace Model.State {
             grid.Remove(position);
         }
 
+        public void addGoalItem(GoalPosition position) {
+            if (position == GoalPosition.Top)
+                goal.topInput = true;
+            if (position == GoalPosition.Mid)
+                goal.midInput = true;
+            if (position == GoalPosition.Bot)
+                goal.botInput = true;
+        }
+
+        public Dictionary<Vector2, MapObject> getObjects() {
+            return grid;
+        }
+
+        public Goal getGoal() {
+            return goal;
+        }
+        
         public Dictionary<Vector2, MapObject> GetObjects() {
             return grid;
         }

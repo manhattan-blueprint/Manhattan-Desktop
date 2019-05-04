@@ -61,7 +61,7 @@ namespace Model.BlueprintUI {
                                         int resourceIDA=0, int resourceIDARequired=0,
                                         int resourceIDB=0, int resourceIDBRequired=0,
                                         int resourceIDC=0, int resourceIDCRequired=0) {
-            // TODO: This needs rethinking as needs to be in a monobehaviour 
+            // TODO: This needs rethinking as needs to be in a monobehaviour
 //            BlueprintAPI.DefaultCredentials()
 //                .AsyncAddToProgress(GameManager.Instance().GetUserCredentials(), resultID);
 

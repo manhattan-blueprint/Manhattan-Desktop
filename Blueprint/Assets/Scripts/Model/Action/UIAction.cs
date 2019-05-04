@@ -11,6 +11,7 @@ namespace Model.Action {
         void visit(OpenMouseUI mouse);
         void visit(OpenGateUI gate);
         void visit(OpenMachineUI machine);
+        void visit(OpenGoalUI machine);
         void visit(OpenSettingsUI settings);
         void visit(Logout logout);
         void visit(Exit exit);
@@ -76,6 +77,12 @@ namespace Model.Action {
             this.machinePosition = machinePosition;
         }
 
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenGoalUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

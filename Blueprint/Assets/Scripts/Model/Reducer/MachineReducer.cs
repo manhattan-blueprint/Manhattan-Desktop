@@ -33,7 +33,7 @@ namespace Model.Reducer {
             }
 
             Machine machine = state.grid[removeMachine.machineLocation];
-            
+
             // Add items within the machine back to the inventory
             if (machine.leftInput.IsPresent()) {
                 InventoryItem item = machine.leftInput.Get();
@@ -71,7 +71,7 @@ namespace Model.Reducer {
             Machine machine = state.grid[setRightInput.machineLocation];
             machine.rightInput = Optional<InventoryItem>.Of(setRightInput.item);
         }
-        
+
         public void visit(SetInputs setInputs) {
             if (!state.grid.ContainsKey(setInputs.machineLocation)) {
                 throw new Exception("Machine does not exist at the given location");
@@ -81,7 +81,7 @@ namespace Model.Reducer {
             machine.leftInput = setInputs.left;
             machine.rightInput = setInputs.right;
         }
-        
+
         public void visit(SetAll setAll) {
             if (!state.grid.ContainsKey(setAll.machineLocation)) {
                 throw new Exception("Machine does not exist at the given location");
@@ -109,7 +109,7 @@ namespace Model.Reducer {
 
             state.grid[clearLeftInput.machineLocation].leftInput = Optional<InventoryItem>.Empty();
         }
-        
+
         public void visit(ClearRightInput clearRightInput) {
             if (!state.grid.ContainsKey(clearRightInput.machineLocation)) {
                 throw new Exception("Machine does not exist at the given location");
@@ -117,7 +117,7 @@ namespace Model.Reducer {
 
             state.grid[clearRightInput.machineLocation].rightInput = Optional<InventoryItem>.Empty();
         }
-        
+
         public void visit(ClearFuel clearFuel) {
             if (!state.grid.ContainsKey(clearFuel.machineLocation)) {
                 throw new Exception("Machine does not exist at the given location");
