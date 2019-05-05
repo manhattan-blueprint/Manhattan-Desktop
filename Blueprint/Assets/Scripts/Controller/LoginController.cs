@@ -180,10 +180,19 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
                             SetMessageError("Could not fetch schema: " + schemaResult.GetError());
                             return;
                         }
-
-                        GameManager.Instance()
-                            .ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess(), inventoryResult.GetSuccess().items);
-                        toLaunch = true;
+                        
+                        // Fetch completed blueprints
+                        StartCoroutine(BlueprintAPI.GetCompletedBlueprints(accessToken, blueprintsResult => {
+                            if (!blueprintsResult.isSuccess()) {
+                                SetMessageError("Could not fetch completed blueprints: " + blueprintsResult.GetError());
+                                return;
+                            }
+                            
+                            GameManager.Instance()
+                                .ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess(), inventoryResult.GetSuccess().items);
+                            GameManager.Instance().completedBlueprints = blueprintsResult.GetSuccess().blueprints;
+                            toLaunch = true;
+                        }));
                     }));
                 }));
             }));

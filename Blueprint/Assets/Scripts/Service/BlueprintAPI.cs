@@ -60,6 +60,11 @@ namespace Service {
             string json = JsonUtility.ToJson(request);
             return restHandler.requestAuthorizedPOST(endpointProgress, json, accessToken, handleEmptyResponse(callback));
         }
+        
+        // Get completed blueprints, given a user's access token
+        public static IEnumerator GetCompletedBlueprints(AccessToken accessToken, Callback<ResponseGetCompletedBlueprints> callback) {
+            return restHandler.requestAuthorizedGET(endpointProgress, accessToken, handleResponse(callback));
+        }
 
         // Get the schema for the game
         public static IEnumerator GetSchema(Callback<SchemaItems> callback) {
