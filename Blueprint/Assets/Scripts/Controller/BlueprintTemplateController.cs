@@ -244,6 +244,7 @@ namespace Controller {
                             AssetManager.Instance().GetItemSprite(currentSI.item_id);
                     }
             }));
+            EventSystem.current.SetSelectedGameObject(null);
         }
 
         public void onBackClick() {
