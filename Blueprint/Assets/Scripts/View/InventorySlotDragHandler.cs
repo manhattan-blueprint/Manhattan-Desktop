@@ -121,8 +121,10 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 }
 
                 if (!splitting) {
+                    Debug.Log("endDrag");
                     endDrag();
                 } else {
+                    Debug.Log("endSplit");
                     endSplit();
                 } 
             }
@@ -130,13 +132,9 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
             // Begin drag behaviour
             if (mouseOver && !dragging && !inventoryController.DraggingInvItem &&
                 inventorySlotController.storedItem.IsPresent() && (inventorySlotController.id != inventoryController.DragDestination)) {
+                Debug.Log("beginDrag");
                 
                 beginDrag();
-            }
-
-            // Reset drag destination once object has been placed
-            if (mouseOver && inventorySlotController.id == inventoryController.DragDestination) {
-                inventoryController.DragDestination = -1;
             }
         }
 
@@ -168,9 +166,14 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(currentItem.GetId(), 
                 newQuantity, inventorySlotController.id));
             }
-            
 
+            Debug.Log("beginSplit");
             beginSplit();
+        }
+        
+        // Reset drag destination once object has been placed
+        if (mouseOver && inventorySlotController.id == inventoryController.DragDestination) {
+            inventoryController.DragDestination = -1;
         }
 
         // Icon follows mouse when left mouse button not down
