@@ -8,6 +8,7 @@ using Model.Action;
 using Model.Reducer;
 using Model.Redux;
 using Service;
+using Service.Request;
 using Service.Response;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class GameManager {
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
     public readonly StateStore<MachineState, MachineAction> machineStore;
     public SchemaManager sm;
+    public List<Item> completedBlueprints;
     private AccessToken accessToken;
 
     public readonly int gridSize = 16;

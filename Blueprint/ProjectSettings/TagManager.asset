@@ -14,10 +14,11 @@ TagManager:
   - Pause
   - Gate
   - Held
+  - Goal
   - Machine
   - Cursor
   - MachineInventory
-  - Goal
+  - BlueprintTemplate
   layers:
   - Default
   - TransparentFX

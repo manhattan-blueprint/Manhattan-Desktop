@@ -9,6 +9,7 @@ namespace Model.State {
             Playing,
             Inventory,
             Blueprint,
+            BlueprintTemplate,
             Machine,
             Goal,
             Pause,
@@ -21,6 +22,7 @@ namespace Model.State {
 
         public OpenUI Selected;
         public Vector2 SelectedMachineLocation;
+        public int SelectedBlueprintID = -1;
 
         public UIState() {
             this.Selected = OpenUI.Login;
