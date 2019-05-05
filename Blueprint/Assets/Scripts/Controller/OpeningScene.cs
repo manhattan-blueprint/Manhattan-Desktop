@@ -36,7 +36,7 @@ public class OpeningScene : MonoBehaviour
     private String story3 = "This place is much like home, and yet...";
     private String story4 = "I haven't found anyone else here, not a soul...";
     private String story5 = "Just this clearing...";
-    private String story6 = "And the blueprints within. I think they might have something to do with this strange structure...";
+    private String story6 = "And the blueprints I found there. I think they might have something to do with this strange structure...";
     private String story7 = "Regardless, I need to send a message for help...";
 
     void Start() {
