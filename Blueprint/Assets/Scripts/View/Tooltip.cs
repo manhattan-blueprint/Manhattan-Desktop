@@ -17,7 +17,6 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     }
     
     public void OnPointerExit(PointerEventData eventData) {
-        
         tooltip.SetActive(false);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Model;
 using Model.Action;
 using Model.Redux;
@@ -10,12 +11,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utils;
 
 namespace Controller {
     public class BlueprintTemplateController : MonoBehaviour, Subscriber<UIState>, Subscriber<InventoryState> {
         
-        private int                     currentID = -1;
-        private SchemaItem              currentSI;
+        private int currentID = -1;
+        private SchemaItem currentSI;
         private readonly Dictionary<int, string> notesDict = new Dictionary<int, string> {
             {11, "Fuel with wood or charcoal"},
             {20, "Fuel with wood or charcoal"},
@@ -29,7 +31,7 @@ namespace Controller {
         private readonly Dictionary<int, string> developerNameDict = new Dictionary<int, string> {
             {11, "Will JV Smith"},
             {19, "Jay Lees"},
-            {18, "Adam fox"},
+            {18, "Adam Fox"},
             {20, "Andrei Nitu"},
             {25, "Ben Lee"},
             {23, "Elias K R"},
@@ -89,50 +91,45 @@ namespace Controller {
             outline.sprite = AssetManager.Instance().GetBlueprintOutline(currentID);
 
             // Populate recipe box UI elements
-            int recipeIndex = 0;
-            
-            for (int i = 0; i < GameManager.Instance().sm.GameObjs.items.Count; i++) {
-                SchemaItem usesSI = GameManager.Instance().sm.GameObjs.items[i];
-                if (usesSI.machine_id == currentID) {
-                    if (usesSI.recipe.Count == 2) {
-                        // Recipe requires two input items
-                        recipesItemLeft[recipeIndex].enabled = true;
-                        recipesItemLeft[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
-                        recipesItemMiddle[recipeIndex].enabled = true;
-                        recipesItemMiddle[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[1].item_id);
-                        recipesQuantityLeft[recipeIndex].enabled = true;
-                        recipesQuantityLeft[recipeIndex].text = usesSI.recipe[0].quantity.ToString();
-                        recipesQuantityMiddle[recipeIndex].enabled = true;
-                        recipesQuantityMiddle[recipeIndex].text = usesSI.recipe[1].quantity.ToString();
-                        recipesPlus[recipeIndex].enabled = true;
-                        recipesEquals[recipeIndex].enabled = true;
-                        recipesTooltipLeft[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
-                            .Find(x => x.item_id == usesSI.recipe[0].item_id).name;
-                        recipesTooltipMiddle[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
-                            .Find(x => x.item_id == usesSI.recipe[1].item_id).name;
-                    } else {
-                        // Recipe requires one input item
-                        recipesItemLeft[recipeIndex].enabled = false;
-                        recipesItemMiddle[recipeIndex].enabled = true;
-                        recipesItemMiddle[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
-                        recipesQuantityLeft[recipeIndex].enabled = false;
-                        recipesQuantityMiddle[recipeIndex].enabled = true;
-                        recipesQuantityMiddle[recipeIndex].text = usesSI.recipe[0].quantity.ToString();
-                        recipesPlus[recipeIndex].enabled = false;
-                        recipesEquals[recipeIndex].enabled = true;
-                        recipesTooltipMiddle[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
-                            .Find(x => x.item_id == usesSI.recipe[0].item_id).name;
-                    }
-                    recipesItemRight[recipeIndex].enabled = true;
-                    recipesItemRight[recipeIndex].sprite = AssetManager.Instance().GetItemSprite(usesSI.item_id);
-                    recipesTooltipRight[recipeIndex].text = GameManager.Instance().sm.GameObjs.items
-                        .Find(x => x.item_id == usesSI.item_id).name;
-                    recipeIndex++;
+            List<SchemaItem> itemsForMachine = GameManager.Instance().sm.GameObjs.items.Where(x => x.machine_id == currentID).ToList();
+            itemsForMachine.Each((usesSI, index) => {
+                if (usesSI.recipe.Count == 2) {
+                    // Recipe requires two input items
+                    recipesItemLeft[index].enabled = true;
+                    recipesItemLeft[index].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
+                    recipesItemMiddle[index].enabled = true;
+                    recipesItemMiddle[index].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[1].item_id);
+                    recipesQuantityLeft[index].enabled = true;
+                    recipesQuantityLeft[index].text = usesSI.recipe[0].quantity.ToString();
+                    recipesQuantityMiddle[index].enabled = true;
+                    recipesQuantityMiddle[index].text = usesSI.recipe[1].quantity.ToString();
+                    recipesPlus[index].enabled = true;
+                    recipesEquals[index].enabled = true;
+                    recipesTooltipLeft[index].text = GameManager.Instance().sm.GameObjs.items
+                        .Find(x => x.item_id == usesSI.recipe[0].item_id).name;
+                    recipesTooltipMiddle[index].text = GameManager.Instance().sm.GameObjs.items
+                        .Find(x => x.item_id == usesSI.recipe[1].item_id).name;
+                } else {
+                    // Recipe requires one input item
+                    recipesItemLeft[index].enabled = false;
+                    recipesItemMiddle[index].enabled = true;
+                    recipesItemMiddle[index].sprite = AssetManager.Instance().GetItemSprite(usesSI.recipe[0].item_id);
+                    recipesQuantityLeft[index].enabled = false;
+                    recipesQuantityMiddle[index].enabled = true;
+                    recipesQuantityMiddle[index].text = usesSI.recipe[0].quantity.ToString();
+                    recipesPlus[index].enabled = false;
+                    recipesEquals[index].enabled = true;
+                    recipesTooltipMiddle[index].text = GameManager.Instance().sm.GameObjs.items
+                        .Find(x => x.item_id == usesSI.recipe[0].item_id).name;
                 }
-            }
+                recipesItemRight[index].enabled = true;
+                recipesItemRight[index].sprite = AssetManager.Instance().GetItemSprite(usesSI.item_id);
+                recipesTooltipRight[index].text = GameManager.Instance().sm.GameObjs.items
+                    .Find(x => x.item_id == usesSI.item_id).name;
+            });
             
             // Hide the remaining recipe elements
-            for (int i = recipeIndex; i < 6; i++) {
+            for (int i = itemsForMachine.Count; i < 6; i++) {
                 recipesItemLeft[i].enabled = false;
                 recipesItemMiddle[i].enabled = false;
                 recipesItemRight[i].enabled = false;
@@ -143,13 +140,8 @@ namespace Controller {
             }
             
             // Hide recipes box if no recipes
-            if (recipeIndex == 0) {
-                recipesTitle.enabled = false;
-                recipesBox.enabled = false;
-            } else {
-                recipesTitle.enabled = true;
-                recipesBox.enabled = true;
-            }
+            recipesTitle.enabled = itemsForMachine.Count != 0;
+            recipesBox.enabled = itemsForMachine.Count != 0;
 
             // Populate components box UI elements
             for (int i = 0; i < 3; i++) {
@@ -205,28 +197,17 @@ namespace Controller {
                 }
             }
 
-            if (quantityComplete == currentSI.blueprint.Count) {
-                componentsButton.interactable = true;
-            } else {
-                componentsButton.interactable = false;
-            }
+            componentsButton.interactable = quantityComplete == currentSI.blueprint.Count;
         }
             
 
         // Get quantity of an item in inventory
         private int getQuantity(int id) {
-            int sum = 0;
-
-            foreach (KeyValuePair<int, List<HexLocation>> item in GameManager.Instance().inventoryStore.GetState()
-                .inventoryContents) {
-                if (item.Key == id) {
-                    foreach (HexLocation hexLocation in item.Value) {
-                        sum += hexLocation.quantity;
-                    }
-                }
-            }
-
-            return sum;
+            return GameManager.Instance().inventoryStore.GetState().inventoryContents
+                .Where(x => x.Key == id)
+                .Select(x => x.Value)
+                .SelectMany(x => x)
+                .Aggregate(0, (acc, x) => acc + x.quantity);
         }
 
         // Craft a blueprint, quantities validated in updateComponents
@@ -241,29 +222,28 @@ namespace Controller {
             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(currentSI.item_id, 1, name));
             
             // Update progress
-            if (!GameManager.Instance().completedBlueprints.Contains(new Item(currentSI.item_id))) {
-                AccessToken accessToken = GameManager.Instance().GetAccessToken();
-                StartCoroutine(BlueprintAPI.AddCompletedBlueprints(accessToken,
-                    new RequestCompletedBlueprint(currentSI.item_id),
-                    blueprintsResult => {
-                        if (!blueprintsResult.isSuccess()) {
-                            // TODO: Handle error
-                        } else {
-                            GameManager.Instance().completedBlueprints.Add(new Item(currentSI.item_id));
-                            
-                            // Update Blueprint tree graphics in a naughty way
-                            GameObject cell = GameObject.Find(name + "BlueprintCell");
-                            cell.GetComponent<Image>().sprite = AssetManager.Instance().blueprintUICellPrimary;
-                            SpriteState ss = new SpriteState();
-                            ss.highlightedSprite = AssetManager.Instance().blueprintUICellPrimaryHighlight;
-                            cell.GetComponent<Button>().spriteState = ss;
+            if (GameManager.Instance().completedBlueprints.Contains(new Item(currentSI.item_id))) return;
+            AccessToken accessToken = GameManager.Instance().GetAccessToken();
+            StartCoroutine(BlueprintAPI.AddCompletedBlueprints(accessToken,
+                new RequestCompletedBlueprint(currentSI.item_id),
+                blueprintsResult => {
+                    if (!blueprintsResult.isSuccess()) {
+                        // TODO: Handle error
+                    } else {
+                        GameManager.Instance().completedBlueprints.Add(new Item(currentSI.item_id));
+                        
+                        // Update Blueprint tree graphics in a naughty way
+                        GameObject cell = GameObject.Find(name + "BlueprintCell");
+                        cell.GetComponent<Image>().sprite = AssetManager.Instance().blueprintUICellPrimary;
+                        SpriteState ss = new SpriteState();
+                        ss.highlightedSprite = AssetManager.Instance().blueprintUICellPrimaryHighlight;
+                        cell.GetComponent<Button>().spriteState = ss;
 
-                            GameObject sprite = GameObject.Find(name + "BlueprintSprite");
-                            sprite.GetComponent<Image>().sprite =
-                                AssetManager.Instance().GetItemSprite(currentSI.item_id);
-                        }
-                }));
-            }
+                        GameObject sprite = GameObject.Find(name + "BlueprintSprite");
+                        sprite.GetComponent<Image>().sprite =
+                            AssetManager.Instance().GetItemSprite(currentSI.item_id);
+                    }
+            }));
         }
 
         public void onBackClick() {

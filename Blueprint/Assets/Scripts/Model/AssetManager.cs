@@ -18,17 +18,15 @@ namespace Model {
         public readonly Sprite borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
         public readonly Sprite outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
 
-        public readonly Sprite blueprintUIBackground = Resources.Load("UI/blueprint-ui-background", typeof(Sprite)) as Sprite;
-        public readonly Sprite blueprintUICellPrimary = Resources.Load("UI/blueprint-ui-cell-primary", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUIBackground           = Resources.Load("UI/blueprint-ui-background", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellPrimary          = Resources.Load("UI/blueprint-ui-cell-primary", typeof(Sprite)) as Sprite;
         public readonly Sprite blueprintUICellPrimaryHighlight = Resources.Load("UI/blueprint-ui-cell-primary-hl", typeof(Sprite)) as Sprite;
-        public readonly Sprite blueprintUICellDark = Resources.Load("UI/blueprint-ui-cell-dark", typeof(Sprite)) as Sprite;
-        public readonly Sprite blueprintUICellDarkHighlight = Resources.Load("UI/blueprint-ui-cell-dark-hl", typeof(Sprite)) as Sprite;
-
-        public readonly Sprite blueprintTemplateBackground =
-            Resources.Load("UI/blueprint-template-background", typeof(Sprite)) as Sprite;
-        public readonly Sprite blueprintTemplateCross = Resources.Load("UI/cross", typeof(Sprite)) as Sprite;
-        public readonly Sprite blueprintTemplateTick = Resources.Load("UI/tick", typeof(Sprite)) as Sprite;
-        public readonly Sprite blueprintBeacon = Resources.Load("UI/outlines/beacon", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellDark             = Resources.Load("UI/blueprint-ui-cell-dark", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellDarkHighlight    = Resources.Load("UI/blueprint-ui-cell-dark-hl", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateBackground     = Resources.Load("UI/blueprint-template-background", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateCross          = Resources.Load("UI/cross", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateTick           = Resources.Load("UI/tick", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintBeacon                 = Resources.Load("UI/outlines/beacon", typeof(Sprite)) as Sprite;
         
         private AssetManager() { }
 
