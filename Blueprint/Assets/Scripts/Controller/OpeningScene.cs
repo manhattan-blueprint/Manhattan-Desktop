@@ -14,27 +14,30 @@ using TMPro;
 public class OpeningScene : MonoBehaviour
 {
     private GameObject dishBase;
-    private bool introCompletionCheck;
+    private bool introCompletionCheck;  
     private GameObject mountainPath;
     private GameObject forestPath;
     private GameObject pondPath;
     private GameObject mountainWater;
     private GameObject deleteTrees;
 
-    private int mountainSceneTime = 20;
-    private int forestSceneTime = 15;
-    private int pondSceneTime = 25;
+    private int mountainSceneTime = 15;
+    private int forestSceneTime = 10;
+    private int pondSceneTime = 14;
     private int beaconSceneTime = 15;
     private int totalIntroTime;
 
     private bool play = true;
     private GameObject player;
     private float currCountdownValue;
-    private GameObject story1;
-    private GameObject story2;
-    private GameObject story3;
-    private GameObject story4;
-
+    private GameObject story;
+    private String story1 = "The last thing I remember I was on my ship, the engines were failing, the ship was falling...";
+    private String story2 = "Now I'm not quite sure where I am...";
+    private String story3 = "This place is much like home...";
+    private String story4 = "And yet I haven't found anyone else here...";
+    private String story5 = "In the centre of these woods there's a clearing...";
+    private String story6 = "I found blueprints in the centre. I think they might have something to do with this strange structure...";
+    private String story7 = "Regardless, I need to send a message for help...";
 
     void Start() {
         totalIntroTime = mountainSceneTime + forestSceneTime + pondSceneTime + beaconSceneTime;
@@ -48,15 +51,7 @@ public class OpeningScene : MonoBehaviour
         forestPath = GameObject.Find("ForestPath");
         pondPath = GameObject.Find("PondPath");
 
-        story1 = GameObject.Find("Story1");
-        story2 = GameObject.Find("Story2");
-        story3 = GameObject.Find("Story3");
-        story4 = GameObject.Find("Story4");
-
-        story1.GetComponent<TextMeshProUGUI>().enabled = false;
-        story2.GetComponent<TextMeshProUGUI>().enabled = false;
-        story3.GetComponent<TextMeshProUGUI>().enabled = false;
-        story4.GetComponent<TextMeshProUGUI>().enabled = false;
+        story = GameObject.Find("Story");
 
         introCompletionCheck = GameManager.Instance().uiStore.GetState().IntroComplete;
         if (!introCompletionCheck) {
@@ -79,9 +74,9 @@ public class OpeningScene : MonoBehaviour
         StartCoroutine(sceneRunner());
     }
 
-    private void enableText(GameObject text, bool val)
+    private void setText(GameObject story, String text)
     {
-        text.GetComponent<TextMeshProUGUI>().enabled = val;
+        story.GetComponent<TextMeshProUGUI>().SetText(text);
     }
 
     private void cameraReset()
@@ -103,58 +98,61 @@ public class OpeningScene : MonoBehaviour
     }
 
     private IEnumerator sceneRunner() {
-        enableText(story1, true);
         mountainPath.GetComponent<CPC_CameraPath>().PlayPath(mountainSceneTime);
-        yield return new WaitForSeconds(mountainSceneTime);
-        enableText(story1, false);
+        yield return new WaitForSeconds(mountainSceneTime/3);
+        setText(story, story1);
+        yield return new WaitForSeconds(2*(mountainSceneTime/3));
         Destroy(mountainWater);
         Destroy(deleteTrees);
 
-        enableText(story2, true);
+        setText(story, story2);
         forestPath.GetComponent<CPC_CameraPath>().PlayPath(forestSceneTime);
         yield return new WaitForSeconds(forestSceneTime);
-        enableText(story2, false);
 
-        enableText(story3, true);
         pondPath.GetComponent<CPC_CameraPath>().PlayPath(pondSceneTime);
-        yield return new WaitForSeconds(pondSceneTime);
-        enableText(story3, false);
+        setText(story, story3);
+        yield return new WaitForSeconds(pondSceneTime/2f);
+        setText(story, story4);
+        yield return new WaitForSeconds((pondSceneTime/2f) + 0.1f);
+
 
         // Reset camera to be within hex grid
-        Camera.main.transform.position = new Vector3(20, 5, 20);
-        while (play)
-        {
-            yield return new WaitForSeconds(1.0f / 60.0f);
-            Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, -0.15f);
-            //fadeOverlay.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-            //fadeOverlay.transform.LookAt(Camera.main.transform.position);
-        }
-        cameraReset();
-        GameManager.Instance().uiStore.Dispatch(new CloseUI());
-    }
-
-    private IEnumerator worldPanning() {
-        float spinSpeed = 0.0f;
-
-        ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
-
-        GameObject fadeOverlay = GameObject.Find("FadeOverlay");
-        //Debug.Log(fadeOverlay);
-        //// time to do, delay
-        //animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Appear, 1.0f, true, 0.0f, 3.0f);
-        //animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Disappear, 1.0f, true, 0.0f, 6.0f);
-
-        GameObject story1 = GameObject.Find("Story1");
-        //animationManager.StartAppearanceAnimation(story1, Anim.Appear, 3.0f, true, 0.0f, 3.0f);
-        //animationManager.StartAppearanceAnimation(story1, Anim.Disappear, 3.0f, true, 0.0f, 30.0f);
+        Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
+        StartCoroutine(beaconTextRunner());
 
         // Create astronaut.
         // Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
         // astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
         // GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
         // astronaut.transform.LookAt(Vector3.zero);
+        while (play)
+        {
+            yield return new WaitForSeconds(1.0f / 60.0f);
+            Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
+            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);    
+        }
+        cameraReset();
+        GameManager.Instance().uiStore.Dispatch(new CloseUI());
+    }
 
-        return null;
+    private IEnumerator beaconTextRunner()
+    {
+        setText(story, story5);
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        setText(story, story6);
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        setText(story, story7);
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
+        setText(story, "");
+        GameObject fadeOverlay = GameObject.Find("FadeOverlay");
+        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.0f);
+        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2.0f);
+        while (play)
+        {
+            yield return new WaitForSeconds(1.0f / 60.0f);
+            fadeOverlay.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+            fadeOverlay.transform.LookAt(Camera.main.transform.position);
+        }
     }
 }

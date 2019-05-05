@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 namespace Utils {
     public enum Anim {
@@ -298,6 +299,12 @@ namespace Utils {
                 if (gameObject.GetComponent<CanvasGroup>() != null)
                     gameObject.GetComponent<CanvasGroup>().alpha = alphaModifier;
                 if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                    Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<TextMeshProUGUI>() != null)
+                {
                     Color color = gameObject.GetComponent<SpriteRenderer>().color;
                     color.a = alphaModifier;
                     gameObject.GetComponent<SpriteRenderer>().color = color;
