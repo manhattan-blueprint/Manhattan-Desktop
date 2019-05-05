@@ -16,6 +16,7 @@ using Service;
 using Service.Response;
 using System.Threading.Tasks;
 using UnityEngine.Assertions.Must;
+using UnityEngine.EventSystems;
 using UnityEngine.Experimental.Rendering;
 
 /* Attached to the inventory canvas and controls inventory collection */
@@ -134,6 +135,8 @@ namespace Controller {
                     Debug.LogError("Could not delete inventory: " + result.GetError()) ;
                 } 
             }));
+            
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 }
