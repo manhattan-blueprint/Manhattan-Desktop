@@ -24,7 +24,8 @@ namespace Controller {
         public Dictionary<int, List<HexLocation>> inventoryContents;
         public bool DraggingInvItem;
         public int DragDestination;
-        
+
+        [SerializeField] private Button backpackButton;
         private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
         private bool firstUIUpdate;
@@ -62,14 +63,32 @@ namespace Controller {
             // If inventory UI opened, check how many things the user has in their backpack and populate UI
             StartCoroutine(BlueprintAPI.GetInventory(GameManager.Instance().GetAccessToken(), result => {
                 if (!result.isSuccess()) {
+                    // TODO make this visible to the user
                     Debug.LogError("Could not get inventory: " + result.GetError()) ;
-                    // TODO
                 } else {
-                    backpackContents = result.GetSuccess().items; 
-                    Debug.Log("The user has " + backpackContents.Count + " items in their backpack");
-                    // TODO: Update UI
+                    backpackContents = result.GetSuccess().items;
+                    setBackpackState();
                 }
             }));
+        }
+
+        private void setBackpackState() {
+            if (backpackContents.Count > 0) {
+                SpriteState ss = new SpriteState {
+                    highlightedSprite = AssetManager.Instance().backpackButtonOccupiedHighlight
+                };
+                backpackButton.spriteState = ss;
+                backpackButton.GetComponent<Image>().sprite = AssetManager.Instance().backpackButtonOccupied;
+                backpackButton.GetComponentInChildren<Text>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            } else {
+                SpriteState ss = new SpriteState {
+                    highlightedSprite = AssetManager.Instance().backpackButtonUnoccupiedHighlight
+                };
+                backpackButton.spriteState = ss;
+                backpackButton.GetComponent<Image>().sprite = AssetManager.Instance().backpackButtonUnoccupied;
+                backpackButton.GetComponentInChildren<Text>().color = new Color(1.0f, 1.0f, 1.0f, 0.3f);
+            }
+            backpackButton.GetComponentInChildren<Text>().text = backpackContents.Count.ToString();
         }
 
         public void RedrawInventory() {
@@ -88,10 +107,12 @@ namespace Controller {
             }
         }
 
-        private void TransferBackpackToInventory() {
+        public void OnBackpackClick() {
             foreach (InventoryEntry entry in backpackContents) {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity));
             }
+            backpackContents.Clear();
+            setBackpackState();
             
             // Save game to avoid losing resources if they don't save again
             GameState gameState = new GameState(GameManager.Instance().mapStore.GetState(),
@@ -101,20 +122,17 @@ namespace Controller {
 
             StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), gameState, result => {
                 if (!result.isSuccess()) {
-                    // TODO
-                } else {
-                    // TODO: Handle failure via UI?
+                    // TODO make this visible to the user
+                    Debug.LogError("Could not get inventory: " + result.GetError()) ;
                 }
             }));
 
             // Delete backpack items
             StartCoroutine(BlueprintAPI.DeleteInventory(GameManager.Instance().GetAccessToken(), result => {
                 if (!result.isSuccess()) {
+                    // TODO make this visible to the user
                     Debug.LogError("Could not delete inventory: " + result.GetError()) ;
-                    // TODO
-                } else {
-                    Debug.Log("Deleting was a success");
-                }
+                } 
             }));
         }
     }
