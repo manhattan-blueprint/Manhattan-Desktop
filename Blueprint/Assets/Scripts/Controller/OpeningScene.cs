@@ -21,7 +21,7 @@ public class OpeningScene : MonoBehaviour
     private GameObject mountainWater;
     private GameObject deleteTrees;
 
-    private int mountainSceneTime = 15;
+    private int mountainSceneTime = 18;
     private int forestSceneTime = 10;
     private int pondSceneTime = 14;
     private int beaconSceneTime = 15;
@@ -31,12 +31,12 @@ public class OpeningScene : MonoBehaviour
     private GameObject player;
     private float currCountdownValue;
     private GameObject story;
-    private String story1 = "The last thing I remember I was on my ship, the engines were failing, the ship was falling...";
+    private String story1 = "The last thing I remember I was on the ship, the engines were failing...";
     private String story2 = "Now I'm not quite sure where I am...";
-    private String story3 = "This place is much like home...";
-    private String story4 = "And yet I haven't found anyone else here...";
-    private String story5 = "In the centre of these woods there's a clearing...";
-    private String story6 = "I found blueprints in the centre. I think they might have something to do with this strange structure...";
+    private String story3 = "This place is much like home, and yet...";
+    private String story4 = "I haven't found anyone else here, not a soul...";
+    private String story5 = "Just this clearing...";
+    private String story6 = "And the blueprints within. I think they might have something to do with this strange structure...";
     private String story7 = "Regardless, I need to send a message for help...";
 
     void Start() {
@@ -70,7 +70,7 @@ public class OpeningScene : MonoBehaviour
     }
 
     private void introAnimation() {
-        StartCoroutine(StartCountdown(totalIntroTime));
+        StartCoroutine(StartCountdown(totalIntroTime + 0.5f));
         StartCoroutine(sceneRunner());
     }
 
