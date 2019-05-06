@@ -48,6 +48,7 @@ namespace View {
         public void StateDidUpdate(UIState state) {
             switch (state.Selected) {
               case UIState.OpenUI.Playing:
+              case UIState.OpenUI.Intro:
                   paused = false;
                   break;
               case UIState.OpenUI.Login:

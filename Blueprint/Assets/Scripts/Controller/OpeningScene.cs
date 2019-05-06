@@ -23,9 +23,13 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     private GameObject blackOverlay;
     private ManhattanAnimation animationManager;
 
-    private int mountainSceneTime = 18;
+    // private int mountainSceneTime = 18;
+    // private int forestSceneTime = 10;
+    // private int pondSceneTime = 14;
+    // private int beaconSceneTime = 15;
+    private int mountainSceneTime = 15;
     private int forestSceneTime = 10;
-    private int pondSceneTime = 14;
+    private int pondSceneTime = 20;
     private int beaconSceneTime = 15;
     private int totalIntroTime;
 
@@ -106,15 +110,15 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         yield return new WaitForSeconds(mountainSceneTime/3);
         setText(story, story1);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1f, true, 0.0f, 2*(mountainSceneTime/3) - 2f);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2*(mountainSceneTime/3) - 0.5f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2*(mountainSceneTime/3) - 0.2f);
         yield return new WaitForSeconds(2*(mountainSceneTime/3));
         Destroy(mountainWater);
         Destroy(deleteTrees);
 
         setText(story, story2);
         forestPath.GetComponent<CPC_CameraPath>().PlayPath(forestSceneTime);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, forestSceneTime - 2f);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, forestSceneTime - 0.5f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, forestSceneTime - 2f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, forestSceneTime - 0.2f);
         yield return new WaitForSeconds(forestSceneTime);
 
 
@@ -122,8 +126,8 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         setText(story, story3);
         yield return new WaitForSeconds(pondSceneTime/2f);
         setText(story, story4);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 2f);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 0.5f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 2f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 0.2f);
         yield return new WaitForSeconds((pondSceneTime/2f));
 
 
@@ -137,8 +141,10 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         setText(story, story6);
         yield return new WaitForSeconds(beaconSceneTime/3);
         setText(story, story7);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
         yield return new WaitForSeconds((beaconSceneTime/3) + 1);
         setText(story, "");
+
 
         // Create astronaut.
         // Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
@@ -146,6 +152,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         // GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
         // astronaut.transform.LookAt(Vector3.zero);
         cameraReset();
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
         GameManager.Instance().uiStore.Dispatch(new CloseUI());
     }
 
