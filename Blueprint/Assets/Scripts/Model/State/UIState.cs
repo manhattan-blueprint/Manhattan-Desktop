@@ -28,7 +28,6 @@ namespace Model.State {
 
         public UIState() {
             this.Selected = OpenUI.Login;
-            this.IntroComplete = false;
         }
     }
 }
