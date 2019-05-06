@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 using Model;
+using View;
 using Model.Action;
 using Model.Redux;
 using Model.State;
@@ -62,6 +63,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         story = GameObject.Find("Story");
 
         Invoke("intro",0.01f);
+        Invoke("disableHighlighting", 1f);
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         GameManager.Instance().uiStore.Subscribe(this);
     }
@@ -69,6 +71,14 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     private void intro()
     {
         introAnimation();
+    }
+
+    private void disableHighlighting() {
+      Cursor.lockState = CursorLockMode.Locked;
+      Highlight[] highlights = (Highlight[]) GameObject.FindObjectsOfType (typeof(Highlight));
+      foreach (Highlight highlight in highlights){
+          highlight.enabled = false;
+      }
     }
 
     public int GetIntroTime() {
@@ -126,7 +136,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         setText(story, story3);
         yield return new WaitForSeconds(pondSceneTime/2f);
         setText(story, story4);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 2f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 2.2f);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 0.2f);
         yield return new WaitForSeconds((pondSceneTime/2f));
 

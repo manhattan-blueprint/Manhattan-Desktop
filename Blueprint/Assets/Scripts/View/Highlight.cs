@@ -48,8 +48,11 @@ namespace View {
         public void StateDidUpdate(UIState state) {
             switch (state.Selected) {
               case UIState.OpenUI.Playing:
+                  paused = false;
+                  break;
               case UIState.OpenUI.Intro:
                   paused = false;
+                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Login:
                   GameManager.Instance().uiStore.Unsubscribe(this);

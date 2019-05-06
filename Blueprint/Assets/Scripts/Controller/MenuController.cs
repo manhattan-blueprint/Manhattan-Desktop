@@ -264,6 +264,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(UIState state) {
+            Debug.Log(state.Selected);
             switch (state.Selected) {
                 case UIState.OpenUI.Inventory:
                     OpenInventory();
