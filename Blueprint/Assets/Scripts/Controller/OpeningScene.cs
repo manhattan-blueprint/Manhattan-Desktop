@@ -56,6 +56,12 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         blackOverlay = GameObject.Find("blackOverlay");
         // blackOverlay.GetComponent<Image>().enabled = false;
 
+        // Create astronaut.
+        Vector3 astronoautPos = player.transform.position;
+        astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
+        GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
+        astronaut.transform.LookAt(Vector3.zero);
+
         mountainPath = GameObject.Find("MountainPath");
         forestPath = GameObject.Find("ForestPath");
         pondPath = GameObject.Find("PondPath");
@@ -68,8 +74,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         GameManager.Instance().uiStore.Subscribe(this);
     }
 
-    private void intro()
-    {
+    private void intro() {
         introAnimation();
     }
 
@@ -155,12 +160,6 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         yield return new WaitForSeconds((beaconSceneTime/3) + 1);
         setText(story, "");
 
-
-        // Create astronaut.
-        // Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
-        // astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
-        // GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
-        // astronaut.transform.LookAt(Vector3.zero);
         cameraReset();
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
         GameManager.Instance().uiStore.Dispatch(new CloseUI());
