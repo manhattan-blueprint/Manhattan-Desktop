@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Model.BlueprintUI;
 using UnityEngine.UI;
 using Utils;
 using Model;
@@ -14,12 +13,14 @@ using TMPro;
 public class OpeningScene : MonoBehaviour
 {
     private GameObject dishBase;
-    private bool introCompletionCheck;  
+    private bool introCompletionCheck;
     private GameObject mountainPath;
     private GameObject forestPath;
     private GameObject pondPath;
     private GameObject mountainWater;
     private GameObject deleteTrees;
+    private GameObject blackOverlay;
+    private ManhattanAnimation animationManager;
 
     private int mountainSceneTime = 18;
     private int forestSceneTime = 10;
@@ -40,12 +41,15 @@ public class OpeningScene : MonoBehaviour
     private String story7 = "Regardless, I need to send a message for help...";
 
     void Start() {
+        animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         totalIntroTime = mountainSceneTime + forestSceneTime + pondSceneTime + beaconSceneTime;
 
         dishBase = GameObject.Find("Beacon");
         mountainWater = GameObject.Find("MountainWater");
         deleteTrees = GameObject.Find("DeleteTrees");
         player = GameObject.Find("Player");
+        blackOverlay = GameObject.Find("blackOverlay");
+        // blackOverlay.GetComponent<Image>().enabled = false;
 
         mountainPath = GameObject.Find("MountainPath");
         forestPath = GameObject.Find("ForestPath");
@@ -53,15 +57,11 @@ public class OpeningScene : MonoBehaviour
 
         story = GameObject.Find("Story");
 
-        introCompletionCheck = GameManager.Instance().uiStore.GetState().IntroComplete;
-        if (!introCompletionCheck) {
-            Invoke("intro",0.001f);
-        }
+        Invoke("intro",0.001f);
     }
 
     private void intro()
     {
-        GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
         introAnimation();
     }
 
@@ -98,6 +98,8 @@ public class OpeningScene : MonoBehaviour
     }
 
     private IEnumerator sceneRunner() {
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
+
         mountainPath.GetComponent<CPC_CameraPath>().PlayPath(mountainSceneTime);
         yield return new WaitForSeconds(mountainSceneTime/3);
         setText(story, story1);
@@ -129,7 +131,7 @@ public class OpeningScene : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f / 60.0f);
             Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);    
+            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);
         }
         cameraReset();
         GameManager.Instance().uiStore.Dispatch(new CloseUI());
@@ -143,7 +145,6 @@ public class OpeningScene : MonoBehaviour
         yield return new WaitForSeconds(beaconSceneTime/3);
         setText(story, story7);
         yield return new WaitForSeconds(beaconSceneTime/3);
-        ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         setText(story, "");
         GameObject fadeOverlay = GameObject.Find("FadeOverlay");
         animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.0f);

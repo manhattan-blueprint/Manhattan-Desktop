@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Utils {
     public enum Anim {
@@ -242,6 +243,11 @@ namespace Utils {
                 color.a = 0f;
                 gameObject.GetComponent<SpriteRenderer>().color = color;
             }
+            if (gameObject.GetComponent<Image>() != null) {
+                Color color = gameObject.GetComponent<Image>().color;
+                color.a = 0f;
+                gameObject.GetComponent<Image>().color = color;
+            }
             if (gameObject.GetComponent<TextMesh>() != null) {
                 Color color = gameObject.GetComponent<TextMesh>().color;
                 color.a = 0f;
@@ -269,6 +275,11 @@ namespace Utils {
                     Color color = gameObject.GetComponent<SpriteRenderer>().color;
                     color.a = alphaModifier;
                     gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<Image>() != null) {
+                    Color color = gameObject.GetComponent<Image>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<Image>().color = color;
                 }
                 if (gameObject.GetComponent<TextMesh>() != null) {
                     Color color = gameObject.GetComponent<TextMesh>().color;
@@ -301,6 +312,11 @@ namespace Utils {
                     Color color = gameObject.GetComponent<SpriteRenderer>().color;
                     color.a = alphaModifier;
                     gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<Image>() != null) {
+                  Color color = gameObject.GetComponent<Image>().color;
+                  color.a = alphaModifier;
+                  gameObject.GetComponent<Image>().color = color;
                 }
                 if (gameObject.GetComponent<TextMeshProUGUI>() != null)
                 {
