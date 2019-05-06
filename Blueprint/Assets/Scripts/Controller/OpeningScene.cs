@@ -57,10 +57,10 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         // blackOverlay.GetComponent<Image>().enabled = false;
 
         // Create astronaut.
-        Vector3 astronoautPos = player.transform.position;
-        astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
-        GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
-        astronaut.transform.LookAt(Vector3.zero);
+        //Vector3 astronoautPos = player.transform.position;
+        //astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
+        //GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
+        //astronaut.transform.LookAt(Vector3.zero);
 
         mountainPath = GameObject.Find("MountainPath");
         forestPath = GameObject.Find("ForestPath");
