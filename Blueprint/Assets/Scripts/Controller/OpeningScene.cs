@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,9 +10,9 @@ using Model.Action;
 using Model.Redux;
 using Model.State;
 using TMPro;
+using Controller;
 
-public class OpeningScene : MonoBehaviour
-{
+public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     private GameObject dishBase;
     private bool introCompletionCheck;
     private GameObject mountainPath;
@@ -41,7 +42,6 @@ public class OpeningScene : MonoBehaviour
     private String story7 = "Regardless, I need to send a message for help...";
 
     void Start() {
-        animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         totalIntroTime = mountainSceneTime + forestSceneTime + pondSceneTime + beaconSceneTime;
 
         dishBase = GameObject.Find("Beacon");
@@ -57,7 +57,9 @@ public class OpeningScene : MonoBehaviour
 
         story = GameObject.Find("Story");
 
-        Invoke("intro",0.001f);
+        Invoke("intro",0.01f);
+        animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
+        GameManager.Instance().uiStore.Subscribe(this);
     }
 
     private void intro()
@@ -103,57 +105,64 @@ public class OpeningScene : MonoBehaviour
         mountainPath.GetComponent<CPC_CameraPath>().PlayPath(mountainSceneTime);
         yield return new WaitForSeconds(mountainSceneTime/3);
         setText(story, story1);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1f, true, 0.0f, 2*(mountainSceneTime/3) - 2f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2*(mountainSceneTime/3) - 0.5f);
         yield return new WaitForSeconds(2*(mountainSceneTime/3));
         Destroy(mountainWater);
         Destroy(deleteTrees);
 
         setText(story, story2);
         forestPath.GetComponent<CPC_CameraPath>().PlayPath(forestSceneTime);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, forestSceneTime - 2f);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, forestSceneTime - 0.5f);
         yield return new WaitForSeconds(forestSceneTime);
+
 
         pondPath.GetComponent<CPC_CameraPath>().PlayPath(pondSceneTime);
         setText(story, story3);
         yield return new WaitForSeconds(pondSceneTime/2f);
         setText(story, story4);
-        yield return new WaitForSeconds((pondSceneTime/2f) + 0.1f);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 2f);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 0.5f);
+        yield return new WaitForSeconds((pondSceneTime/2f));
+
 
 
         // Reset camera to be within hex grid
         Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
-        StartCoroutine(beaconTextRunner());
+
+        StartCoroutine(cameraSpin());
+        setText(story, story5);
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        setText(story, story6);
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        setText(story, story7);
+        yield return new WaitForSeconds((beaconSceneTime/3) + 1);
+        setText(story, "");
 
         // Create astronaut.
         // Vector3 astronoautPos = Camera.main.transform.position - Camera.main.transform.forward * 0.8f;
         // astronoautPos += new Vector3(0.0f, -astronoautPos.y, 0.0f);
         // GameObject astronaut = Instantiate(Resources.Load("Astronaut") as GameObject, astronoautPos, Quaternion.identity);
         // astronaut.transform.LookAt(Vector3.zero);
-        while (play)
-        {
-            yield return new WaitForSeconds(1.0f / 60.0f);
-            Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);
-        }
         cameraReset();
         GameManager.Instance().uiStore.Dispatch(new CloseUI());
     }
 
-    private IEnumerator beaconTextRunner()
-    {
-        setText(story, story5);
-        yield return new WaitForSeconds(beaconSceneTime/3);
-        setText(story, story6);
-        yield return new WaitForSeconds(beaconSceneTime/3);
-        setText(story, story7);
-        yield return new WaitForSeconds(beaconSceneTime/3);
-        setText(story, "");
-        GameObject fadeOverlay = GameObject.Find("FadeOverlay");
-        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.0f);
-        animationManager.StartAppearanceAnimation(fadeOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2.0f);
-        while (play)
-        {
-            yield return new WaitForSeconds(1.0f / 60.0f);
-            fadeOverlay.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-            fadeOverlay.transform.LookAt(Camera.main.transform.position);
+    public void StateDidUpdate(UIState state) {
+        if (state.Selected == UIState.OpenUI.Playing) {
+            GameManager.Instance().uiStore.Unsubscribe(this);
+            SceneManager.LoadScene(SceneMapping.World);
         }
+    }
+
+    private IEnumerator cameraSpin()
+    {
+      while (play)
+      {
+          yield return new WaitForSeconds(1.0f / 60.0f);
+          Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
+          Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);
+      }
     }
 }

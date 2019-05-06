@@ -139,8 +139,7 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
 
         if (toLaunch) {
             toLaunch = false;
-            if (!GameManager.Instance().uiStore.GetState().IntroComplete)
-            {
+            if (!GameManager.Instance().uiStore.GetState().IntroComplete) {
               GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
             } else {
               GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());

@@ -243,11 +243,11 @@ namespace Utils {
                 color.a = 0f;
                 gameObject.GetComponent<SpriteRenderer>().color = color;
             }
-            if (gameObject.GetComponent<Image>() != null) {
-                Color color = gameObject.GetComponent<Image>().color;
-                color.a = 0f;
-                gameObject.GetComponent<Image>().color = color;
-            }
+            // if (gameObject.GetComponent<Image>() != null) {
+            //     Color color = gameObject.GetComponent<Image>().color;
+            //     color.a = 0f;
+            //     gameObject.GetComponent<Image>().color = color;
+            // }
             if (gameObject.GetComponent<TextMesh>() != null) {
                 Color color = gameObject.GetComponent<TextMesh>().color;
                 color.a = 0f;

@@ -24,7 +24,6 @@ namespace Controller {
         private Canvas blueprintCanvas;
         private Canvas blueprintTemplateCanvas;
         private Canvas bindingsCanvas;
-        private Canvas introCanvas;
         private Canvas gateCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
@@ -32,7 +31,6 @@ namespace Controller {
         private Image cursor;
         private SVGImage rmb;
         private const int rightButton = 1;
-        private bool watchingIntro;
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -45,7 +43,6 @@ namespace Controller {
             blueprintTemplateCanvas = GameObject.FindGameObjectWithTag("BlueprintTemplate").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             gateCanvas = GameObject.FindGameObjectWithTag("Gate").GetComponent<Canvas>();
-            introCanvas = GameObject.FindGameObjectWithTag("Intro").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
             goalCanvas = GameObject.FindGameObjectWithTag("Goal").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
@@ -56,7 +53,6 @@ namespace Controller {
             blueprintCanvas.enabled = false;
             blueprintTemplateCanvas.enabled = false;
             gateCanvas.enabled = false;
-            introCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
@@ -102,10 +98,6 @@ namespace Controller {
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
-                }
-            } else if (GameManager.Instance().uiStore.GetState().IntroComplete) {
-                if (!GameManager.Instance().uiStore.GetState().IntroComplete) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
                 }
             }
 
@@ -212,20 +204,8 @@ namespace Controller {
             heldCanvas.enabled = true;
             rmb.enabled = false;
             cursor.enabled = true;
-            introCanvas.enabled = false;
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
             GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
-        }
-
-        public void WatchIntro() {
-            int time = introCanvas.GetComponent<OpeningScene>().GetIntroTime();
-            watchingIntro = true;
-            introCanvas.enabled = true;
-            heldCanvas.enabled = false;
-            cursorCanvas.enabled = false;
-            pauseCanvas.enabled = false;
-            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
-            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
         }
 
         // Logout button from the pause menu
@@ -317,9 +297,6 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Logout:
                     LogoutPrompt();
-                    break;
-                case UIState.OpenUI.Intro:
-                    WatchIntro();
                     break;
                 case UIState.OpenUI.Login:
                     GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
