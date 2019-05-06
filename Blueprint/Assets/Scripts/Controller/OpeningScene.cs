@@ -22,6 +22,8 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     private GameObject mountainWater;
     private GameObject deleteTrees;
     private GameObject blackOverlay;
+    private GameObject grid;
+    private Material grass;
     private ManhattanAnimation animationManager;
 
     // private int mountainSceneTime = 18;
@@ -54,6 +56,8 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         deleteTrees = GameObject.Find("DeleteTrees");
         player = GameObject.Find("Player");
         blackOverlay = GameObject.Find("blackOverlay");
+        grid = GameObject.Find("Grid");
+        grass = Resources.Load<Material>("Grass");
         // blackOverlay.GetComponent<Image>().enabled = false;
 
         // Create astronaut.
@@ -69,7 +73,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         story = GameObject.Find("Story");
 
         Invoke("intro",0.01f);
-        Invoke("disableHighlighting", 1f);
+        Invoke("disableGridBehaviour", 1f);
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
         GameManager.Instance().uiStore.Subscribe(this);
     }
@@ -78,12 +82,17 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         introAnimation();
     }
 
-    private void disableHighlighting() {
-      Cursor.lockState = CursorLockMode.Locked;
-      Highlight[] highlights = (Highlight[]) GameObject.FindObjectsOfType (typeof(Highlight));
-      foreach (Highlight highlight in highlights){
-          highlight.enabled = false;
-      }
+    private void disableGridBehaviour() {
+        Cursor.lockState = CursorLockMode.Locked;
+        Highlight[] highlights = (Highlight[]) GameObject.FindObjectsOfType (typeof(Highlight));
+        foreach (Highlight highlight in highlights){
+            highlight.enabled = false;
+        }
+        MeshRenderer[] renderers = grid.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer renderer in renderers)
+        {
+            renderer.material = grass;
+        }
     }
 
     public int GetIntroTime() {

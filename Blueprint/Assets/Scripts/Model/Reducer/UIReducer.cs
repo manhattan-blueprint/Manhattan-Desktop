@@ -138,7 +138,7 @@ namespace Model.Reducer {
         public void visit(OpenIntroUI intro) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
-                case UIState.OpenUI.Playing:
+                case UIState.OpenUI.Login:
                     state.Selected = UIState.OpenUI.Intro;
                     state.IntroComplete = true;
                     break;
