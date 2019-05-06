@@ -48,7 +48,7 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     /* Call when item is dropped on left input */
     public class SetLeftInput : MachineAction {
         public readonly Vector2 machineLocation;
@@ -63,7 +63,7 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     /* Call when item is dropped on right input */
     public class SetRightInput : MachineAction {
         public readonly Vector2 machineLocation;
@@ -78,7 +78,7 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     public class SetInputs : MachineAction {
         public readonly Vector2 machineLocation;
         public readonly Optional<InventoryItem> left;
@@ -94,14 +94,14 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     public class SetAll : MachineAction {
         public readonly Vector2 machineLocation;
         public readonly Optional<InventoryItem> left;
         public readonly Optional<InventoryItem> right;
         public readonly Optional<InventoryItem> fuel;
 
-        public SetAll(Vector2 machineLocation, Optional<InventoryItem> left, 
+        public SetAll(Vector2 machineLocation, Optional<InventoryItem> left,
             Optional<InventoryItem> right, Optional<InventoryItem> fuel) {
             this.machineLocation = machineLocation;
             this.left = left;
@@ -113,7 +113,7 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     public class ClearLeftInput: MachineAction {
         public readonly Vector2 machineLocation;
 
@@ -125,7 +125,7 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     public class ClearRightInput : MachineAction {
         public readonly Vector2 machineLocation;
 
@@ -137,7 +137,7 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
-    
+
     public class ClearFuel : MachineAction {
         public readonly Vector2 machineLocation;
 
@@ -171,7 +171,7 @@ namespace Model.Action {
         public ConsumeInputs(Vector2 machineLocation) {
             this.machineLocation = machineLocation;
         }
-        
+
         public override void Accept(MachineVisitor visitor) {
             visitor.visit(this);
         }

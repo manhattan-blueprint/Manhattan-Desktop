@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Model;
@@ -8,25 +9,24 @@ using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MachineSlotController : InventorySlotController, IDropHandler {
+public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
-    private MachineController MachineController = null;
+    internal MachineController MachineController = null;
 
-    public new void OnDrop(PointerEventData eventData) {
+    public new void OnDrop(GameObject droppedObject, bool splitting) {
         RectTransform invPanel = transform as RectTransform;
-        GameObject droppedObject = eventData.pointerDrag;
         if (MachineController == null) loadMachineController();
 
-        InventorySlotController source = droppedObject.transform.parent.GetComponent<InventorySlotController>(); 
+        InventorySlotController source = droppedObject.GetComponent<InventorySlotController>(); 
         InventorySlotController destination = gameObject.GetComponent<InventorySlotController>();
 
-        if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition) 
+        if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition)
             && SlotType != SlotType.output) {
-            
+
             if (destination.storedItem.IsPresent()) {
                 // Move to occupied slot
                 Optional<InventoryItem> temp = destination.storedItem;
-                
+
                 destination.SetStoredItem(source.storedItem);
                 source.SetStoredItem(temp);
             } else {
@@ -36,14 +36,16 @@ public class MachineSlotController : InventorySlotController, IDropHandler {
             }
 
             // If not from a machine, remove from inventory
-            if (droppedObject.transform.parent.GetComponent<MachineSlotController>() == null) {
+            if (droppedObject.GetComponent<MachineSlotController>() == null) {
                 if (source.storedItem.IsPresent()) {
-                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(), 
+                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(),
                         source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));
                 }
                 
-                GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(
+                if (!splitting) {
+                    GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(
                     destination.storedItem.Get().GetId(), destination.storedItem.Get().GetQuantity(), source.id));
+                }
             }
 
             // Add to correct element of machine
@@ -51,26 +53,26 @@ public class MachineSlotController : InventorySlotController, IDropHandler {
                 InventorySlotController fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
                 InventorySlotController rightSlot = GameObject.Find("InputSlot1").GetComponent<InventorySlotController>();
 
-                GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, storedItem, 
+                GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, storedItem,
                     rightSlot.storedItem, fuelSlot.storedItem));
-                
+
             } else if (SlotType == SlotType.rightInput) {
                 InventorySlotController leftSlot = GameObject.Find("InputSlot0").GetComponent<InventorySlotController>();
                 InventorySlotController fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
-                
-                GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem, 
+
+                GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem,
                     storedItem, fuelSlot.storedItem));
-                
+
             } else if (SlotType == SlotType.fuel) {
                 InventorySlotController leftSlot = GameObject.Find("InputSlot0").GetComponent<InventorySlotController>();
                 InventorySlotController rightSlot = GameObject.Find("InputSlot1").GetComponent<InventorySlotController>();
-                
-                GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem, 
+
+                GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem,
                     rightSlot.storedItem, storedItem));
-                
+
             }
         } else {
-            droppedObject.transform.parent.GetComponentInChildren<Text>().text = 
+            droppedObject.transform.parent.GetComponentInChildren<Text>().text =
                 source.storedItem.Get().GetQuantity().ToString();
         }
     }

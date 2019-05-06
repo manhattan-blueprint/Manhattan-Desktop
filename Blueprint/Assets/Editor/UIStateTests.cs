@@ -80,6 +80,21 @@ namespace Tests {
         }
 
         [Test]
+        public void TestOpenGoalUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenGoalUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Goal));
+        }
+
+        [Test]
+        public void TestCloseGoalUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenGoalUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
+        }
+
+        [Test]
         public void TestOpenPlaySettingsUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenSettingsUI());

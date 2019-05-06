@@ -4,21 +4,22 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Inventory
-  - Placed
-  - Map
-  - Cursor
-  - Held
-  - Pause
-  - MenuButton
-  - Exit
-  - Blueprint
   - Logout
-  - MachineInventory
-  - Machine
+  - Blueprint
+  - MenuButton
+  - Inventory
+  - Map
+  - Exit
   - Bindings
+  - Pause
   - Gate
   - Intro
+  - Held
+  - Goal
+  - Machine
+  - Cursor
+  - MachineInventory
+  - BlueprintTemplate
   layers:
   - Default
   - TransparentFX

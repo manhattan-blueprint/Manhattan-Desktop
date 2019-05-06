@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: HelveticaNeueMedium SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 1844525338
   material: {fileID: 21755089094042206}
-  materialHashCode: 0
+  materialHashCode: 1328486481
   fontAssetType: 1
   m_fontInfo:
     Name: Helvetica Neue
     PointSize: 70
-    Scale: 0
+    Scale: 1
     CharacterCount: 97
     LineHeight: 85.5
     Baseline: 0
     Ascender: 68.25
-    CapHeight: 0
+    CapHeight: 49.999996
     Descender: -15.1875
     CenterLine: 0
     SuperscriptOffset: 68.25
@@ -34,19 +34,23 @@ MonoBehaviour:
     UnderlineThickness: 3.5000002
     strikethrough: 19.295454
     strikethroughThickness: 3.5000002
-    TabWidth: 0
+    TabWidth: 194.375
     Padding: 5
     AtlasWidth: 512
     AtlasHeight: 512
   atlas: {fileID: 28079048148144462}
+  m_AtlasWidth: 512
+  m_AtlasHeight: 512
+  m_AtlasPadding: 5
+  m_AtlasRenderMode: 16426
   m_glyphInfoList:
   - id: 32
     x: 6
     y: 517
-    width: 0
-    height: 0
+    width: 19.4375
+    height: 83.4375
     xOffset: 0
-    yOffset: 0
+    yOffset: 68.25
     xAdvance: 19.4375
     scale: 1
   - id: 33
@@ -913,23 +917,11 @@ MonoBehaviour:
     yOffset: 9.437499
     xAdvance: 70
     scale: 1
-  m_kerningInfo:
+  m_KerningTable:
     kerningPairs: []
-  m_kerningPair:
-    m_FirstGlyph: 0
-    m_FirstGlyphAdjustments:
-      xPlacement: 0
-      yPlacement: 0
-      xAdvance: 0
-      yAdvance: 0
-    m_SecondGlyph: 0
-    m_SecondGlyphAdjustments:
-      xPlacement: 0
-      yPlacement: 0
-      xAdvance: 0
-      yAdvance: 0
-    xOffset: 0
-  fallbackFontAssets: []
+  m_FontFeatureTable:
+    m_GlyphPairAdjustmentRecords: []
+  m_FallbackFontAssetTable: []
   m_CreationSettings:
     sourceFontFileName: 
     sourceFontFileGUID: 9f3456e4d5e4f458380246695bfafc62
@@ -947,6 +939,27 @@ MonoBehaviour:
     fontStyleModifier: 2
     renderMode: 6
     includeFontFeatures: 0
+  m_FontWeightTable:
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
   fontWeights:
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
@@ -1041,9 +1054,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

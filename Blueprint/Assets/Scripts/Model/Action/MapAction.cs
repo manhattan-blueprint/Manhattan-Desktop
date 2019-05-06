@@ -3,12 +3,26 @@ using Vector2 = UnityEngine.Vector2;
 
 namespace Model.Action {
     public interface MapVisitor {
+        void visit(UpdateGoal updateGoal);
         void visit(PlaceItem placeItem);
         void visit(CollectItem collectItem);
     }
 
     public abstract class MapAction : Action {
         public abstract void Accept(MapVisitor visitor);
+    }
+    
+    /* Update the goal progress */
+    public class UpdateGoal: MapAction {
+        public readonly GoalPosition goalPosition;
+        
+        public UpdateGoal(GoalPosition goalPosition) {
+            this.goalPosition = goalPosition;
+        }
+
+        public override void Accept(MapVisitor visitor) {
+            visitor.visit(this);
+        }
     }
     
     /* Place an item at grid position */

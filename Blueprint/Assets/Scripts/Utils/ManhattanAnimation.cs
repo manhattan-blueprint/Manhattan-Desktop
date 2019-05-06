@@ -213,7 +213,6 @@ namespace Utils {
 
                 gameObject.transform.localScale = size * originalSize;
             }
-            Destroy(this);
         }
 
         private IEnumerator Grow(float time, float targetSize, float delay) {

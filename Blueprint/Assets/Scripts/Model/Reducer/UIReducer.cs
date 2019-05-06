@@ -1,6 +1,8 @@
 using System;
 using Model.Action;
 using Model.State;
+using UnityEngine;
+using Controller;
 
 namespace Model.Reducer {
     public class UIReducer : Reducer<UIState, UIAction>, UIVisitor {
@@ -19,11 +21,15 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Inventory:
                 case UIState.OpenUI.Blueprint:
                 case UIState.OpenUI.Machine:
+                case UIState.OpenUI.Goal:
                 case UIState.OpenUI.Pause:
                 case UIState.OpenUI.Bindings:
                 case UIState.OpenUI.Mouse:
                 case UIState.OpenUI.Intro:
                     state.Selected = UIState.OpenUI.Playing;
+                    break;
+                case UIState.OpenUI.BlueprintTemplate:
+                    state.Selected = UIState.OpenUI.Blueprint;
                     break;
                 case UIState.OpenUI.Gate:
                     state.Selected = UIState.OpenUI.Mouse;
@@ -40,6 +46,7 @@ namespace Model.Reducer {
         public void visit(OpenLoginUI login) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
+                case UIState.OpenUI.Playing:
                 case UIState.OpenUI.Welcome:
                 case UIState.OpenUI.Logout:
                     state.Selected = UIState.OpenUI.Login;
@@ -75,6 +82,7 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
+                case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
                     break;
                 default:
@@ -82,7 +90,19 @@ namespace Model.Reducer {
             }
         }
 
-        public void visit(OpenBindingsUI blueprint) {
+        public void visit(OpenBlueprintTemplateUI blueprintTemplate) {
+            state.SelectedBlueprintID = blueprintTemplate.id;
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Blueprint:
+                    state.Selected = UIState.OpenUI.BlueprintTemplate;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBlueprintTemplateUI");
+            }
+        }
+
+        public void visit(OpenBindingsUI bindings) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
@@ -139,6 +159,18 @@ namespace Model.Reducer {
             }
         }
 
+        public void visit(OpenGoalUI goal) {
+            // Update if exists or add new
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.Goal;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenGoalUI");
+            }
+        }
+
         public void visit(OpenSettingsUI settings) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
@@ -157,6 +189,8 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Logout;
+                    GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+                    GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to Logout");
