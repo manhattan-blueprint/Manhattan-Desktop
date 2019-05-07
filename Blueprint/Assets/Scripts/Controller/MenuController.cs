@@ -31,6 +31,9 @@ namespace Controller {
         private Image cursor;
         private SVGImage rmb;
         private const int rightButton = 1;
+        private PlayerMoveController movement;
+        private PlayerLookController looking;
+
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -48,6 +51,8 @@ namespace Controller {
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
             cursor = GameObject.Find("Cursor Image").GetComponent<Image>();
             rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
+            movement = GameObject.Find("Player").GetComponent<PlayerMoveController>();
+            looking = GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
@@ -114,8 +119,8 @@ namespace Controller {
             heldCanvas.enabled = false;
             cursorCanvas.enabled = false;
             pauseCanvas.enabled = false;
-            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
-            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
+            movement.enabled = false;
+            looking.enabled = false;
             Invoke("ToMainMenu", 30.0f);
         }
 
@@ -185,6 +190,7 @@ namespace Controller {
 
         private void OpenGate() {
             gateCanvas.enabled = true;
+            Time.timeScale = 0;
         }
 
         // Playing state
@@ -245,6 +251,7 @@ namespace Controller {
         }
 
         private void EnableMouse() {
+            Time.timeScale = 1;
             gateCanvas.enabled = false;
             cursor.enabled = false;
             rmb.enabled = true;
