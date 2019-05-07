@@ -84,7 +84,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
 
     private void disableGridBehaviour() {
         Cursor.lockState = CursorLockMode.Locked;
-        Highlight[] highlights = (Highlight[]) GameObject.FindObjectsOfType (typeof(Highlight));
+        Highlight[] highlights = grid.GetComponentsInChildren<Highlight>();
         foreach (Highlight highlight in highlights){
             highlight.enabled = false;
         }
