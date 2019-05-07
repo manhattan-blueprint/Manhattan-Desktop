@@ -23,20 +23,29 @@ namespace Controller {
         }
 
         private void PlayerMovement() {
-            float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
-            float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
-
-            Vector3 forwardMovement = transform.forward * vertInput;
-            Vector3 rightMovement = transform.right * horizInput;
-
             if (Input.GetKey(KeyMapping.Sprint)) {
               movementSpeed = 9.5f;
             } else {
               movementSpeed = 6.0f;
             }
 
+            float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
+            float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
+
+            Vector3 forwardMovement = transform.forward * vertInput;
+            Vector3 rightMovement = transform.right * horizInput;
+            Vector3 sum;
+            
+            if (Mathf.Abs(horizInput) > 0 && Mathf.Abs(vertInput) > 0) {
+                sum = (forwardMovement + rightMovement)/1.2f;
+            } else {
+                sum = forwardMovement + rightMovement;
+            }
+
+            Debug.Log(sum);
+
             // applies delta time so don't need to multiply above
-            charController.SimpleMove(forwardMovement + rightMovement);
+            charController.SimpleMove(sum);
 
             JumpInput ();
         }
