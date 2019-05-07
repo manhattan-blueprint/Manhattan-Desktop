@@ -30,23 +30,27 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     // private int forestSceneTime = 10;
     // private int pondSceneTime = 14;
     // private int beaconSceneTime = 15;
-    private int mountainSceneTime = 15;
-    private int forestSceneTime = 10;
-    private int pondSceneTime = 20;
-    private int beaconSceneTime = 15;
+    private int mountainSceneTime = 12;
+    private int forestSceneTime = 8;
+    private int pondSceneTime = 15;
+    private int beaconSceneTime = 25;
     private int totalIntroTime;
 
     private bool play = true;
     private GameObject player;
     private float currCountdownValue;
     private GameObject story;
-    private String story1 = "The last thing I remember I was on the ship, the engines were failing...";
-    private String story2 = "Now I'm not quite sure where I am...";
-    private String story3 = "This place is much like home, and yet...";
-    private String story4 = "I haven't found anyone else here, not a soul...";
-    private String story5 = "Just this clearing...";
-    private String story6 = "And the blueprints I found there. I think they might have something to do with this strange structure...";
-    private String story7 = "Regardless, I need to send a message for help...";
+    // Mountains
+    private String story1 = "You have crash landed on a distant planet...";
+    // Trees
+    private String story2 = "The world feels familiar, yet you could not be further from home...";
+    // Water
+    private String story3 = "The landscape is untouched, dense with resources...";
+    private String story4 = "While exploring this unfamiliar world, you stumble across a fenced off clearing...";
+    // Pan Clearing
+    private String story5 = "At the centre is an abandoned structure surrounded by mysterious documents...";
+    private String story6 = "Upon further inspection, you realise they are blueprints for a communication beacon...";
+    private String story7 = "Could this be your way home?";
 
     void Start() {
         totalIntroTime = mountainSceneTime + forestSceneTime + pondSceneTime + beaconSceneTime;
@@ -89,8 +93,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
             highlight.enabled = false;
         }
         MeshRenderer[] renderers = grid.GetComponentsInChildren<MeshRenderer>();
-        foreach (MeshRenderer renderer in renderers)
-        {
+        foreach (MeshRenderer renderer in renderers) {
             renderer.material = grass;
         }
     }
@@ -104,23 +107,19 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         StartCoroutine(sceneRunner());
     }
 
-    private void setText(GameObject story, String text)
-    {
+    private void setText(GameObject story, String text) {
         story.GetComponent<TextMeshProUGUI>().SetText(text);
     }
 
-    private void cameraReset()
-    {
+    private void cameraReset() {
         Camera.main.transform.position = player.transform.position + new Vector3(0f, 0.9f, 0f);
         player.transform.rotation = Quaternion.Euler(0, 180, 0);
         Camera.main.transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
-        private IEnumerator StartCountdown(float countdownValue = 60)
-    {
+    private IEnumerator StartCountdown(float countdownValue = 60) {
         currCountdownValue = countdownValue;
-        while (currCountdownValue > 0)
-        {
+        while (currCountdownValue > 0) {
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
         }
@@ -148,13 +147,11 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
 
         pondPath.GetComponent<CPC_CameraPath>().PlayPath(pondSceneTime);
         setText(story, story3);
-        yield return new WaitForSeconds(pondSceneTime/2f);
+        yield return new WaitForSeconds(0.4f * pondSceneTime);
         setText(story, story4);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 2.2f);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, (pondSceneTime/2f) - 0.2f);
-        yield return new WaitForSeconds((pondSceneTime/2f));
-
-
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.4f * pondSceneTime);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime);
+        yield return new WaitForSeconds(0.6f * pondSceneTime);
 
         // Reset camera to be within hex grid
         Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
@@ -181,13 +178,11 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         }
     }
 
-    private IEnumerator cameraSpin()
-    {
-      while (play)
-      {
-          yield return new WaitForSeconds(1.0f / 60.0f);
-          Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
-          Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);
-      }
+    private IEnumerator cameraSpin() {
+        while (play) {
+            yield return new WaitForSeconds(1.0f / 60.0f);
+            Camera.main.transform.LookAt(new Vector3(0.0f, 2.0f, 0.0f));
+            Camera.main.transform.RotateAround(Vector3.zero, Vector3.up, 0.15f);
+        }
     }
 }
