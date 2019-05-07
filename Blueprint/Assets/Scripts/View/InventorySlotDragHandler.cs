@@ -77,7 +77,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                     if (!splitting) {
                         // Dragging
                         if (isc is MachineSlotController) {
-                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, false);
+                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, false, newQuantity);
                         } else {
                             isc.OnDrop(dragObject);
                         }
@@ -87,7 +87,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                         
                         if (isc is MachineSlotController) {
                             // Into machine
-                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, true);
+                            isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, true, newQuantity);
                         } else {
                             // Into inventory slot
                             if (isc.storedItem.IsPresent()) {
