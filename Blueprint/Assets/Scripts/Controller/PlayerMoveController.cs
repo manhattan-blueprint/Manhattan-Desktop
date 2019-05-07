@@ -24,9 +24,9 @@ namespace Controller {
 
         private void PlayerMovement() {
             if (Input.GetKey(KeyMapping.Sprint)) {
-              movementSpeed = 9.5f;
+                movementSpeed = 9.5f;
             } else {
-              movementSpeed = 6.0f;
+                movementSpeed = 6.0f;
             }
 
             float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
@@ -41,8 +41,6 @@ namespace Controller {
             } else {
                 sum = forwardMovement + rightMovement;
             }
-
-            Debug.Log(sum);
 
             // applies delta time so don't need to multiply above
             charController.SimpleMove(sum);
