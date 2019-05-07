@@ -140,7 +140,7 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Login:
                     state.Selected = UIState.OpenUI.Intro;
-                    state.IntroComplete = true;
+                    GameManager.Instance().mapStore.Dispatch(new IntroComplete());
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenIntroUI");
