@@ -42,9 +42,7 @@ public class GameManager {
     }
 
     public void ConfigureGame(SchemaItems schemaItems, GameState gameState, List<InventoryEntry> inventoryEntries) {
-        Debug.Log("ELIAS");
         this.sm = new SchemaManager(schemaItems);
-        Debug.Log("BEN");
         mapStore.SetState(gameState.mapState);
         heldItemStore.SetState(gameState.heldItemState);
         inventoryStore.SetState(gameState.inventoryState);

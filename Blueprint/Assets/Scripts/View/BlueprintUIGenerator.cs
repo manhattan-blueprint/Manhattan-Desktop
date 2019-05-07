@@ -137,7 +137,6 @@ public class BlueprintUIGenerator : MonoBehaviour {
     }
 
     private void addPrimaryCell(int id, float xPos, float yPos) {
-        if (GameManager.Instance().sm == null) Debug.Log("WILL");
         string name = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == id).name;
         GameObject cell = new GameObject(name + "Cell");
         cell.transform.SetParent(contentContainer.transform);
