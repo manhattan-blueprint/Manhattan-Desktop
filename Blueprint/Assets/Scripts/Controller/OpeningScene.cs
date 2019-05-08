@@ -146,10 +146,10 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         // Screen fades back in after delay into forest scene
         // Text fades back in after delay
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2*(mountainSceneTime/3) - 0.2f);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 2*(mountainSceneTime/3) - 0.2f);
-        yield return new WaitForSeconds(2*(mountainSceneTime/3) - 0.2f);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 2*(mountainSceneTime/3) - 0.7f);
+        yield return new WaitForSeconds(2*(mountainSceneTime/3) - 0.7f);
         setText(story, story2);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.7f);
 
         // Destroy unnecessary assets
         Destroy(mountainWater);
@@ -160,24 +160,23 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         // fade out of forest scene
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1f, true, 0.0f, forestSceneTime - 2f);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, forestSceneTime - 2f);
-
-        // fade into pond scene
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, forestSceneTime - 0.2f);
         yield return new WaitForSeconds(forestSceneTime);
+        // fade into pond scene
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0f);
 
         // Next camera path plays
         pondPath.GetComponent<CPC_CameraPath>().PlayPath(pondSceneTime);
         setText(story, story3);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 1f, true, 0.0f, 0f);
-        
-        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.4f * pondSceneTime);
-        yield return new WaitForSeconds(0.4f * pondSceneTime + 1f);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0f);
+
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.4f * pondSceneTime - 1f);
+        yield return new WaitForSeconds(0.4f * pondSceneTime + 0.5f);
         setText(story, story4);
         animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.0f);
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.0f);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.0f);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 0.2f);
-        yield return new WaitForSeconds(0.6f * pondSceneTime);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 0.7f);
+        yield return new WaitForSeconds(0.6f * pondSceneTime - 0.7f);
         setText(story, story5);
         animationManager.StartAppearanceAnimation(story, Anim.Appear, 1.0f, true, 0.0f, 0f);
 
@@ -187,18 +186,18 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         StartCoroutine(cameraSpin());
         yield return new WaitForSeconds(beaconSceneTime/3);
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         setText(story, story6);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
-        yield return new WaitForSeconds(beaconSceneTime/3);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.0f);
+        yield return new WaitForSeconds((beaconSceneTime/3) - 1f);
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         setText(story, story7);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.0f);
 
-        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, (beaconSceneTime/3f) - 2f);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
-        yield return new WaitForSeconds((beaconSceneTime/3) + 1);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, (beaconSceneTime/3f) - 1f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 1f);
+        yield return new WaitForSeconds(beaconSceneTime/3);
         setText(story, "");
 
         cameraReset();
