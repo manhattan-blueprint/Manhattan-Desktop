@@ -18,7 +18,8 @@ namespace Model.Reducer {
 
         public void visit(PlaceItem placeItem) {
             if (!state.GetObjects().ContainsKey(placeItem.position)) {
-                state.AddObject(placeItem.position, placeItem.itemID);
+                // Rotation is set to 30 to negate incorrect model rotation
+                state.AddObject(placeItem.position, placeItem.itemID, 30);
 
                 SchemaItem item = GameManager.Instance().sm.GameObjs.items
                     .Find(x => x.item_id == placeItem.itemID);
@@ -59,6 +60,12 @@ namespace Model.Reducer {
                 state.RemoveWirePaths(collectItem.position);
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
                 GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
+            }
+        }
+
+        public void visit(RotateItem rotateItem) {
+            if (state.getObjects().ContainsKey(rotateItem.position)) {
+                state.RotateObject(rotateItem.position);
             }
         }
     }

@@ -17,12 +17,16 @@ namespace Model.State {
             wirePaths = new List<WirePath>();
         }
 
-        public void AddObject(Vector2 position, int id) {
-            grid[position] = new MapObject(id);
+        public void AddObject(Vector2 position, int id, float rotation) {
+            grid[position] = new MapObject(id, rotation);
         }
 
         public void RemoveObject(Vector2 position) {
             grid.Remove(position);
+        }
+
+        public void RotateObject(Vector2 position) {
+            grid[position].Rotate();
         }
 
         public void addGoalItem(GoalPosition position) {
