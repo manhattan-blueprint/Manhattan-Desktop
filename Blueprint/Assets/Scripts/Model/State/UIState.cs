@@ -26,7 +26,7 @@ namespace Model.State {
         public int SelectedBlueprintID = -1;
 
         public UIState() {
-            this.Selected = OpenUI.Intro;
+            this.Selected = OpenUI.Login;
         }
     }
 }

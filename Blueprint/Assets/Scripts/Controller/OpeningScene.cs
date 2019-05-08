@@ -12,6 +12,7 @@ using Model.Redux;
 using Model.State;
 using TMPro;
 using Controller;
+using UnityEngine.Experimental.UIElements;
 
 public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     private GameObject dishBase;
@@ -88,6 +89,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
 
     private void disableGridBehaviour() {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Highlight[] highlights = grid.GetComponentsInChildren<Highlight>();
         foreach (Highlight highlight in highlights){
             highlight.enabled = false;
@@ -174,9 +176,9 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         yield return new WaitForSeconds(0.4f * pondSceneTime + 1f);
         setText(story, story4);
         animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.0f);
-        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.0f);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.0f);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 0.2f);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.4f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.4f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 0.3f);
         yield return new WaitForSeconds(0.6f * pondSceneTime);
         setText(story, story5);
         animationManager.StartAppearanceAnimation(story, Anim.Appear, 1.0f, true, 0.0f, 0f);
@@ -187,16 +189,16 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         StartCoroutine(cameraSpin());
         yield return new WaitForSeconds(beaconSceneTime/3);
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         setText(story, story6);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
-        yield return new WaitForSeconds(beaconSceneTime/3);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0f);
+        yield return new WaitForSeconds(beaconSceneTime/3 - 1f);
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         setText(story, story7);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0f);
 
-        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, (beaconSceneTime/3f) - 2f);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1f, true, 0.0f, (beaconSceneTime/3f) - 2f);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
         yield return new WaitForSeconds((beaconSceneTime/3) + 1);
         setText(story, "");
