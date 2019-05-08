@@ -342,6 +342,6 @@ namespace Utils {
                 }
             }
             Destroy(this);
-          }
+        }
     }
 }

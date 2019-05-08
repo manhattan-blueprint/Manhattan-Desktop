@@ -26,11 +26,6 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     private GameObject grid;
     private Material grass;
     private ManhattanAnimation animationManager;
-
-    // private int mountainSceneTime = 18;
-    // private int forestSceneTime = 10;
-    // private int pondSceneTime = 14;
-    // private int beaconSceneTime = 15;
     private int mountainSceneTime = 12;
     private int forestSceneTime = 8;
     private int pondSceneTime = 15;
