@@ -69,17 +69,19 @@ public class MachineSlotController : InventorySlotController {
                 if (!splitting) {
                     // Default case
                     
+                    // Into stack of same type
                     if (source.storedItem.IsPresent() && storedItem.Get().GetId() == source.storedItem.Get().GetId()) {
                         // Add to existing stack of correct item
                         InventoryItem temp = storedItem.Get();
                         temp.AddQuantity(source.storedItem.Get().GetQuantity());
                         
+                        // Dragged from...
                         if (source.name == "InputSlot1") {
                             GameManager.Instance().machineStore.Dispatch(new ClearRightInput(MachineController.machineLocation));
                         } else if (source.name == "FuelSlot") {
                             GameManager.Instance().machineStore.Dispatch(new ClearFuel(MachineController.machineLocation));
                         } else {
-                            // Remove from inventory, add to input slot
+                            // ...inventory, add to input slot
                             GameManager.Instance().inventoryStore.Dispatch(
                                 new RemoveItemFromStackInventory(source.storedItem.Get().GetId(), source.storedItem.Get().GetQuantity(), source.id));
                         }
@@ -101,6 +103,7 @@ public class MachineSlotController : InventorySlotController {
                     temp.SetQuantity(newSplitQuantity);
                     InventoryItem addition = new InventoryItem(temp.GetName(), temp.GetId(), originalDestinationQuantity + newSplitQuantity);
 
+                    // Split into stack of same type
                     if (source.storedItem.IsPresent() && storedItem.Get().GetId() == source.storedItem.Get().GetId()) {
                         GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(temp.GetId(), initialQuantity, source.id));
                         GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, addition));
@@ -110,6 +113,7 @@ public class MachineSlotController : InventorySlotController {
                         
                     }
                     
+                    // If split from other input slot
                     if (source.name == "InputSlot1") {
                         InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                         GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, initial));
@@ -122,6 +126,8 @@ public class MachineSlotController : InventorySlotController {
 
                 if (!splitting) {
                     // Default case
+                    
+                    // Into stack of same type
                     if (source.storedItem.IsPresent() && storedItem.Get().GetId() == source.storedItem.Get().GetId()) {
                         // Add to existing stack of correct item
                         InventoryItem temp = storedItem.Get();
@@ -154,6 +160,7 @@ public class MachineSlotController : InventorySlotController {
                     temp.SetQuantity(newSplitQuantity);
                     InventoryItem addition = new InventoryItem(temp.GetName(), temp.GetId(), originalDestinationQuantity + newSplitQuantity);
                     
+                    // Split into stack of same type
                     if (source.storedItem.IsPresent() && storedItem.Get().GetId() == source.storedItem.Get().GetId()) {
                         GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(temp.GetId(), initialQuantity, source.id));
                         GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, addition));
@@ -163,6 +170,7 @@ public class MachineSlotController : InventorySlotController {
 
                     }
                     
+                    // If split from other input slot
                     if (source.name == "InputSlot0") {
                         InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                         GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, initial));
