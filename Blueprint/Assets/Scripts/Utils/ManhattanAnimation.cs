@@ -324,8 +324,7 @@ namespace Utils {
                   color.a = alphaModifier;
                   gameObject.GetComponent<Image>().color = color;
                 }
-                if (gameObject.GetComponent<TextMeshProUGUI>() != null)
-                {
+                if (gameObject.GetComponent<TextMeshProUGUI>() != null) {
                     Color color = gameObject.GetComponent<TextMeshProUGUI>().color;
                     color.a = alphaModifier;
                     gameObject.GetComponent<TextMeshProUGUI>().color = color;
