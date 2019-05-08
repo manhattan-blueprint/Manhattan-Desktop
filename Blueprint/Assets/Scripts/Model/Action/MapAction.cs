@@ -6,6 +6,8 @@ namespace Model.Action {
         void visit(UpdateGoal updateGoal);
         void visit(PlaceItem placeItem);
         void visit(CollectItem collectItem);
+        void visit(RotateItem rotateItem);
+        void visit(IntroComplete introComplete);
     }
 
     public abstract class MapAction : Action {
@@ -48,6 +50,24 @@ namespace Model.Action {
             this.position = position;
         }
 
+        public override void Accept(MapVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    /* Rotate an item at grid position */
+    public class RotateItem : MapAction {
+        public readonly Vector2 position;
+
+        public RotateItem(Vector2 position) {
+            this.position = position;
+        }
+        public override void Accept(MapVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class IntroComplete: MapAction {
         public override void Accept(MapVisitor visitor) {
             visitor.visit(this);
         }
