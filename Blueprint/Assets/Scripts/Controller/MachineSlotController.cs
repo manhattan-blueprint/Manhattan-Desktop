@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Controller;
+﻿using Controller;
 using Model;
 using Model.Action;
 using UnityEngine;
-using UnityEngine.Analytics;
-using UnityEngine.Assertions.Must;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using UnityEngine.XR.WSA.Input;
 
 public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
