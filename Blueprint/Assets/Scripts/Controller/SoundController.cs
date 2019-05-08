@@ -136,9 +136,7 @@ namespace Controller {
 
             outroMusic = Resources.Load<AudioClip>("Sounds/Music/OutroMusic");
 
-            if (!isMenu)
-                PlayBirdsSound();
-            else
+            if (isMenu)
                 PlayMenuSound();
         }
         
@@ -161,12 +159,6 @@ namespace Controller {
             // One in 10,000 chance per frame for... reasons.
             if (!musicSource.isPlaying && UnityEngine.Random.Range(0.0f, 1.0f) < 0.0001f)  {
                 PlayBuildingEnvironmentMusic();
-                ambientSource.Stop();
-            }
-
-            // Play ambient noise of no music is playing.
-            if (!musicSource.isPlaying && !ambientSource.isPlaying) {
-                PlayBirdsSound();
             }
         }
         
@@ -296,9 +288,9 @@ namespace Controller {
         }
 
         public void PlayBirdsSound() {
-            // ambientSource.Stop();
-            // ambientSource.clip = birdsLooping;
-            // ambientSource.Play();
+            ambientSource.Stop();
+            ambientSource.clip = birdsLooping;
+            ambientSource.Play();
         }
 
         public void PlayMenuSound() {
