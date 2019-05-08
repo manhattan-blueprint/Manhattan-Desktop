@@ -25,9 +25,7 @@ namespace View {
         void OnMouseEnter() {
             if (!paused) {
               if (model) {
-                Debug.Log("Hello");
                 foreach (var component in GetComponents<Component>()) {
-                  Debug.Log(component.GetType());
                 }
               }
               rend.material.color = highlightColor;
@@ -49,6 +47,10 @@ namespace View {
             switch (state.Selected) {
               case UIState.OpenUI.Playing:
                   paused = false;
+                  break;
+              case UIState.OpenUI.Intro:
+                  paused = false;
+                  GameManager.Instance().uiStore.Unsubscribe(this);
                   break;
               case UIState.OpenUI.Login:
                   GameManager.Instance().uiStore.Unsubscribe(this);

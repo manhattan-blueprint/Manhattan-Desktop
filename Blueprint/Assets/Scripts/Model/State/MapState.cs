@@ -10,6 +10,7 @@ namespace Model.State {
         [SerializeField] private Dictionary<Vector2, MapObject> grid;
         [SerializeField] private Goal goal;
         [SerializeField] private List<WirePath> wirePaths;
+        [SerializeField] private bool IntroComplete;
 
         public MapState() {
             grid = new Dictionary<Vector2, MapObject>();
@@ -56,6 +57,14 @@ namespace Model.State {
 
         public List<WirePath> GetWirePaths() {
             return wirePaths;
+        }
+
+        public bool GetIntroState() {
+            return this.IntroComplete;
+        }
+
+        public void SetIntroState(bool state) {
+            this.IntroComplete = state;
         }
     }
 }

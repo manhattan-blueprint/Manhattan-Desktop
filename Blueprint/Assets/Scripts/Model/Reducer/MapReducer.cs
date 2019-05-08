@@ -61,5 +61,9 @@ namespace Model.Reducer {
                 GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
             }
         }
+
+        public void visit(IntroComplete introComplete) {
+            state.SetIntroState(true);
+        }
     }
 }
