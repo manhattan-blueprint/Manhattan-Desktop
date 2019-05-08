@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Controller;
@@ -5,6 +6,7 @@ using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
+using UnityEditor;
 using View;
 
 /* Attached to PlayerCamera and controls mouse actions */
@@ -14,10 +16,11 @@ namespace Controller {
         public Transform cubeLarge;
         public Transform capsule;
         public Transform machinery;
-        private const float maxDistance = 10;
+        private const float maxDistance = 7;
         private const float holdLength = 0.5f;
-        private const int rightButton = 1;
         private const int leftButton = 0;
+        private const int rightButton = 1;
+        private const int middleButton = 2;
 
         private RaycastHit hit;
         private Text txt;
@@ -55,6 +58,10 @@ namespace Controller {
                 hit = new RaycastHit();
                 if (!Physics.Raycast(ray, out hit)) return;
 
+                // Check player is not too far away
+                float distance = Vector3.Distance(hit.transform.position, transform.position);
+                if (distance > maxDistance) return;
+
                 // If we hit a machine, go to machine UI
                 MachinePlaceable mp = hit.transform.gameObject.GetComponent<MachinePlaceable>();
                 if (mp != null) {
@@ -85,6 +92,11 @@ namespace Controller {
                 hit = new RaycastHit();
 
                 if (!Physics.Raycast(ray, out hit)) return;
+
+                // Check player is not too far away
+                float distance = Vector3.Distance(hit.transform.position, transform.position);
+                if (distance > maxDistance) return;
+
                 Placeable p = hit.transform.gameObject.GetComponent<Placeable>();
                 if (p == null) return;
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
@@ -103,6 +115,26 @@ namespace Controller {
                 timer += Time.deltaTime;
             } else if (Input.GetMouseButtonUp(leftButton)) {
                 timer = 0.0f;
+            }
+            
+            // Rotate item
+            if (Input.GetMouseButtonDown(middleButton)) {
+                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+                hit = new RaycastHit();
+
+                if (!Physics.Raycast(ray, out hit)) return;
+
+                // Check player is not too far away
+                float distance = Vector3.Distance(hit.transform.position, transform.position);
+                if (distance > maxDistance) return;
+
+                Placeable p = hit.transform.gameObject.GetComponent<Placeable>();
+                if (p == null) return;
+                HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
+                if (hc == null) return;
+                
+                p.transform.localRotation = Quaternion.Euler(0, p.transform.localEulerAngles.y + 60, 0);
+                GameManager.Instance().mapStore.Dispatch(new RotateItem(hc.GetPosition()));
             }
         }
     }

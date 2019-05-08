@@ -73,7 +73,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 // Drop over slot?  
                 InventorySlotController isc = null;
                 foreach (RaycastResult result in results) {
-                    Debug.Log(result.gameObject.name);
                     if (result.gameObject.GetComponent<InventorySlotController>()) {
                         isc = result.gameObject.GetComponent<InventorySlotController>();
                     } 

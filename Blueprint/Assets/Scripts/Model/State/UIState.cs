@@ -18,6 +18,7 @@ namespace Model.State {
             Bindings,
             Gate,
             Mouse,
+            Intro,
         };
 
         public OpenUI Selected;
