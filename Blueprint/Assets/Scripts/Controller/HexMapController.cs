@@ -193,7 +193,12 @@ namespace Controller {
                 
                 Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
                 foreach (Light light in lights) {
-                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
+                    if (kvp.Value.HasFuel()) {
+                        light.intensity = 20;
+                    }
+                    else {
+                        light.intensity = 0;
+                    }
                 }
 
                 ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();

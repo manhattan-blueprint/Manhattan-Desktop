@@ -38,12 +38,13 @@ namespace Controller {
         private AudioClip blueprintCollecting;
         private AudioClip mapView;
         private AudioClip buildingEnvironment;
+        private AudioClip introMusic;
+        private AudioClip outroMusic;
 
         private System.Random random;
 
 
-        void Start()
-        {
+        void Start() {
             random = new System.Random();
             musicSource.loop = true;
 
@@ -131,14 +132,17 @@ namespace Controller {
 
             buildingEnvironment = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment");
 
+            introMusic = Resources.Load<AudioClip>("Sounds/Music/IntroMusic");
+
+            outroMusic = Resources.Load<AudioClip>("Sounds/Music/OutroMusic");
+
             if (!isMenu)
                 PlayBirdsSound();
             else
                 PlayMenuSound();
         }
         
-        void Update()
-        {
+        void Update() {
             if (isMenu)
                 return;
 
@@ -148,108 +152,155 @@ namespace Controller {
                 playerTotalDistance += Vector3.Distance(playerCurrentPos, playerLastPos);
                 playerTotalTime += Time.deltaTime;
                 playerLastPos = playerCurrentPos;
-                if (playerTotalDistance > playerLastStep + 2.4f)
-                {
+                if (playerTotalDistance > playerLastStep + 2.4f) {
                     PlayStepsSound();
                     playerLastStep = playerTotalDistance;
                 }
             }
 
             // One in 10,000 chance per frame for... reasons.
-            if (!musicSource.isPlaying && UnityEngine.Random.Range(0.0f, 1.0f) < 0.0001f) 
-            {
+            if (!musicSource.isPlaying && UnityEngine.Random.Range(0.0f, 1.0f) < 0.0001f)  {
                 PlayBuildingEnvironmentMusic();
+                ambientSource.Stop();
+            }
+
+            // Play ambient noise of no music is playing.
+            if (!musicSource.isPlaying && !ambientSource.isPlaying) {
+                PlayBirdsSound();
             }
         }
         
-        public void PlayBlueprintOpeningSound()
-        {
+        public void PlayBlueprintOpeningSound() {
             soundSource.PlayOneShot(blueprintOpening[random.Next(blueprintOpening.Count)]);
         }
 
-        public void PlayBagOpeningSound()
-        {
+        public void PlayBagOpeningSound() {
             soundSource.PlayOneShot(bagOpening[random.Next(bagOpening.Count)]);
         }
 
-        public void PlayButtonPressSound()
-        {
+        public void PlayButtonPressSound() {
             soundSource.PlayOneShot(buttonPress[random.Next(buttonPress.Count)]);
         }
 
-        public void PlayChopSound()
-        {
+        public void PlayChopSound() {
             soundSource.PlayOneShot(chop[random.Next(chop.Count)]);
         }
 
-        public void PlayShovelSound()
-        {
+        public void PlayShovelSound() {
             soundSource.PlayOneShot(shovel[random.Next(shovel.Count)]);
         }
 
-        public void PlayMineSound()
-        {
+        public void PlayMineSound() {
             soundSource.PlayOneShot(mine[random.Next(mine.Count)]);
         }
 
-        public void PlayDripSound()
-        {
+        public void PlayDripSound() {
             soundSource.PlayOneShot(drip[random.Next(drip.Count)]);
         }
 
-        public void PlayStepsSound()
-        {
+        public void PlayMachinePlacementSound() {
+            soundSource.PlayOneShot(drip[random.Next(drip.Count)]);
+        }
+
+        public void PlayStepsSound() {
             soundSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
         }
 
-        public void PlayJumpSound()
-        {
+        public void PlayJumpSound() {
+            playerCurrentPos = player.transform.position;
+            playerTotalDistance += Vector3.Distance(playerCurrentPos, playerLastPos);
+            playerTotalTime += Time.deltaTime;
+            playerLastPos = playerCurrentPos;
+            playerLastStep = playerTotalDistance;
+            soundSource.Stop();
+
+            // Want landing sound to play slightly before end of jump as loading the clip is slightly delayed.
+            Invoke("PlayLandSound", 0.62f);
+        }
+
+        private void PlayLandSound() {
+            playerCurrentPos = player.transform.position;
+            playerTotalDistance += Vector3.Distance(playerCurrentPos, playerLastPos);
+            playerTotalTime += Time.deltaTime;
+            playerLastPos = playerCurrentPos;
             playerLastStep = playerTotalDistance;
             soundSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
         }
 
-        public void PlayBlueprintCollectingMusic()
-        {
+        public void PlayBlueprintCollectingMusic() {
             musicSource.Stop();
             musicSource.clip = blueprintCollecting;
             musicSource.Play();
         }
 
-        public void PlayBuildingEnvironmentMusic()
-        {
+        public void PlayBuildingEnvironmentMusic() {
             musicSource.Stop();
             musicSource.clip = buildingEnvironment;
             musicSource.Play();
         }
 
-        public void PlayGameOverMusic()
-        {
+        public void PlayIntroMusic() {
             musicSource.Stop();
-            musicSource.clip = blueprintCollecting;
+            musicSource.clip = introMusic;
             musicSource.Play();
         }
 
-        public void PlayBirdsSound()
-        {
+        public void PlayOutroMusic() {
+            musicSource.Stop();
+            musicSource.clip = outroMusic;
+            musicSource.Play();
+        }
+        
+        public void PlayPlacementSound(int inpID) {
+            switch (inpID) {
+                case 1: PlayChopSound(); break;
+                case 2: PlayMineSound(); break;
+                case 3: PlayShovelSound(); break;
+                case 4: PlayMineSound(); break;
+                case 5: PlayMineSound(); break;
+                case 6: PlayDripSound(); break;
+                case 7: PlayMineSound(); break;
+                case 8: PlayShovelSound(); break;
+                case 9: PlayMineSound(); break;
+                case 10: PlayMineSound(); break;
+                case 11: PlayMachinePlacementSound(); break;
+                case 12: PlayShovelSound(); break;
+                case 13: PlayMineSound(); break;
+                case 14: PlayMineSound(); break;
+                case 15: PlayMineSound(); break;
+                case 16: PlayMineSound(); break;
+                case 17: PlayMachinePlacementSound(); break;
+                case 18: PlayMachinePlacementSound(); break;
+                case 19: PlayMachinePlacementSound(); break;
+                case 20: PlayMachinePlacementSound(); break;
+                case 21: PlayMachinePlacementSound(); break;
+                case 22: PlayMachinePlacementSound(); break;
+                case 23: PlayMachinePlacementSound(); break;
+                case 24: PlayMachinePlacementSound(); break;
+                case 25: PlayMachinePlacementSound(); break;
+                case 26: PlayMachinePlacementSound(); break;
+                case 27: PlayMachinePlacementSound(); break;
+                case 28: PlayMachinePlacementSound(); break;
+                case 29: PlayMachinePlacementSound(); break;
+                case 30: PlayMachinePlacementSound(); break;
+                case 31: PlayMachinePlacementSound(); break;
+                default: PlayMineSound(); break;
+            }
+        }
+
+        public void PlayBirdsSound() {
             ambientSource.Stop();
             ambientSource.clip = birdsLooping;
             ambientSource.Play();
         }
 
-        public void StopBirdsSound()
-        {
-            ambientSource.Stop();
-        }
-
-        public void PlayMenuSound()
-        {
+        public void PlayMenuSound() {
             musicSource.Stop();
             musicSource.clip = birdsLooping;
             musicSource.Play();
         }
 
-        public void PlayAfterDelay(string functionName, float delay)
-        {
+        public void PlayAfterDelay(string functionName, float delay) {
             Invoke(functionName, delay);
         }
     }

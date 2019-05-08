@@ -2240,7 +2240,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1494898019}
-  - component: {fileID: 1494898017}
   - component: {fileID: 1494898018}
   m_Layer: 0
   m_Name: SoundController
@@ -2249,14 +2248,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1494898017
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1494898016}
-  m_Enabled: 1
 --- !u!114 &1494898018
 MonoBehaviour:
   m_ObjectHideFlags: 0

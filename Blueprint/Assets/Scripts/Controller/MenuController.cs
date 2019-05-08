@@ -94,11 +94,9 @@ namespace Controller {
                 } else if (blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayBlueprintOpeningSound();
-                } else if (bindingsCanvas.enabled || gateCanvas.enabled) {
+                } else if (bindingsCanvas.enabled || gateCanvas.enabled || blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayButtonPressSound();
-                } else if (blueprintTemplateCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
                     soundController.PlayButtonPressSound();
@@ -142,7 +140,7 @@ namespace Controller {
             pauseCanvas.enabled = false;
             movement.enabled = false;
             looking.enabled = false;
-            soundController.PlayGameOverMusic();
+            soundController.PlayOutroMusic();
             Invoke("ToMainMenu", 30.0f);
         }
 
@@ -176,6 +174,7 @@ namespace Controller {
         private void OpenBlueprintTemplate() {
             blueprintTemplateCanvas.enabled = true;
             blueprintCanvas.enabled = false;
+            soundController.PlayButtonPressSound();
         }
 
         private void OpenMachine() {
