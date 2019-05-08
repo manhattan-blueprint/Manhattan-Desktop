@@ -33,6 +33,7 @@ namespace Controller {
         private const int rightButton = 1;
         private PlayerMoveController movement;
         private PlayerLookController looking;
+        private SoundController soundController;
 
 
         void Start() {
@@ -68,6 +69,8 @@ namespace Controller {
             gameOver = false;
             rmb.enabled = false;
 
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+
             GameManager.Instance().uiStore.Subscribe(this);
         }
 
@@ -79,35 +82,53 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
+                    soundController.PlayBagOpeningSound();
                 } else if (inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                    soundController.PlayBagOpeningSound();
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || gateCanvas.enabled || goalCanvas.enabled || blueprintTemplateCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || goalCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                    soundController.PlayBagOpeningSound();
+                } else if (blueprintCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                    soundController.PlayBlueprintOpeningSound();
+                } else if (bindingsCanvas.enabled || gateCanvas.enabled) {
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                    soundController.PlayButtonPressSound();
+                } else if (blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
+                    soundController.PlayButtonPressSound();
                 } else {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                    soundController.PlayButtonPressSound();
                 }
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled && !blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
+                    soundController.PlayBlueprintOpeningSound();
                 } else if (blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                    soundController.PlayBlueprintOpeningSound();
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
+                    soundController.PlayButtonPressSound();
                 }
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
+                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
                 }
             }
 
             if (Input.GetKeyUp(KeyMapping.Bindings)) {
                 if (bindingsCanvas.enabled) {
+                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
@@ -121,6 +142,7 @@ namespace Controller {
             pauseCanvas.enabled = false;
             movement.enabled = false;
             looking.enabled = false;
+            soundController.PlayGameOverMusic();
             Invoke("ToMainMenu", 30.0f);
         }
 
@@ -157,6 +179,7 @@ namespace Controller {
         }
 
         private void OpenMachine() {
+            soundController.PlayBagOpeningSound();
             Time.timeScale = 0;
             machineCanvas.enabled = true;
             machineInventoryCanvas.enabled = true;
@@ -168,6 +191,7 @@ namespace Controller {
         }
 
         private void OpenGoal() {
+            soundController.PlayBagOpeningSound();
             Time.timeScale = 0;
             goalCanvas.enabled = true;
             machineInventoryCanvas.enabled = true;

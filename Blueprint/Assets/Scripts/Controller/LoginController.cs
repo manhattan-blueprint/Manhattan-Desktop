@@ -40,6 +40,7 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
     private ScreenProportions sp;
     private ManhattanAnimation animationManager;
     private string passwordRegex = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{5,16}";
+    private SoundController soundController;
 
     // Used to prevent the user from interacting during animation to prevent unexpected errors.
     private bool animating;
@@ -68,6 +69,8 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
         // Fade whole menu fade in
         animationManager.StartAppearanceAnimation(fadeIn.gameObject,
             Anim.Disappear, 2.0f, true, 1.0f, 0.5f);
+
+        soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
 
         GameManager.Instance().uiStore.Subscribe(this);
     }
@@ -189,6 +192,8 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
     }
 
     public void OnLoginClick() {
+        soundController.PlayButtonPressSound();
+
         if (animating) return;
         SetMessageClear();
         string loginUsernameText = loginUsernameInput.text;
@@ -224,6 +229,8 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
     }
 
     public void OnRegisterClick() {
+        soundController.PlayButtonPressSound();
+
         if (animating) return;
         SetMessageClear();
         string registerUsernameText = registerUsernameInput.text;
@@ -260,6 +267,7 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
     // Splash screen is only accessible from the login menu.
     public void ToSplashScreen() {
         if (animating) return;
+        soundController.PlayButtonPressSound();
         ShowMenu(splashScreen);
         HideMenu(loginMenu);
 
@@ -278,6 +286,7 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
     // Login menu is accessible from either the splash screen or the register menu.
     public void ToLoginMenu() {
         if (animating) return;
+        soundController.PlayButtonPressSound();
         switch(visibleMenu) {
             case VisibleMenu.SplashScreen:
                 HideMenu(splashScreen);
@@ -303,6 +312,7 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
     // Register menu is only accessible from the login menu.
     public void ToRegister() {
         if (animating) return;
+        soundController.PlayButtonPressSound();
         ShowMenu(registerMenu);
         HideMenu(loginMenu);
         registerUsernameInput.Select();
