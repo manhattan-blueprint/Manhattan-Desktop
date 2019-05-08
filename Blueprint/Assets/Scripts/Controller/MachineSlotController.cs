@@ -64,7 +64,8 @@ public class MachineSlotController : InventorySlotController {
 
             // Add to correct element of machine
             if (SlotType == SlotType.leftInput) {
-                InventorySlotController fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
+                InventorySlotController fuelSlot = null; 
+                if (!MachineController.isElectrical) fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
                 InventorySlotController rightSlot = GameObject.Find("InputSlot1").GetComponent<InventorySlotController>();
 
 
@@ -91,8 +92,13 @@ public class MachineSlotController : InventorySlotController {
                         GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, temp));
 
                     } else {
-                        GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, storedItem, 
-                            rightSlot.storedItem, fuelSlot.storedItem));
+                        if (MachineController.isElectrical) {
+                            GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, storedItem, 
+                                rightSlot.storedItem, Optional<InventoryItem>.Empty()));
+                        } else {
+                            GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, storedItem, 
+                                rightSlot.storedItem, fuelSlot.storedItem));
+                        }
                     }
                     
                 } else {
@@ -147,7 +153,9 @@ public class MachineSlotController : InventorySlotController {
                 }
             } else if (SlotType == SlotType.rightInput) {
                 InventorySlotController leftSlot = GameObject.Find("InputSlot0").GetComponent<InventorySlotController>();
-                InventorySlotController fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
+                InventorySlotController fuelSlot = null; 
+                if (!MachineController.isElectrical) fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
+                
 
                 if (!splitting) {
                     // Default case
@@ -171,8 +179,13 @@ public class MachineSlotController : InventorySlotController {
                         GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, temp));
                         
                     } else {
-                        GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem, 
-                            storedItem, fuelSlot.storedItem));
+                        if (MachineController.isElectrical) {
+                            GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem, 
+                                storedItem, Optional<InventoryItem>.Empty()));
+                        } else {
+                            GameManager.Instance().machineStore.Dispatch(new SetAll(MachineController.machineLocation, leftSlot.storedItem, 
+                                storedItem, fuelSlot.storedItem));
+                        }
                     }
                     
                 } else {

@@ -15,7 +15,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     private GameObject inputSlot1;
     
     private Image fuelIcon;
-    private bool isElectrical = false;
+    public bool isElectrical = false;
     private Sprite unpoweredElectrical;
     private Sprite poweredElectrical;
     private Sprite unpoweredFuel;
