@@ -132,9 +132,8 @@ namespace Controller {
                 if (p == null) return;
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
-
-                p.transform.localRotation = Quaternion.Euler(0, (float) Math.Round(p.transform.localEulerAngles.y + 60), 0);
                 
+                p.transform.localRotation = Quaternion.Euler(0, p.transform.localEulerAngles.y + 60, 0);
                 GameManager.Instance().mapStore.Dispatch(new RotateItem(hc.GetPosition()));
             }
         }

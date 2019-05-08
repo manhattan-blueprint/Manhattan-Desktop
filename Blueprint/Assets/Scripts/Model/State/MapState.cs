@@ -17,7 +17,7 @@ namespace Model.State {
             wirePaths = new List<WirePath>();
         }
 
-        public void AddObject(Vector2 position, int id, float rotation) {
+        public void AddObject(Vector2 position, int id, int rotation) {
             grid[position] = new MapObject(id, rotation);
         }
 

@@ -151,7 +151,7 @@ namespace Controller {
                 Vector3 pos = parent.transform.position;
                 pos.y += 0.5f;
                 
-                GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, mapObject.GetRotation(), 0)); 
+                GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, mapObject.GetRotation(), 0));
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
             }

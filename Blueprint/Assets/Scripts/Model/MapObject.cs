@@ -9,9 +9,9 @@ namespace Model {
     [Serializable]
     public class MapObject {
         [SerializeField] private int id;
-        [SerializeField] private float rotation;
+        [SerializeField] private int rotation;
 
-        public MapObject(int id, float rotation) {
+        public MapObject(int id, int rotation) {
             this.id = id;
             this.rotation = rotation;
         }
@@ -20,7 +20,7 @@ namespace Model {
             return id;
         }
 
-        public float GetRotation() {
+        public int GetRotation() {
             return rotation;
         }
 
