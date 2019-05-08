@@ -43,7 +43,6 @@ public class GameManager {
 
     public void ConfigureGame(SchemaItems schemaItems, GameState gameState) {
         this.sm = new SchemaManager(schemaItems);
-            
         mapStore.SetState(gameState.mapState);
         heldItemStore.SetState(gameState.heldItemState);
         inventoryStore.SetState(gameState.inventoryState);
@@ -53,7 +52,7 @@ public class GameManager {
         // This must be done after setting state, overriding any previous value
         inventoryStore.Dispatch(
             new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
-            
+        
         // Update which machines are connected when loading from save state
         machineStore.Dispatch(new UpdateConnected());
     }
@@ -61,7 +60,7 @@ public class GameManager {
     public void ResetGame() {
         manager = new GameManager();
     }
-    
+
     public AccessToken GetAccessToken() {
         return this.accessToken;
     }
