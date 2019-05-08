@@ -212,10 +212,17 @@ namespace Controller {
             playerTotalTime += Time.deltaTime;
             playerLastPos = playerCurrentPos;
             playerLastStep = playerTotalDistance;
-            soundSource.Stop();
+            soundSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
+
+            // Stopping a step sound halfway through makes it sound more like a jump.
+            Invoke("StopJumpSound", 0.25f);
 
             // Want landing sound to play slightly before end of jump as loading the clip is slightly delayed.
             Invoke("PlayLandSound", 0.62f);
+        }
+
+        private void StopJumpSound() {
+            soundSource.Stop();
         }
 
         private void PlayLandSound() {
@@ -289,9 +296,9 @@ namespace Controller {
         }
 
         public void PlayBirdsSound() {
-            ambientSource.Stop();
-            ambientSource.clip = birdsLooping;
-            ambientSource.Play();
+            // ambientSource.Stop();
+            // ambientSource.clip = birdsLooping;
+            // ambientSource.Play();
         }
 
         public void PlayMenuSound() {

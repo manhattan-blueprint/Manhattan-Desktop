@@ -239,6 +239,7 @@ namespace Controller {
 
         // Logout button from the pause menu
         public void LogoutButton() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new Logout());
         }
 
@@ -249,15 +250,18 @@ namespace Controller {
         }
 
         public void Logout() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
         }
 
         public void LogoutCancel() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
         // Exit button from the pause menu
         public void ExitButton() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new Exit());
         }
 
@@ -268,10 +272,12 @@ namespace Controller {
         }
 
         public void Exit() {
+            soundController.PlayButtonPressSound();
             Application.Quit();
         }
 
         public void ExitCancel() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
