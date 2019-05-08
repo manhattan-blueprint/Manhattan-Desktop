@@ -171,38 +171,39 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         animationManager.StartAppearanceAnimation(story, Anim.Appear, 1f, true, 0.0f, 0f);
         
         animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.4f * pondSceneTime);
-        yield return new WaitForSeconds(0.4f * pondSceneTime + 0.5f);
+        yield return new WaitForSeconds(0.4f * pondSceneTime + 1f);
         setText(story, story4);
-        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.4f * pondSceneTime + 0.5f);
-        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1.0f, true, 0.0f, 0.4f * pondSceneTime);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.4f * pondSceneTime);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime);
-        // setText(story, story5);
-        // animationManager.StartAppearanceAnimation(story, Anim.Appear, 1.0f, true, 0.0f, 0.6f * pondSceneTime);
-        // yield return new WaitForSeconds(0.6f * pondSceneTime);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.0f);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.0f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 2.0f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime - 0.2f);
+        yield return new WaitForSeconds(0.6f * pondSceneTime);
+        setText(story, story5);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 1.0f, true, 0.0f, 0f);
 
-        // // Reset camera to be within hex grid
-        // Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
+        // Reset camera to be within hex grid
+        Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
 
-        // StartCoroutine(cameraSpin());
-        // yield return new WaitForSeconds(beaconSceneTime/3);
-        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
-        // setText(story, story6);
-        // animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
+        StartCoroutine(cameraSpin());
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
+        yield return new WaitForSeconds(0.5f);
+        setText(story, story6);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
+        yield return new WaitForSeconds(beaconSceneTime/3);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
+        yield return new WaitForSeconds(0.5f);
+        setText(story, story7);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
 
-        // yield return new WaitForSeconds(beaconSceneTime/3);
-        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
-        // setText(story, story7);
-        // animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, (beaconSceneTime/3f) - 2f);
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
+        yield return new WaitForSeconds((beaconSceneTime/3) + 1);
+        setText(story, "");
 
-        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, (beaconSceneTime/3f) - 2f);
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
-        // yield return new WaitForSeconds((beaconSceneTime/3) + 1);
-        // setText(story, "");
-
-        // cameraReset();
-        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
-        // GameManager.Instance().uiStore.Dispatch(new CloseUI());
+        cameraReset();
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
+        GameManager.Instance().uiStore.Dispatch(new CloseUI());
     }
 
     public void StateDidUpdate(UIState state) {
