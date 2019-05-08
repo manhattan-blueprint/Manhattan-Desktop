@@ -24,7 +24,7 @@ namespace Tests {
             }
             
             // Add an item and validate it updates the state
-            gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1, "wood"));
+            gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1));
             Assert.IsTrue(gameManager.inventoryStore.GetState().inventoryContents.ContainsKey(1));
             Assert.AreEqual(gameManager.inventoryStore.GetState().inventoryContents[1].Count, 1);
             Assert.AreEqual(gameManager.inventoryStore.GetState().inventoryContents[1][0].quantity, 1);
@@ -38,8 +38,8 @@ namespace Tests {
             }
 
             // Add an item, then add the same item again 
-            gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1, "wood"));
-            gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 1));
+            gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10));
             
             // Validate the same stack is updated
             Assert.IsTrue(gameManager.inventoryStore.GetState().inventoryContents.ContainsKey(1));
@@ -55,7 +55,7 @@ namespace Tests {
             }
 
             // Add an item, then remove some of the items
-            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10));
             this.gameManager.inventoryStore.Dispatch(new RemoveItemFromInventory(1, 4));
            
             Assert.IsTrue(gameManager.inventoryStore.GetState().inventoryContents.ContainsKey(1));
@@ -71,7 +71,7 @@ namespace Tests {
             }
 
             // Add an item and validate it updates the state
-            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10));
             this.gameManager.inventoryStore.Dispatch(new RemoveItemFromInventory(1, 10));
 
             Assert.IsFalse(gameManager.inventoryStore.GetState().inventoryContents.ContainsKey(1));
@@ -85,7 +85,7 @@ namespace Tests {
             }
 
             // Add an item and validate it updates the state
-            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10, "wood"));
+            this.gameManager.inventoryStore.Dispatch(new AddItemToInventory(1, 10));
             this.gameManager.inventoryStore.Dispatch(new RemoveItemFromInventory(1, 11));
 
             Assert.IsFalse(gameManager.inventoryStore.GetState().inventoryContents.ContainsKey(1));
