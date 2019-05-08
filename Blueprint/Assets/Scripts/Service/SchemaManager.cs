@@ -42,11 +42,12 @@ public class SchemaManager {
         return Optional<SchemaItem>.Of(entry);
     }
 
-    public Optional<SchemaItem> GetRecipe(List<RecipeElement> inputItems, int machineId) {
+    public Optional<MachineProduct> GetRecipe(List<RecipeElement> inputItems, int machineId) {
         // Find objects that can be produced by machine
         List<SchemaItem> objects = GameObjs.items.FindAll(item => item.machine_id == machineId);
         
         foreach (SchemaItem obj in objects) {
+            int maxQuantity = int.MaxValue;
             Boolean correctItem = true;
             
             foreach (RecipeElement recipeItem in obj.recipe) {
@@ -55,14 +56,17 @@ public class SchemaManager {
                 // If item isn't present or don't have enough, fail
                 if (available == null || available.quantity < recipeItem.quantity) {
                     correctItem = false;
+                } else {
+                    int maxMultiple = available.quantity / recipeItem.quantity;
+                    maxQuantity = Math.Min(maxQuantity, maxMultiple);
                 }
             }
 
             // Success case
             if (correctItem) {
-                return Optional<SchemaItem>.Of(obj);
+                return Optional<MachineProduct>.Of(new MachineProduct(obj, maxQuantity));
             }
         }
-        return Optional<SchemaItem>.Empty();
+        return Optional<MachineProduct>.Empty();
     }
 }
