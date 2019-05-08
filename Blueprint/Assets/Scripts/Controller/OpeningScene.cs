@@ -127,48 +127,82 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
     }
 
     private IEnumerator sceneRunner() {
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
+        Color color = story.GetComponent<TextMeshProUGUI>().color;
+        color.a = 0f;
 
+        // Black screen fades away
+        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
+        // Camera path begins as screen fades in
         mountainPath.GetComponent<CPC_CameraPath>().PlayPath(mountainSceneTime);
         yield return new WaitForSeconds(mountainSceneTime/3);
+        // Text fades in after a short delay
         setText(story, story1);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f,0f);
+
+        // Text fades out as screen fades out
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1f, true, 0.0f, 2*(mountainSceneTime/3) - 2f);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1f, true, 0.0f, 2*(mountainSceneTime/3) - 2f);
+
+        // Screen fades back in after delay into forest scene
+        // Text fades back in after delay
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 2*(mountainSceneTime/3) - 0.2f);
-        yield return new WaitForSeconds(2*(mountainSceneTime/3));
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 2*(mountainSceneTime/3) - 0.2f);
+        yield return new WaitForSeconds(2*(mountainSceneTime/3) - 0.2f);
+        setText(story, story2);
+        yield return new WaitForSeconds(0.2f);
+
+        // Destroy unnecessary assets
         Destroy(mountainWater);
         Destroy(deleteTrees);
 
-        setText(story, story2);
+        // Next camera path plays
         forestPath.GetComponent<CPC_CameraPath>().PlayPath(forestSceneTime);
+        // fade out of forest scene
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1f, true, 0.0f, forestSceneTime - 2f);
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, forestSceneTime - 2f);
+
+        // fade into pond scene
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, forestSceneTime - 0.2f);
         yield return new WaitForSeconds(forestSceneTime);
 
-
+        // Next camera path plays
         pondPath.GetComponent<CPC_CameraPath>().PlayPath(pondSceneTime);
         setText(story, story3);
-        yield return new WaitForSeconds(0.4f * pondSceneTime);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 1f, true, 0.0f, 0f);
+        
+        animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.4f * pondSceneTime);
+        yield return new WaitForSeconds(0.4f * pondSceneTime + 0.5f);
         setText(story, story4);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.4f * pondSceneTime);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime);
-        yield return new WaitForSeconds(0.6f * pondSceneTime);
+        animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.4f * pondSceneTime + 0.5f);
+        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 1.0f, true, 0.0f, 0.4f * pondSceneTime);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, 0.4f * pondSceneTime);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.6f * pondSceneTime);
+        // setText(story, story5);
+        // animationManager.StartAppearanceAnimation(story, Anim.Appear, 1.0f, true, 0.0f, 0.6f * pondSceneTime);
+        // yield return new WaitForSeconds(0.6f * pondSceneTime);
 
-        // Reset camera to be within hex grid
-        Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
+        // // Reset camera to be within hex grid
+        // Camera.main.transform.position = player.transform.position + new Vector3(15,4,15);
 
-        StartCoroutine(cameraSpin());
-        setText(story, story5);
-        yield return new WaitForSeconds(beaconSceneTime/3);
-        setText(story, story6);
-        yield return new WaitForSeconds(beaconSceneTime/3);
-        setText(story, story7);
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
-        yield return new WaitForSeconds((beaconSceneTime/3) + 1);
-        setText(story, "");
+        // StartCoroutine(cameraSpin());
+        // yield return new WaitForSeconds(beaconSceneTime/3);
+        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
+        // setText(story, story6);
+        // animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
 
-        cameraReset();
-        animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
-        GameManager.Instance().uiStore.Dispatch(new CloseUI());
+        // yield return new WaitForSeconds(beaconSceneTime/3);
+        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, 0.0f);
+        // setText(story, story7);
+        // animationManager.StartAppearanceAnimation(story, Anim.Appear, 0.5f, true, 0.0f, 0.5f);
+
+        // animationManager.StartAppearanceAnimation(story, Anim.Disappear, 0.5f, true, 0.0f, (beaconSceneTime/3f) - 2f);
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Appear, 1.0f, true, 0.0f, (beaconSceneTime/3f) - 2f);
+        // yield return new WaitForSeconds((beaconSceneTime/3) + 1);
+        // setText(story, "");
+
+        // cameraReset();
+        // animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
+        // GameManager.Instance().uiStore.Dispatch(new CloseUI());
     }
 
     public void StateDidUpdate(UIState state) {
