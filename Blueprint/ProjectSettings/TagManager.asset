@@ -13,6 +13,7 @@ TagManager:
   - Bindings
   - Pause
   - Gate
+  - Intro
   - Held
   - Goal
   - Machine

@@ -219,7 +219,7 @@ namespace Controller {
                 GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromInventory(currentSI.blueprint[i].item_id,
                     currentSI.blueprint[i].quantity));
             }
-            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(currentSI.item_id, 1, name));
+            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(currentSI.item_id, 1));
             
             // Update progress
             if (GameManager.Instance().completedBlueprints.Contains(new Item(currentSI.item_id))) return;

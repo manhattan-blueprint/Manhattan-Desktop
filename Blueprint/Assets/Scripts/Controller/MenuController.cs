@@ -104,7 +104,7 @@ namespace Controller {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
                 }
-              }
+            }
 
             if (Input.GetKeyUp(KeyMapping.Bindings)) {
                 if (bindingsCanvas.enabled) {
@@ -210,6 +210,8 @@ namespace Controller {
             heldCanvas.enabled = true;
             rmb.enabled = false;
             cursor.enabled = true;
+            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
         }
 
         // Logout button from the pause menu

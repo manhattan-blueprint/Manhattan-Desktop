@@ -76,12 +76,15 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
         if (state.Selected == UIState.OpenUI.Playing) {
             GameManager.Instance().uiStore.Unsubscribe(this);
             SceneManager.LoadScene(SceneMapping.World);
+        } else if (state.Selected == UIState.OpenUI.Intro) {
+            GameManager.Instance().uiStore.Unsubscribe(this);
+            SceneManager.LoadScene(SceneMapping.Intro);
         }
     }
 
     void Update() {
         if (animating) return;
-        
+
         switch (visibleMenu) {
             case VisibleMenu.SplashScreen:
                 if (Input.GetKeyDown(KeyCode.Space)) {
@@ -136,7 +139,11 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
 
         if (toLaunch) {
             toLaunch = false;
-            GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
+            if (!GameManager.Instance().mapStore.GetState().GetIntroState()) {
+              GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
+            } else {
+              GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
+            }
         }
 
         // As the API call is running on a separate thread and Unity is not
@@ -160,40 +167,22 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
                 return;
             }
 
-            // Fetch inventory
-            StartCoroutine(BlueprintAPI.GetInventory(accessToken, inventoryResult => {
-                if (!inventoryResult.isSuccess()) {
-                    SetMessageError("Could not fetch inventory: " + inventoryResult.GetError());
+            // Fetch schema
+            StartCoroutine(BlueprintAPI.GetSchema(schemaResult => {
+                if (!schemaResult.isSuccess()) {
+                    SetMessageError("Could not fetch schema: " + schemaResult.GetError());
                     return;
                 }
-
-                // Delete inventory
-                StartCoroutine(BlueprintAPI.DeleteInventory(accessToken, deleteResult => {
-                    if (!deleteResult.isSuccess()) {
-                        SetMessageError("Could not remove inventory: " + deleteResult.GetError());
+                // Fetch completed blueprints
+                StartCoroutine(BlueprintAPI.GetCompletedBlueprints(accessToken, blueprintsResult => {
+                    if (!blueprintsResult.isSuccess()) {
+                        SetMessageError("Could not fetch completed blueprints: " + blueprintsResult.GetError());
                         return;
                     }
                     
-                    // Fetch schema
-                    StartCoroutine(BlueprintAPI.GetSchema(schemaResult => {
-                        if (!schemaResult.isSuccess()) {
-                            SetMessageError("Could not fetch schema: " + schemaResult.GetError());
-                            return;
-                        }
-                        
-                        // Fetch completed blueprints
-                        StartCoroutine(BlueprintAPI.GetCompletedBlueprints(accessToken, blueprintsResult => {
-                            if (!blueprintsResult.isSuccess()) {
-                                SetMessageError("Could not fetch completed blueprints: " + blueprintsResult.GetError());
-                                return;
-                            }
-                            
-                            GameManager.Instance()
-                                .ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess(), inventoryResult.GetSuccess().items);
-                            GameManager.Instance().completedBlueprints = blueprintsResult.GetSuccess().blueprints;
-                            toLaunch = true;
-                        }));
-                    }));
+                    GameManager.Instance().ConfigureGame(schemaResult.GetSuccess(), desktopResult.GetSuccess());
+                    GameManager.Instance().completedBlueprints = blueprintsResult.GetSuccess().blueprints;
+                    toLaunch = true;
                 }));
             }));
         }));
@@ -210,14 +199,14 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
             loginUsernameText.Length > maxUsernameLength) {
             SetMessageError("Invalid username\nMust be between 1 and 16 characters");
             return;
-        } 
-        
+        }
+
         // Validate password
         if (string.IsNullOrWhiteSpace(loginPasswordText))  {
             SetMessageError("Please enter a non-empty password");
             return;
         }
-        
+
         loginLoginButton.gameObject.SetActive(false);
         loginRegisterButton.gameObject.SetActive(false);
         loginRegisterText.gameObject.SetActive(false);
@@ -245,8 +234,8 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
             registerUsernameText.Length > maxUsernameLength) {
             SetMessageError("Invalid username\nMust have between 1 and 16 characters");
             return;
-        } 
-        
+        }
+
         if (string.IsNullOrWhiteSpace(registerPasswordText) || !new Regex(passwordRegex).IsMatch(registerPasswordText)) {
             SetMessageError("Your password must be between 5 and 16 characters, with at least 1 number, 1 uppercase and 1 lowercase letter.");
             return;

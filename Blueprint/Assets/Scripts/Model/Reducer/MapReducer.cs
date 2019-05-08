@@ -54,11 +54,9 @@ namespace Model.Reducer {
             if (state.GetObjects().ContainsKey(collectItem.position)) {
                 MapObject obj = state.GetObjects()[collectItem.position];
                
-                string name = GameManager.Instance().sm.GameObjs.items[obj.GetID() - 1].name;
-                
                 state.RemoveObject(collectItem.position);
                 state.RemoveWirePaths(collectItem.position);
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1));
                 GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
             }
         }
@@ -67,6 +65,10 @@ namespace Model.Reducer {
             if (state.getObjects().ContainsKey(rotateItem.position)) {
                 state.RotateObject(rotateItem.position);
             }
+        }
+      
+        public void visit(IntroComplete introComplete) {
+            state.SetIntroState(true);
         }
     }
 }

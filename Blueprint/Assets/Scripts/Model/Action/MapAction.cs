@@ -7,6 +7,7 @@ namespace Model.Action {
         void visit(PlaceItem placeItem);
         void visit(CollectItem collectItem);
         void visit(RotateItem rotateItem);
+        void visit(IntroComplete introComplete);
     }
 
     public abstract class MapAction : Action {
@@ -61,6 +62,12 @@ namespace Model.Action {
         public RotateItem(Vector2 position) {
             this.position = position;
         }
+        public override void Accept(MapVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class IntroComplete: MapAction {
         public override void Accept(MapVisitor visitor) {
             visitor.visit(this);
         }
