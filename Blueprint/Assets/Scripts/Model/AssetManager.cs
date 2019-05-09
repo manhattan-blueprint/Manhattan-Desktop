@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using TMPro;
 using UnityEngine;
 
 namespace Model {
     public class AssetManager {
         private static AssetManager instance;
         public readonly Font FontHelveticaNeueBold = Resources.Load("Fonts/HelveticaNeueBold", typeof(Font)) as Font;
+        public readonly TMP_FontAsset FontHelveticaNeueMedium = Resources.Load("Fonts/HelveticaNeueMedium SDF", typeof(TMP_FontAsset)) as TMP_FontAsset;
         public readonly Color ColourOffWhite = new Color32(245, 245, 245, 255);
         public readonly int QuantityFieldFontSize = (int) Mathf.Round(Screen.height/50);
 
@@ -15,6 +18,21 @@ namespace Model {
         public readonly Sprite borderSprite = Resources.Load("slot_border", typeof(Sprite)) as Sprite;
         public readonly Sprite outerBorderSprite = Resources.Load("slot_border_outer", typeof(Sprite)) as Sprite;
 
+        public readonly Sprite blueprintUIBackground           = Resources.Load("UI/blueprint-ui-background", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellPrimary          = Resources.Load("UI/blueprint-ui-cell-primary", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellPrimaryHighlight = Resources.Load("UI/blueprint-ui-cell-primary-hl", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellDark             = Resources.Load("UI/blueprint-ui-cell-dark", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintUICellDarkHighlight    = Resources.Load("UI/blueprint-ui-cell-dark-hl", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateBackground     = Resources.Load("UI/blueprint-template-background", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateCross          = Resources.Load("UI/cross", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintTemplateTick           = Resources.Load("UI/tick", typeof(Sprite)) as Sprite;
+        public readonly Sprite blueprintBeacon                 = Resources.Load("UI/outlines/beacon", typeof(Sprite)) as Sprite;
+
+        public readonly Sprite backpackButtonUnoccupied = Resources.Load("UI/backpack-unocc", typeof(Sprite)) as Sprite;
+        public readonly Sprite backpackButtonUnoccupiedHighlight = Resources.Load("UI/backpack-unocc-hl", typeof(Sprite)) as Sprite;
+        public readonly Sprite backpackButtonOccupied = Resources.Load("UI/backpack-occ", typeof(Sprite)) as Sprite;
+        public readonly Sprite backpackButtonOccupiedHighlight = Resources.Load("UI/backpack-occ-hl", typeof(Sprite)) as Sprite;
+        
         private AssetManager() { }
 
         public static AssetManager Instance() {
@@ -45,6 +63,18 @@ namespace Model {
             // Load default if object sprite doesn't exist
             if (sprite == null) {
                 sprite = Resources.Load(baseLocation + "sprite_default", typeof(Sprite)) as Sprite;
+            }
+
+            return sprite;
+        }
+
+        public Sprite GetBlueprintOutline(int id) {
+            String baseLocation = "UI/outlines/";
+            Sprite sprite = Resources.Load(baseLocation + "outline_" + id, typeof(Sprite)) as Sprite;
+            
+            // Load default if object sprite doesn't exist
+            if (sprite == null) {
+                sprite = Resources.Load("Models/2D/sprite_default", typeof(Sprite)) as Sprite;
             }
 
             return sprite;

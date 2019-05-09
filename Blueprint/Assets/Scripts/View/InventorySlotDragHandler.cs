@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using Controller;
 using Model;
 using Model.Action;
+using Model.State;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -49,6 +50,10 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     }
 
     private void Update() {
+        // Used by Goal UI
+        if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Goal) 
+            secondaryCanvasRaycaster = GameObject.Find("GoalCanvas").GetComponent<GraphicRaycaster>();
+        
         // DRAG
         // When left mouse button is down
         if (Input.GetMouseButtonDown(0)) {
@@ -78,6 +83,8 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                         // Dragging
                         if (isc is MachineSlotController) {
                             isc.GetComponentInParent<MachineSlotController>().OnDrop(dragObject, false, newQuantity);
+                        } else if (isc is GoalSlotController) {
+                            isc.GetComponentInParent<GoalSlotController>().OnDrop(dragObject, false);
                         } else {
                             isc.OnDrop(dragObject);
                         }

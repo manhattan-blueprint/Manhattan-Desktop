@@ -14,6 +14,7 @@ using Debug = UnityEngine.Debug;
 /* Attached to Inventory, listens for key press to show/hide panel */
 namespace Controller {
     public class MenuController : MonoBehaviour, Subscriber<UIState> {
+        public bool gameOver;
         private Canvas inventoryCanvas;
         private Canvas heldCanvas;
         private Canvas cursorCanvas;
@@ -21,13 +22,18 @@ namespace Controller {
         private Canvas logoutCanvas;
         private Canvas exitCanvas;
         private Canvas blueprintCanvas;
+        private Canvas blueprintTemplateCanvas;
         private Canvas bindingsCanvas;
         private Canvas gateCanvas;
         private Canvas machineCanvas;
         private Canvas machineInventoryCanvas;
+        private Canvas goalCanvas;
         private Image cursor;
         private SVGImage rmb;
         private const int rightButton = 1;
+        private PlayerMoveController movement;
+        private PlayerLookController looking;
+
 
         void Start() {
             inventoryCanvas = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>();
@@ -37,29 +43,39 @@ namespace Controller {
             exitCanvas = GameObject.FindGameObjectWithTag("Exit").GetComponent<Canvas>();
             logoutCanvas = GameObject.FindGameObjectWithTag("Logout").GetComponent<Canvas>();
             blueprintCanvas = GameObject.FindGameObjectWithTag("Blueprint").GetComponent<Canvas>();
+            blueprintTemplateCanvas = GameObject.FindGameObjectWithTag("BlueprintTemplate").GetComponent<Canvas>();
             bindingsCanvas = GameObject.FindGameObjectWithTag("Bindings").GetComponent<Canvas>();
             gateCanvas = GameObject.FindGameObjectWithTag("Gate").GetComponent<Canvas>();
             machineCanvas = GameObject.FindGameObjectWithTag("Machine").GetComponent<Canvas>();
+            goalCanvas = GameObject.FindGameObjectWithTag("Goal").GetComponent<Canvas>();
             machineInventoryCanvas = GameObject.FindGameObjectWithTag("MachineInventory").GetComponent<Canvas>();
             cursor = GameObject.Find("Cursor Image").GetComponent<Image>();
             rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
-
-            // TO DO FIND MOUSE ICON AND SWITCH IT WITH CURSOR
+            movement = GameObject.Find("Player").GetComponent<PlayerMoveController>();
+            looking = GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>();
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
+            blueprintTemplateCanvas.enabled = false;
             gateCanvas.enabled = false;
             pauseCanvas.enabled = false;
             logoutCanvas.enabled = false;
             exitCanvas.enabled = false;
             bindingsCanvas.enabled = false;
             machineCanvas.enabled = false;
+            goalCanvas.enabled = false;
+
+            gameOver = false;
             rmb.enabled = false;
 
             GameManager.Instance().uiStore.Subscribe(this);
         }
 
         void Update() {
+            if (gameOver) {
+                return;
+            }
+
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
@@ -67,7 +83,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || gateCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || gateCanvas.enabled || goalCanvas.enabled || blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
@@ -75,7 +91,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
-                if (!blueprintCanvas.enabled) {
+                if (!blueprintCanvas.enabled && !blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
@@ -88,14 +104,31 @@ namespace Controller {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
                 }
-              }
+            }
 
             if (Input.GetKeyUp(KeyMapping.Bindings)) {
                 if (bindingsCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
-         }
+        }
+
+        public void GameOver() {
+            gameOver = true;
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+            heldCanvas.enabled = false;
+            cursorCanvas.enabled = false;
+            pauseCanvas.enabled = false;
+            movement.enabled = false;
+            looking.enabled = false;
+            Invoke("ToMainMenu", 30.0f);
+        }
+
+        private void ToMainMenu() {
+            GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
 
         private void OpenInventory() {
             Time.timeScale = 0;
@@ -110,6 +143,7 @@ namespace Controller {
         private void OpenBlueprint() {
             Time.timeScale = 0;
             blueprintCanvas.enabled = true;
+            blueprintTemplateCanvas.enabled = false;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -117,9 +151,25 @@ namespace Controller {
             heldCanvas.enabled = false;
         }
 
+        private void OpenBlueprintTemplate() {
+            blueprintTemplateCanvas.enabled = true;
+            blueprintCanvas.enabled = false;
+        }
+
         private void OpenMachine() {
             Time.timeScale = 0;
             machineCanvas.enabled = true;
+            machineInventoryCanvas.enabled = true;
+            pauseCanvas.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
+
+        private void OpenGoal() {
+            Time.timeScale = 0;
+            goalCanvas.enabled = true;
             machineInventoryCanvas.enabled = true;
             pauseCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
@@ -140,6 +190,7 @@ namespace Controller {
 
         private void OpenGate() {
             gateCanvas.enabled = true;
+            Time.timeScale = 0;
         }
 
         // Playing state
@@ -153,11 +204,14 @@ namespace Controller {
             bindingsCanvas.enabled = false;
             gateCanvas.enabled = false;
             machineCanvas.enabled = false;
+            goalCanvas.enabled = false;
             machineInventoryCanvas.enabled = false;
             cursorCanvas.enabled = true;
             heldCanvas.enabled = true;
             rmb.enabled = false;
             cursor.enabled = true;
+            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
         }
 
         // Logout button from the pause menu
@@ -199,6 +253,7 @@ namespace Controller {
         }
 
         private void EnableMouse() {
+            Time.timeScale = 1;
             gateCanvas.enabled = false;
             cursor.enabled = false;
             rmb.enabled = true;
@@ -226,6 +281,9 @@ namespace Controller {
                 case UIState.OpenUI.Blueprint:
                     OpenBlueprint();
                     break;
+                case UIState.OpenUI.BlueprintTemplate:
+                    OpenBlueprintTemplate();
+                    break;
                 case UIState.OpenUI.Bindings:
                     OpenBindings();
                     break;
@@ -237,6 +295,9 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Machine:
                     OpenMachine();
+                    break;
+                case UIState.OpenUI.Goal:
+                    OpenGoal();
                     break;
                 case UIState.OpenUI.Pause:
                     PauseGame();

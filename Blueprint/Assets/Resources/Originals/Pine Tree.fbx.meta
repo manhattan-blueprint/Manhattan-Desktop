@@ -10,7 +10,17 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Tree__Pine_
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pine_pine_PineLeafTexture
+    second: {fileID: 2100000, guid: d3040f289fc6cbd438b27cdd70fb9e02, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pine_pine_PineTexture2
+    second: {fileID: 2100000, guid: 3b9e2871921137446b90e528fb7962f3, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

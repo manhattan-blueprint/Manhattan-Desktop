@@ -12,9 +12,14 @@ namespace Model.Reducer {
             return this.state;
         }
 
+        public void visit(UpdateGoal updateGoal) {
+            state.addGoalItem(updateGoal.goalPosition);
+        }
+
         public void visit(PlaceItem placeItem) {
             if (!state.GetObjects().ContainsKey(placeItem.position)) {
-                state.AddObject(placeItem.position, placeItem.itemID);
+                // Rotation is set to 30 to negate incorrect model rotation
+                state.AddObject(placeItem.position, placeItem.itemID, 30);
 
                 SchemaItem item = GameManager.Instance().sm.GameObjs.items
                     .Find(x => x.item_id == placeItem.itemID);
@@ -49,13 +54,21 @@ namespace Model.Reducer {
             if (state.GetObjects().ContainsKey(collectItem.position)) {
                 MapObject obj = state.GetObjects()[collectItem.position];
                
-                string name = GameManager.Instance().sm.GameObjs.items[obj.GetID() - 1].name;
-                
                 state.RemoveObject(collectItem.position);
                 state.RemoveWirePaths(collectItem.position);
-                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1, name));
+                GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1));
                 GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
             }
+        }
+
+        public void visit(RotateItem rotateItem) {
+            if (state.getObjects().ContainsKey(rotateItem.position)) {
+                state.RotateObject(rotateItem.position);
+            }
+        }
+      
+        public void visit(IntroComplete introComplete) {
+            state.SetIntroState(true);
         }
     }
 }

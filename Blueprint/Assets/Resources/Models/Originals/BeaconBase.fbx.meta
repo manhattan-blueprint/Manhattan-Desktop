@@ -1,0 +1,153 @@
+fileFormatVersion: 2
+guid: 57b71aaaacaf141b696aa8975d2ec307
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Beacon_base
+    100002: //RootNode
+    100004: Dish_Holder
+    100006: Satellite:pCube51
+    100008: Satellite:pCylinder134
+    100010: Satellite:pCylinder135
+    100012: Satellite:pCylinder136
+    100014: Satellite:pCylinder137
+    100016: Satellite:pCylinder138
+    100018: Satellite:pCylinder139
+    100020: Satellite:pCylinder140
+    100022: Satellite:pCylinder142
+    100024: Satellite:pCylinder143
+    100026: Satellite:pCylinder50
+    400000: Beacon_base
+    400002: //RootNode
+    400004: Dish_Holder
+    400006: Satellite:pCube51
+    400008: Satellite:pCylinder134
+    400010: Satellite:pCylinder135
+    400012: Satellite:pCylinder136
+    400014: Satellite:pCylinder137
+    400016: Satellite:pCylinder138
+    400018: Satellite:pCylinder139
+    400020: Satellite:pCylinder140
+    400022: Satellite:pCylinder142
+    400024: Satellite:pCylinder143
+    400026: Satellite:pCylinder50
+    2100000: Satellite3
+    2300000: Satellite:pCube51
+    2300002: Satellite:pCylinder134
+    2300004: Satellite:pCylinder135
+    2300006: Satellite:pCylinder136
+    2300008: Satellite:pCylinder137
+    2300010: Satellite:pCylinder138
+    2300012: Satellite:pCylinder139
+    2300014: Satellite:pCylinder140
+    2300016: Satellite:pCylinder142
+    2300018: Satellite:pCylinder143
+    2300020: Satellite:pCylinder50
+    3300000: Satellite:pCube51
+    3300002: Satellite:pCylinder134
+    3300004: Satellite:pCylinder135
+    3300006: Satellite:pCylinder136
+    3300008: Satellite:pCylinder137
+    3300010: Satellite:pCylinder138
+    3300012: Satellite:pCylinder139
+    3300014: Satellite:pCylinder140
+    3300016: Satellite:pCylinder142
+    3300018: Satellite:pCylinder143
+    3300020: Satellite:pCylinder50
+    4300000: Satellite:pCylinder50
+    4300002: Satellite:pCylinder134
+    4300004: Satellite:pCylinder140
+    4300006: Satellite:pCylinder139
+    4300008: Satellite:pCylinder138
+    4300010: Satellite:pCylinder137
+    4300012: Satellite:pCylinder136
+    4300014: Satellite:pCylinder135
+    4300016: Satellite:pCube51
+    4300018: Satellite:pCylinder143
+    4300020: Satellite:pCylinder142
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

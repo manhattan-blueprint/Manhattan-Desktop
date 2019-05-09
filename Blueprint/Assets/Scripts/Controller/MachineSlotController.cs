@@ -55,11 +55,11 @@ public class MachineSlotController : InventorySlotController {
 
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition) 
             && SlotType != SlotType.output) {
-            
+
             if (destination.storedItem.IsPresent()) {
                 // Move to occupied slot
                 Optional<InventoryItem> temp = destination.storedItem;
-                
+
                 destination.SetStoredItem(source.storedItem);
                 source.SetStoredItem(temp);
             } else {
@@ -71,7 +71,7 @@ public class MachineSlotController : InventorySlotController {
             // If not from a machine, remove from inventory
             if (droppedObject.GetComponent<MachineSlotController>() == null) {
                 if (source.storedItem.IsPresent()) {
-                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(), 
+                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(),
                         source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));
                 }
                 
@@ -339,7 +339,7 @@ public class MachineSlotController : InventorySlotController {
                 
             }
         } else {
-            droppedObject.transform.parent.GetComponentInChildren<Text>().text = 
+            droppedObject.transform.parent.GetComponentInChildren<Text>().text =
                 source.storedItem.Get().GetQuantity().ToString();
         }
     }

@@ -8,6 +8,7 @@ using Model.Action;
 using Model.Reducer;
 using Model.Redux;
 using Service;
+using Service.Request;
 using Service.Response;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class GameManager {
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
     public readonly StateStore<MachineState, MachineAction> machineStore;
     public SchemaManager sm;
+    public List<Item> completedBlueprints;
     private AccessToken accessToken;
 
     public readonly int gridSize = 16;
@@ -39,9 +41,8 @@ public class GameManager {
         return manager;
     }
 
-    public void ConfigureGame(SchemaItems schemaItems, GameState gameState, List<InventoryEntry> inventoryEntries) {
+    public void ConfigureGame(SchemaItems schemaItems, GameState gameState) {
         this.sm = new SchemaManager(schemaItems);
-            
         mapStore.SetState(gameState.mapState);
         heldItemStore.SetState(gameState.heldItemState);
         inventoryStore.SetState(gameState.inventoryState);
@@ -51,11 +52,7 @@ public class GameManager {
         // This must be done after setting state, overriding any previous value
         inventoryStore.Dispatch(
             new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
-            
-        foreach (InventoryEntry entry in inventoryEntries) {
-            inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity,
-                sm.GameObjs.items[entry.item_id - 1].name));
-        }
+        
         // Update which machines are connected when loading from save state
         machineStore.Dispatch(new UpdateConnected());
     }
@@ -63,7 +60,7 @@ public class GameManager {
     public void ResetGame() {
         manager = new GameManager();
     }
-    
+
     public AccessToken GetAccessToken() {
         return this.accessToken;
     }

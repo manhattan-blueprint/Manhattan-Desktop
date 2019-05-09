@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 namespace Utils {
     public enum Anim {
@@ -96,7 +98,7 @@ namespace Utils {
 
             for (float count = 0; count <= overshootAmount; count += speed) {
                 float speedModifier = Mathf.Sin(count * Mathf.Deg2Rad);
-                
+
                 gameObject.transform.position = originalPosition + overshoot * speedModifier * moveVector;
 
                 yield return new WaitForSeconds(framePeriod);
@@ -212,7 +214,6 @@ namespace Utils {
 
                 gameObject.transform.localScale = size * originalSize;
             }
-            Destroy(this);
         }
 
         private IEnumerator Grow(float time, float targetSize, float delay) {
@@ -235,8 +236,29 @@ namespace Utils {
         }
 
         private IEnumerator Appear(float time, float delay) {
-            if (gameObject.GetComponent<CanvasGroup>() != null)
+            if (gameObject.GetComponent<CanvasGroup>() != null) {
                 gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
+            }
+            if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                color.a = 0f;
+                gameObject.GetComponent<SpriteRenderer>().color = color;
+            }
+            if (gameObject.GetComponent<TextMeshProUGUI>() != null) {
+                Color color = gameObject.GetComponent<TextMeshProUGUI>().color;
+                color.a = 0f;
+                gameObject.GetComponent<TextMeshProUGUI>().color = color;
+            }
+            if (gameObject.GetComponent<TextMesh>() != null) {
+                Color color = gameObject.GetComponent<TextMesh>().color;
+                color.a = 0f;
+                gameObject.GetComponent<TextMesh>().color = color;
+            }
+            if (gameObject.GetComponent<SVGImage>() != null) {
+                Color color = gameObject.GetComponent<SVGImage>().color;
+                color.a = 0f;
+                gameObject.GetComponent<SVGImage>().color = color;
+            }
 
             float speed = (framePeriod * 90.0f) / time;
 
@@ -250,6 +272,31 @@ namespace Utils {
 
                 if (gameObject.GetComponent<CanvasGroup>() != null)
                     gameObject.GetComponent<CanvasGroup>().alpha = alphaModifier;
+                if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                    Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<Image>() != null) {
+                    Color color = gameObject.GetComponent<Image>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<Image>().color = color;
+                }
+                if (gameObject.GetComponent<TextMesh>() != null) {
+                    Color color = gameObject.GetComponent<TextMesh>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMesh>().color = color;
+                }
+                if (gameObject.GetComponent<TextMeshProUGUI>() != null) {
+                    Color color = gameObject.GetComponent<TextMeshProUGUI>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMeshProUGUI>().color = color;
+                }
+                if (gameObject.GetComponent<SVGImage>() != null) {
+                    Color color = gameObject.GetComponent<SVGImage>().color;
+                    color.a = 0f;
+                    gameObject.GetComponent<SVGImage>().color = color;
+                }
             }
             Destroy(this);
         }
@@ -267,6 +314,31 @@ namespace Utils {
 
                 if (gameObject.GetComponent<CanvasGroup>() != null)
                     gameObject.GetComponent<CanvasGroup>().alpha = alphaModifier;
+                if (gameObject.GetComponent<SpriteRenderer>() != null) {
+                    Color color = gameObject.GetComponent<SpriteRenderer>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<SpriteRenderer>().color = color;
+                }
+                if (gameObject.GetComponent<Image>() != null) {
+                  Color color = gameObject.GetComponent<Image>().color;
+                  color.a = alphaModifier;
+                  gameObject.GetComponent<Image>().color = color;
+                }
+                if (gameObject.GetComponent<TextMeshProUGUI>() != null) {
+                    Color color = gameObject.GetComponent<TextMeshProUGUI>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMeshProUGUI>().color = color;
+                }
+                if (gameObject.GetComponent<TextMesh>() != null) {
+                    Color color = gameObject.GetComponent<TextMesh>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMesh>().color = color;
+                }
+                if (gameObject.GetComponent<TextMeshProUGUI>() != null) {
+                    Color color = gameObject.GetComponent<TextMeshProUGUI>().color;
+                    color.a = alphaModifier;
+                    gameObject.GetComponent<TextMeshProUGUI>().color = color;
+                }
             }
             Destroy(this);
         }

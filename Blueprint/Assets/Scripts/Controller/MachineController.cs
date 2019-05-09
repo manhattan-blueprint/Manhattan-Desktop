@@ -39,7 +39,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         GameManager.Instance().uiStore.Subscribe(this);
         GameManager.Instance().machineStore.Subscribe(this);
     }
-    
+
     public void StateDidUpdate(MachineState state) {
         if (!state.grid.ContainsKey(machineLocation)) {
             return;
@@ -55,7 +55,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         Machine machine = state.grid[machineLocation];
         refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
         populateOutputSlot(Optional<InventoryItem>.Empty());
-        
+
         // Check the fuel is present otherwise don't bother checking what we can make
         if (!machine.HasFuel()) {
             if (isElectrical) {
