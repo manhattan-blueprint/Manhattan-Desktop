@@ -216,7 +216,7 @@ namespace Controller {
             Invoke("StopJumpSound", 0.2f);
 
             // Want landing sound to play slightly before end of jump as loading the clip is slightly delayed.
-            Invoke("PlayLandSound", 0.65f);
+            Invoke("PlayLandSound", 0.7f);
         }
 
         private void StopJumpSound() {
