@@ -33,6 +33,24 @@ public class MachineSlotController : InventorySlotController {
         int originalDestinationQuantity = 0, originalSourceQuantity = 0;
         if (destination.storedItem.IsPresent()) originalDestinationQuantity = destination.storedItem.Get().GetQuantity();
         if (source.storedItem.IsPresent()) originalSourceQuantity = source.storedItem.Get().GetQuantity();
+        
+        // Cancel split into output slot
+        if (SlotType == SlotType.output) {
+
+            if (splitting) {
+                if (source.name != "InputSlot0" && source.name != "InputSlot1" && source.name != "FuelSlot") {
+                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex( 
+                        source.storedItem.Get().GetId(), source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));
+                } else {
+                    InventoryItem refillItem = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), originalSourceQuantity + newSplitQuantity);
+                        
+                    if (source.name == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, refillItem));
+                    if (source.name == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, refillItem));
+                    if (source.name == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(refillItem)));
+                }
+            }
+        }
+        
 
         if (RectTransformUtility.RectangleContainsScreenPoint(invPanel, Input.mousePosition) 
             && SlotType != SlotType.output) {

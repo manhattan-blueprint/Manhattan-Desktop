@@ -114,9 +114,21 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                 } else {
                     // Drop item outside the inventory while splitting
                     if (splitting) {
+                        string name = gameObject.transform.parent.name; 
                         InventoryItem originalItem = inventorySlotController.storedItem.Get();
-                        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
-                            newQuantity, originalItem.GetName(), inventorySlotController.id));
+                        
+                        if (name != "FuelSlot" && name != "InputSlot0" && name != "InputSlot1") {
+                            GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
+                                newQuantity, originalItem.GetName(), inventorySlotController.id));
+                        } else {
+                            Vector2 machineLocation = (inventorySlotController as MachineSlotController).MachineController.machineLocation;
+                            InventoryItem unDropItem = new InventoryItem(originalItem.GetName(), originalItem.GetId(), originalItem.GetQuantity() + newQuantity);
+                            
+                            if (name == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(machineLocation, Optional<InventoryItem>.Of(unDropItem)));
+                            if (name == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(machineLocation, unDropItem));
+                            if (name == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(machineLocation, unDropItem));
+                        }
+
                     }
                 }
 
@@ -142,8 +154,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
             newQuantity = (int) currentItem.GetQuantity() / 2;
             
             if (inventorySlotController is MachineSlotController) {
-                Vector2 machineLocation = (inventorySlotController as MachineSlotController).MachineController
-                    .machineLocation;
+                Vector2 machineLocation = (inventorySlotController as MachineSlotController).MachineController.machineLocation;
                 //currentItem.SetQuantity(currentItem.GetQuantity() - newQuantity);
                 InventoryItem tempItem = new InventoryItem(currentItem.GetName(), currentItem.GetId(), currentItem.GetQuantity() - newQuantity);
                 
@@ -212,6 +223,10 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         
         inventoryController.RedrawInventory();
         machineInventoryController.RedrawInventory();
+
+        string name = gameObject.transform.parent.name; 
+        if (name == "FuelSlot" || name == "InputSlot0" || name == "InputSlot1") 
+            inventorySlotController.SetStoredItem(inventorySlotController.storedItem);
     }
 
     private void beginSplit() {
