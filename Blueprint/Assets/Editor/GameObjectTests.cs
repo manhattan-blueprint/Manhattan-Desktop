@@ -124,11 +124,11 @@ namespace Tests {
             availables.Add(new RecipeElement(5, 1));
 
             // Obtain valid output
-            Optional<SchemaItem> goe = goh.GetRecipe(availables, 7);
+            Optional<MachineProduct> goe = goh.GetRecipe(availables, 7);
             
             // Asserts
             Assert.That(goe.IsPresent());
-            Assert.That(goe.Get().name, Is.EqualTo("steel"));
+            Assert.That(goe.Get().item.name, Is.EqualTo("steel"));
         }
 
         // Asserts that a null value is correctly returned where no recipe is valid
@@ -142,7 +142,7 @@ namespace Tests {
             availables.Add(new RecipeElement(5, 1));
 
             // Obtain valid output
-            Optional<SchemaItem> goe = goh.GetRecipe(availables, 7);
+            Optional<MachineProduct> goe = goh.GetRecipe(availables, 7);
             
             // Asserts
             if (goe.IsPresent()) {

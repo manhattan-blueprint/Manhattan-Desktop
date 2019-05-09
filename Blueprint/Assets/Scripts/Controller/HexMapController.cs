@@ -202,6 +202,7 @@ namespace Controller {
                         system.Play();
                     } else {
                         system.Pause();
+                        system.Clear();
                     }
                 }
             }
