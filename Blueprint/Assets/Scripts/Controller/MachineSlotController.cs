@@ -3,11 +3,14 @@ using Model;
 using Model.Action;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class MachineSlotController : InventorySlotController {
     [SerializeField] private SlotType SlotType;
     internal MachineController MachineController = null;
+    private string InputSlot0 = "InputSlot0";
+    private string InputSlot1 = "InputSlot1";
+    private string FuelSlot = "FuelSlot";
+    private string OutputSlot = "FuelSlot";
 
     public new void OnDrop(GameObject droppedObject, bool splitting, int newSplitQuantity) {
         RectTransform invPanel = transform as RectTransform;
@@ -19,14 +22,14 @@ public class MachineSlotController : InventorySlotController {
         if (source == destination) {
                 // Dragging to same slot
                 if (splitting) {
-                    if (source.name == "InputSlot0" || source.name == "InputSlot1" || source.name == "FuelSlot") 
+                    if (source.name == InputSlot0 || source.name == InputSlot1 || source.name == FuelSlot) 
                         storedItem.Get().AddQuantity(newSplitQuantity);
                 }
                 
-                if (source.name == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, storedItem.Get()));
-                if (source.name == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, storedItem.Get()));
-                if (source.name == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(storedItem.Get())));
-                if (source.name == "OutputSlot") (this as InventorySlotController).SetStoredItem((this as InventorySlotController).storedItem);
+                if (source.name == InputSlot0) GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, storedItem.Get()));
+                if (source.name == InputSlot1) GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, storedItem.Get()));
+                if (source.name == FuelSlot) GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(storedItem.Get())));
+                if (source.name == OutputSlot) (this as InventorySlotController).SetStoredItem((this as InventorySlotController).storedItem);
                 
                 return;
         }
@@ -39,15 +42,15 @@ public class MachineSlotController : InventorySlotController {
         if (SlotType == SlotType.output) {
 
             if (splitting) {
-                if (source.name != "InputSlot0" && source.name != "InputSlot1" && source.name != "FuelSlot") {
+                if (source.name != InputSlot0 && source.name != InputSlot1 && source.name != FuelSlot) {
                     GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex( 
                         source.storedItem.Get().GetId(), source.storedItem.Get().GetQuantity(), source.storedItem.Get().GetName(), source.id));
                 } else {
                     InventoryItem refillItem = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), originalSourceQuantity + newSplitQuantity);
                         
-                    if (source.name == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, refillItem));
-                    if (source.name == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, refillItem));
-                    if (source.name == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(refillItem)));
+                    if (source.name == InputSlot0) GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, refillItem));
+                    if (source.name == InputSlot1) GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, refillItem));
+                    if (source.name == FuelSlot) GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(refillItem)));
                 }
             }
         }
@@ -84,8 +87,8 @@ public class MachineSlotController : InventorySlotController {
             // Add to correct element of machine
             if (SlotType == SlotType.leftInput) {
                 InventorySlotController fuelSlot = null; 
-                if (!MachineController.isElectrical) fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
-                InventorySlotController rightSlot = GameObject.Find("InputSlot1").GetComponent<InventorySlotController>();
+                if (!MachineController.isElectrical) fuelSlot = GameObject.Find(FuelSlot).GetComponent<InventorySlotController>();
+                InventorySlotController rightSlot = GameObject.Find(InputSlot1).GetComponent<InventorySlotController>();
 
 
                 if (!splitting) {
@@ -98,9 +101,9 @@ public class MachineSlotController : InventorySlotController {
                         temp.AddQuantity(source.storedItem.Get().GetQuantity());
                         
                         // Dragged from...
-                        if (source.name == "InputSlot1") {
+                        if (source.name == InputSlot1) {
                             GameManager.Instance().machineStore.Dispatch(new ClearRightInput(MachineController.machineLocation));
-                        } else if (source.name == "FuelSlot") {
+                        } else if (source.name == FuelSlot) {
                             GameManager.Instance().machineStore.Dispatch(new ClearFuel(MachineController.machineLocation));
                         } else {
                             // ...inventory, add to input slot
@@ -135,11 +138,11 @@ public class MachineSlotController : InventorySlotController {
                         // Split into stack of same type
                         
                         // If split from other input slot
-                        if (source.name == "InputSlot1") {
+                        if (source.name == InputSlot1) {
                             InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, initial));
                             
-                        } else if (source.name == "FuelSlot") {
+                        } else if (source.name == FuelSlot) {
                             InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(initial)));
                             
@@ -154,13 +157,13 @@ public class MachineSlotController : InventorySlotController {
                         InventoryItem nonMatchingSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), originalDestinationQuantity);
                         GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, nonMatchingSplit));
 
-                        if (source.name != "InputSlot1" && source.name != "FuelSlot") {
+                        if (source.name != InputSlot1 && source.name != FuelSlot) {
                             GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(destination.storedItem.Get().GetId(), originalDestinationQuantity, source.id));
                             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(), originalSourceQuantity, source.storedItem.Get().GetName(), source.id));
-                        } else if (source.name == "InputSlot1") {
+                        } else if (source.name == InputSlot1) {
                             InventoryItem nonMatchingMachineSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), rightSlot.storedItem.Get().GetQuantity() + originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, nonMatchingMachineSplit));
-                        } else if (source.name == "FuelSlot") {
+                        } else if (source.name == FuelSlot) {
                             InventoryItem nonMatchingMachineSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), fuelSlot.storedItem.Get().GetQuantity() + originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(nonMatchingMachineSplit)));
                         }
@@ -171,9 +174,9 @@ public class MachineSlotController : InventorySlotController {
                     
                 }
             } else if (SlotType == SlotType.rightInput) {
-                InventorySlotController leftSlot = GameObject.Find("InputSlot0").GetComponent<InventorySlotController>();
+                InventorySlotController leftSlot = GameObject.Find(InputSlot0).GetComponent<InventorySlotController>();
                 InventorySlotController fuelSlot = null; 
-                if (!MachineController.isElectrical) fuelSlot = GameObject.Find("FuelSlot").GetComponent<InventorySlotController>();
+                if (!MachineController.isElectrical) fuelSlot = GameObject.Find(FuelSlot).GetComponent<InventorySlotController>();
                 
 
                 if (!splitting) {
@@ -185,9 +188,9 @@ public class MachineSlotController : InventorySlotController {
                         InventoryItem temp = storedItem.Get();
                         temp.AddQuantity(source.storedItem.Get().GetQuantity());
                         
-                        if (source.name == "InputSlot0") {
+                        if (source.name == InputSlot0) {
                             GameManager.Instance().machineStore.Dispatch(new ClearLeftInput(MachineController.machineLocation));
-                        } else if (source.name == "FuelSlot") {
+                        } else if (source.name == FuelSlot) {
                             GameManager.Instance().machineStore.Dispatch(new ClearFuel(MachineController.machineLocation));
                         } else {
                             // Remove from inventory, add to input slot
@@ -221,11 +224,11 @@ public class MachineSlotController : InventorySlotController {
                         // Split into stack of same type
 
                         // If split from other input slot
-                        if (source.name == "InputSlot0") {
+                        if (source.name == InputSlot0) {
                             InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, initial));
                             
-                        } else if (source.name == "FuelSlot") {
+                        } else if (source.name == FuelSlot) {
                             InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(initial)));
                          
@@ -241,13 +244,13 @@ public class MachineSlotController : InventorySlotController {
                         InventoryItem nonMatchingSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), originalDestinationQuantity);
                         GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, nonMatchingSplit));
 
-                        if (source.name != "InputSlot0" && source.name != "FuelSlot") {
+                        if (source.name != InputSlot0 && source.name != FuelSlot) {
                             GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(destination.storedItem.Get().GetId(), originalDestinationQuantity, source.id));
                             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(), originalSourceQuantity, source.storedItem.Get().GetName(), source.id));
-                        } else if (source.name == "InputSlot0"){
+                        } else if (source.name == InputSlot0){
                             InventoryItem nonMatchingMachineSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), leftSlot.storedItem.Get().GetQuantity() + originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, nonMatchingMachineSplit));
-                        } else if (source.name == "FuelSlot") {
+                        } else if (source.name == FuelSlot) {
                             InventoryItem nonMatchingMachineSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), fuelSlot.storedItem.Get().GetQuantity() + originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(nonMatchingMachineSplit)));
                         }
@@ -258,8 +261,8 @@ public class MachineSlotController : InventorySlotController {
                 }
                 
             } else if (SlotType == SlotType.fuel) {
-                InventorySlotController leftSlot = GameObject.Find("InputSlot0").GetComponent<InventorySlotController>();
-                InventorySlotController rightSlot = GameObject.Find("InputSlot1").GetComponent<InventorySlotController>();
+                InventorySlotController leftSlot = GameObject.Find(InputSlot0).GetComponent<InventorySlotController>();
+                InventorySlotController rightSlot = GameObject.Find(InputSlot1).GetComponent<InventorySlotController>();
                 
                 if (!splitting) {
                     // Default case
@@ -270,9 +273,9 @@ public class MachineSlotController : InventorySlotController {
                         InventoryItem temp = storedItem.Get();
                         temp.AddQuantity(source.storedItem.Get().GetQuantity());
                         
-                        if (source.name == "InputSlot0") {
+                        if (source.name == InputSlot0) {
                             GameManager.Instance().machineStore.Dispatch(new ClearLeftInput(MachineController.machineLocation));
-                        } else if (source.name == "InputSlot1") {
+                        } else if (source.name == InputSlot1) {
                             GameManager.Instance().machineStore.Dispatch(new ClearRightInput(MachineController.machineLocation));
                         } else {
                             // Remove from inventory, add to input slot
@@ -301,11 +304,11 @@ public class MachineSlotController : InventorySlotController {
                         // Split into stack of same type
 
                         // If split from other input slot
-                        if (source.name == "InputSlot0") {
+                        if (source.name == InputSlot0) {
                             InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, initial));
                             
-                        } else if (source.name == "InputSlot1") {
+                        } else if (source.name == InputSlot1) {
                             InventoryItem initial = new InventoryItem(temp.GetName(), temp.GetId(), originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, initial));
                          
@@ -321,13 +324,13 @@ public class MachineSlotController : InventorySlotController {
                         InventoryItem nonMatchingSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), originalDestinationQuantity);
                         GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(nonMatchingSplit)));
 
-                        if (source.name != "InputSlot0" && source.name != "InputSlot1") {
+                        if (source.name != InputSlot0 && source.name != InputSlot1) {
                             GameManager.Instance().inventoryStore.Dispatch(new RemoveItemFromStackInventory(destination.storedItem.Get().GetId(), originalDestinationQuantity, source.id));
                             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(source.storedItem.Get().GetId(), originalSourceQuantity, source.storedItem.Get().GetName(), source.id));
-                        } else if (source.name == "InputSlot0"){
+                        } else if (source.name == InputSlot0){
                             InventoryItem nonMatchingMachineSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), leftSlot.storedItem.Get().GetQuantity() + originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, nonMatchingMachineSplit));
-                        } else if (source.name == "InputSlot1") {
+                        } else if (source.name == InputSlot1) {
                             InventoryItem nonMatchingMachineSplit = new InventoryItem(source.storedItem.Get().GetName(), source.storedItem.Get().GetId(), rightSlot.storedItem.Get().GetQuantity() + originalSourceQuantity);
                             GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, nonMatchingMachineSplit));
                         }
