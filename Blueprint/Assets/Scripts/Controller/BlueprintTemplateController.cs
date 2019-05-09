@@ -251,10 +251,6 @@ namespace Controller {
             // This probably has side effects ngl
             EventSystem.current.SetSelectedGameObject(null);
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
-
-            // This part is not related to the comment above. Shame on whoever did that.
-            SoundController soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
-            soundController.PlayButtonPressSound();
         }
     }
 }
