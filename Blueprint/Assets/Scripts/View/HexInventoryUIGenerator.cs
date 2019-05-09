@@ -133,15 +133,17 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         // 0.25 * slotdim padding on y
         double hotbarCenterY = 1.75 * slotDimensionY;
 
+        float localSlotDimensionX = slotDimensionX * 0.98f; 
+
         // In order, starting from top left
         int id = 0;
         GameObject go;
-        go = newSlot(ref id, (float) hotbarCenterX - slotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset), true);
-        go = newSlot(ref id, (float) hotbarCenterX + slotDimensionX / 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset), true);
-        go = newSlot(ref id, (float) hotbarCenterX + slotDimensionX, (float) hotbarCenterY, true);
-        go = newSlot(ref id, (float) hotbarCenterX + slotDimensionX / 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset), true);
-        go = newSlot(ref id, (float) hotbarCenterX - slotDimensionX/ 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset), true);
-        go = newSlot(ref id, (float) hotbarCenterX - slotDimensionX, (float) hotbarCenterY, true);
+        go = newSlot(ref id, (float) hotbarCenterX - localSlotDimensionX/ 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX + localSlotDimensionX/ 2, (float) hotbarCenterY + (slotDimensionY / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX + localSlotDimensionX, (float) hotbarCenterY, true);
+        go = newSlot(ref id, (float) hotbarCenterX + localSlotDimensionX/ 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX - localSlotDimensionX/ 2, (float) hotbarCenterY - (slotDimensionY / tileYOffset), true);
+        go = newSlot(ref id, (float) hotbarCenterX - localSlotDimensionX, (float) hotbarCenterY, true);
     }
 
     // Create new slot, place in centre

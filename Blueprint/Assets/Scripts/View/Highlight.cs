@@ -9,7 +9,6 @@ namespace View {
         private Color initialColor;
         private Renderer rend;
         private bool paused;
-        [SerializeField] private bool model;
 
         void Start () {
             rend = GetComponent<Renderer>();
@@ -24,10 +23,6 @@ namespace View {
 
         void OnMouseEnter() {
             if (!paused) {
-              if (model) {
-                foreach (var component in GetComponents<Component>()) {
-                }
-              }
               rend.material.color = highlightColor;
             }
         }

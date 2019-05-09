@@ -132,16 +132,34 @@ namespace Model.Reducer {
             }
 
             Machine machine = state.grid[consumeInputs.machineLocation];
-            if (machine.leftInput.IsPresent()) {
-                machine.leftInput.Get().SetQuantity(machine.leftInput.Get().GetQuantity() - 1);
+            Optional<MachineProduct> product = GameManager.Instance().sm.GetRecipe(machine.GetInputs(), machine.id);
+            if (!product.IsPresent()) {
+                throw new Exception("Consuming inputs for an invalid recipe!");
+            }
+
+            bool shouldRemoveLeft = machine.leftInput.IsPresent() &&
+                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.leftInput.Get().GetId()) != null;
+            
+            // Final boolean statement fixes decrementing two items of the same type
+            bool shouldRemoveRight = machine.rightInput.IsPresent() &&
+                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null
+                                    && machine.leftInput.Get().GetId() != machine.rightInput.Get().GetId();
+           
+            int maxQuantity = product.Get().maxQuantity;
+            if (!GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == machine.id).isPoweredByElectricity()) {
+                maxQuantity = Math.Min(maxQuantity, machine.fuel.Get().GetQuantity());
+            }
+            
+            if (shouldRemoveLeft) {
+                machine.leftInput.Get().SetQuantity(machine.leftInput.Get().GetQuantity() - maxQuantity);
                 if (machine.leftInput.Get().GetQuantity() == 0) machine.leftInput = Optional<InventoryItem>.Empty();
             }
-            if (machine.rightInput.IsPresent()) {
-                machine.rightInput.Get().SetQuantity(machine.rightInput.Get().GetQuantity() - 1);
+            if (shouldRemoveRight) {
+                machine.rightInput.Get().SetQuantity(machine.rightInput.Get().GetQuantity() - maxQuantity);
                 if (machine.rightInput.Get().GetQuantity() == 0) machine.rightInput = Optional<InventoryItem>.Empty();
             }
             if (machine.fuel.IsPresent()) {
-                machine.fuel.Get().SetQuantity(machine.fuel.Get().GetQuantity() - 1);
+                machine.fuel.Get().SetQuantity(machine.fuel.Get().GetQuantity() - maxQuantity);
                 if (machine.fuel.Get().GetQuantity() == 0) visit(new ClearFuel(consumeInputs.machineLocation));
             }
         }

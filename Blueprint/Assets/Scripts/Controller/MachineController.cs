@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System;
 using Controller;
 using Model;
-using Model.Action;
 using Model.Redux;
 using Model.State;
-using Unity.VectorGraphics;
 using UnityEngine;
-using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscriber<UIState> {
@@ -19,7 +15,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     private GameObject inputSlot1;
     
     private Image fuelIcon;
-    private bool isElectrical = false;
+    public bool isElectrical = false;
     private Sprite unpoweredElectrical;
     private Sprite poweredElectrical;
     private Sprite unpoweredFuel;
@@ -53,13 +49,8 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         // 26 : Welder
         // 29 : Circuit Printer
         int id = state.grid[machineLocation].id;
-        if (id == 26 || id == 29) {
-            isElectrical = true;
-            fuelSlot.SetActive(false);
-        } else {
-            isElectrical = false;
-            fuelSlot.SetActive(true);
-        }
+        isElectrical = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == id).isPoweredByElectricity();
+        fuelSlot.SetActive(!isElectrical);
         
         Machine machine = state.grid[machineLocation];
         refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
@@ -83,25 +74,17 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
         }
 
         // Check if anything can be made
-        Optional<SchemaItem> possibleOutput = GameManager.Instance().sm.GetRecipe(machine.GetInputs(), machine.id);
+        Optional<MachineProduct> possibleOutput = GameManager.Instance().sm.GetRecipe(machine.GetInputs(), machine.id);
         if (possibleOutput.IsPresent()) {
-            SchemaItem output = possibleOutput.Get();
+            SchemaItem output = possibleOutput.Get().item;
             // This _should_ be an explicit state action, but that will cause this function to be called indefinitely
-            // TODO: Think of a better way of doing this
-            machine.output = Optional<InventoryItem>.Of(new InventoryItem(output.name, output.item_id, 1));
-            // TODO: show output in output cell, fade opacity to 50% of inputs
-
+            int maxQuantity = possibleOutput.Get().maxQuantity;
+            if (!isElectrical) {
+                maxQuantity = Math.Min(maxQuantity, machine.fuel.Get().GetQuantity());
+            }
+            
+            machine.output = Optional<InventoryItem>.Of(new InventoryItem(output.name, output.item_id, maxQuantity));    
             populateOutputSlot(machine.output);
-        }
-
-        if (machine.leftInput.IsPresent()) {
-            inputSlot0.GetComponent<InventorySlotController>().SetStoredItem(machine.leftInput);
-        }
-        if (machine.rightInput.IsPresent()) {
-            inputSlot1.GetComponent<InventorySlotController>().SetStoredItem(machine.rightInput);
-        }
-        if (machine.fuel.IsPresent()) {
-            fuelSlot.GetComponent<InventorySlotController>().SetStoredItem(machine.fuel);
         }
 
         refreshInputSlots(machine.leftInput, machine.rightInput, machine.fuel);
