@@ -26,6 +26,7 @@ public class MachineSlotController : InventorySlotController {
                 if (source.name == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(MachineController.machineLocation, storedItem.Get()));
                 if (source.name == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(MachineController.machineLocation, storedItem.Get()));
                 if (source.name == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(MachineController.machineLocation, Optional<InventoryItem>.Of(storedItem.Get())));
+                if (source.name == "OutputSlot") (this as InventorySlotController).SetStoredItem((this as InventorySlotController).storedItem);
                 
                 return;
         }
