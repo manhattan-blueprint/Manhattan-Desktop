@@ -203,6 +203,7 @@ namespace Controller {
                 leftFootSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
             else
                 rightFootSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
+            whichFoot = !whichFoot;
         }
 
         public void PlayJumpSound() {

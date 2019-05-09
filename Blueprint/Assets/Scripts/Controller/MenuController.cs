@@ -81,7 +81,6 @@ namespace Controller {
 
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
-                    soundController.PlayBagOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
                     Debug.Log("Playing open inventory sound");
                 } else if (inventoryCanvas.enabled) {
@@ -99,15 +98,12 @@ namespace Controller {
                     soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
-                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
                 } else {
-                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled && !blueprintTemplateCanvas.enabled) {
-                    soundController.PlayBlueprintOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled) {
                     soundController.PlayBlueprintOpeningSound();
@@ -115,12 +111,10 @@ namespace Controller {
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
-                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
                 }
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
-                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
                 }
             }
@@ -152,6 +146,7 @@ namespace Controller {
         }
 
         private void OpenInventory() {
+            soundController.PlayBagOpeningSound();
             Time.timeScale = 0;
             inventoryCanvas.enabled = true;
             pauseCanvas.enabled = false;
@@ -162,6 +157,7 @@ namespace Controller {
         }
 
         private void OpenBlueprint() {
+            soundController.PlayBlueprintOpeningSound();
             Time.timeScale = 0;
             blueprintCanvas.enabled = true;
             blueprintTemplateCanvas.enabled = false;
@@ -173,6 +169,7 @@ namespace Controller {
         }
 
         private void OpenBlueprintTemplate() {
+            soundController.PlayButtonPressSound();
             blueprintTemplateCanvas.enabled = true;
             blueprintCanvas.enabled = false;
             soundController.PlayButtonPressSound();
@@ -203,6 +200,7 @@ namespace Controller {
         }
 
         private void OpenBindings() {
+            soundController.PlayButtonPressSound();
             Time.timeScale = 0;
             bindingsCanvas.enabled = true;
             pauseCanvas.enabled = false;
@@ -213,6 +211,7 @@ namespace Controller {
         }
 
         private void OpenGate() {
+            soundController.PlayButtonPressSound();
             gateCanvas.enabled = true;
             Time.timeScale = 0;
         }
