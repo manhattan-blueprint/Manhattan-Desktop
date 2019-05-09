@@ -235,7 +235,8 @@ namespace Model.Reducer {
                         // If is blueprint, add to machine _before_ the map state, to correctly trigger update
                         // of connected status
                         SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
-                        if (entry.item_id == 17 || entry.item_id == 27 || entry.item_id == 28 || entry.item_id == 30)
+                        if (entry.item_id == 17 || entry.item_id == 27 || entry.item_id == 28 || entry.item_id == 30) continue;
+                        
                         if (entry.isMachine()) {
                             GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
                         }
