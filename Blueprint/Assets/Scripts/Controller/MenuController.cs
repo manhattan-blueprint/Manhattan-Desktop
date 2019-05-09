@@ -9,6 +9,7 @@ using Service;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Utils;
 using Debug = UnityEngine.Debug;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
@@ -347,8 +348,7 @@ namespace Controller {
                             GameManager.Instance().ResetGame();
                             SceneManager.LoadScene(SceneMapping.MainMenu);
                         } else {
-                            // TODO: Handle failure via UI?
-                            throw new Exception("Couldn't save game " + result.GetError());
+                            this.ShowAlert("Error", "Could not save game: " + result.GetError());
                         }
                     }));
                     break;
@@ -362,7 +362,7 @@ namespace Controller {
                         if (result.isSuccess()) {
                             ExitPrompt();
                         } else {
-                            // TODO: Handle failure via UI?
+                            this.ShowAlert("Error", "Could not save game: " + result.GetError());
                         }
                     }));
 

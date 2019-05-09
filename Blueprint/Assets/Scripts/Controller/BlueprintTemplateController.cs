@@ -228,7 +228,7 @@ namespace Controller {
                 new RequestCompletedBlueprint(currentSI.item_id),
                 blueprintsResult => {
                     if (!blueprintsResult.isSuccess()) {
-                        // TODO: Handle error
+                        this.ShowAlert("Error", "Could not update completed Blueprints: " + blueprintsResult.GetError());
                     } else {
                         GameManager.Instance().completedBlueprints.Add(new Item(currentSI.item_id));
                         

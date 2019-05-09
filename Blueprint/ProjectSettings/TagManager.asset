@@ -20,6 +20,7 @@ TagManager:
   - Cursor
   - MachineInventory
   - BlueprintTemplate
+  - Alert
   layers:
   - Default
   - TransparentFX
