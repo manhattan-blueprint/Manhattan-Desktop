@@ -297,8 +297,8 @@ namespace Controller {
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
-            looking.enabled = true;
-            movement.enabled = true;
+            looking.enabled = false;
+            movement.enabled = false;
         }
 
         public void StateDidUpdate(UIState state) {
