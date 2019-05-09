@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.Serialization;
 using Model.Action;
 using Model.State;
 using UnityEngine;
@@ -142,9 +143,18 @@ namespace Model.Reducer {
             
             // Final boolean statement fixes decrementing two items of the same type
             bool shouldRemoveRight = machine.rightInput.IsPresent() &&
-                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null
-                                    && machine.leftInput.Get().GetId() != machine.rightInput.Get().GetId();
-           
+                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null;
+
+            if (machine.leftInput.IsPresent() && shouldRemoveRight) {
+                shouldRemoveRight &= !machine.leftInput.Map(x => new WrappedInt(x.GetId()))
+                    .Equals(machine.rightInput.Map(x => new WrappedInt(x.GetId())));
+                if (shouldRemoveRight) {
+                    if (machine.rightInput.Get().GetQuantity() > machine.leftInput.Get().GetQuantity()) {
+                        shouldRemoveLeft = false;
+                    }
+                }
+            } //&& machine.leftInput.Map(x => x.GetId()).Equals(machine.rightInput.Map(x => x.GetId()));
+
             int maxQuantity = product.Get().maxQuantity;
             if (!GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == machine.id).isPoweredByElectricity()) {
                 maxQuantity = Math.Min(maxQuantity, machine.fuel.Get().GetQuantity());
