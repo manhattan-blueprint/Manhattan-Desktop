@@ -55,6 +55,9 @@ namespace Controller {
             rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
             movement = GameObject.Find("Player").GetComponent<PlayerMoveController>();
             looking = GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>();
+            
+            // Hide Alert
+            GameObject.FindGameObjectWithTag("Alert").GetComponent<Canvas>().enabled = false;
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
