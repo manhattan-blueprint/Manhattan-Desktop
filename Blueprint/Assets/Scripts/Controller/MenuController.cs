@@ -210,8 +210,8 @@ namespace Controller {
             heldCanvas.enabled = true;
             rmb.enabled = false;
             cursor.enabled = true;
-            GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
-            GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
+            looking.enabled = true;
+            movement.enabled = true;
         }
 
         // Logout button from the pause menu
@@ -268,6 +268,8 @@ namespace Controller {
             Cursor.visible = true;
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
+            looking.enabled = true;
+            movement.enabled = true;
         }
 
         public void StateDidUpdate(UIState state) {
