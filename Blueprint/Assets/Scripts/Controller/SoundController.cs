@@ -5,15 +5,16 @@ using UnityEngine;
 
 namespace Controller {
     public class SoundController : MonoBehaviour {
-        [SerializeField] public AudioSource soundSource;
-        [SerializeField] public AudioSource ambientSource;
-
-        [SerializeField] public AudioSource musicSource;
+        public AudioSource soundSource;
+        public AudioSource ambientSource;
+        public AudioSource leftFootSource;
+        public AudioSource rightFootSource;
+        public AudioSource musicSource;
 
         // Keeping track of player position for footsteps.
-        [SerializeField] public GameObject player;
+        public GameObject player;
 
-        [SerializeField]public bool isMenu;
+        public bool isMenu;
 
         private Vector3 playerLastPos;
         private Vector3 playerCurrentPos;
@@ -40,8 +41,8 @@ namespace Controller {
         private AudioClip buildingEnvironment;
         private AudioClip introMusic;
         private AudioClip outroMusic;
-
         private System.Random random;
+        private bool whichFoot;
 
 
         void Start() {
@@ -53,6 +54,9 @@ namespace Controller {
             playerLastPos = player.transform.position;
             playerCurrentPos = player.transform.position;
             playerLastStep = 0.0f;
+
+            // This is arbitrary; governs which foot plays sound first.
+            whichFoot = false;
 
             blueprintOpening.Add(Resources.Load<AudioClip>("Sounds/BlueprintOpening/BlueprintOpening1"));
             blueprintOpening.Add(Resources.Load<AudioClip>("Sounds/BlueprintOpening/BlueprintOpening2"));
@@ -195,7 +199,10 @@ namespace Controller {
         }
 
         public void PlayStepsSound() {
-            soundSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
+            if (whichFoot)
+                leftFootSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
+            else
+                rightFootSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
         }
 
         public void PlayJumpSound() {
@@ -204,17 +211,17 @@ namespace Controller {
             playerTotalTime += Time.deltaTime;
             playerLastPos = playerCurrentPos;
             playerLastStep = playerTotalDistance;
-            soundSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
 
             // Stopping a step sound halfway through makes it sound more like a jump.
-            Invoke("StopJumpSound", 0.25f);
+            Invoke("StopJumpSound", 0.2f);
 
             // Want landing sound to play slightly before end of jump as loading the clip is slightly delayed.
             Invoke("PlayLandSound", 0.62f);
         }
 
         private void StopJumpSound() {
-            soundSource.Stop();
+            leftFootSource.Stop();
+            rightFootSource.Stop();
         }
 
         private void PlayLandSound() {
@@ -223,7 +230,8 @@ namespace Controller {
             playerTotalTime += Time.deltaTime;
             playerLastPos = playerCurrentPos;
             playerLastStep = playerTotalDistance;
-            soundSource.PlayOneShot(footsteps[random.Next(footsteps.Count)]);
+            PlayStepsSound();
+            PlayStepsSound();
         }
 
         public void PlayBlueprintCollectingMusic() {
