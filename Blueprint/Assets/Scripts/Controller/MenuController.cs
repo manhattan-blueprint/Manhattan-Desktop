@@ -81,41 +81,42 @@ namespace Controller {
 
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
+                    soundController.PlayBagOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
-                    soundController.PlayBagOpeningSound();
+                    Debug.Log("Playing open inventory sound");
                 } else if (inventoryCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayBagOpeningSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
                 if (machineCanvas.enabled || inventoryCanvas.enabled || goalCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayBagOpeningSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (blueprintCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayBlueprintOpeningSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (bindingsCanvas.enabled || gateCanvas.enabled || blueprintTemplateCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayButtonPressSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
+                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
-                    soundController.PlayButtonPressSound();
                 } else {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayButtonPressSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
                 if (!blueprintCanvas.enabled && !blueprintTemplateCanvas.enabled) {
+                    soundController.PlayBlueprintOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
-                    soundController.PlayBlueprintOpeningSound();
                 } else if (blueprintCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                     soundController.PlayBlueprintOpeningSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
                 if (!bindingsCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
                     soundController.PlayButtonPressSound();
+                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
                 }
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
@@ -134,13 +135,13 @@ namespace Controller {
 
         public void GameOver() {
             gameOver = true;
+            soundController.PlayOutroMusic();
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
             heldCanvas.enabled = false;
             cursorCanvas.enabled = false;
             pauseCanvas.enabled = false;
             movement.enabled = false;
             looking.enabled = false;
-            soundController.PlayOutroMusic();
             Invoke("ToMainMenu", 30.0f);
         }
 

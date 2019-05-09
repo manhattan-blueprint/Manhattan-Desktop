@@ -2262,6 +2262,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundSource: {fileID: 1869794423}
   ambientSource: {fileID: 940067818}
+  leftFootSource: {fileID: 0}
+  rightFootSource: {fileID: 0}
   musicSource: {fileID: 1707245839}
   player: {fileID: 1494898016}
   isMenu: 1
@@ -3162,7 +3164,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
