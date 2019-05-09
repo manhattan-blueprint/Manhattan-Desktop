@@ -193,7 +193,17 @@ namespace Controller {
                 
                 Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
                 foreach (Light light in lights) {
-                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
+                    AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
+                    if (kvp.Value.HasFuel()) {
+                        light.intensity = 20;
+                        if (!audioSource.isPlaying)
+                            audioSource.Play();
+                    }
+                    else {
+                        light.intensity = 0;
+                        if (audioSource.isPlaying)
+                            audioSource.Stop();
+                    }
                 }
 
                 ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();

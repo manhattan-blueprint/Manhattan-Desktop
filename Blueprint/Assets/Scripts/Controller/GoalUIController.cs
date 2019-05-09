@@ -148,6 +148,9 @@ namespace Controller {
         private IEnumerator SpinDish() {
             float spinSpeed = 0.0f;
 
+            SoundController soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+            soundController.PlayOutroMusic();
+
             ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
 
             GameObject blackOverlay = GameObject.Find("GameoverOverlay");

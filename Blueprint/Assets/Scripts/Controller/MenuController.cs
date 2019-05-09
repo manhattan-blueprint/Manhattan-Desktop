@@ -33,6 +33,7 @@ namespace Controller {
         private const int rightButton = 1;
         private PlayerMoveController movement;
         private PlayerLookController looking;
+        private SoundController soundController;
 
 
         void Start() {
@@ -68,6 +69,8 @@ namespace Controller {
             gameOver = false;
             rmb.enabled = false;
 
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+
             GameManager.Instance().uiStore.Subscribe(this);
         }
 
@@ -79,11 +82,20 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
+                    Debug.Log("Playing open inventory sound");
                 } else if (inventoryCanvas.enabled) {
+                    soundController.PlayBagOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || blueprintCanvas.enabled || bindingsCanvas.enabled || gateCanvas.enabled || goalCanvas.enabled || blueprintTemplateCanvas.enabled) {
+                if (machineCanvas.enabled || inventoryCanvas.enabled || goalCanvas.enabled) {
+                    soundController.PlayBagOpeningSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                } else if (blueprintCanvas.enabled) {
+                    soundController.PlayBlueprintOpeningSound();
+                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
+                } else if (bindingsCanvas.enabled || gateCanvas.enabled || blueprintTemplateCanvas.enabled) {
+                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
@@ -94,6 +106,7 @@ namespace Controller {
                 if (!blueprintCanvas.enabled && !blueprintTemplateCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
                 } else if (blueprintCanvas.enabled) {
+                    soundController.PlayBlueprintOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
@@ -108,6 +121,7 @@ namespace Controller {
 
             if (Input.GetKeyUp(KeyMapping.Bindings)) {
                 if (bindingsCanvas.enabled) {
+                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
@@ -115,6 +129,7 @@ namespace Controller {
 
         public void GameOver() {
             gameOver = true;
+            soundController.PlayOutroMusic();
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
             heldCanvas.enabled = false;
             cursorCanvas.enabled = false;
@@ -131,6 +146,7 @@ namespace Controller {
         }
 
         private void OpenInventory() {
+            soundController.PlayBagOpeningSound();
             Time.timeScale = 0;
             inventoryCanvas.enabled = true;
             pauseCanvas.enabled = false;
@@ -141,6 +157,7 @@ namespace Controller {
         }
 
         private void OpenBlueprint() {
+            soundController.PlayBlueprintOpeningSound();
             Time.timeScale = 0;
             blueprintCanvas.enabled = true;
             blueprintTemplateCanvas.enabled = false;
@@ -152,11 +169,14 @@ namespace Controller {
         }
 
         private void OpenBlueprintTemplate() {
+            soundController.PlayButtonPressSound();
             blueprintTemplateCanvas.enabled = true;
             blueprintCanvas.enabled = false;
+            soundController.PlayButtonPressSound();
         }
 
         private void OpenMachine() {
+            soundController.PlayBagOpeningSound();
             Time.timeScale = 0;
             machineCanvas.enabled = true;
             machineInventoryCanvas.enabled = true;
@@ -168,6 +188,7 @@ namespace Controller {
         }
 
         private void OpenGoal() {
+            soundController.PlayBagOpeningSound();
             Time.timeScale = 0;
             goalCanvas.enabled = true;
             machineInventoryCanvas.enabled = true;
@@ -179,6 +200,7 @@ namespace Controller {
         }
 
         private void OpenBindings() {
+            soundController.PlayButtonPressSound();
             Time.timeScale = 0;
             bindingsCanvas.enabled = true;
             pauseCanvas.enabled = false;
@@ -189,6 +211,7 @@ namespace Controller {
         }
 
         private void OpenGate() {
+            soundController.PlayButtonPressSound();
             gateCanvas.enabled = true;
             Time.timeScale = 0;
         }
@@ -216,6 +239,7 @@ namespace Controller {
 
         // Logout button from the pause menu
         public void LogoutButton() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new Logout());
         }
 
@@ -226,15 +250,18 @@ namespace Controller {
         }
 
         public void Logout() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new OpenLoginUI());
         }
 
         public void LogoutCancel() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
         // Exit button from the pause menu
         public void ExitButton() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new Exit());
         }
 
@@ -245,10 +272,12 @@ namespace Controller {
         }
 
         public void Exit() {
+            soundController.PlayButtonPressSound();
             Application.Quit();
         }
 
         public void ExitCancel() {
+            soundController.PlayButtonPressSound();
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
