@@ -139,8 +139,11 @@ namespace Model.Reducer {
 
             bool shouldRemoveLeft = machine.leftInput.IsPresent() &&
                                     product.Get().item.recipe.Find(recipe => recipe.item_id == machine.leftInput.Get().GetId()) != null;
+            
+            // Final boolean statement fixes decrementing two items of the same type
             bool shouldRemoveRight = machine.rightInput.IsPresent() &&
-                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null;
+                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null
+                                    && machine.leftInput.Get().GetId() != machine.rightInput.Get().GetId();
            
             int maxQuantity = product.Get().maxQuantity;
             if (!GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == machine.id).isPoweredByElectricity()) {
