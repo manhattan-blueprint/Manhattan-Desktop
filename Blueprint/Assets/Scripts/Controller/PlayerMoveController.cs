@@ -5,17 +5,20 @@ using UnityEngine;
 /* Attached to player and controls movement around map */
 namespace Controller {
     public class PlayerMoveController : MonoBehaviour {
+        public bool isJumping;
         [SerializeField] private AnimationCurve jumpFalloff;
         private const string horizontalInputName = "Horizontal";
         private const string verticalInputName = "Vertical";
         private float movementSpeed = 6.0f;
         private const float jumpMultiplier = 6.0f;
+        private SoundController soundController;
 
         private CharacterController charController;
-        private bool isJumping;
 
         private void Awake() {
             charController = GetComponent<CharacterController>();
+            if (soundController == null)
+                soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         }
 
         private void Update() {
@@ -52,6 +55,7 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Jump) && !isJumping) {
                 isJumping = true;
                 StartCoroutine(JumpEvent());
+                soundController.PlayJumpSound();
             }
         }
 
