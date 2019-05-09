@@ -10,7 +10,7 @@ public class MachineSlotController : InventorySlotController {
     private string InputSlot0 = "InputSlot0";
     private string InputSlot1 = "InputSlot1";
     private string FuelSlot = "FuelSlot";
-    private string OutputSlot = "FuelSlot";
+    private string OutputSlot = "OutputSlot";
 
     public new void OnDrop(GameObject droppedObject, bool splitting, int newSplitQuantity) {
         RectTransform invPanel = transform as RectTransform;
