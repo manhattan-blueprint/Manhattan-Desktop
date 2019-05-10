@@ -18,16 +18,6 @@ namespace Controller {
             Cursor.visible = true;
             GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = false;
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = false;
-           
-            // This doesn't seem to work, leaving as an issue
-            foreach (Highlight h in GameObject.Find("MapGenerator").GetComponentsInChildren<Highlight>()) {
-                h.enabled = false;
-            }
-            
-            Material grass = Resources.Load<Material>("Grass");
-            foreach (MeshRenderer renderer in GameObject.Find("MapGenerator").GetComponentsInChildren<MeshRenderer>()) {
-                renderer.material = grass;
-            }
         }
 
         public void CloseAlertView() {
@@ -36,12 +26,6 @@ namespace Controller {
             Cursor.visible = false;
             GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
             GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
-           
-            Material grass = Resources.Load<Material>("Grass");
-            foreach (Highlight h in GameObject.Find("MapGenerator").GetComponentsInChildren<Highlight>()) {
-                h.enabled = true;
-            }
-            
         }
     }
 }
