@@ -131,9 +131,10 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                     
                     inventoryController.DragDestination = isc.id;
                 } else {
+                    string name = gameObject.transform.parent.name; 
+                    
                     // Drop item outside the inventory while splitting
                     if (splitting) {
-                        string name = gameObject.transform.parent.name; 
                         InventoryItem originalItem = inventorySlotController.storedItem.Get();
                         
                         if (name != "FuelSlot" && name != "InputSlot0" && name != "InputSlot1") {
@@ -147,8 +148,10 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                             if (name == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(machineLocation, unDropItem));
                             if (name == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(machineLocation, unDropItem));
                         }
-
-                    }
+                    } 
+                    
+                    // Populate output slot when item is dropped outside
+                    if (name == "OutputSlot") inventorySlotController.SetStoredItem(inventorySlotController.storedItem);
                 }
 
                 if (!splitting) {
