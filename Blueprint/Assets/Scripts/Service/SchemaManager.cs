@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Model;
 using Service;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SchemaManager {
     public SchemaItems GameObjs;
@@ -47,18 +48,25 @@ public class SchemaManager {
         List<SchemaItem> objects = GameObjs.items.FindAll(item => item.machine_id == machineId);
         
         foreach (SchemaItem obj in objects) {
-            int maxQuantity = int.MaxValue;
+            int maxQuantity = -int.MaxValue;
             Boolean correctItem = true;
             
             foreach (RecipeElement recipeItem in obj.recipe) {
-                RecipeElement available = inputItems.Find(itemToFind => itemToFind.item_id == recipeItem.item_id);
+                List<RecipeElement> available = inputItems.FindAll(itemToFind => itemToFind.item_id == recipeItem.item_id);
                 
                 // If item isn't present or don't have enough, fail
-                if (available == null || available.quantity < recipeItem.quantity) {
-                    correctItem = false;
+                if (available.Count > 0) {
+                    foreach (RecipeElement element in available) {
+                        if (element == null || element.quantity < recipeItem.quantity) {
+                            correctItem = false;
+                            break;
+                        } else {
+                            int maxMultiple = element.quantity / recipeItem.quantity;
+                            maxQuantity = Math.Max(maxQuantity, maxMultiple);
+                        }
+                    }
                 } else {
-                    int maxMultiple = available.quantity / recipeItem.quantity;
-                    maxQuantity = Math.Min(maxQuantity, maxMultiple);
+                    correctItem = false;
                 }
             }
 
