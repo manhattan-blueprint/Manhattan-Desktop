@@ -24,7 +24,7 @@ public class GameManager {
     private AccessToken accessToken;
 
     public readonly int gridSize = 16;
-    public readonly int inventoryLayers = 2;
+    public readonly int inventoryLayers = 3;
 
     private GameManager() {
         this.mapStore = new StateStore<MapState, MapAction>(new MapReducer(), new MapState());
