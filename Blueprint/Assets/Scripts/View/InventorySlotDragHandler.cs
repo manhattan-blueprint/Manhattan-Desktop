@@ -26,7 +26,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     private InventoryController machineInventoryController;
     private InventorySlotController inventorySlotController;
     private int newQuantity;
-    private List<string> machineSlots;
 
     private void Start() {
         raycaster = GetComponentInParent<GraphicRaycaster>();
@@ -48,11 +47,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
 
         // Reset DragDestination
         if (inventorySlotController.id == 0) inventoryController.DragDestination = -1;
-        
-        machineSlots = new List<string>();
-        machineSlots.Add("InputSlot0");
-        machineSlots.Add("InputSlot1");
-        machineSlots.Add("FuelSlot");
     }
 
     private void Update() {
