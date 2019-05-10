@@ -25,8 +25,13 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Pause:
                 case UIState.OpenUI.BindingsIntro:
                 case UIState.OpenUI.Mouse:
-                case UIState.OpenUI.Intro:
                     state.Selected = UIState.OpenUI.Playing;
+                    break;
+                case UIState.OpenUI.Intro:
+                    // *MUST* start the world in playing or bad things happen...
+                    state.Selected = UIState.OpenUI.Playing;
+                    // Use a boolean to store the state we want to get to
+                    state.ShouldShowHelpUI = true;
                     break;
                 case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
@@ -118,7 +123,8 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
-                    state.Selected = UIState.OpenUI.BindingsPause;
+                    state.Selected = UIState.OpenUI.BindingsIntro;
+                    state.ShouldShowHelpUI = false;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUIIntro");

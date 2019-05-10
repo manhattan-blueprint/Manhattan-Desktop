@@ -35,6 +35,7 @@ namespace Controller {
         private PlayerMoveController movement;
         private PlayerLookController looking;
         private SoundController soundController;
+        private ManhattanAnimation animationManager;
 
 
         void Start() {
@@ -55,6 +56,7 @@ namespace Controller {
             rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
             movement = GameObject.Find("Player").GetComponent<PlayerMoveController>();
             looking = GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>();
+            animationManager = gameObject.AddComponent<ManhattanAnimation>();
             
             // Hide Alert
             GameObject.FindGameObjectWithTag("Alert").GetComponent<Canvas>().enabled = false;
@@ -202,6 +204,17 @@ namespace Controller {
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
         }
+        
+        private void OpenBindingsIntro() {
+            Time.timeScale = 0;
+            CanvasRenderer bindingsRenderer = bindingsCanvas.GetComponentInChildren<CanvasRenderer>();
+            bindingsRenderer.SetAlpha(0);
+            bindingsCanvas.enabled = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
 
         private void OpenGate() {
             soundController.PlayButtonPressSound();
@@ -320,6 +333,9 @@ namespace Controller {
                 case UIState.OpenUI.BindingsPause:
                     OpenBindings();
                     break;
+                case UIState.OpenUI.BindingsIntro:
+                    OpenBindingsIntro();
+                    break;
                 case UIState.OpenUI.Gate:
                     OpenGate();
                     break;
@@ -373,6 +389,14 @@ namespace Controller {
                 default:
                     throw new Exception("Not in expected state.");
             }
+            
+            if (state.ShouldShowHelpUI) {
+                Invoke(nameof(ShowHelpUI), 1);
+            }
+        }
+
+        private void ShowHelpUI() {
+            GameManager.Instance().uiStore.Dispatch(new OpenBindingsUIIntro()); 
         }
     }
 }
