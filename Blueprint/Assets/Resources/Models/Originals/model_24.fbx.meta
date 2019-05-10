@@ -10,7 +10,17 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Motor
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: 124f279c4ab6e4596bb35495cfeb8634, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: motor_aiStandardSurface2
+    second: {fileID: 2100000, guid: b37efd23a96574847b99469317a82c20, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

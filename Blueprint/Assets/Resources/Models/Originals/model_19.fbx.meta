@@ -11,7 +11,12 @@ ModelImporter:
     2300000: Machine_Base
     3300000: Machine_Base
     4300000: Machine_Base
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Steel1
+    second: {fileID: 2100000, guid: 124f279c4ab6e4596bb35495cfeb8634, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
