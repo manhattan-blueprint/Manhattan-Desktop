@@ -113,20 +113,9 @@ namespace Controller {
                     soundController.PlayBlueprintOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
-                if (!bindingsCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
-                }
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
-                }
-            }
-
-            if (Input.GetKeyUp(KeyMapping.Bindings)) {
-                if (bindingsCanvas.enabled) {
-                    soundController.PlayButtonPressSound();
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
         }
@@ -285,6 +274,16 @@ namespace Controller {
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
+        public void OpenHelpPause() {
+            soundController.PlayButtonPressSound();
+            GameManager.Instance().uiStore.Dispatch(new OpenBindingsUIPaused());
+        }
+
+        public void CloseHelp() {
+            soundController.PlayButtonPressSound();
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+        }
+
         private void EnableMouse() {
             Time.timeScale = 1;
             gateCanvas.enabled = false;
@@ -297,6 +296,7 @@ namespace Controller {
             pauseCanvas.enabled = true;
             exitCanvas.enabled = false;
             logoutCanvas.enabled = false;
+            bindingsCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
@@ -317,7 +317,7 @@ namespace Controller {
                 case UIState.OpenUI.BlueprintTemplate:
                     OpenBlueprintTemplate();
                     break;
-                case UIState.OpenUI.Bindings:
+                case UIState.OpenUI.BindingsPause:
                     OpenBindings();
                     break;
                 case UIState.OpenUI.Gate:

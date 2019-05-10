@@ -146,18 +146,6 @@ namespace Tests {
         }
 
         [Test]
-        public void TestOpenBindingSettingsUI() {
-            gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenBindingsUI());
-            try {
-                gameManager.uiStore.Dispatch(new OpenSettingsUI());
-                Assert.Fail("Exception wasn't thrown");
-            } catch {
-                Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Bindings));
-            }
-        }
-
-        [Test]
         public void TestOpenLogoutUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
@@ -237,15 +225,6 @@ namespace Tests {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenSettingsUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Pause));
-        }
-
-        [Test]
-        public void TestLoginAndBindings() {
-            gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenBindingsUI());
-            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Bindings));
-            gameManager.uiStore.Dispatch(new CloseUI());
-            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
     }
 }
