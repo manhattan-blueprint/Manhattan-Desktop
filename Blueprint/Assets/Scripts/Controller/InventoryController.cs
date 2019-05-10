@@ -1,23 +1,15 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
-using Utils;
-using View;
 using Service;
 using Service.Response;
-using System.Threading.Tasks;
-using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
-using UnityEngine.Experimental.Rendering;
+using Utils;
 
 /* Attached to the inventory canvas and controls inventory collection */
 namespace Controller {
@@ -64,8 +56,7 @@ namespace Controller {
             // If inventory UI opened, check how many things the user has in their backpack and populate UI
             StartCoroutine(BlueprintAPI.GetInventory(GameManager.Instance().GetAccessToken(), result => {
                 if (!result.isSuccess()) {
-                    // TODO make this visible to the user
-                    Debug.LogError("Could not get inventory: " + result.GetError()) ;
+                    this.ShowAlert("Error", "Could not get inventory " + result.GetError());
                 } else {
                     backpackContents = result.GetSuccess().items;
                     setBackpackState();
@@ -123,16 +114,14 @@ namespace Controller {
 
             StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), gameState, result => {
                 if (!result.isSuccess()) {
-                    // TODO make this visible to the user
-                    Debug.LogError("Could not get inventory: " + result.GetError()) ;
+                    this.ShowAlert("Error", "Could not get inventory " + result.GetError());
                 }
             }));
 
             // Delete backpack items
             StartCoroutine(BlueprintAPI.DeleteInventory(GameManager.Instance().GetAccessToken(), result => {
                 if (!result.isSuccess()) {
-                    // TODO make this visible to the user
-                    Debug.LogError("Could not delete inventory: " + result.GetError()) ;
+                    this.ShowAlert("Error", "Could not clear inventory " + result.GetError());
                 } 
             }));
             

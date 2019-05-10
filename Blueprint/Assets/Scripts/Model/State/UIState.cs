@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 namespace Model.State {
