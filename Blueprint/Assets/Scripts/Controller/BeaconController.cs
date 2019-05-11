@@ -19,9 +19,9 @@ namespace Controller
             float dist = Vector3.Distance(player.transform.position, transform.position);
             if (dist < minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Playing)
             {
-                GameManager.Instance().uiStore.Dispatch(new OpenGateMouseUI());
+                GameManager.Instance().uiStore.Dispatch(new OpenBeaconMouseUI());
             }
-            else if (dist > minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.GateMouse)
+            else if (dist > minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.BeaconMouse)
             {
                 GameManager.Instance().uiStore.Dispatch(new CloseUI());
             }
@@ -29,7 +29,7 @@ namespace Controller
 
         public void OnMouseExit()
         {
-            if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.GateMouse)
+            if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.BeaconMouse)
             {
                 GameManager.Instance().uiStore.Dispatch(new CloseUI());
             }
