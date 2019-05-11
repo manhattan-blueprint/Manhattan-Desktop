@@ -9,7 +9,8 @@ namespace Model.Action {
         void visit(OpenInventoryUI inventory);
         void visit(OpenBlueprintUI blueprint);
         void visit(OpenBlueprintTemplateUI blueprintTemplate);
-        void visit(OpenBindingsUI bindings);
+        void visit(OpenBindingsUIPaused bindings);
+        void visit(OpenBindingsUIIntro bindings);
         void visit(OpenMouseUI mouse);
         void visit(OpenGateUI gate);
         void visit(OpenIntroUI intro);
@@ -66,7 +67,13 @@ namespace Model.Action {
         }
     }
 
-    public class OpenBindingsUI : UIAction {
+    public class OpenBindingsUIPaused : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenBindingsUIIntro : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
