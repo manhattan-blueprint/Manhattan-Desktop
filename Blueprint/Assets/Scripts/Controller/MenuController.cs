@@ -117,7 +117,12 @@ namespace Controller {
                 }
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
+                    UIState.OpenUI state = GameManager.Instance().uiStore.GetState().Selected;
+                    if (state == UIState.OpenUI.GateMouse) {
+                        GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
+                    } else if (state == UIState.OpenUI.BeaconMouse) {
+                        GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
+                    }
                 }
             }
         }
@@ -337,7 +342,10 @@ namespace Controller {
                 case UIState.OpenUI.Gate:
                     OpenGate();
                     break;
-                case UIState.OpenUI.Mouse:
+                case UIState.OpenUI.GateMouse:
+                    EnableMouse();
+                    break;
+                case UIState.OpenUI.BeaconMouse:
                     EnableMouse();
                     break;
                 case UIState.OpenUI.Machine:
@@ -353,6 +361,8 @@ namespace Controller {
                     LogoutPrompt();
                     break;
                 case UIState.OpenUI.Login:
+                    GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
+                    GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
                     GameState logoutGameState = new GameState(GameManager.Instance().mapStore.GetState(),
                         GameManager.Instance().heldItemStore.GetState(),
                         GameManager.Instance().inventoryStore.GetState(),

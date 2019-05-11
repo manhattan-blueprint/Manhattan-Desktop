@@ -23,8 +23,9 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Machine:
                 case UIState.OpenUI.Goal:
                 case UIState.OpenUI.Pause:
+                case UIState.OpenUI.GateMouse:
+                case UIState.OpenUI.BeaconMouse:
                 case UIState.OpenUI.BindingsIntro:
-                case UIState.OpenUI.Mouse:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.Intro:
@@ -37,7 +38,7 @@ namespace Model.Reducer {
                     state.Selected = UIState.OpenUI.Blueprint;
                     break;
                 case UIState.OpenUI.Gate:
-                    state.Selected = UIState.OpenUI.Mouse;
+                    state.Selected = UIState.OpenUI.GateMouse;
                     break;
                 case UIState.OpenUI.BindingsPause:
                 case UIState.OpenUI.Logout:
@@ -131,11 +132,22 @@ namespace Model.Reducer {
             }
         }
 
-        public void visit(OpenMouseUI mouse) {
+        public void visit(OpenGateMouseUI mouse) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
-                    state.Selected = UIState.OpenUI.Mouse;
+                    state.Selected = UIState.OpenUI.GateMouse;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMouseUI");
+            }
+        }
+
+        public void visit(OpenBeaconMouseUI mouse) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.BeaconMouse;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenMouseUI");
@@ -145,7 +157,7 @@ namespace Model.Reducer {
         public void visit(OpenGateUI gate) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
-                case UIState.OpenUI.Mouse:
+                case UIState.OpenUI.GateMouse:
                     state.Selected = UIState.OpenUI.Gate;
                     break;
                 default:
@@ -181,7 +193,7 @@ namespace Model.Reducer {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
             switch (current) {
-                case UIState.OpenUI.Playing:
+                case UIState.OpenUI.BeaconMouse:
                     state.Selected = UIState.OpenUI.Goal;
                     break;
                 default:
@@ -207,8 +219,6 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Pause:
                     state.Selected = UIState.OpenUI.Logout;
-                    GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;
-                    GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>().enabled = true;
                     break;
                 default:
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to Logout");

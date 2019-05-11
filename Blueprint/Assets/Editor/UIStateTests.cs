@@ -173,7 +173,7 @@ namespace Tests {
         [Test]
         public void TestOpenGateUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMouseUI());
+            gameManager.uiStore.Dispatch(new OpenGateMouseUI());
             gameManager.uiStore.Dispatch(new OpenGateUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Gate));
         }
@@ -181,10 +181,25 @@ namespace Tests {
         [Test]
         public void TestCloseGateUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
-            gameManager.uiStore.Dispatch(new OpenMouseUI());
+            gameManager.uiStore.Dispatch(new OpenGateMouseUI());
             gameManager.uiStore.Dispatch(new OpenGateUI());
             gameManager.uiStore.Dispatch(new CloseUI());
-            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Mouse));
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.GateMouse));
+        }
+
+        [Test]
+        public void TestOpenBeaconMouseUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBeaconMouseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.BeaconMouse));
+        }
+
+        [Test]
+        public void TestCloseBeaconMouseUI() {
+            gameManager.uiStore.Dispatch(new OpenPlayingUI());
+            gameManager.uiStore.Dispatch(new OpenBeaconMouseUI());
+            gameManager.uiStore.Dispatch(new CloseUI());
+            Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.Playing));
         }
 
         [Test]

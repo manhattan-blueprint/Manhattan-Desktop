@@ -73,13 +73,6 @@ namespace Controller {
                     return;
                 }
 
-                // If we hit the goal, go to goal UI
-                CentralGoal gl = hit.transform.gameObject.GetComponent<CentralGoal>();
-                if (gl != null) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
-                    return;
-                }
-
                 // Otherwise try and place an object in that spot
                 HexCell hc = hit.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc != null) {

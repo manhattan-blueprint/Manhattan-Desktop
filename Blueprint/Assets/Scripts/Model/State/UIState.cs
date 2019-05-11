@@ -17,7 +17,8 @@ namespace Model.State {
             BindingsPause,
             BindingsIntro,
             Gate,
-            Mouse,
+            GateMouse,
+            BeaconMouse,
             Intro,
         };
 
