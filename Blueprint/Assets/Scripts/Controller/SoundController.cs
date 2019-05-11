@@ -38,7 +38,8 @@ namespace Controller {
         private AudioClip birdsLooping;
         private AudioClip blueprintCollecting;
         private AudioClip mapView;
-        private AudioClip buildingEnvironment;
+        private AudioClip buildingEnvironment1;
+        private AudioClip buildingEnvironment2;
         private AudioClip introMusic;
         private AudioClip outroMusic;
         private System.Random random;
@@ -134,7 +135,9 @@ namespace Controller {
 
             mapView = Resources.Load<AudioClip>("Sounds/Music/MapView");
 
-            buildingEnvironment = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment");
+            buildingEnvironment1 = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment1");
+
+            buildingEnvironment2 = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment2");
 
             introMusic = Resources.Load<AudioClip>("Sounds/Music/IntroMusic");
 
@@ -243,7 +246,7 @@ namespace Controller {
 
         public void PlayBuildingEnvironmentMusic() {
             musicSource.Stop();
-            musicSource.clip = buildingEnvironment;
+            musicSource.clip = UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f ? buildingEnvironment1 : buildingEnvironment2;
             musicSource.Play();
         }
 
