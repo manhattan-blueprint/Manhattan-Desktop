@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 namespace Model.State {
@@ -15,7 +14,8 @@ namespace Model.State {
             Pause,
             Exit,
             Logout,
-            Bindings,
+            BindingsPause,
+            BindingsIntro,
             Gate,
             Mouse,
             Intro,
@@ -24,6 +24,7 @@ namespace Model.State {
         public OpenUI Selected;
         public Vector2 SelectedMachineLocation;
         public int SelectedBlueprintID = -1;
+        public bool ShouldShowHelpUI = false;
 
         public UIState() {
             this.Selected = OpenUI.Login;

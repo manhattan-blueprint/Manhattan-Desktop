@@ -9,6 +9,7 @@ using Service;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Utils;
 using Debug = UnityEngine.Debug;
 
 /* Attached to Inventory, listens for key press to show/hide panel */
@@ -34,6 +35,7 @@ namespace Controller {
         private PlayerMoveController movement;
         private PlayerLookController looking;
         private SoundController soundController;
+        private ManhattanAnimation animationManager;
 
 
         void Start() {
@@ -54,6 +56,10 @@ namespace Controller {
             rmb = GameObject.Find("RMB Image").GetComponent<SVGImage>();
             movement = GameObject.Find("Player").GetComponent<PlayerMoveController>();
             looking = GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>();
+            animationManager = gameObject.AddComponent<ManhattanAnimation>();
+            
+            // Hide Alert
+            GameObject.FindGameObjectWithTag("Alert").GetComponent<Canvas>().enabled = false;
 
             inventoryCanvas.enabled = false;
             blueprintCanvas.enabled = false;
@@ -109,20 +115,9 @@ namespace Controller {
                     soundController.PlayBlueprintOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
-            } else if (Input.GetKeyDown(KeyMapping.Bindings)) {
-                if (!bindingsCanvas.enabled) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenBindingsUI());
-                }
             } else if (Input.GetMouseButtonDown(rightButton)) {
                 if (rmb.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
-                }
-            }
-
-            if (Input.GetKeyUp(KeyMapping.Bindings)) {
-                if (bindingsCanvas.enabled) {
-                    soundController.PlayButtonPressSound();
-                    GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             }
         }
@@ -209,6 +204,15 @@ namespace Controller {
             cursorCanvas.enabled = false;
             heldCanvas.enabled = false;
         }
+        
+        private void OpenBindingsIntro() {
+            Time.timeScale = 0;
+            bindingsCanvas.enabled = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cursorCanvas.enabled = false;
+            heldCanvas.enabled = false;
+        }
 
         private void OpenGate() {
             soundController.PlayButtonPressSound();
@@ -281,6 +285,16 @@ namespace Controller {
             GameManager.Instance().uiStore.Dispatch(new CloseUI());
         }
 
+        public void OpenHelpPause() {
+            soundController.PlayButtonPressSound();
+            GameManager.Instance().uiStore.Dispatch(new OpenBindingsUIPaused());
+        }
+
+        public void CloseHelp() {
+            soundController.PlayButtonPressSound();
+            GameManager.Instance().uiStore.Dispatch(new CloseUI());
+        }
+
         private void EnableMouse() {
             Time.timeScale = 1;
             gateCanvas.enabled = false;
@@ -293,6 +307,7 @@ namespace Controller {
             pauseCanvas.enabled = true;
             exitCanvas.enabled = false;
             logoutCanvas.enabled = false;
+            bindingsCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             cursorCanvas.enabled = false;
@@ -313,8 +328,11 @@ namespace Controller {
                 case UIState.OpenUI.BlueprintTemplate:
                     OpenBlueprintTemplate();
                     break;
-                case UIState.OpenUI.Bindings:
+                case UIState.OpenUI.BindingsPause:
                     OpenBindings();
+                    break;
+                case UIState.OpenUI.BindingsIntro:
+                    OpenBindingsIntro();
                     break;
                 case UIState.OpenUI.Gate:
                     OpenGate();
@@ -347,8 +365,7 @@ namespace Controller {
                             GameManager.Instance().ResetGame();
                             SceneManager.LoadScene(SceneMapping.MainMenu);
                         } else {
-                            // TODO: Handle failure via UI?
-                            throw new Exception("Couldn't save game " + result.GetError());
+                            this.ShowAlert("Error", "Could not save game: " + result.GetError());
                         }
                     }));
                     break;
@@ -362,7 +379,7 @@ namespace Controller {
                         if (result.isSuccess()) {
                             ExitPrompt();
                         } else {
-                            // TODO: Handle failure via UI?
+                            this.ShowAlert("Error", "Could not save game: " + result.GetError());
                         }
                     }));
 
@@ -370,6 +387,14 @@ namespace Controller {
                 default:
                     throw new Exception("Not in expected state.");
             }
+            
+            if (state.ShouldShowHelpUI) {
+                Invoke(nameof(ShowHelpUI), 1);
+            }
+        }
+
+        private void ShowHelpUI() {
+            GameManager.Instance().uiStore.Dispatch(new OpenBindingsUIIntro()); 
         }
     }
 }

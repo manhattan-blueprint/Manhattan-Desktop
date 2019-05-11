@@ -23,10 +23,15 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Machine:
                 case UIState.OpenUI.Goal:
                 case UIState.OpenUI.Pause:
-                case UIState.OpenUI.Bindings:
+                case UIState.OpenUI.BindingsIntro:
                 case UIState.OpenUI.Mouse:
-                case UIState.OpenUI.Intro:
                     state.Selected = UIState.OpenUI.Playing;
+                    break;
+                case UIState.OpenUI.Intro:
+                    // *MUST* start the world in playing or bad things happen...
+                    state.Selected = UIState.OpenUI.Playing;
+                    // Use a boolean to store the state we want to get to
+                    state.ShouldShowHelpUI = true;
                     break;
                 case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
@@ -34,6 +39,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Gate:
                     state.Selected = UIState.OpenUI.Mouse;
                     break;
+                case UIState.OpenUI.BindingsPause:
                 case UIState.OpenUI.Logout:
                 case UIState.OpenUI.Exit:
                     state.Selected = UIState.OpenUI.Pause;
@@ -102,14 +108,26 @@ namespace Model.Reducer {
             }
         }
 
-        public void visit(OpenBindingsUI bindings) {
+        public void visit(OpenBindingsUIPaused bindings) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Pause:
+                    state.Selected = UIState.OpenUI.BindingsPause;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUIPaused");
+            }
+        }
+        
+        public void visit(OpenBindingsUIIntro bindings) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
-                    state.Selected = UIState.OpenUI.Bindings;
+                    state.Selected = UIState.OpenUI.BindingsIntro;
+                    state.ShouldShowHelpUI = false;
                     break;
                 default:
-                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUI");
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUIIntro");
             }
         }
 

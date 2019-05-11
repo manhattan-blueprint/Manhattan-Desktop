@@ -4,17 +4,63 @@ ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: solarpanel:Solar_Panel_Single
+    100002: polySurface1
+    100004: polySurface2
+    100006: polySurface3
+    100008: polySurface4
+    100010: polySurface4 1
+    100012: polySurface5
+    100014: polySurface5 1
+    100016: polySurface6
+    100018: solar:polySurface1
+    100020: transform1
+    100022: transform2
+    100024: transform3
+    100026: transform4
+    100028: transform5
+    100030: transform6
+    100032: transform7
+    100034: transform8
     400000: //RootNode
-    400002: solarpanel:Solar_Panel_Single
-    2100000: solarpanel_Steel
-    2100002: solarpanel_Solar_Cell
-    2100004: phong10
-    2100006: solarpanel_Dark_Steel
-    2300000: solarpanel:Solar_Panel_Single
-    3300000: solarpanel:Solar_Panel_Single
-    4300000: solarpanel:Solar_Panel_Single
-  externalObjects: {}
+    400002: polySurface1
+    400004: polySurface2
+    400006: polySurface3
+    400008: polySurface4
+    400010: polySurface4 1
+    400012: polySurface5
+    400014: polySurface5 1
+    400016: polySurface6
+    400018: solar:polySurface1
+    400020: transform1
+    400022: transform2
+    400024: transform3
+    400026: transform4
+    400028: transform5
+    400030: transform6
+    400032: transform7
+    400034: transform8
+    2100000: solar_group29SG5
+    2100002: solar_group29SG2
+    2100004: solar_group29SG4
+    2300000: polySurface5
+    3300000: polySurface5
+    4300000: polySurface5
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: solar_group29SG2
+    second: {fileID: 2100000, guid: 124f279c4ab6e4596bb35495cfeb8634, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: solar_group29SG4
+    second: {fileID: 2100000, guid: 158c09a6915603245bd3d7f61985e21c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: solar_group29SG5
+    second: {fileID: 2100000, guid: 124f279c4ab6e4596bb35495cfeb8634, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

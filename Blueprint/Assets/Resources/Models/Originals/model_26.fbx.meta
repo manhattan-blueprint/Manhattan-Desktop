@@ -12,7 +12,27 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: group16_group13_pCylinder153
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Steel1
+    second: {fileID: 2100000, guid: 124f279c4ab6e4596bb35495cfeb8634, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: aiStandardSurface2
+    second: {fileID: 2100000, guid: 0375681a8aef26f34885441b12f51eb8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: f6f66a229333c457699241a1f250b9e0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: machine_Dark_Steel
+    second: {fileID: 2100000, guid: f6f66a229333c457699241a1f250b9e0, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

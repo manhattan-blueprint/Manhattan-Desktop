@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Model.Reducer {
     public class InventoryReducer : Reducer<InventoryState, InventoryAction>, InventoryVisitor {
         private InventoryState state;
-        
+
         public InventoryState Reduce(InventoryState current, InventoryAction action) {
             this.state = current;
             // Dispatch to visitor which will manipulate state
@@ -23,7 +23,7 @@ namespace Model.Reducer {
             } else {
                 return 0;
             }
-        } 
+        }
 
         private int getFirstEmptySlot() {
             List<int> occupiedSlots = new List<int>();
@@ -34,7 +34,7 @@ namespace Model.Reducer {
                     foreach (HexLocation loc in tempList) {
                         occupiedSlots.Add(loc.hexID);
                     }
-                }                
+                }
             }
 
             occupiedSlots.Sort();
@@ -65,23 +65,23 @@ namespace Model.Reducer {
                 HexLocation item = new HexLocation(getFirstEmptySlot(), addItemToInventoryAction.count);
                 List<HexLocation> list = new List<HexLocation>();
                 list.Add(item);
-                
+
                 state.inventoryContents.Add(addItemToInventoryAction.item, list);
             }
         }
-        
+
         public void visit(SplitInventoryStack splitStackAction) {
             int firstEmptySlot = getFirstEmptySlot();
             int newQuantity = (int) splitStackAction.count / 2;
 
             if (firstEmptySlot < state.inventorySize && newQuantity > 0 && firstEmptySlot > 0) {
                 visit(new RemoveItemFromStackInventory(splitStackAction.item, newQuantity, splitStackAction.hexID));
-                
+
                 HexLocation item = new HexLocation(firstEmptySlot, newQuantity);
                 state.inventoryContents[splitStackAction.item].Add(item);
             }
         }
-        
+
         public void visit(AddItemToInventoryAtHex addItemToInventoryAction) {
             // Cases:
             //     Not in inventory - create new stack
@@ -103,13 +103,13 @@ namespace Model.Reducer {
                     HexLocation item = new HexLocation(addItemToInventoryAction.hexID, addItemToInventoryAction.count);
                     state.inventoryContents[addItemToInventoryAction.item].Add(item);
                 }
-                
+
             } else {
                 // Not present in inventory
                 HexLocation item = new HexLocation(addItemToInventoryAction.hexID, addItemToInventoryAction.count);
                 List<HexLocation> list = new List<HexLocation>();
                 list.Add(item);
-                
+
                 state.inventoryContents.Add(addItemToInventoryAction.item, list);
             }
         }
@@ -117,27 +117,27 @@ namespace Model.Reducer {
         public void visit(RemoveItemFromInventory removeItemFromInventory) {
             // If item is present in inventory
             if (!state.inventoryContents.ContainsKey(removeItemFromInventory.item)) return;
-            
-            int leftToRemove = removeItemFromInventory.count; 
-            
+
+            int leftToRemove = removeItemFromInventory.count;
+
             // Iterate thought each stack, removing as needed
             for (int i = 0; i < state.inventoryContents[removeItemFromInventory.item].Count; i++) {
                 if (leftToRemove == 0) break;
-                
+
                 // If are more in the stack than required, remove the required amount
                 if (state.inventoryContents[removeItemFromInventory.item][i].quantity > leftToRemove) {
                     state.inventoryContents[removeItemFromInventory.item][i].quantity -= leftToRemove;
                     leftToRemove = 0;
-                    
+
                 // If less in stack than left, remove all
                 } else {
                     leftToRemove -= state.inventoryContents[removeItemFromInventory.item][i].quantity;
                     state.inventoryContents[removeItemFromInventory.item][i].quantity = 0;
                 }
             }
-           
+
             // Now iterate over all stacks and clean up, removing key if necessary
-            state.inventoryContents[removeItemFromInventory.item] = 
+            state.inventoryContents[removeItemFromInventory.item] =
                 state.inventoryContents[removeItemFromInventory.item].FindAll(x => x.quantity != 0);
 
             if (state.inventoryContents[removeItemFromInventory.item].Count == 0) {
@@ -176,7 +176,7 @@ namespace Model.Reducer {
 
                         foreach (HexLocation hexLocation in state.inventoryContents[
                             swapItemLocations.destinationItem.Get().GetId()]) {
-                            // Find the destination hexLocation, add the source quantity 
+                            // Find the destination hexLocation, add the source quantity
                             if (hexLocation.hexID == swapItemLocations.destinationHexID) {
                                 hexLocation.quantity += swapItemLocations.sourceItem.Get().GetQuantity();
                             }
@@ -193,16 +193,16 @@ namespace Model.Reducer {
 
                         return;
                     }
-                } 
-                
+                }
+
                 if (swapItemLocations.sourceItem.IsPresent()) {
                     foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.sourceItem.Get().GetId()]) {
                         if (hexLocation.hexID == swapItemLocations.sourceHexID) {
                             hexLocation.hexID = swapItemLocations.destinationHexID;
                         }
                     }
-                } 
-                
+                }
+
                 if (swapItemLocations.destinationItem.IsPresent()) {
                     foreach (HexLocation hexLocation in state.inventoryContents[swapItemLocations.destinationItem.Get().GetId()]) {
                         if (hexLocation.hexID == swapItemLocations.destinationHexID) {
@@ -215,7 +215,7 @@ namespace Model.Reducer {
                 HexLocation item = new HexLocation(swapItemLocations.destinationHexID, swapItemLocations.sourceItem.Get().GetQuantity());
                 List<HexLocation> list = new List<HexLocation>();
                 list.Add(item);
-                
+
                 state.inventoryContents.Add(swapItemLocations.sourceItem.Get().GetId(), list);
             }
         }
@@ -223,28 +223,29 @@ namespace Model.Reducer {
         public void visit(RemoveHeldItem removeHeldItem) {
             // Look for the object in that cell
             int index = GameManager.Instance().heldItemStore.GetState().indexOfHeldItem;
-            
+
             foreach (KeyValuePair<int, List<HexLocation>> content in state.inventoryContents) {
                 foreach (HexLocation hexLocation in content.Value) {
                     int itemID = content.Key;
                     // Only remove and place if quantity > 0 and there is not a item placed at this location
                     if (hexLocation.hexID == index && hexLocation.quantity > 0 &&
                             !GameManager.Instance().mapStore.GetState().GetObjects().ContainsKey(removeHeldItem.dropAt)) {
-                        visit(new RemoveItemFromStackInventory(itemID, 1, index));
-                        
+
                         // If is blueprint, add to machine _before_ the map state, to correctly trigger update
                         // of connected status
                         SchemaItem entry = GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == content.Key);
-                        if (entry.item_id == 17 || entry.item_id == 27 || entry.item_id == 28 || entry.item_id == 30) continue;
-                        
+                        // Prevent placement of certain items without decrementing
+                        if (entry.item_id == 17 || entry.item_id == 27 || entry.item_id == 28 || entry.item_id == 30 || entry.item_id == 31) continue;
+                        visit(new RemoveItemFromStackInventory(itemID, 1, index));
+
                         if (entry.isMachine()) {
-                            GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID)); 
+                            GameManager.Instance().machineStore.Dispatch(new AddMachine(removeHeldItem.dropAt, itemID));
                         }
-                        
+
                         // Place item on map
                         GameManager.Instance().mapStore.Dispatch(new PlaceItem(removeHeldItem.dropAt, itemID));
                         return;
-                    } 
+                    }
                 }
             }
         }

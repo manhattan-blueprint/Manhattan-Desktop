@@ -41,7 +41,12 @@ ModelImporter:
     4300006: wire:Wire_Holder
     4300008: wire:Wire_Holder6
     4300010: wire:Wire_Holder8
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wire_RubberTexture
+    second: {fileID: 2100000, guid: 124f279c4ab6e4596bb35495cfeb8634, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
