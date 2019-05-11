@@ -214,7 +214,7 @@ namespace Controller {
 
         // Craft a blueprint, quantities validated in updateComponents
         public void onCraftClick() {
-            soundController.PlayButtonPressSound();
+            soundController.PlayMachinePlacementSound();
             string name = GameManager.Instance().sm.GameObjs.items
                 .Find(x => x.item_id == currentSI.item_id)
                 .name;

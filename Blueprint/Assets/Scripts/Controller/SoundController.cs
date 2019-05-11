@@ -13,28 +13,29 @@ namespace Controller {
 
         // Keeping track of player position for footsteps.
         public GameObject player;
-
-        public bool isMenu;
-
         private Vector3 playerLastPos;
         private Vector3 playerCurrentPos;
         private float playerTotalDistance;
         private float playerTotalTime;
         private float playerLastStep;
+        private bool whichFoot;
 
         // UI related sounds.
-        private List<AudioClip> blueprintOpening = new List<AudioClip>();
-        private List<AudioClip> bagOpening = new List<AudioClip>();
-        private List<AudioClip> buttonPress = new List<AudioClip>();
+        private List<AudioClip> blueprintOpening;
+        private List<AudioClip> bagOpening;
+        private List<AudioClip> buttonPress;
 
         // Resource collection sounds.
-        private List<AudioClip> chop = new List<AudioClip>();
-        private List<AudioClip> shovel = new List<AudioClip>();
-        private List<AudioClip> mine = new List<AudioClip>();
-        private List<AudioClip> drip = new List<AudioClip>();
+        private List<AudioClip> chop;
+        private List<AudioClip> shovel;
+        private List<AudioClip> mine;
+        private List<AudioClip> drip;
+        private List<AudioClip> hammer;
+        private AudioClip machinePickUp;
+        private AudioClip machinePlace;
 
         // Background noise/music.
-        private List<AudioClip> footsteps = new List<AudioClip>();
+        private List<AudioClip> footsteps;
         private AudioClip birdsLooping;
         private AudioClip blueprintCollecting;
         private AudioClip mapView;
@@ -42,11 +43,25 @@ namespace Controller {
         private AudioClip buildingEnvironment2;
         private AudioClip introMusic;
         private AudioClip outroMusic;
+        private AudioClip mainMenuMusic;
+
+        // Other.
+        private AudioClip signalSent;
         private System.Random random;
-        private bool whichFoot;
+        public bool isMenu;
 
 
         void Start() {
+            blueprintOpening = new List<AudioClip>();
+            bagOpening = new List<AudioClip>();
+            buttonPress = new List<AudioClip>();
+            chop = new List<AudioClip>();
+            shovel = new List<AudioClip>();
+            mine = new List<AudioClip>();
+            drip = new List<AudioClip>();
+            hammer = new List<AudioClip>();
+            footsteps = new List<AudioClip>();
+
             random = new System.Random();
             musicSource.loop = true;
 
@@ -108,6 +123,18 @@ namespace Controller {
             drip.Add(Resources.Load<AudioClip>("Sounds/LiquidDripping/LiquidDripping6"));
             drip.Add(Resources.Load<AudioClip>("Sounds/LiquidDripping/LiquidDripping7"));
 
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer1"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer2"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer3"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer4"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer5"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer6"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer7"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer8"));
+
+            machinePickUp = Resources.Load<AudioClip>("Sounds/MachinePlace/PickUp");
+            machinePlace = Resources.Load<AudioClip>("Sounds/MachinePlace/Place");
+
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps1"));
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps2"));
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps3"));
@@ -142,6 +169,8 @@ namespace Controller {
             introMusic = Resources.Load<AudioClip>("Sounds/Music/IntroMusic");
 
             outroMusic = Resources.Load<AudioClip>("Sounds/Music/OutroMusic");
+
+            mainMenuMusic = Resources.Load<AudioClip>("Sounds/Music/MainMenu");
 
             if (isMenu)
                 PlayMenuSound();
@@ -197,8 +226,16 @@ namespace Controller {
             soundSource.PlayOneShot(drip[random.Next(drip.Count)]);
         }
 
+        public void PlayHammerSound() {
+            soundSource.PlayOneShot(hammer[random.Next(drip.Count)]);
+        }
+
         public void PlayMachinePlacementSound() {
-            soundSource.PlayOneShot(drip[random.Next(drip.Count)]);
+            soundSource.PlayOneShot(machinePlace);
+        }
+
+        public void PlayMachinePickupSound() {
+            soundSource.PlayOneShot(machinePickUp);
         }
 
         public void PlayStepsSound() {
@@ -307,7 +344,7 @@ namespace Controller {
 
         public void PlayMenuSound() {
             musicSource.Stop();
-            musicSource.clip = birdsLooping;
+            musicSource.clip = mainMenu;
             musicSource.Play();
         }
 
