@@ -1,23 +1,15 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 using Model;
 using Model.Action;
 using Model.Redux;
 using Model.State;
-using Utils;
-using View;
 using Service;
 using Service.Response;
-using System.Threading.Tasks;
-using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
-using UnityEngine.Experimental.Rendering;
+using Utils;
 
 /* Attached to the inventory canvas and controls inventory collection */
 namespace Controller {
@@ -31,7 +23,8 @@ namespace Controller {
         private GameManager gameManager;
         private bool firstUIUpdate;
         private List<InventoryEntry> backpackContents;
-
+        private List<InventorySlotController> allSlots;
+             
         public void Start() {
             firstUIUpdate = true;
             itemSlots = new Dictionary<int, InventorySlotController>();
@@ -40,7 +33,7 @@ namespace Controller {
 
         void Update() {
             if (firstUIUpdate) {
-                List<InventorySlotController> allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+                allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
                 
                 foreach (InventorySlotController controller in allSlots) {
                   itemSlots.Add(controller.getId(), controller);
@@ -64,13 +57,22 @@ namespace Controller {
             // If inventory UI opened, check how many things the user has in their backpack and populate UI
             StartCoroutine(BlueprintAPI.GetInventory(GameManager.Instance().GetAccessToken(), result => {
                 if (!result.isSuccess()) {
-                    // TODO make this visible to the user
-                    Debug.LogError("Could not get inventory: " + result.GetError()) ;
+                    this.ShowAlert("Error", "Could not get inventory " + result.GetError());
                 } else {
                     backpackContents = result.GetSuccess().items;
                     setBackpackState();
                 }
             }));
+        }
+
+        private bool isInventoryFull() {
+            foreach (InventorySlotController isc in allSlots) {
+                if (!isc.storedItem.IsPresent()) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void setBackpackState() {
@@ -109,6 +111,11 @@ namespace Controller {
         }
 
         public void OnBackpackClick() {
+            if (isInventoryFull()) {
+                this.ShowAlert("Inventory Full!", "Please make more space before retrieving backpack contents...");
+                return;
+            }
+
             foreach (InventoryEntry entry in backpackContents) {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity));
             }
@@ -123,16 +130,14 @@ namespace Controller {
 
             StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), gameState, result => {
                 if (!result.isSuccess()) {
-                    // TODO make this visible to the user
-                    Debug.LogError("Could not get inventory: " + result.GetError()) ;
+                    this.ShowAlert("Error", "Could not get inventory " + result.GetError());
                 }
             }));
 
             // Delete backpack items
             StartCoroutine(BlueprintAPI.DeleteInventory(GameManager.Instance().GetAccessToken(), result => {
                 if (!result.isSuccess()) {
-                    // TODO make this visible to the user
-                    Debug.LogError("Could not delete inventory: " + result.GetError()) ;
+                    this.ShowAlert("Error", "Could not clear inventory " + result.GetError());
                 } 
             }));
             
