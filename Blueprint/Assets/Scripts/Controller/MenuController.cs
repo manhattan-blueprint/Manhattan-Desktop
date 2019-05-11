@@ -206,6 +206,7 @@ namespace Controller {
         }
         
         private void OpenBindingsIntro() {
+            soundController.PlayButtonPressSound();
             Time.timeScale = 0;
             bindingsCanvas.enabled = true;
             Cursor.lockState = CursorLockMode.None;
@@ -222,6 +223,7 @@ namespace Controller {
 
         // Playing state
         private void ContinueGame() {
+            soundController.PlayButtonPressSound();
             Time.timeScale = 1;
             inventoryCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -303,6 +305,7 @@ namespace Controller {
         }
 
         private void PauseGame() {
+            soundController.PlayButtonPressSound();
             Time.timeScale = 0;
             pauseCanvas.enabled = true;
             exitCanvas.enabled = false;

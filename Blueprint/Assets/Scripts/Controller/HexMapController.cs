@@ -20,6 +20,7 @@ namespace Controller {
         private Dictionary<Vector2, GameObject> grid;
         private Dictionary<Vector2, GameObject> objectsPlaced;
         private List<GameObject> wires;
+        private SoundController soundController;
         
         private void Start() {
             this.grid = new Dictionary<Vector2, GameObject>();
@@ -29,6 +30,7 @@ namespace Controller {
             
             GameManager.Instance().mapStore.Subscribe(this);
             GameManager.Instance().machineStore.Subscribe(this);
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         }
         
         private void drawMap() {
@@ -154,10 +156,23 @@ namespace Controller {
                 GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, mapObject.GetRotation(), 0));
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
+
+                // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
+                if (inNewNotInOld.Count == 1) {
+                    soundController.PlayPlacementSound(mapObject.GetID());
+                    Debug.Log("Playing place item sound");
+                }
             }
 	
             // Remove things in old but not in new
             foreach (Vector3 oldObject in inOldNotInNew) {
+
+                // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
+                if (inOldNotInNew.Count == 1) {
+                    soundController.PlayPlacementSound(state.GetObjects()[oldObject].GetID());
+                    Debug.Log("Playing remove item sound");
+                }
+
                 Destroy(objectsPlaced[oldObject]);
                 objectsPlaced.Remove(oldObject);
             }
