@@ -2,35 +2,26 @@
 using Model.Action;
 using Model.State;
 
-namespace Controller
-{
-    public class BeaconController : MonoBehaviour
-    {
+namespace Controller {
+    public class BeaconController : MonoBehaviour {
         private GameObject player;
-        private const float minDistance = 7;
+        private const float minDistance = 6;
 
-        public void Start()
-        {
+        public void Start() {
             player = GameObject.Find("Player");
         }
 
-        public void OnMouseOver()
-        {
+        public void OnMouseOver() {
             float dist = Vector3.Distance(player.transform.position, transform.position);
-            if (dist < minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Playing)
-            {
+            if (dist < minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Playing) {
                 GameManager.Instance().uiStore.Dispatch(new OpenBeaconMouseUI());
-            }
-            else if (dist > minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.BeaconMouse)
-            {
+            }  else if (dist > minDistance && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.BeaconMouse) {
                 GameManager.Instance().uiStore.Dispatch(new CloseUI());
             }
         }
 
-        public void OnMouseExit()
-        {
-            if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.BeaconMouse)
-            {
+        public void OnMouseExit() {
+            if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.BeaconMouse) {
                 GameManager.Instance().uiStore.Dispatch(new CloseUI());
             }
         }

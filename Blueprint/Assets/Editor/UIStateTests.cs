@@ -188,16 +188,14 @@ namespace Tests {
         }
 
         [Test]
-        public void TestOpenBeaconMouseUI()
-        {
+        public void TestOpenBeaconMouseUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenBeaconMouseUI());
             Assert.That(gameManager.uiStore.GetState().Selected, Is.EqualTo(UIState.OpenUI.BeaconMouse));
         }
 
         [Test]
-        public void TestCloseBeaconMouseUI()
-        {
+        public void TestCloseBeaconMouseUI() {
             gameManager.uiStore.Dispatch(new OpenPlayingUI());
             gameManager.uiStore.Dispatch(new OpenBeaconMouseUI());
             gameManager.uiStore.Dispatch(new CloseUI());

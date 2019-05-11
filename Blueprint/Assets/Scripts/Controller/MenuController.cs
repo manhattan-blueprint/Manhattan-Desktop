@@ -116,8 +116,13 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetMouseButtonDown(rightButton)) {
-                if (rmb.enabled && GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.GateMouse) {
-                    GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
+                if (rmb.enabled) {
+                    UIState.OpenUI state = GameManager.Instance().uiStore.GetState().Selected;
+                    if (state == UIState.OpenUI.GateMouse) {
+                        GameManager.Instance().uiStore.Dispatch(new OpenGateUI());
+                    } else if (state == UIState.OpenUI.BeaconMouse) {
+                        GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
+                    }
                 }
             }
         }

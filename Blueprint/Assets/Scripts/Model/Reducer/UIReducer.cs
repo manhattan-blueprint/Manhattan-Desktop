@@ -143,11 +143,9 @@ namespace Model.Reducer {
             }
         }
 
-        public void visit(OpenBeaconMouseUI mouse)
-        {
+        public void visit(OpenBeaconMouseUI mouse) {
             UIState.OpenUI current = state.Selected;
-            switch (current)
-            {
+            switch (current) {
                 case UIState.OpenUI.Playing:
                     state.Selected = UIState.OpenUI.BeaconMouse;
                     break;
