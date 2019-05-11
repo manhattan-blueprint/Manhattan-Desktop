@@ -5,6 +5,7 @@ using System.Linq;
 using Model;
 using Model.Redux;
 using Model.State;
+using View;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -20,6 +21,7 @@ namespace Controller {
         private Dictionary<Vector2, GameObject> grid;
         private Dictionary<Vector2, GameObject> objectsPlaced;
         private List<GameObject> wires;
+        private SoundController soundController;
         
         private void Start() {
             this.grid = new Dictionary<Vector2, GameObject>();
@@ -29,28 +31,36 @@ namespace Controller {
             
             GameManager.Instance().mapStore.Subscribe(this);
             GameManager.Instance().machineStore.Subscribe(this);
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         }
         
         private void drawMap() {
             GameObject hexTile = Resources.Load("hex_cell") as GameObject;
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
-            // Draw origin hexagon
+            // Draw origin hexagon without placeable script
             GameObject cell = Instantiate(hexTile, new Vector3(0, -0.5f, 0), rotation);
             cell.transform.parent = this.gameObject.transform;
             Vector2 position = new Vector2(0, 0);
-            cell.AddComponent<HexCell>().SetPosition(position);
-            
+            cell.GetComponentInChildren<Highlight>().enabled = false;
             grid.Add(position, cell);
           
             
             for (int l = 1; l < gridSize; l++) {
                 // Move to correct layer, top left of origin
                 
+                // Not allowed to place on layers 1 or 2
+                bool shouldBePlaceable = !(l == 1 || l == 2);
+                
                 cell = Instantiate(hexTile, new Vector3(l * - (float) Math.Sqrt(3) / 2, -0.5f, l * 1.5f), rotation);
                 position = new Vector2(-l, l);
                 cell.transform.parent = this.gameObject.transform;
-                cell.AddComponent<HexCell>().SetPosition(position);
+                if (shouldBePlaceable) {
+                    cell.AddComponent<HexCell>().SetPosition(position);
+                } else {
+                    cell.GetComponentInChildren<Highlight>().enabled = false;
+                }
+
                 grid.Add(position, cell);
                 
                 setPreviousCoords(cell);
@@ -59,7 +69,11 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3), -0.5f, previousZ), rotation);
                     position = new Vector2(-l + i, l);
-                    cell.AddComponent<HexCell>().SetPosition(position);
+                    if (shouldBePlaceable) {
+                        cell.AddComponent<HexCell>().SetPosition(position);
+                    } else {
+                        cell.GetComponentInChildren<Highlight>().enabled = false;
+                    }
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -69,7 +83,11 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(i, l-i);
-                    cell.AddComponent<HexCell>().SetPosition(position);
+                    if (shouldBePlaceable) {
+                        cell.AddComponent<HexCell>().SetPosition(position);
+                    } else {
+                        cell.GetComponentInChildren<Highlight>().enabled = false;
+                    }
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -79,7 +97,11 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ - i * 1.5f), rotation);
                     position = new Vector2(l, -i);
-                    cell.AddComponent<HexCell>().SetPosition(position);
+                    if (shouldBePlaceable) {
+                        cell.AddComponent<HexCell>().SetPosition(position);
+                    } else {
+                        cell.GetComponentInChildren<Highlight>().enabled = false;
+                    }
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -89,7 +111,11 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3), -0.5f, previousZ), rotation);
                     position = new Vector2(l-i, -l);
-                    cell.AddComponent<HexCell>().SetPosition(position);
+                    if (shouldBePlaceable) {
+                        cell.AddComponent<HexCell>().SetPosition(position);
+                    } else {
+                        cell.GetComponentInChildren<Highlight>().enabled = false;
+                    }
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -99,7 +125,11 @@ namespace Controller {
                 for (int i = 1; i < l + 1; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX - i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-i, -l + i);
-                    cell.AddComponent<HexCell>().SetPosition(position);
+                    if (shouldBePlaceable) {
+                        cell.AddComponent<HexCell>().SetPosition(position);
+                    } else {
+                        cell.GetComponentInChildren<Highlight>().enabled = false;
+                    }
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -109,7 +139,11 @@ namespace Controller {
                 for (int i = 1; i < l; i++) {
                     cell = Instantiate(hexTile, new Vector3(previousX + i * (float) Math.Sqrt(3) / 2, -0.5f, previousZ + i * 1.5f), rotation);
                     position = new Vector2(-l, i);
-                    cell.AddComponent<HexCell>().SetPosition(position);
+                    if (shouldBePlaceable) {
+                        cell.AddComponent<HexCell>().SetPosition(position);
+                    } else {
+                        cell.GetComponentInChildren<Highlight>().enabled = false;
+                    }
                     cell.transform.parent = this.gameObject.transform;
                     grid.Add(position, cell);
                 }
@@ -154,10 +188,16 @@ namespace Controller {
                 GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, mapObject.GetRotation(), 0));
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
+
+                // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
+                if (inNewNotInOld.Count == 1) {
+                    soundController.PlayPlacementSound(mapObject.GetID());
+                }
             }
 	
             // Remove things in old but not in new
-            foreach (Vector3 oldObject in inOldNotInNew) {
+            foreach (Vector2 oldObject in inOldNotInNew) {
+
                 Destroy(objectsPlaced[oldObject]);
                 objectsPlaced.Remove(oldObject);
             }
@@ -191,21 +231,22 @@ namespace Controller {
             foreach (KeyValuePair<Vector2, Machine> kvp in GameManager.Instance().machineStore.GetState().grid) {
                 if (!objectsPlaced.ContainsKey(kvp.Key)) continue;
                 
+                // Handle light.
                 Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
                 foreach (Light light in lights) {
-                    AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
-                    if (kvp.Value.HasFuel()) {
-                        light.intensity = 20;
-                        if (!audioSource.isPlaying)
-                            audioSource.Play();
-                    }
-                    else {
-                        light.intensity = 0;
-                        if (audioSource.isPlaying)
-                            audioSource.Stop();
-                    }
+                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
                 }
 
+                // Handle sound.
+                AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
+                if (kvp.Value.HasFuel() && !audioSource.isPlaying) {
+                    audioSource.Play();
+                }
+                else if (!kvp.Value.HasFuel() && audioSource.isPlaying) {
+                    audioSource.Stop();
+                }
+
+                // Handle particle effects.
                 ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();
                 foreach (ParticleSystem system in particleSystems) {
                     if (kvp.Value.HasFuel()) {
