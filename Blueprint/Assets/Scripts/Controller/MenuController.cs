@@ -207,8 +207,6 @@ namespace Controller {
         
         private void OpenBindingsIntro() {
             Time.timeScale = 0;
-            CanvasRenderer bindingsRenderer = bindingsCanvas.GetComponentInChildren<CanvasRenderer>();
-            bindingsRenderer.SetAlpha(0);
             bindingsCanvas.enabled = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
