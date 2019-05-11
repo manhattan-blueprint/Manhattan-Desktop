@@ -207,7 +207,8 @@ namespace Controller {
         }
 
         public void PlayButtonPressSound() {
-            soundSource.PlayOneShot(buttonPress[random.Next(buttonPress.Count)]);
+            if (buttonPress != null && random != null)
+                soundSource.PlayOneShot(buttonPress[random.Next(buttonPress.Count)]);
         }
 
         public void PlayChopSound() {
@@ -335,6 +336,43 @@ namespace Controller {
                 default: PlayMineSound(); break;
             }
         }
+        
+        public void PlayPickupSound(int inpID) {
+            switch (inpID) {
+                case 1: PlayChopSound(); break;
+                case 2: PlayMineSound(); break;
+                case 3: PlayShovelSound(); break;
+                case 4: PlayMineSound(); break;
+                case 5: PlayMineSound(); break;
+                case 6: PlayDripSound(); break;
+                case 7: PlayMineSound(); break;
+                case 8: PlayShovelSound(); break;
+                case 9: PlayMineSound(); break;
+                case 10: PlayMineSound(); break;
+                case 11: PlayMachinePickupSound(); break;
+                case 12: PlayShovelSound(); break;
+                case 13: PlayMineSound(); break;
+                case 14: PlayMineSound(); break;
+                case 15: PlayMineSound(); break;
+                case 16: PlayMineSound(); break;
+                case 17: PlayMachinePickupSound(); break;
+                case 18: PlayMachinePickupSound(); break;
+                case 19: PlayMachinePickupSound(); break;
+                case 20: PlayMachinePickupSound(); break;
+                case 21: PlayMachinePickupSound(); break;
+                case 22: PlayMachinePickupSound(); break;
+                case 23: PlayMachinePickupSound(); break;
+                case 24: PlayMachinePickupSound(); break;
+                case 25: PlayMachinePickupSound(); break;
+                case 26: PlayMachinePickupSound(); break;
+                case 27: PlayMachinePickupSound(); break;
+                case 28: PlayMachinePickupSound(); break;
+                case 29: PlayMachinePickupSound(); break;
+                case 30: PlayMachinePickupSound(); break;
+                case 31: PlayMachinePickupSound(); break;
+                default: PlayMineSound(); break;
+            }
+        }
 
         public void PlayBirdsSound() {
             ambientSource.Stop();
@@ -344,8 +382,12 @@ namespace Controller {
 
         public void PlayMenuSound() {
             musicSource.Stop();
-            musicSource.clip = mainMenu;
+            musicSource.clip = mainMenuMusic;
             musicSource.Play();
+        }
+
+        public void PlaySignalSent() {
+            soundSource.PlayOneShot(signalSent);
         }
 
         public void PlayAfterDelay(string functionName, float delay) {

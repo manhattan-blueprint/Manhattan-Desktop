@@ -88,7 +88,6 @@ namespace Controller {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
                 if (!inventoryCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenInventoryUI());
-                    Debug.Log("Playing open inventory sound");
                 } else if (inventoryCanvas.enabled) {
                     soundController.PlayBagOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
@@ -167,7 +166,6 @@ namespace Controller {
             soundController.PlayButtonPressSound();
             blueprintTemplateCanvas.enabled = true;
             blueprintCanvas.enabled = false;
-            soundController.PlayButtonPressSound();
         }
 
         private void OpenMachine() {
@@ -206,7 +204,6 @@ namespace Controller {
         }
         
         private void OpenBindingsIntro() {
-            soundController.PlayButtonPressSound();
             Time.timeScale = 0;
             bindingsCanvas.enabled = true;
             Cursor.lockState = CursorLockMode.None;

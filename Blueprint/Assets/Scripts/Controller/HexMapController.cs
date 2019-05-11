@@ -165,13 +165,7 @@ namespace Controller {
             }
 	
             // Remove things in old but not in new
-            foreach (Vector3 oldObject in inOldNotInNew) {
-
-                // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
-                if (inOldNotInNew.Count == 1) {
-                    soundController.PlayPlacementSound(state.GetObjects()[oldObject].GetID());
-                    Debug.Log("Playing remove item sound");
-                }
+            foreach (Vector2 oldObject in inOldNotInNew) {
 
                 Destroy(objectsPlaced[oldObject]);
                 objectsPlaced.Remove(oldObject);
