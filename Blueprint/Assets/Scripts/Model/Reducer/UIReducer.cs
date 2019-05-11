@@ -193,7 +193,6 @@ namespace Model.Reducer {
             // Update if exists or add new
             UIState.OpenUI current = state.Selected;
             switch (current) {
-                // case UIState.OpenUI.Playing:????
                 case UIState.OpenUI.BeaconMouse:
                     state.Selected = UIState.OpenUI.Goal;
                     break;

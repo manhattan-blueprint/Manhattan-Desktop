@@ -85,10 +85,8 @@ namespace Model.Action {
         }
     }
 
-    public class OpenBeaconMouseUI : UIAction
-    {
-        public override void Accept(UIVisitor visitor)
-        {
+    public class OpenBeaconMouseUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
