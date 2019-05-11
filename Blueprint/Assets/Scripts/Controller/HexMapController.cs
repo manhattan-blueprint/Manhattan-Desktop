@@ -199,21 +199,22 @@ namespace Controller {
             foreach (KeyValuePair<Vector2, Machine> kvp in GameManager.Instance().machineStore.GetState().grid) {
                 if (!objectsPlaced.ContainsKey(kvp.Key)) continue;
                 
+                // Handle light.
                 Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
                 foreach (Light light in lights) {
-                    AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
-                    if (kvp.Value.HasFuel()) {
-                        light.intensity = 20;
-                        if (!audioSource.isPlaying)
-                            audioSource.Play();
-                    }
-                    else {
-                        light.intensity = 0;
-                        if (audioSource.isPlaying)
-                            audioSource.Stop();
-                    }
+                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
                 }
 
+                // Handle sound.
+                AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
+                if (kvp.Value.HasFuel() && !audioSource.isPlaying) {
+                    audioSource.Play();
+                }
+                else if (!kvp.Value.HasFuel() && audioSource.isPlaying) {
+                    audioSource.Stop();
+                }
+
+                // Handle particle effects.
                 ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();
                 foreach (ParticleSystem system in particleSystems) {
                     if (kvp.Value.HasFuel()) {
