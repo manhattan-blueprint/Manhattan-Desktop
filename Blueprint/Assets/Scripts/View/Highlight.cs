@@ -22,13 +22,13 @@ namespace View {
         }
 
         void OnMouseEnter() {
-            if (!paused) {
+            if (!paused && enabled) {
               rend.material.color = highlightColor;
             }
         }
 
         void OnMouseExit() {
-            if (!paused) {
+            if (!paused && enabled) {
               rend.material.color = initialColor;
             }
         }
