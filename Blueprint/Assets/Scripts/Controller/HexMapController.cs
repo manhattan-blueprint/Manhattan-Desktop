@@ -160,7 +160,6 @@ namespace Controller {
                 // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
                 if (inNewNotInOld.Count == 1) {
                     soundController.PlayPlacementSound(mapObject.GetID());
-                    Debug.Log("Playing place item sound");
                 }
             }
 	

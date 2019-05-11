@@ -156,6 +156,8 @@ namespace Controller {
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps19"));
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps20"));
 
+            signalSent = Resources.Load<AudioClip>("Sounds/SignalSent");
+
             birdsLooping = Resources.Load<AudioClip>("Sounds/Ambient/BirdsLooping");
 
             blueprintCollecting = Resources.Load<AudioClip>("Sounds/Music/BlueprintCollecting");
@@ -301,6 +303,7 @@ namespace Controller {
         }
         
         public void PlayPlacementSound(int inpID) {
+            Debug.Log("Playing place sound with id " + inpID);
             switch (inpID) {
                 case 1: PlayChopSound(); break;
                 case 2: PlayMineSound(); break;
@@ -333,11 +336,12 @@ namespace Controller {
                 case 29: PlayMachinePlacementSound(); break;
                 case 30: PlayMachinePlacementSound(); break;
                 case 31: PlayMachinePlacementSound(); break;
-                default: PlayMineSound(); break;
+                default: PlayMachinePlacementSound(); break;
             }
         }
         
         public void PlayPickupSound(int inpID) {
+            Debug.Log("Playing pick up sound with id " + inpID);
             switch (inpID) {
                 case 1: PlayChopSound(); break;
                 case 2: PlayMineSound(); break;
@@ -370,7 +374,7 @@ namespace Controller {
                 case 29: PlayMachinePickupSound(); break;
                 case 30: PlayMachinePickupSound(); break;
                 case 31: PlayMachinePickupSound(); break;
-                default: PlayMineSound(); break;
+                default: PlayMachinePickupSound(); break;
             }
         }
 

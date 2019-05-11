@@ -105,6 +105,7 @@ namespace Controller {
                 } else if (!pauseCanvas.enabled) {
                     GameManager.Instance().uiStore.Dispatch(new OpenSettingsUI());
                 } else {
+                    soundController.PlayButtonPressSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Blueprint)) {
@@ -220,7 +221,6 @@ namespace Controller {
 
         // Playing state
         private void ContinueGame() {
-            soundController.PlayButtonPressSound();
             Time.timeScale = 1;
             inventoryCanvas.enabled = false;
             Cursor.lockState = CursorLockMode.Locked;
