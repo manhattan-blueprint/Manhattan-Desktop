@@ -45,6 +45,8 @@ namespace Model.Reducer {
                         if (neighbourID == 25 && placeItem.itemID == 25) continue;
                         // If machine and machine, don't connect
                         if (item.isMachine() && neighbour.isMachine()) continue;
+                        // If solar and machine or machine & solar, don't connect
+                        if (neighbourID == 25 && item.isMachine() || neighbour.isMachine() && placeItem.itemID == 25) continue;
                         
                         // If solar, wire or electricity powered machine, continue
                         if (neighbourID == 25 || neighbourID == 22 || (neighbour.isMachine() && neighbour.isPoweredByElectricity())) {
@@ -54,17 +56,20 @@ namespace Model.Reducer {
                 }
 
                 // Play sound relative to the object being placed.
-                soundController.PlayPlacementSound(placeItem.itemID);
+                // TODO: FIX ME - THIS CANNOT BE HERE
+                // soundController.PlayPlacementSound(placeItem.itemID);
 
                 GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
             }
         }
 
         public void visit(CollectItem collectItem) {
-            if (soundController == null)
-                soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+            // TODO: FIX ME - THIS CANNOT BE HERE
+            // if (soundController == null) {
+            //    soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+            // }
 
-            if (state.GetObjects().ContainsKey(collectItem.position)) {
+        if (state.GetObjects().ContainsKey(collectItem.position)) {
                 MapObject obj = state.GetObjects()[collectItem.position];
                
                 state.RemoveObject(collectItem.position);
@@ -72,15 +77,17 @@ namespace Model.Reducer {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(obj.GetID(), 1));
                 GameManager.Instance().machineStore.Dispatch(new UpdateConnected());
 
+              
+                // TODO: FIX ME - THIS CANNOT BE HERE
                 // Play sound relative to the object being picked up.
-                soundController.PlayPlacementSound(obj.GetID());
+                // soundController.PlayPlacementSound(obj.GetID());
             }
         }
 
         public void visit(RotateItem rotateItem) {
             if (state.getObjects().ContainsKey(rotateItem.position)) {
                 state.RotateObject(rotateItem.position);
-                soundController.PlayButtonPressSound();
+                // soundController.PlayButtonPressSound();
             }
         }
       
