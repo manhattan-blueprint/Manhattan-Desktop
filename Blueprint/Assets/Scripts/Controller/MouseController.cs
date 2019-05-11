@@ -29,11 +29,13 @@ namespace Controller {
         private HexMapController hexMapController;
         private GameObject drop;
         private bool holdInitiated;
+        private SoundController soundController;
 
         void Start() {
             hexMapController = GameObject.FindGameObjectWithTag("Map").GetComponent<HexMapController>();
             timer = 0.0f;
             holdInitiated = false;
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         }
 
         void Update() {
@@ -101,6 +103,9 @@ namespace Controller {
                 if (p == null) return;
                 HexCell hc = p.transform.parent.gameObject.GetComponent<HexCell>();
                 if (hc == null) return;
+
+                // Play sound corresponding to item
+                soundController.PlayPickupSound(GameManager.Instance().mapStore.GetState().GetObjects()[hc.GetPosition()].GetID());
 
                 GameManager.Instance().mapStore.Dispatch(new CollectItem(hc.GetPosition()));
                 holdInitiated = false;

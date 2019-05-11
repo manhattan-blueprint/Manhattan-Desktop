@@ -13,39 +13,55 @@ namespace Controller {
 
         // Keeping track of player position for footsteps.
         public GameObject player;
-
-        public bool isMenu;
-
         private Vector3 playerLastPos;
         private Vector3 playerCurrentPos;
         private float playerTotalDistance;
         private float playerTotalTime;
         private float playerLastStep;
+        private bool whichFoot;
 
         // UI related sounds.
-        private List<AudioClip> blueprintOpening = new List<AudioClip>();
-        private List<AudioClip> bagOpening = new List<AudioClip>();
-        private List<AudioClip> buttonPress = new List<AudioClip>();
+        private List<AudioClip> blueprintOpening;
+        private List<AudioClip> bagOpening;
+        private List<AudioClip> buttonPress;
 
         // Resource collection sounds.
-        private List<AudioClip> chop = new List<AudioClip>();
-        private List<AudioClip> shovel = new List<AudioClip>();
-        private List<AudioClip> mine = new List<AudioClip>();
-        private List<AudioClip> drip = new List<AudioClip>();
+        private List<AudioClip> chop;
+        private List<AudioClip> shovel;
+        private List<AudioClip> mine;
+        private List<AudioClip> drip;
+        private List<AudioClip> hammer;
+        private AudioClip machinePickUp;
+        private AudioClip machinePlace;
 
         // Background noise/music.
-        private List<AudioClip> footsteps = new List<AudioClip>();
+        private List<AudioClip> footsteps;
         private AudioClip birdsLooping;
         private AudioClip blueprintCollecting;
         private AudioClip mapView;
-        private AudioClip buildingEnvironment;
+        private AudioClip buildingEnvironment1;
+        private AudioClip buildingEnvironment2;
         private AudioClip introMusic;
         private AudioClip outroMusic;
+        private AudioClip mainMenuMusic;
+
+        // Other.
+        private AudioClip signalSent;
         private System.Random random;
-        private bool whichFoot;
+        public bool isMenu;
 
 
         void Start() {
+            blueprintOpening = new List<AudioClip>();
+            bagOpening = new List<AudioClip>();
+            buttonPress = new List<AudioClip>();
+            chop = new List<AudioClip>();
+            shovel = new List<AudioClip>();
+            mine = new List<AudioClip>();
+            drip = new List<AudioClip>();
+            hammer = new List<AudioClip>();
+            footsteps = new List<AudioClip>();
+
             random = new System.Random();
             musicSource.loop = true;
 
@@ -107,6 +123,18 @@ namespace Controller {
             drip.Add(Resources.Load<AudioClip>("Sounds/LiquidDripping/LiquidDripping6"));
             drip.Add(Resources.Load<AudioClip>("Sounds/LiquidDripping/LiquidDripping7"));
 
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer1"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer2"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer3"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer4"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer5"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer6"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer7"));
+            hammer.Add(Resources.Load<AudioClip>("Sounds/Hammer/Hammer8"));
+
+            machinePickUp = Resources.Load<AudioClip>("Sounds/MachinePlace/PickUp");
+            machinePlace = Resources.Load<AudioClip>("Sounds/MachinePlace/Place");
+
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps1"));
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps2"));
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps3"));
@@ -128,17 +156,15 @@ namespace Controller {
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps19"));
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps20"));
 
+            signalSent = Resources.Load<AudioClip>("Sounds/SignalSent");
             birdsLooping = Resources.Load<AudioClip>("Sounds/Ambient/BirdsLooping");
-
             blueprintCollecting = Resources.Load<AudioClip>("Sounds/Music/BlueprintCollecting");
-
             mapView = Resources.Load<AudioClip>("Sounds/Music/MapView");
-
-            buildingEnvironment = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment");
-
+            buildingEnvironment1 = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment1");
+            buildingEnvironment2 = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment2");
             introMusic = Resources.Load<AudioClip>("Sounds/Music/IntroMusic");
-
             outroMusic = Resources.Load<AudioClip>("Sounds/Music/OutroMusic");
+            mainMenuMusic = Resources.Load<AudioClip>("Sounds/Music/MainMenu");
 
             if (isMenu)
                 PlayMenuSound();
@@ -175,7 +201,8 @@ namespace Controller {
         }
 
         public void PlayButtonPressSound() {
-            soundSource.PlayOneShot(buttonPress[random.Next(buttonPress.Count)]);
+            if (buttonPress != null && random != null)
+                soundSource.PlayOneShot(buttonPress[random.Next(buttonPress.Count)]);
         }
 
         public void PlayChopSound() {
@@ -194,8 +221,16 @@ namespace Controller {
             soundSource.PlayOneShot(drip[random.Next(drip.Count)]);
         }
 
+        public void PlayHammerSound() {
+            soundSource.PlayOneShot(hammer[random.Next(drip.Count)]);
+        }
+
         public void PlayMachinePlacementSound() {
-            soundSource.PlayOneShot(drip[random.Next(drip.Count)]);
+            soundSource.PlayOneShot(machinePlace);
+        }
+
+        public void PlayMachinePickupSound() {
+            soundSource.PlayOneShot(machinePickUp);
         }
 
         public void PlayStepsSound() {
@@ -243,7 +278,7 @@ namespace Controller {
 
         public void PlayBuildingEnvironmentMusic() {
             musicSource.Stop();
-            musicSource.clip = buildingEnvironment;
+            musicSource.clip = UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f ? buildingEnvironment1 : buildingEnvironment2;
             musicSource.Play();
         }
 
@@ -260,6 +295,7 @@ namespace Controller {
         }
         
         public void PlayPlacementSound(int inpID) {
+            Debug.Log("Playing place sound with id " + inpID);
             switch (inpID) {
                 case 1: PlayChopSound(); break;
                 case 2: PlayMineSound(); break;
@@ -292,7 +328,45 @@ namespace Controller {
                 case 29: PlayMachinePlacementSound(); break;
                 case 30: PlayMachinePlacementSound(); break;
                 case 31: PlayMachinePlacementSound(); break;
-                default: PlayMineSound(); break;
+                default: PlayMachinePlacementSound(); break;
+            }
+        }
+        
+        public void PlayPickupSound(int inpID) {
+            Debug.Log("Playing pick up sound with id " + inpID);
+            switch (inpID) {
+                case 1: PlayChopSound(); break;
+                case 2: PlayMineSound(); break;
+                case 3: PlayShovelSound(); break;
+                case 4: PlayMineSound(); break;
+                case 5: PlayMineSound(); break;
+                case 6: PlayDripSound(); break;
+                case 7: PlayMineSound(); break;
+                case 8: PlayShovelSound(); break;
+                case 9: PlayMineSound(); break;
+                case 10: PlayMineSound(); break;
+                case 11: PlayMachinePickupSound(); break;
+                case 12: PlayShovelSound(); break;
+                case 13: PlayMineSound(); break;
+                case 14: PlayMineSound(); break;
+                case 15: PlayMineSound(); break;
+                case 16: PlayMineSound(); break;
+                case 17: PlayMachinePickupSound(); break;
+                case 18: PlayMachinePickupSound(); break;
+                case 19: PlayMachinePickupSound(); break;
+                case 20: PlayMachinePickupSound(); break;
+                case 21: PlayMachinePickupSound(); break;
+                case 22: PlayMachinePickupSound(); break;
+                case 23: PlayMachinePickupSound(); break;
+                case 24: PlayMachinePickupSound(); break;
+                case 25: PlayMachinePickupSound(); break;
+                case 26: PlayMachinePickupSound(); break;
+                case 27: PlayMachinePickupSound(); break;
+                case 28: PlayMachinePickupSound(); break;
+                case 29: PlayMachinePickupSound(); break;
+                case 30: PlayMachinePickupSound(); break;
+                case 31: PlayMachinePickupSound(); break;
+                default: PlayMachinePickupSound(); break;
             }
         }
 
@@ -304,8 +378,12 @@ namespace Controller {
 
         public void PlayMenuSound() {
             musicSource.Stop();
-            musicSource.clip = birdsLooping;
+            musicSource.clip = mainMenuMusic;
             musicSource.Play();
+        }
+
+        public void PlaySignalSent() {
+            soundSource.PlayOneShot(signalSent);
         }
 
         public void PlayAfterDelay(string functionName, float delay) {

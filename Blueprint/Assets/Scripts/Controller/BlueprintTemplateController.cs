@@ -74,10 +74,12 @@ namespace Controller {
         
         // Developer box UI elements
         [SerializeField] private TextMeshProUGUI developerName;
+        private SoundController soundController;
 
         void Start() {
             GameManager.Instance().uiStore.Subscribe(this);
             GameManager.Instance().inventoryStore.Subscribe(this);
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         }
 
         public void StateDidUpdate(UIState state) {
@@ -212,6 +214,7 @@ namespace Controller {
 
         // Craft a blueprint, quantities validated in updateComponents
         public void onCraftClick() {
+            soundController.PlayMachinePlacementSound();
             string name = GameManager.Instance().sm.GameObjs.items
                 .Find(x => x.item_id == currentSI.item_id)
                 .name;

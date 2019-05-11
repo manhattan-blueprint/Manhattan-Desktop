@@ -25,6 +25,7 @@ namespace Controller {
         private GameObject dishHolder3;
         private bool transmitterPlaced;
         private Goal goal;
+        private SoundController soundController;
 
         void Start() {
             ScreenProportions sp = GameObject.Find("ScreenProportions").GetComponent<ScreenProportions>();
@@ -50,6 +51,8 @@ namespace Controller {
             HideDish();
             HideAntenna();
             HideTransmitter();
+
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
 
             GameManager.Instance().mapStore.Subscribe(this);
         }
@@ -110,6 +113,7 @@ namespace Controller {
             dishHolder2.GetComponent<MeshRenderer>().enabled = true;
             dishHolder3.GetComponent<MeshRenderer>().enabled = true;
             SetSlotActive("MidSlot");
+            soundController.PlayMachinePlacementSound();
         }
 
         public void ActivateAntenna() {
@@ -120,10 +124,12 @@ namespace Controller {
             antenna5.GetComponent<MeshRenderer>().enabled = true;
             antenna6.GetComponent<MeshRenderer>().enabled = true;
             SetSlotActive("BotSlot");
+            soundController.PlayMachinePlacementSound();
         }
 
         public void ActivateTransmitter() {
             transmitterPlaced = true;
+            soundController.PlayMachinePlacementSound();
         }
 
         // Finds an object by name, sets its alpha low.
@@ -148,8 +154,8 @@ namespace Controller {
         private IEnumerator SpinDish() {
             float spinSpeed = 0.0f;
 
-            SoundController soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
             soundController.PlayOutroMusic();
+            soundController.PlaySignalSent();
 
             ManhattanAnimation animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
 

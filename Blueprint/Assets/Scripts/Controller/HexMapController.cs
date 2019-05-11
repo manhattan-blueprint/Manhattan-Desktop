@@ -21,6 +21,7 @@ namespace Controller {
         private Dictionary<Vector2, GameObject> grid;
         private Dictionary<Vector2, GameObject> objectsPlaced;
         private List<GameObject> wires;
+        private SoundController soundController;
         
         private void Start() {
             this.grid = new Dictionary<Vector2, GameObject>();
@@ -30,6 +31,7 @@ namespace Controller {
             
             GameManager.Instance().mapStore.Subscribe(this);
             GameManager.Instance().machineStore.Subscribe(this);
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
         }
         
         private void drawMap() {
@@ -186,10 +188,16 @@ namespace Controller {
                 GameObject obj = Instantiate(original, pos, Quaternion.Euler(0, mapObject.GetRotation(), 0));
                 objectsPlaced.Add(newObjectPosition, obj);
                 obj.transform.parent = parent.transform;
+
+                // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
+                if (inNewNotInOld.Count == 1) {
+                    soundController.PlayPlacementSound(mapObject.GetID());
+                }
             }
 	
             // Remove things in old but not in new
-            foreach (Vector3 oldObject in inOldNotInNew) {
+            foreach (Vector2 oldObject in inOldNotInNew) {
+
                 Destroy(objectsPlaced[oldObject]);
                 objectsPlaced.Remove(oldObject);
             }
@@ -223,21 +231,22 @@ namespace Controller {
             foreach (KeyValuePair<Vector2, Machine> kvp in GameManager.Instance().machineStore.GetState().grid) {
                 if (!objectsPlaced.ContainsKey(kvp.Key)) continue;
                 
+                // Handle light.
                 Light[] lights = objectsPlaced[kvp.Key].GetComponentsInChildren<Light>();
                 foreach (Light light in lights) {
-                    AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
-                    if (kvp.Value.HasFuel()) {
-                        light.intensity = 20;
-                        if (!audioSource.isPlaying)
-                            audioSource.Play();
-                    }
-                    else {
-                        light.intensity = 0;
-                        if (audioSource.isPlaying)
-                            audioSource.Stop();
-                    }
+                    light.intensity = kvp.Value.HasFuel() ? 20 : 0;
                 }
 
+                // Handle sound.
+                AudioSource audioSource = objectsPlaced[kvp.Key].GetComponent<AudioSource>();
+                if (kvp.Value.HasFuel() && !audioSource.isPlaying) {
+                    audioSource.Play();
+                }
+                else if (!kvp.Value.HasFuel() && audioSource.isPlaying) {
+                    audioSource.Stop();
+                }
+
+                // Handle particle effects.
                 ParticleSystem[] particleSystems = objectsPlaced[kvp.Key].GetComponentsInChildren<ParticleSystem>();
                 foreach (ParticleSystem system in particleSystems) {
                     if (kvp.Value.HasFuel()) {
