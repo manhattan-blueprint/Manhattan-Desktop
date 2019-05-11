@@ -16,7 +16,8 @@ namespace Model.State {
             Logout,
             Bindings,
             Gate,
-            Mouse,
+            GateMouse,
+            BeaconMouse,
             Intro,
         };
 
