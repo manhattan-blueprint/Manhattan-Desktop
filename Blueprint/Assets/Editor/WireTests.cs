@@ -50,7 +50,7 @@ namespace Tests {
             GameManager.Instance().mapStore.Dispatch(new PlaceItem(machineLocation, 26)); 
             GameManager.Instance().mapStore.Dispatch(new PlaceItem(solarLocation, 25));
 
-            Assert.True(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
+            Assert.False(GameManager.Instance().machineStore.GetState().grid[machineLocation].HasFuel());
         }
 
         [Test]

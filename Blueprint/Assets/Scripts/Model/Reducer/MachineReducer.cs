@@ -177,7 +177,7 @@ namespace Model.Reducer {
         }
 
 
-        private bool isConnected(Vector2 location) {
+        private bool isConnected(Vector2 location, int depth = 0) {
             consideredConnected.Add(location);
             bool connected = false;
             foreach (Vector2 neighbour in location.HexNeighbours()) {
@@ -190,12 +190,16 @@ namespace Model.Reducer {
 
                 // If is a solar panel
                 if (neighbourID == 25) {
-                    return true;
-                } 
+                    if (depth > 0) {
+                        return true;
+                    }
+                    // If 0 depth, allow to be considered again
+                    consideredConnected.Remove(neighbour);
+                }
                 
                 // If is a wire 
                 if (neighbourID == 22) {
-                    connected = connected || isConnected(neighbour);
+                    connected = connected || isConnected(neighbour, depth + 1);
                 }
             }
 
