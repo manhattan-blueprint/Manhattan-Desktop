@@ -157,21 +157,13 @@ namespace Controller {
             footsteps.Add(Resources.Load<AudioClip>("Sounds/Steps/Steps20"));
 
             signalSent = Resources.Load<AudioClip>("Sounds/SignalSent");
-
             birdsLooping = Resources.Load<AudioClip>("Sounds/Ambient/BirdsLooping");
-
             blueprintCollecting = Resources.Load<AudioClip>("Sounds/Music/BlueprintCollecting");
-
             mapView = Resources.Load<AudioClip>("Sounds/Music/MapView");
-
             buildingEnvironment1 = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment1");
-
             buildingEnvironment2 = Resources.Load<AudioClip>("Sounds/Music/BuildingEnvironment2");
-
             introMusic = Resources.Load<AudioClip>("Sounds/Music/IntroMusic");
-
             outroMusic = Resources.Load<AudioClip>("Sounds/Music/OutroMusic");
-
             mainMenuMusic = Resources.Load<AudioClip>("Sounds/Music/MainMenu");
 
             if (isMenu)
