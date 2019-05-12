@@ -190,7 +190,7 @@ namespace Controller {
                 obj.transform.parent = parent.transform;
 
                 // Play sound corresponding to item. Require only 1 to prevent noise spam when loading
-                if (inNewNotInOld.Count == 1) {
+                if (inNewNotInOld.Count == 1 && soundController != null) {
                     soundController.PlayPlacementSound(mapObject.GetID());
                 }
             }

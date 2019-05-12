@@ -31,6 +31,10 @@ namespace Controller {
             backpackContents = new List<InventoryEntry>();
         }
 
+        private void subscribeToInventory() {
+            GameManager.Instance().inventoryStore.Subscribe(this);
+        }
+
         void Update() {
             if (firstUIUpdate) {
                 allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
@@ -39,11 +43,11 @@ namespace Controller {
                   itemSlots.Add(controller.getId(), controller);
                 }
 
-                // *MUST* subscribe *AFTER* finishing configuring the UI.
-                GameManager.Instance().inventoryStore.Subscribe(this);
-                GameManager.Instance().uiStore.Subscribe(this);
-
                 firstUIUpdate = false;
+
+                // *MUST* subscribe *AFTER* finishing configuring the UI.
+                GameManager.Instance().uiStore.Subscribe(this);
+                Invoke(nameof(subscribeToInventory), 5);
             }
         }
 
