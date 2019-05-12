@@ -24,11 +24,15 @@ namespace Controller {
         private bool firstUIUpdate;
         private List<InventoryEntry> backpackContents;
         private List<InventorySlotController> allSlots;
+        private float startTime;
+        private bool subscribed;
              
         public void Start() {
             firstUIUpdate = true;
             itemSlots = new Dictionary<int, InventorySlotController>();
             backpackContents = new List<InventoryEntry>();
+            startTime = Time.realtimeSinceStartup;
+            subscribed = false;
         }
 
         void Update() {
@@ -39,11 +43,15 @@ namespace Controller {
                   itemSlots.Add(controller.getId(), controller);
                 }
 
-                // *MUST* subscribe *AFTER* finishing configuring the UI.
-                GameManager.Instance().inventoryStore.Subscribe(this);
-                GameManager.Instance().uiStore.Subscribe(this);
-
                 firstUIUpdate = false;
+
+                // *MUST* subscribe *AFTER* finishing configuring the UI.
+                GameManager.Instance().uiStore.Subscribe(this);
+            }
+
+            if (!subscribed && Time.realtimeSinceStartup - startTime > 5.0f) {
+                GameManager.Instance().inventoryStore.Subscribe(this);
+                subscribed = true;
             }
         }
 
