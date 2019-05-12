@@ -24,8 +24,6 @@ namespace Controller {
         private bool firstUIUpdate;
         private List<InventoryEntry> backpackContents;
         private List<InventorySlotController> allSlots;
-        private float startTime;
-        private bool subscribed;
              
         public void Start() {
             firstUIUpdate = true;
