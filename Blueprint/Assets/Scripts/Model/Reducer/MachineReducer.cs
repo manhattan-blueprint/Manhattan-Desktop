@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.Serialization;
 using Model.Action;
 using Model.State;
 using UnityEngine;
@@ -142,24 +143,41 @@ namespace Model.Reducer {
             
             // Final boolean statement fixes decrementing two items of the same type
             bool shouldRemoveRight = machine.rightInput.IsPresent() &&
-                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null
-                                    && machine.leftInput.Get().GetId() != machine.rightInput.Get().GetId();
-           
+                                    product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null;
+
+            if (shouldRemoveLeft && shouldRemoveRight) {
+                if (machine.leftInput.Get().GetQuantity() >= machine.rightInput.Get().GetQuantity()) {
+                    shouldRemoveRight = false;
+                } else {
+                    shouldRemoveLeft = false;
+                }
+            }
+            
+            // Item to remove
+            RecipeElement itemToRemove = null;
+            if (shouldRemoveLeft) {
+                itemToRemove = product.Get().item.recipe.Find(recipe => recipe.item_id == machine.leftInput.Get().GetId());
+            } else if (shouldRemoveRight) {
+                itemToRemove = product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId());
+            }
+
             int maxQuantity = product.Get().maxQuantity;
             if (!GameManager.Instance().sm.GameObjs.items.Find(x => x.item_id == machine.id).isPoweredByElectricity()) {
                 maxQuantity = Math.Min(maxQuantity, machine.fuel.Get().GetQuantity());
             }
+
+            int reduceBy = maxQuantity * itemToRemove.quantity;
             
             if (shouldRemoveLeft) {
-                machine.leftInput.Get().SetQuantity(machine.leftInput.Get().GetQuantity() - maxQuantity);
+                machine.leftInput.Get().SetQuantity(machine.leftInput.Get().GetQuantity() - reduceBy);
                 if (machine.leftInput.Get().GetQuantity() == 0) machine.leftInput = Optional<InventoryItem>.Empty();
             }
             if (shouldRemoveRight) {
-                machine.rightInput.Get().SetQuantity(machine.rightInput.Get().GetQuantity() - maxQuantity);
+                machine.rightInput.Get().SetQuantity(machine.rightInput.Get().GetQuantity() - reduceBy);
                 if (machine.rightInput.Get().GetQuantity() == 0) machine.rightInput = Optional<InventoryItem>.Empty();
             }
             if (machine.fuel.IsPresent()) {
-                machine.fuel.Get().SetQuantity(machine.fuel.Get().GetQuantity() - maxQuantity);
+                machine.fuel.Get().SetQuantity(machine.fuel.Get().GetQuantity() - reduceBy);
                 if (machine.fuel.Get().GetQuantity() == 0) visit(new ClearFuel(consumeInputs.machineLocation));
             }
         }
