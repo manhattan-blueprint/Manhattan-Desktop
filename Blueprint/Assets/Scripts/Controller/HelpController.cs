@@ -75,7 +75,6 @@ namespace Controller {
                     helpTitle.text = "Collecting Resources";
                     ExitGroup.SetActive(true);
                     rightArrow.gameObject.SetActive(false);
-                    exit.gameObject.SetActive(true);
                     break;
                 default:
                     break;
@@ -117,7 +116,6 @@ namespace Controller {
                     helpTitle.text = "Blueprint Tree";
                     BlueprintGroup.SetActive(true);
                     rightArrow.gameObject.SetActive(true);
-                    exit.gameObject.SetActive(false);
                     break;
                 default:
                     break;
