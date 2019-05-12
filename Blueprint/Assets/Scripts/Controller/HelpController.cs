@@ -19,6 +19,8 @@ namespace Controller {
         [SerializeField] private GameObject MachinesGroup;
         [SerializeField] private GameObject BlueprintGroup;
         [SerializeField] private GameObject ExitGroup;
+        private SoundController soundController;
+        private HelpScreens currentScreen;
 
         enum HelpScreens {
             KeyBindings,
@@ -29,16 +31,9 @@ namespace Controller {
             Exit
         };
 
-        private HelpScreens currentScreen = HelpScreens.KeyBindings;
-
         void Start() {
-            leftArrow.gameObject.SetActive(false);
-            KeyBindingsGroup.SetActive(true);
-            InventoryGroup.SetActive(false);
-            PlacementGroup.SetActive(false);
-            MachinesGroup.SetActive(false);
-            BlueprintGroup.SetActive(false);
-            ExitGroup.SetActive(false);
+            soundController = GameObject.Find("SoundController").GetComponent<SoundController>();
+            SetFirstScreen();
         }
 
         void Update() {
@@ -46,6 +41,7 @@ namespace Controller {
         }
 
         public void NextScreen() {
+            soundController.PlayButtonPressSound();
             EventSystem.current.SetSelectedGameObject(null);
             switch (currentScreen) {
                 case HelpScreens.KeyBindings:
@@ -87,6 +83,7 @@ namespace Controller {
         }
 
         public void PreviousScreen() {
+            soundController.PlayButtonPressSound();
             EventSystem.current.SetSelectedGameObject(null);
             switch (currentScreen) {
                 case HelpScreens.Inventory:
@@ -125,6 +122,20 @@ namespace Controller {
                 default:
                     break;
             }
+        }
+
+        public void SetFirstScreen() {
+            currentScreen = HelpScreens.KeyBindings;
+            leftArrow.gameObject.SetActive(false);
+            KeyBindingsGroup.SetActive(true);
+            InventoryGroup.SetActive(false);
+            PlacementGroup.SetActive(false);
+            MachinesGroup.SetActive(false);
+            BlueprintGroup.SetActive(false);
+            ExitGroup.SetActive(false);
+            exit.gameObject.SetActive(false);
+            rightArrow.gameObject.SetActive(true);
+            leftArrow.gameObject.SetActive(false);
         }
     }
 }

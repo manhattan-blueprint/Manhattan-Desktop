@@ -124,6 +124,14 @@ namespace Controller {
                         GameManager.Instance().uiStore.Dispatch(new OpenGoalUI());
                     }
                 }
+            } else if (Input.GetKeyDown(KeyMapping.LeftArrow)) {
+                if (bindingsCanvas.enabled) {
+                    GameObject.Find("HelpCanvas").GetComponent<HelpController>().PreviousScreen();
+                }
+            } else if (Input.GetKeyDown(KeyMapping.RightArrow)) {
+                if (bindingsCanvas.enabled) {
+                    GameObject.Find("HelpCanvas").GetComponent<HelpController>().NextScreen();
+                }
             }
         }
 
@@ -200,6 +208,7 @@ namespace Controller {
 
         private void OpenBindings() {
             soundController.PlayButtonPressSound();
+            GameObject.Find("HelpCanvas").GetComponent<HelpController>().SetFirstScreen();
             Time.timeScale = 0;
             bindingsCanvas.enabled = true;
             pauseCanvas.enabled = false;
