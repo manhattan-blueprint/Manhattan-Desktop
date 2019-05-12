@@ -23,7 +23,8 @@ namespace Controller {
         private GameManager gameManager;
         private bool firstUIUpdate;
         private List<InventoryEntry> backpackContents;
-
+        private List<InventorySlotController> allSlots;
+             
         public void Start() {
             firstUIUpdate = true;
             itemSlots = new Dictionary<int, InventorySlotController>();
@@ -32,16 +33,17 @@ namespace Controller {
 
         void Update() {
             if (firstUIUpdate) {
-                List<InventorySlotController> allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+                allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
                 
                 foreach (InventorySlotController controller in allSlots) {
                   itemSlots.Add(controller.getId(), controller);
                 }
-                firstUIUpdate = false;
 
                 // *MUST* subscribe *AFTER* finishing configuring the UI.
                 GameManager.Instance().inventoryStore.Subscribe(this);
                 GameManager.Instance().uiStore.Subscribe(this);
+
+                firstUIUpdate = false;
             }
         }
 
@@ -51,7 +53,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(UIState state) {
-            if (state.Selected != UIState.OpenUI.Inventory) return;
+            if (state.Selected != UIState.OpenUI.Inventory || gameObject.name == "MachineInventoryCanvas") return;
             
             // If inventory UI opened, check how many things the user has in their backpack and populate UI
             StartCoroutine(BlueprintAPI.GetInventory(GameManager.Instance().GetAccessToken(), result => {
@@ -62,6 +64,16 @@ namespace Controller {
                     setBackpackState();
                 }
             }));
+        }
+
+        private bool isInventoryFull() {
+            foreach (InventorySlotController isc in allSlots) {
+                if (!isc.storedItem.IsPresent()) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void setBackpackState() {
@@ -76,6 +88,7 @@ namespace Controller {
                 SpriteState ss = new SpriteState {
                     highlightedSprite = AssetManager.Instance().backpackButtonUnoccupiedHighlight
                 };
+
                 backpackButton.spriteState = ss;
                 backpackButton.GetComponent<Image>().sprite = AssetManager.Instance().backpackButtonUnoccupied;
                 backpackButton.GetComponentInChildren<Text>().color = new Color(1.0f, 1.0f, 1.0f, 0.3f);
@@ -100,6 +113,11 @@ namespace Controller {
         }
 
         public void OnBackpackClick() {
+            if (isInventoryFull()) {
+                this.ShowAlert("Inventory Full!", "Please make more space before retrieving backpack contents...");
+                return;
+            }
+
             foreach (InventoryEntry entry in backpackContents) {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity));
             }
