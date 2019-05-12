@@ -11,7 +11,7 @@
    data-name="Layer 1"
    viewBox="0 0 256 384"
    version="1.1"
-   sodipodi:docname="mouse-left-new.svg"
+   sodipodi:docname="mouse-middle-new.svg"
    inkscape:version="0.92.2 5c3e80d, 2017-08-06">
   <metadata
      id="metadata23">
@@ -39,12 +39,12 @@
      id="namedview21"
      showgrid="false"
      inkscape:zoom="1.2291667"
-     inkscape:cx="62.915254"
-     inkscape:cy="257.08475"
+     inkscape:cx="111.72881"
+     inkscape:cy="289.62712"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
-     inkscape:current-layer="Layer_1" />
+     inkscape:current-layer="layer2" />
   <defs
      id="defs4">
     <style
@@ -60,16 +60,6 @@
      height="370"
      rx="96.35"
      id="rect8" />
-  <polygon
-     class="cls-2"
-     points="240,176 240,84.57 240,59.64 224,30.55 192,16 128,16 128,176 "
-     id="polygon10"
-     transform="matrix(-1.0193705,0,0,1,258.47942,0)"
-     style="fill:#5f5f5f" />
-  <path
-     d="M284,80a84.3,84.3,0,0,1,84,84V348a84.3,84.3,0,0,1-84,84H228a84.3,84.3,0,0,1-84-84V164a84.3,84.3,0,0,1,84-84h56m0-16H228c-55,0-100,45-100,100V348c0,55,45,100,100,100h56c55,0,100-45,100-100V164C384,109,339,64,284,64Z"
-     transform="translate(-128 -64)"
-     id="path12" />
   <line
      class="cls-3"
      y1="176"
@@ -83,12 +73,40 @@
      x2="128"
      y2="176"
      id="line16" />
-  <rect
-     class="cls-4"
-     x="104"
-     y="48"
-     width="48"
-     height="96"
-     rx="21"
-     id="rect18" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 1">
+    <path
+       style=""
+       d="M284,80a84.3,84.3,0,0,1,84,84V348a84.3,84.3,0,0,1-84,84H228a84.3,84.3,0,0,1-84-84V164a84.3,84.3,0,0,1,84-84h56m0-16H228c-55,0-100,45-100,100V348c0,55,45,100,100,100h56c55,0,100-45,100-100V164C384,109,339,64,284,64Z"
+       transform="translate(-128,-64)"
+       id="path12" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2">
+    <polygon
+       class="cls-2"
+       points="192,16 128,16 128,176 240,176 240,84.57 240,59.64 224,30.55 "
+       id="polygon10"
+       transform="matrix(-0.39467318,0,0,0.55254238,202.51817,39.159322)"
+       style="fill:#5f5f5f" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Layer 3"
+     style="opacity:0.94">
+    <rect
+       style="fill:#ffffff;fill-opacity:0"
+       class="cls-4"
+       x="104"
+       y="48"
+       width="48"
+       height="96"
+       rx="21"
+       id="rect18" />
+  </g>
 </svg>
