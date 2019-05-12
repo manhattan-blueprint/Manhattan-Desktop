@@ -29,10 +29,9 @@ namespace Controller {
         private HelpScreens currentScreen = HelpScreens.KeyBindings;
 
         void Start() {
-            
+            leftArrow.gameObject.SetActive(false);
         }
 
-        // Update is called once per frame
         void Update() {
 
         }
@@ -44,7 +43,7 @@ namespace Controller {
                     currentScreen = HelpScreens.Inventory;
                     helpTitle.text = "Inventory";
                     InventoryGroup.SetActive(true);
-                    leftArrow.enabled = true;
+                    leftArrow.gameObject.SetActive(true);
                     break;
                 case HelpScreens.Inventory:
                     InventoryGroup.SetActive(false);
@@ -63,7 +62,7 @@ namespace Controller {
                     currentScreen = HelpScreens.Blueprint;
                     helpTitle.text = "Blueprint Tree";
                     BlueprintGroup.SetActive(true);
-                    rightArrow.enabled = false;
+                    rightArrow.gameObject.SetActive(false);
                     break;
                 default:
                     break;
@@ -77,7 +76,7 @@ namespace Controller {
                     currentScreen = HelpScreens.KeyBindings;
                     helpTitle.text = "Key Bindings";
                     KeyBindingsGroup.SetActive(true);
-                    leftArrow.enabled = false;
+                    leftArrow.gameObject.SetActive(false);
                     break;
                 case HelpScreens.Placement:
                     PlacementGroup.SetActive(false);
@@ -96,7 +95,7 @@ namespace Controller {
                     currentScreen = HelpScreens.Machines;
                     helpTitle.text = "Machines";
                     MachinesGroup.SetActive(true);
-                    rightArrow.enabled = true;
+                    rightArrow.gameObject.SetActive(true);
                     break;
                 default:
                     break;
