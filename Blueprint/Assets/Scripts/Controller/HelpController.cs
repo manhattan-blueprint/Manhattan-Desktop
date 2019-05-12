@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace Controller {
     public class HelpController : MonoBehaviour {
@@ -17,19 +18,27 @@ namespace Controller {
         [SerializeField] private GameObject PlacementGroup;
         [SerializeField] private GameObject MachinesGroup;
         [SerializeField] private GameObject BlueprintGroup;
+        [SerializeField] private GameObject ExitGroup;
 
         enum HelpScreens {
             KeyBindings,
             Inventory,
             Placement,
             Machines,
-            Blueprint
+            Blueprint,
+            Exit
         };
 
         private HelpScreens currentScreen = HelpScreens.KeyBindings;
 
         void Start() {
             leftArrow.gameObject.SetActive(false);
+            KeyBindingsGroup.SetActive(true);
+            InventoryGroup.SetActive(false);
+            PlacementGroup.SetActive(false);
+            MachinesGroup.SetActive(false);
+            BlueprintGroup.SetActive(false);
+            ExitGroup.SetActive(false);
         }
 
         void Update() {
@@ -37,6 +46,7 @@ namespace Controller {
         }
 
         public void NextScreen() {
+            EventSystem.current.SetSelectedGameObject(null);
             switch (currentScreen) {
                 case HelpScreens.KeyBindings:
                     KeyBindingsGroup.SetActive(false);
@@ -62,7 +72,14 @@ namespace Controller {
                     currentScreen = HelpScreens.Blueprint;
                     helpTitle.text = "Blueprint Tree";
                     BlueprintGroup.SetActive(true);
+                    break;
+                case HelpScreens.Blueprint:
+                    BlueprintGroup.SetActive(false);
+                    currentScreen = HelpScreens.Exit;
+                    helpTitle.text = "Collecting Resources";
+                    ExitGroup.SetActive(true);
                     rightArrow.gameObject.SetActive(false);
+                    exit.gameObject.SetActive(true);
                     break;
                 default:
                     break;
@@ -70,6 +87,7 @@ namespace Controller {
         }
 
         public void PreviousScreen() {
+            EventSystem.current.SetSelectedGameObject(null);
             switch (currentScreen) {
                 case HelpScreens.Inventory:
                     InventoryGroup.SetActive(false);
@@ -95,7 +113,14 @@ namespace Controller {
                     currentScreen = HelpScreens.Machines;
                     helpTitle.text = "Machines";
                     MachinesGroup.SetActive(true);
+                    break;
+                case HelpScreens.Exit:
+                    ExitGroup.SetActive(false);
+                    currentScreen = HelpScreens.Blueprint;
+                    helpTitle.text = "Blueprint Tree";
+                    BlueprintGroup.SetActive(true);
                     rightArrow.gameObject.SetActive(true);
+                    exit.gameObject.SetActive(false);
                     break;
                 default:
                     break;
