@@ -31,8 +31,10 @@ namespace Controller {
             firstUIUpdate = true;
             itemSlots = new Dictionary<int, InventorySlotController>();
             backpackContents = new List<InventoryEntry>();
-            startTime = Time.realtimeSinceStartup;
-            subscribed = false;
+        }
+
+        private void subscribeToInventory() {
+            GameManager.Instance().inventoryStore.Subscribe(this);
         }
 
         void Update() {
@@ -47,11 +49,7 @@ namespace Controller {
 
                 // *MUST* subscribe *AFTER* finishing configuring the UI.
                 GameManager.Instance().uiStore.Subscribe(this);
-            }
-
-            if (!subscribed && Time.realtimeSinceStartup - startTime > 5.0f) {
-                GameManager.Instance().inventoryStore.Subscribe(this);
-                subscribed = true;
+                Invoke(nameof(subscribeToInventory), 5);
             }
         }
 
