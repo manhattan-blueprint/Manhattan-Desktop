@@ -140,12 +140,11 @@ namespace Model.Reducer {
 
             bool shouldRemoveLeft = machine.leftInput.IsPresent() &&
                                     product.Get().item.recipe.Find(recipe => recipe.item_id == machine.leftInput.Get().GetId()) != null;
-            
-            // Final boolean statement fixes decrementing two items of the same type
+
             bool shouldRemoveRight = machine.rightInput.IsPresent() &&
                                     product.Get().item.recipe.Find(recipe => recipe.item_id == machine.rightInput.Get().GetId()) != null;
 
-            if (shouldRemoveLeft && shouldRemoveRight) {
+            if ((shouldRemoveLeft && shouldRemoveRight) && (machine.rightInput.Get().GetId() == machine.leftInput.Get().GetId())) {
                 if (machine.leftInput.Get().GetQuantity() >= machine.rightInput.Get().GetQuantity()) {
                     shouldRemoveRight = false;
                 } else {

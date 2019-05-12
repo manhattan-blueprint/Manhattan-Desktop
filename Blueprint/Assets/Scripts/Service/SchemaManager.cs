@@ -47,7 +47,7 @@ public class SchemaManager {
         List<SchemaItem> objects = GameObjs.items.FindAll(item => item.machine_id == machineId);
         
         foreach (SchemaItem obj in objects) {
-            int maxQuantity = -int.MaxValue;
+            int maxQuantity = int.MaxValue;
             Boolean correctItem = true;
             
             foreach (RecipeElement recipeItem in obj.recipe) {
@@ -61,7 +61,7 @@ public class SchemaManager {
                             break;
                         } else {
                             int maxMultiple = element.quantity / recipeItem.quantity;
-                            maxQuantity = Math.Max(maxQuantity, maxMultiple);
+                            maxQuantity = Math.Min(maxQuantity, maxMultiple);
                         }
                     }
                 } else {
