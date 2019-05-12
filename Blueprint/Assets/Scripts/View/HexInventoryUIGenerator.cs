@@ -100,14 +100,6 @@ public class HexInventoryUIGenerator : MonoBehaviour {
         (svg.transform as RectTransform).sizeDelta = new Vector2(slotDimensionX, slotDimensionY);
         highlight.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
 
-        // Temp drag object
-        GameObject drag = new GameObject("drag");
-        drag.transform.parent = transform;
-        Image image = drag.AddComponent<Image>();
-        image.raycastTarget = false;
-        // To initialise drag object off screen
-        drag.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
-
         // Rollover text object
         GameObject rollover = new GameObject("Rollover");
         rollover.transform.parent = transform;

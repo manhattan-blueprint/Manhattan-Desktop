@@ -42,7 +42,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         inventoryController = GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>();
         machineInventoryController = GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>();
         inventorySlotController = gameObject.transform.parent.GetComponent<InventorySlotController>();
-        foregroundObject = GameObject.Find(this.transform.parent.parent.name + "/drag");
+        foregroundObject = GameObject.Find("Canvii/DragCanvas/Drag");
         foregroundImage = foregroundObject.GetComponent<Image>();
 
         // Reset DragDestination
