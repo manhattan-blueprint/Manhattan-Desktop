@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Model;
 using Service;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SchemaManager {
     public SchemaItems GameObjs;
