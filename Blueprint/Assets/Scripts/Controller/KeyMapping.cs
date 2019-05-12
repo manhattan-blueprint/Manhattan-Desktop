@@ -7,5 +7,7 @@ namespace Controller {
         public const KeyCode Jump = KeyCode.Space;
         public const KeyCode Pause = KeyCode.Escape;
         public const KeyCode Sprint = KeyCode.LeftShift;
+        public const KeyCode LeftArrow = KeyCode.LeftArrow;
+        public const KeyCode RightArrow = KeyCode.RightArrow;
     }
 }
