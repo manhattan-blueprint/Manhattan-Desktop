@@ -38,11 +38,12 @@ namespace Controller {
                 foreach (InventorySlotController controller in allSlots) {
                   itemSlots.Add(controller.getId(), controller);
                 }
-                firstUIUpdate = false;
 
                 // *MUST* subscribe *AFTER* finishing configuring the UI.
                 GameManager.Instance().inventoryStore.Subscribe(this);
                 GameManager.Instance().uiStore.Subscribe(this);
+
+                firstUIUpdate = false;
             }
         }
 
@@ -52,7 +53,7 @@ namespace Controller {
         }
 
         public void StateDidUpdate(UIState state) {
-            if (state.Selected != UIState.OpenUI.Inventory) return;
+            if (state.Selected != UIState.OpenUI.Inventory || gameObject.name == "MachineInventoryCanvas") return;
             
             // If inventory UI opened, check how many things the user has in their backpack and populate UI
             StartCoroutine(BlueprintAPI.GetInventory(GameManager.Instance().GetAccessToken(), result => {
@@ -87,6 +88,7 @@ namespace Controller {
                 SpriteState ss = new SpriteState {
                     highlightedSprite = AssetManager.Instance().backpackButtonUnoccupiedHighlight
                 };
+
                 backpackButton.spriteState = ss;
                 backpackButton.GetComponent<Image>().sprite = AssetManager.Instance().backpackButtonUnoccupied;
                 backpackButton.GetComponentInChildren<Text>().color = new Color(1.0f, 1.0f, 1.0f, 0.3f);
