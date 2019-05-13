@@ -6,7 +6,6 @@ using Model.Redux;
 using Model.State;
 using Service.Response;
 using TMPro;
-using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +27,7 @@ using UnityEngine.UI;
 // - Explain notes
 
 public class TutorialController : MonoBehaviour, 
-    Subscriber<TutorialState>, Subscriber<InventoryState>, Subscriber<UIState>, Subscriber<HeldItemState>, Subscriber<MapState> {
+    Subscriber<TutorialState>, Subscriber<InventoryState>, Subscriber<UIState>, Subscriber<HeldItemState>, Subscriber<MapState>, Subscriber<MachineState> {
     [SerializeField] private Image cursor;
     [SerializeField] private SVGImage rmb;
     [SerializeField] private Canvas alertCanvas;
@@ -48,6 +47,9 @@ public class TutorialController : MonoBehaviour,
     [SerializeField] private Canvas notesMask;
     [SerializeField] private Canvas blueprintBackMask;
     [SerializeField] private Canvas gridMask;
+    [SerializeField] private Canvas machineInputMask;
+    [SerializeField] private Canvas machineOutputMask;
+    [SerializeField] private Canvas machineGeneralMask;
 
     private List<InventoryEntry> mockBackpackContents;
     private int scrollCount = 0;
@@ -71,7 +73,13 @@ public class TutorialController : MonoBehaviour,
         notesMask.enabled = false;
         blueprintBackMask.enabled = false;
         gridMask.enabled = false;
+        machineInputMask.enabled = false;
+        machineOutputMask.enabled = false;
+        machineGeneralMask.enabled = false;
         inventoryCanvas.gameObject.GetComponent<InventoryController>().backpackButton.enabled = false;
+        machineInventoryCanvas.transform.position = new Vector2(Screen.width/3, Screen.height/2);
+
+        
         GameManager.Instance().tutorialStore.Subscribe(this);
         
         // Give some mock data
@@ -230,6 +238,36 @@ public class TutorialController : MonoBehaviour,
             case TutorialState.TutorialStage.PlacedFurnace:
                 gridMask.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "To interact with a machine, point your cursor at it and right click";
                 break; 
+            case TutorialState.TutorialStage.ShouldOpenMachine:
+                DisablePlayer();
+                Time.timeScale = 1; 
+                gridMask.enabled = false;
+                machineCanvas.enabled = true;
+                machineInventoryCanvas.enabled = true;
+                machineInputMask.enabled = true;
+                Invoke(nameof(FromMachineInputToOutput), 5);
+                break;
+            case TutorialState.TutorialStage.ShowMachineOutputSlots:
+                machineInputMask.enabled = false;
+                machineOutputMask.enabled = true;
+                Invoke(nameof(FromMachineOutputToAll), 5);
+                break;
+            case TutorialState.TutorialStage.ShowAllMachine:
+                machineOutputMask.enabled = false;
+                machineGeneralMask.enabled = true;
+                GameManager.Instance().machineStore.Subscribe(this);
+                break;
+            case TutorialState.TutorialStage.DidCraftInMachine:
+                machineGeneralMask.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Nice job! Now move the item back to your inventory...";
+                break;
+            case TutorialState.TutorialStage.DidMoveCraftToInventory:
+                GameManager.Instance().uiStore.Unsubscribe(this);
+                GameManager.Instance().machineStore.Unsubscribe(this);
+                GameManager.Instance().inventoryStore.Unsubscribe(this);
+                GameManager.Instance().heldItemStore.Unsubscribe(this);
+                GameManager.Instance().mapStore.Unsubscribe(this);
+                Debug.Log("Done");
+                break;
             default:
                 Debug.Log("UNHANDLED CASE IN STATE DID UPDATE");
                 break;
@@ -263,6 +301,11 @@ public class TutorialController : MonoBehaviour,
             if (state.inventoryContents.ContainsKey(11)) {
                 GameManager.Instance().tutorialStore.Dispatch(new CraftedFurnace()); 
             }
+        } else if (tutorialState == TutorialState.TutorialStage.DidCraftInMachine) {
+            if (state.inventoryContents.ContainsKey(12)) {
+                GameManager.Instance().tutorialStore.Dispatch(new DidMoveCraftToInventory());
+            }
+            
         }
     }
 
@@ -273,16 +316,21 @@ public class TutorialController : MonoBehaviour,
                 GameManager.Instance().tutorialStore.Dispatch(new OpenFurnaceBlueprint());
             } else {
                 // Invalid click, go back to blueprint
-                GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
+                // TODO: Fix this, otherwise causes infinite recursion
+                GameManager.Instance().uiStore.GetState().Selected = UIState.OpenUI.Blueprint;
             }
         }
 
-        if (state.Selected == UIState.OpenUI.Blueprint && GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ReturnToProgression) {
-            GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseBlueprintTemplate());
+        if (state.Selected == UIState.OpenUI.Blueprint) {
+            if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ReturnToProgression) {
+                GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseBlueprintTemplate());
+            } else if (GameManager.Instance().tutorialStore.GetState().stage != TutorialState.TutorialStage.InsideBlueprint) {
+                GameManager.Instance().uiStore.Dispatch(new OpenBlueprintTemplateUI(11));
+            }
         }
 
         if (state.Selected == UIState.OpenUI.Machine && GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.PlacedFurnace) {
-            Debug.Log("Lets go crazy crazy crazy till we see the sun");
+            GameManager.Instance().tutorialStore.Dispatch(new ShouldOpenMachine());
         }
         
     }
@@ -297,12 +345,24 @@ public class TutorialController : MonoBehaviour,
     }
 
     public void StateDidUpdate(MapState state) {
-        foreach (MapObject mapObject in state.GetObjects().Values) {
-            if (mapObject.GetID() == 11) {
-                GameManager.Instance().tutorialStore.Dispatch(new DidPlaceFurnace());
-            } 
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ScrolledHeldItem) {
+            foreach (MapObject mapObject in state.GetObjects().Values) {
+                if (mapObject.GetID() == 11) {
+                    GameManager.Instance().tutorialStore.Dispatch(new DidPlaceFurnace());
+                } 
+            }
         }
+    }
 
+    public void StateDidUpdate(MachineState state) {
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShowAllMachine) {
+            foreach (Machine machine in state.grid.Values) {
+                Debug.Log(machine.output);
+                if (machine.id == 11 && machine.output.IsPresent()) {
+                    GameManager.Instance().tutorialStore.Dispatch(new DidCraftInMachine());
+                }
+            }
+        }
     }
 
     private void ShowMessage(string title, string description) {
@@ -340,6 +400,14 @@ public class TutorialController : MonoBehaviour,
 
     private void StartGridFlow() {
         GameManager.Instance().tutorialStore.Dispatch(new ShowHeldItemScroll());
+    }
+
+    private void FromMachineInputToOutput() {
+        GameManager.Instance().tutorialStore.Dispatch(new ShowMachineOutputSlots());
+    }
+    
+    private void FromMachineOutputToAll() {
+        GameManager.Instance().tutorialStore.Dispatch(new ShowAllMachine());
     }
 
     private void DisablePlayer() {

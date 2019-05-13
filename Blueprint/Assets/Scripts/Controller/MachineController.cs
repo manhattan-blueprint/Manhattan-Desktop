@@ -24,7 +24,7 @@ public class MachineController : MonoBehaviour, Subscriber<MachineState>, Subscr
     void Start() {
         machineInventoryCanvas = GameObject.Find("MachineInventoryCanvas");
         machineInventoryCanvas.GetComponent<CanvasScaler>().scaleFactor = 0.7f;
-        machineInventoryCanvas.transform.position = new Vector2(Screen.width/3, Screen.height/2);
+        machineInventoryCanvas.transform.localPosition = new Vector2(Screen.width/3, Screen.height/2);
         outputSlot = GameObject.Find("OutputSlot");
         fuelSlot = GameObject.Find("FuelSlot");
         inputSlot0 = GameObject.Find("InputSlot0");

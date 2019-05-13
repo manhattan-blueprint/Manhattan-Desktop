@@ -28,7 +28,12 @@ namespace Model.State {
             ClosedBlueprint,
             ShowHeldItemScroll,
             ScrolledHeldItem,
-            PlacedFurnace
+            PlacedFurnace,
+            ShouldOpenMachine,
+            ShowMachineOutputSlots,
+            ShowAllMachine,
+            DidCraftInMachine,
+            DidMoveCraftToInventory
         }
         public TutorialStage stage;
 

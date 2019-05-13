@@ -99,5 +99,25 @@ namespace Model.Reducer {
         public void visit(DidPlaceFurnace didPlaceFurnace) {
             this.state.stage = TutorialState.TutorialStage.PlacedFurnace;
         }
+
+        public void visit(ShouldOpenMachine shouldOpenMachine) {
+            this.state.stage = TutorialState.TutorialStage.ShouldOpenMachine;
+        }
+        
+        public void visit(ShowMachineOutputSlots showMachineOutputSlots) {
+            this.state.stage = TutorialState.TutorialStage.ShowMachineOutputSlots;
+        }
+
+        public void visit(ShowAllMachine showAllMachine) {
+            this.state.stage = TutorialState.TutorialStage.ShowAllMachine;
+        }
+
+        public void visit(DidCraftInMachine didCraftInMachine) {
+            this.state.stage = TutorialState.TutorialStage.DidCraftInMachine;
+        }
+
+        public void visit(DidMoveCraftToInventory didMoveCraftToInventory) {
+            this.state.stage = TutorialState.TutorialStage.DidMoveCraftToInventory;
+        }
     }
 }

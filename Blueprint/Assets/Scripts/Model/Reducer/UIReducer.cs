@@ -26,7 +26,6 @@ namespace Model.Reducer {
                 case UIState.OpenUI.GateMouse:
                 case UIState.OpenUI.BeaconMouse:
                 case UIState.OpenUI.BindingsIntro:
-                    Debug.Log("1");
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.Intro:

@@ -22,6 +22,11 @@ namespace Model.Action {
         void visit(ShowHeldItemScroll showHeldItemScroll);
         void visit(DidScrollHeldItem didScrollHeldItem);
         void visit(DidPlaceFurnace didPlaceFurnace);
+        void visit(ShouldOpenMachine shouldOpenMachine);
+        void visit(ShowMachineOutputSlots showMachineOutputSlots);
+        void visit(ShowAllMachine showAllMachine);
+        void visit(DidCraftInMachine didCraftInMachine);
+        void visit(DidMoveCraftToInventory didMoveCraftToInventory);
     }
 
     public abstract class TutorialAction: Action {
@@ -155,6 +160,36 @@ namespace Model.Action {
     }
 
     public class DidPlaceFurnace : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShouldOpenMachine : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShowMachineOutputSlots: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShowAllMachine : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class DidCraftInMachine : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class DidMoveCraftToInventory: TutorialAction {
         public override void Accept(TutorialVisitor visitor) {
             visitor.visit(this);
         }
