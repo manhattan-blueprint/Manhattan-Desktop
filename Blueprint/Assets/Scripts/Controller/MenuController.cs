@@ -345,9 +345,6 @@ namespace Controller {
                 case UIState.OpenUI.BindingsPause:
                     OpenBindings();
                     break;
-                case UIState.OpenUI.BindingsIntro:
-                    OpenBindingsIntro();
-                    break;
                 case UIState.OpenUI.Gate:
                     OpenGate();
                     break;
@@ -406,14 +403,6 @@ namespace Controller {
                 default:
                     throw new Exception("Not in expected state.");
             }
-            
-            if (state.ShouldShowHelpUI) {
-                Invoke(nameof(ShowHelpUI), 1);
-            }
-        }
-
-        private void ShowHelpUI() {
-            GameManager.Instance().uiStore.Dispatch(new OpenBindingsUIIntro()); 
         }
     }
 }

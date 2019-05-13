@@ -15,7 +15,6 @@ namespace Model.State {
             Exit,
             Logout,
             BindingsPause,
-            BindingsIntro,
             Gate,
             GateMouse,
             BeaconMouse,
@@ -25,7 +24,6 @@ namespace Model.State {
         public OpenUI Selected;
         public Vector2 SelectedMachineLocation;
         public int SelectedBlueprintID = -1;
-        public bool ShouldShowHelpUI = false;
 
         public UIState() {
             this.Selected = OpenUI.Login;

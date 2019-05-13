@@ -25,15 +25,11 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Pause:
                 case UIState.OpenUI.GateMouse:
                 case UIState.OpenUI.BeaconMouse:
-                case UIState.OpenUI.BindingsIntro:
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.Intro:
                     // *MUST* start the world in playing or bad things happen...
                     state.Selected = UIState.OpenUI.Playing;
-                    // TODO: REMOVE THIS!!
-                    // Use a boolean to store the state we want to get to
-                    state.ShouldShowHelpUI = true;
                     break;
                 case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
@@ -122,17 +118,6 @@ namespace Model.Reducer {
             }
         }
         
-        public void visit(OpenBindingsUIIntro bindings) {
-            UIState.OpenUI current = state.Selected;
-            switch (current) {
-                case UIState.OpenUI.Playing:
-                    state.Selected = UIState.OpenUI.BindingsIntro;
-                    state.ShouldShowHelpUI = false;
-                    break;
-                default:
-                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenBindingsUIIntro");
-            }
-        }
 
         public void visit(OpenGateMouseUI mouse) {
             UIState.OpenUI current = state.Selected;
