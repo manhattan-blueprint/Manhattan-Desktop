@@ -17,12 +17,15 @@ namespace Model.State {
             ShouldCloseInventory,
             ClosedInventory,
             ShouldOpenBlueprint,
-            InsideBlueprint
+            InsideBlueprint,
+            HighlightFurnace,
+            OpenFurnace,
+            CraftedFurnace
         }
         public TutorialStage stage;
 
         public TutorialState() {
-            this.stage = TutorialStage.ShouldOpenBlueprint;
+            this.stage = TutorialStage.Welcome;
         }
     }
 }

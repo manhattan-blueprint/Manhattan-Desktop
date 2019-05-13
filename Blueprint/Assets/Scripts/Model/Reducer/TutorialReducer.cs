@@ -55,5 +55,17 @@ namespace Model.Reducer {
         public void visit(InsideBlueprint insideBlueprint) {
             this.state.stage = TutorialState.TutorialStage.InsideBlueprint;
         }
+
+        public void visit(HighlightFurnace highlightFurnace) {
+            this.state.stage = TutorialState.TutorialStage.HighlightFurnace;
+        }
+
+        public void visit(OpenFurnace openFurnace) {
+            this.state.stage = TutorialState.TutorialStage.OpenFurnace;
+        }
+        
+        public void visit(CraftedFurnace craftedFurnace) {
+            this.state.stage = TutorialState.TutorialStage.CraftedFurnace;
+        }
     }
 }

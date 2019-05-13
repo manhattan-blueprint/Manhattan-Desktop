@@ -11,6 +11,9 @@ namespace Model.Action {
         void visit(ClosedInventory closedInventory);
         void visit(ShouldOpenBlueprint shouldOpenBlueprint);
         void visit(InsideBlueprint insideBlueprint);
+        void visit(HighlightFurnace highlightFurnace);
+        void visit(OpenFurnace openFurnace);
+        void visit(CraftedFurnace craftedFurnace);
     }
 
     public abstract class TutorialAction: Action {
@@ -82,4 +85,23 @@ namespace Model.Action {
             visitor.visit(this);
         }
     }
+
+    public class HighlightFurnace: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenFurnace: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class CraftedFurnace: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
 }

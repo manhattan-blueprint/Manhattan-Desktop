@@ -6,6 +6,7 @@ using Model.Redux;
 using Model.State;
 using Service.Response;
 using TMPro;
+using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,14 @@ using UnityEngine.UI;
 // - Moves Item
 // - Splits item 
 // - Collects resources from backpack
+// - Show held item UI
+// - Close inventory
+// - Open blueprint UI
+// - Show primary resources
+// - Show furnace and click on
+// - Explain materials to build
+// - Explain things can make with furnace
+// - Explain notes
 
 public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subscriber<InventoryState>, Subscriber<UIState> {
     [SerializeField] private Image cursor;
@@ -30,6 +39,10 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     [SerializeField] private Canvas inventoryMask;
     [SerializeField] private Canvas backpackMask;
     [SerializeField] private Canvas heldItemMask;
+    [SerializeField] private Canvas primaryResourceMask;
+    [SerializeField] private Canvas furnaceMask;
+    [SerializeField] private Canvas componentsMask;
+    [SerializeField] private Canvas recipeMask;
 
     private List<InventoryEntry> mockBackpackContents;
 
@@ -44,6 +57,10 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
         inventoryMask.enabled = false;
         backpackMask.enabled = false;
         heldItemMask.enabled = false;
+        primaryResourceMask.enabled = false;
+        furnaceMask.enabled = false;
+        componentsMask.enabled = false;
+        recipeMask.enabled = false;
         inventoryCanvas.gameObject.GetComponent<InventoryController>().backpackButton.enabled = false;
         GameManager.Instance().tutorialStore.Subscribe(this);
         
@@ -52,6 +69,10 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
         mockBackpackContents = new List<InventoryEntry> {
             new InventoryEntry(2, 4), new InventoryEntry(3, 4)
         };
+        
+        // REMOVE THESE WHEN BLUEPRITN IS DONE
+//        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(2, 10, "Stone", 1));
+//        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(3, 10, "Clay", 2));
 
     }
 
@@ -87,6 +108,7 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     }
 
     public void StateDidUpdate(TutorialState state) {
+        Debug.Log("State did update to " + state.stage);
         switch (state.stage) {
             case TutorialState.TutorialStage.Welcome:
                 // Show welcome message
@@ -116,6 +138,7 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
             case TutorialState.TutorialStage.DidCollectFromBackpack:
                 backpackMask.enabled = false;
                 heldItemMask.enabled = true;
+                Time.timeScale = 1;
                 Invoke(nameof(FinishInventoryFlow), 3);
                 break;
             case TutorialState.TutorialStage.ShouldCloseInventory:
@@ -125,16 +148,33 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
                 heldItemMask.enabled = false;
                 inventoryCanvas.enabled = false; 
                 EnablePlayer();
-                Invoke(nameof(StartBlueprintFlow), 10);
+                Invoke(nameof(StartBlueprintFlow), 3);
                 break;
             case TutorialState.TutorialStage.ShouldOpenBlueprint:
                 ShowMessage("Blueprints", "To view the blueprints mysteriously left around the beacon, press the Q key");
                 break; 
             case TutorialState.TutorialStage.InsideBlueprint:
-                GameManager.Instance().uiStore.Subscribe(this);
                 blueprintCanvas.enabled = true;
+                primaryResourceMask.enabled = true;
                 DisablePlayer();
+                Time.timeScale = 1;
+                GameManager.Instance().uiStore.Subscribe(this);
+                Invoke(nameof(FromPrimaryToFurnaceHighlight), 5); 
                 break; 
+            case TutorialState.TutorialStage.HighlightFurnace:
+                primaryResourceMask.enabled = false;
+                furnaceMask.enabled = true;
+                break;
+            case TutorialState.TutorialStage.OpenFurnace:
+                blueprintCanvas.enabled = false;
+                furnaceMask.enabled = false;
+                blueprintTemplateCanvas.enabled = true;
+                componentsMask.enabled = true;
+                break;
+            case TutorialState.TutorialStage.CraftedFurnace:
+                componentsMask.enabled = false;
+                recipeMask.enabled = true;
+                break;
             default:
                 Debug.Log("UNHANDLED CASE IN STATE DID UPDATE");
                 break;
@@ -142,6 +182,7 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     }
 
     public void StateDidUpdate(InventoryState state) {
+        Debug.Log(state.inventoryContents.Keys);
         TutorialState.TutorialStage tutorialState = GameManager.Instance().tutorialStore.GetState().stage;
         
         if (tutorialState == TutorialState.TutorialStage.InsideInventory) {
@@ -163,12 +204,24 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
             if (state.inventoryContents.ContainsKey(2) && state.inventoryContents.ContainsKey(3)) {
                 GameManager.Instance().tutorialStore.Dispatch(new DidCollectFromBackpack());
             }
+        } else if (tutorialState == TutorialState.TutorialStage.OpenFurnace) {
+            // Check inventory for crafted furnace
+            if (state.inventoryContents.ContainsKey(11)) {
+                Debug.Log("Made furnace");
+                GameManager.Instance().tutorialStore.Dispatch(new CraftedFurnace()); 
+            }
         }
     }
 
     public void StateDidUpdate(UIState state) {
         if (state.Selected == UIState.OpenUI.BlueprintTemplate) {
-            Debug.Log("Complete");
+            // If tapped furnace AND are at right stage in tutorial
+            if (state.SelectedBlueprintID == 11 && GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.HighlightFurnace) {
+                GameManager.Instance().tutorialStore.Dispatch(new OpenFurnace());
+            } else {
+                // Invalid click, go back to blueprint
+                GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
+            }
         }
     }
 
@@ -187,6 +240,10 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     
     private void StartBlueprintFlow() {
         GameManager.Instance().tutorialStore.Dispatch(new ShouldOpenBlueprint());
+    }
+
+    private void FromPrimaryToFurnaceHighlight() {
+        GameManager.Instance().tutorialStore.Dispatch(new HighlightFurnace());
     }
 
     private void DisablePlayer() {
