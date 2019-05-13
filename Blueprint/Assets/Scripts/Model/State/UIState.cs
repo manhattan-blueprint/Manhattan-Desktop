@@ -19,11 +19,15 @@ namespace Model.State {
             GateMouse,
             BeaconMouse,
             Intro,
+            EndGame
         };
 
         public OpenUI Selected;
         public Vector2 SelectedMachineLocation;
         public int SelectedBlueprintID = -1;
+        public bool ShouldShowHelpUI = false;
+        public bool fromGateRMB = false;
+        public bool fromBeaconRMB = false;
 
         public UIState() {
             this.Selected = OpenUI.Login;

@@ -163,7 +163,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
             }
         }
 
-        // SPLIT
+        // SPLIT    
         // When right mouse button is down
         InventoryItem currentItem = inventorySlotController.storedItem.Get();
         if (Input.GetMouseButtonDown(1) && mouseOver && currentItem.GetQuantity() > 1 && !inventoryController.DraggingInvItem

@@ -24,6 +24,7 @@ namespace Controller {
         private List<InventorySlotController> allSlots;
         public Button backpackButton;
         public List<InventoryEntry> backpackContents;
+        private bool subscribed;
              
         public void Start() {
             firstUIUpdate = true;
@@ -47,7 +48,11 @@ namespace Controller {
 
                 // *MUST* subscribe *AFTER* finishing configuring the UI.
                 GameManager.Instance().uiStore.Subscribe(this);
-                Invoke(nameof(subscribeToInventory), 5);
+            }
+
+            if (!subscribed && GameManager.Instance().isInventoryInitialised) {
+                subscribed = true;
+                subscribeToInventory();
             }
         }
         

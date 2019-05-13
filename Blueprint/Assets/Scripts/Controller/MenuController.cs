@@ -36,6 +36,8 @@ namespace Controller {
         private PlayerLookController looking;
         private SoundController soundController;
         private ManhattanAnimation animationManager;
+        private InventoryController inventoryController;
+        private InventoryController machineInventoryController;
 
 
         void Start() {
@@ -57,7 +59,9 @@ namespace Controller {
             movement = GameObject.Find("Player").GetComponent<PlayerMoveController>();
             looking = GameObject.Find("PlayerCamera").GetComponent<PlayerLookController>();
             animationManager = gameObject.AddComponent<ManhattanAnimation>();
-            
+            inventoryController = GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>();
+            machineInventoryController= GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>();
+
             // Hide Alert
             GameObject.FindGameObjectWithTag("Alert").GetComponent<Canvas>().enabled = false;
 
@@ -93,7 +97,7 @@ namespace Controller {
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 }
             } else if (Input.GetKeyDown(KeyMapping.Pause)) {
-                if (machineCanvas.enabled || inventoryCanvas.enabled || goalCanvas.enabled) {
+                if ((machineCanvas.enabled || inventoryCanvas.enabled || goalCanvas.enabled) && !inventoryController.DraggingInvItem && !machineInventoryController.DraggingInvItem) {
                     soundController.PlayBagOpeningSound();
                     GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 } else if (blueprintCanvas.enabled) {
@@ -138,7 +142,6 @@ namespace Controller {
         public void GameOver() {
             gameOver = true;
             soundController.PlayOutroMusic();
-            GameManager.Instance().uiStore.Dispatch(new CloseUI());
             heldCanvas.enabled = false;
             cursorCanvas.enabled = false;
             pauseCanvas.enabled = false;
@@ -310,9 +313,15 @@ namespace Controller {
 
         private void EnableMouse() {
             Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             gateCanvas.enabled = false;
             cursor.enabled = false;
+            cursorCanvas.enabled = true;
             rmb.enabled = true;
+            pauseCanvas.enabled = false;
+            blueprintCanvas.enabled = false;
+            inventoryCanvas.enabled = false;
         }
 
         private void PauseGame() {
@@ -365,6 +374,9 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Logout:
                     LogoutPrompt();
+                    break;
+                case UIState.OpenUI.EndGame:
+                    GameOver();
                     break;
                 case UIState.OpenUI.Login:
                     GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;

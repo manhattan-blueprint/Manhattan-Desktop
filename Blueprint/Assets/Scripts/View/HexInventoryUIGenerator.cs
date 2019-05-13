@@ -117,6 +117,8 @@ public class HexInventoryUIGenerator : MonoBehaviour {
 
         rollover.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
 
+        // Notify GameManager that UI is generated
+        GameManager.Instance().isInventoryInitialised = true;
     }
 
     private void generateHotbar() {

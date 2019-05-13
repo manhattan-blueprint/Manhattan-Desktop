@@ -17,6 +17,7 @@ namespace Model.Action {
         void visit(OpenMachineUI machine);
         void visit(OpenGoalUI machine);
         void visit(OpenSettingsUI settings);
+        void visit(OpenEndGameUI cap);
         void visit(Logout logout);
         void visit(Exit exit);
     }
@@ -39,6 +40,12 @@ namespace Model.Action {
     }
 
     public class OpenPlayingUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class OpenEndGameUI : UIAction {
         public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }

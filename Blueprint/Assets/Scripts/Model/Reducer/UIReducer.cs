@@ -20,9 +20,19 @@ namespace Model.Reducer {
             switch (current) {
                 case UIState.OpenUI.Inventory:
                 case UIState.OpenUI.Blueprint:
+                case UIState.OpenUI.Pause:
+                    if (state.fromBeaconRMB) {
+                        state.fromBeaconRMB = false;
+                        state.Selected = UIState.OpenUI.BeaconMouse;
+                    } else if (state.fromGateRMB) {
+                        state.fromGateRMB = false;
+                        state.Selected = UIState.OpenUI.GateMouse;
+                    } else {
+                        state.Selected = UIState.OpenUI.Playing;
+                    }
+                    break;
                 case UIState.OpenUI.Machine:
                 case UIState.OpenUI.Goal:
-                case UIState.OpenUI.Pause:
                 case UIState.OpenUI.GateMouse:
                 case UIState.OpenUI.BeaconMouse:
                     state.Selected = UIState.OpenUI.Playing;
@@ -53,6 +63,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Playing:
                 case UIState.OpenUI.Welcome:
                 case UIState.OpenUI.Logout:
+                case UIState.OpenUI.EndGame:
                     state.Selected = UIState.OpenUI.Login;
                     break;
                 default:
@@ -74,6 +85,14 @@ namespace Model.Reducer {
         public void visit(OpenInventoryUI inventory) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
+                case UIState.OpenUI.BeaconMouse:
+                    state.fromBeaconRMB = true;
+                    state.Selected = UIState.OpenUI.Inventory;
+                    break;
+                case UIState.OpenUI.GateMouse:
+                    state.fromGateRMB = true;
+                    state.Selected = UIState.OpenUI.Inventory;
+                    break;
                 case UIState.OpenUI.Playing:
                     state.Selected = UIState.OpenUI.Inventory;
                     break;
@@ -82,9 +101,29 @@ namespace Model.Reducer {
             }
         }
 
+        public void visit(OpenEndGameUI cap) {
+            UIState.OpenUI current = state.Selected;
+            switch (current) {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.EndGame;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenEndgameUI");
+            }
+        }
+
+
         public void visit(OpenBlueprintUI blueprint) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
+                case UIState.OpenUI.BeaconMouse:
+                    state.fromBeaconRMB = true;
+                    state.Selected = UIState.OpenUI.Blueprint;
+                    break;
+                case UIState.OpenUI.GateMouse:
+                    state.fromGateRMB = true;
+                    state.Selected = UIState.OpenUI.Blueprint;
+                    break;
                 case UIState.OpenUI.Playing:
                 case UIState.OpenUI.BlueprintTemplate:
                     state.Selected = UIState.OpenUI.Blueprint;
@@ -193,6 +232,14 @@ namespace Model.Reducer {
         public void visit(OpenSettingsUI settings) {
             UIState.OpenUI current = state.Selected;
             switch (current) {
+                case UIState.OpenUI.BeaconMouse:
+                    state.fromBeaconRMB = true;
+                    state.Selected = UIState.OpenUI.Inventory;
+                    break;
+                case UIState.OpenUI.GateMouse:
+                    state.fromGateRMB = true;
+                    state.Selected = UIState.OpenUI.Pause;
+                    break;
                 case UIState.OpenUI.Playing:
                 case UIState.OpenUI.Exit:
                 case UIState.OpenUI.Logout:

@@ -24,6 +24,7 @@ public class GameManager {
     public SchemaManager sm;
     public List<Item> completedBlueprints;
     private AccessToken accessToken;
+    public bool isInventoryInitialised;
 
     public readonly int gridSize = 16;
     public readonly int inventoryLayers = 3;
@@ -35,6 +36,7 @@ public class GameManager {
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
         this.tutorialStore = new StateStore<TutorialState, TutorialAction>(new TutorialReducer(), new TutorialState());
+        this.isInventoryInitialised = false;
     }
 
     private GameManager(SchemaManager schemaManager) {
@@ -45,6 +47,7 @@ public class GameManager {
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
         this.tutorialStore = new StateStore<TutorialState, TutorialAction>(new TutorialReducer(), new TutorialState());
         this.sm = schemaManager;
+        this.isInventoryInitialised = false;
     }
 
     public static GameManager Instance() {
