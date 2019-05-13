@@ -42,11 +42,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         if (inventorySlotController.id == 0) inventoryController.DragDestination = -1;
     }
 
-    private void Update() {
-        // Used by Goal UI
-        if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Goal) 
-            secondaryCanvasRaycaster = GameObject.Find("GoalCanvas").GetComponent<GraphicRaycaster>();
-            
+    private void Update() {   
         // Update secondaryCanvasRaycaster for Machine UI
         Transform parentCanvasObject = this.gameObject.transform.parent.parent; 
         if (parentCanvasObject.name == "MachineInventoryCanvas") {
@@ -54,7 +50,11 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         } else if (parentCanvasObject.name == "MachineCanvas") {
             secondaryCanvasRaycaster = GameObject.Find("MachineInventoryCanvas").GetComponent<GraphicRaycaster>();
         }
-        
+
+        // Used by Goal UI
+        if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Goal)
+            secondaryCanvasRaycaster = GameObject.Find("GoalCanvas").GetComponent<GraphicRaycaster>();
+
         // DRAG
         // When left mouse button is down
         if (Input.GetMouseButtonDown(0)) {
