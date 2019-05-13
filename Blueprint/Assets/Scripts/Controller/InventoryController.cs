@@ -32,24 +32,15 @@ namespace Controller {
             backpackContents = new List<InventoryEntry>();
         }
 
-        private void subscribeToInventory() {
-            GameManager.Instance().inventoryStore.Subscribe(this);
-        }
-
-        void Update() {
-            if (firstUIUpdate) {
-                allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
-                
-                foreach (InventorySlotController controller in allSlots) {
-                  itemSlots.Add(controller.getId(), controller);
-                }
-
-                firstUIUpdate = false;
-
-                // *MUST* subscribe *AFTER* finishing configuring the UI.
-                GameManager.Instance().uiStore.Subscribe(this);
-                Invoke(nameof(subscribeToInventory), 4);
+        public void Subscribe() {
+            allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+            
+            foreach (InventorySlotController controller in allSlots) {
+                itemSlots.Add(controller.getId(), controller);
             }
+            
+            GameManager.Instance().uiStore.Subscribe(this);
+            GameManager.Instance().inventoryStore.Subscribe(this);
         }
 
         public void StateDidUpdate(InventoryState state) {

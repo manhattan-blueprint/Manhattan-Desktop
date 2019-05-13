@@ -23,12 +23,9 @@ public class HeldItemController : MonoBehaviour, Subscriber<InventoryState>, Sub
         generateHotbar();
     }
 
-    void Update() {
-        if (firstUIUpdate) {
-            GameManager.Instance().inventoryStore.Subscribe(this);
-            GameManager.Instance().heldItemStore.Subscribe(this);
-            firstUIUpdate = false;
-        }
+    public void Subscribe() {
+        GameManager.Instance().heldItemStore.Subscribe(this);
+        GameManager.Instance().inventoryStore.Subscribe(this);
     }
 
     private void generateHotbar() {

@@ -15,12 +15,20 @@ public class HexInventoryUIGenerator : MonoBehaviour {
     private float slotDimensionY = 0;
     private float slotDimensionX = 0;
 
+    private InventoryController inventoryController;
+    private InventoryController machineInventoryController;
+    private HeldItemController heldItemController;
+
     // EDITABLE
     private int numLayers;
     private float slotScale = 10;
 
     void Start() {
         numLayers = GameManager.Instance().inventoryLayers;
+
+        inventoryController = GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>();
+        machineInventoryController = GameObject.Find("MachineInventoryCanvas").GetComponent<InventoryController>();
+        heldItemController = GameObject.Find("HeldItemUICanvas").GetComponent<HeldItemController>();
 
         slotDimensionY = Screen.width / slotScale;
         slotDimensionX = slotDimensionY * (float) Math.Sqrt(3) / 2;
@@ -117,8 +125,17 @@ public class HexInventoryUIGenerator : MonoBehaviour {
 
         rollover.transform.position = new Vector3(-Screen.width, -Screen.height, 0);
 
-        // Notify GameManager that UI is generated
-        GameManager.Instance().isInventoryInitialised = true;
+        // Should only happen once
+        if (gameObject.name == "MachineInventoryCanvas") {
+            Invoke(nameof(performSubscriptions), 0.01f); 
+        }
+        
+    }
+
+    private void performSubscriptions() {
+        heldItemController.Subscribe();
+        inventoryController.Subscribe();
+        machineInventoryController.Subscribe();
     }
 
     private void generateHotbar() {
