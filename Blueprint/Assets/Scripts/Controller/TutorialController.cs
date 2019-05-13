@@ -7,6 +7,7 @@ using Model.State;
 using Service.Response;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // Tutorial Summary
@@ -50,9 +51,10 @@ public class TutorialController : MonoBehaviour,
     [SerializeField] private Canvas machineInputMask;
     [SerializeField] private Canvas machineOutputMask;
     [SerializeField] private Canvas machineGeneralMask;
+    [SerializeField] private Canvas finishingCanvas;
 
     private List<InventoryEntry> mockBackpackContents;
-    private int scrollCount = 0;
+    private int scrollCount;
 
     void Start() {
         rmb.enabled = false;
@@ -76,9 +78,9 @@ public class TutorialController : MonoBehaviour,
         machineInputMask.enabled = false;
         machineOutputMask.enabled = false;
         machineGeneralMask.enabled = false;
+        finishingCanvas.enabled = false;
         inventoryCanvas.gameObject.GetComponent<InventoryController>().backpackButton.enabled = false;
         machineInventoryCanvas.transform.position = new Vector2(Screen.width/3, Screen.height/2);
-
         
         GameManager.Instance().tutorialStore.Subscribe(this);
         
@@ -87,11 +89,6 @@ public class TutorialController : MonoBehaviour,
         mockBackpackContents = new List<InventoryEntry> {
             new InventoryEntry(2, 4), new InventoryEntry(3, 4)
         };
-        
-        // REMOVE THESE WHEN BLUEPRITN IS DONE
-//        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(2, 10, "Stone", 1));
-//        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(3, 10, "Clay", 2));
-
     }
 
     private void Update() {
@@ -104,29 +101,54 @@ public class TutorialController : MonoBehaviour,
         }
         
         // If waiting to go to inventory, check if they have done so
-        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldOpenInventory && !alertCanvas.enabled) {
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldOpenInventory) {
             if (Input.GetKeyDown(KeyMapping.Inventory)) {
+                alertCanvas.enabled = false;
                 GameManager.Instance().tutorialStore.Dispatch(new InsideInventory());
             }  
         }
         
         // If waiting to close inventory, check they have done so
-        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldCloseInventory && !alertCanvas.enabled) {
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldCloseInventory) {
             if (Input.GetKeyDown(KeyMapping.Inventory) || Input.GetKeyDown(KeyCode.Escape)) {
+                alertCanvas.enabled = false;
                 GameManager.Instance().tutorialStore.Dispatch(new ClosedInventory());
             }
         }
         
         // If waiting to open blueprint, check they have done so
-        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldOpenBlueprint && !alertCanvas.enabled) {
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldOpenBlueprint) {
             if (Input.GetKeyDown(KeyMapping.Blueprint)) {
+                alertCanvas.enabled = false;
                 GameManager.Instance().tutorialStore.Dispatch(new InsideBlueprint());
             }
         }
 
-        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldCloseBlueprint && !alertCanvas.enabled) {
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldCloseBlueprint) {
             if (Input.GetKeyDown(KeyMapping.Blueprint) || Input.GetKeyDown(KeyCode.Escape)) {
+                alertCanvas.enabled = false;
                 GameManager.Instance().tutorialStore.Dispatch(new ClosedBlueprint());
+            }
+        }
+        
+        // If left mouse button
+        if (Input.GetMouseButtonDown(0)) {
+            switch (GameManager.Instance().tutorialStore.GetState().stage) {
+                case TutorialState.TutorialStage.InsideBlueprint:
+                    GameManager.Instance().tutorialStore.Dispatch(new HighlightFurnace());
+                    break;
+                case TutorialState.TutorialStage.CraftedFurnace:
+                    GameManager.Instance().tutorialStore.Dispatch(new HighlightBlueprintNotes());
+                    break;
+                case TutorialState.TutorialStage.HighlightBlueprintNotes:
+                    GameManager.Instance().tutorialStore.Dispatch(new ReturnToProgression());
+                    break;
+                case TutorialState.TutorialStage.ShouldOpenMachine:
+                    GameManager.Instance().tutorialStore.Dispatch(new ShowMachineOutputSlots());
+                    break;
+                case TutorialState.TutorialStage.ShowMachineOutputSlots:
+                    GameManager.Instance().tutorialStore.Dispatch(new ShowAllMachine());
+                    break;
             }
         }
     }
@@ -139,7 +161,7 @@ public class TutorialController : MonoBehaviour,
                 break;
             case TutorialState.TutorialStage.Moving:
                 // Allow some exploration before continuing
-                Invoke(nameof(StartInventoryFlow), 10);
+                Invoke(nameof(StartInventoryFlow), 5);
                 break;
             case TutorialState.TutorialStage.ShouldOpenInventory:
                 ShowMessage("Inventory", "To view your inventory, press the E key");
@@ -160,9 +182,7 @@ public class TutorialController : MonoBehaviour,
                 break;
             case TutorialState.TutorialStage.DidCollectFromBackpack:
                 backpackMask.enabled = false;
-                heldItemMask.enabled = true;
-                Time.timeScale = 1;
-                Invoke(nameof(FinishInventoryFlow), 3);
+                GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseInventory()); 
                 break;
             case TutorialState.TutorialStage.ShouldCloseInventory:
                 ShowMessage("Close Inventory", "Tap E or ESC to close your inventory");
@@ -180,9 +200,7 @@ public class TutorialController : MonoBehaviour,
                 blueprintCanvas.enabled = true;
                 primaryResourceMask.enabled = true;
                 DisablePlayer();
-                Time.timeScale = 1;
                 GameManager.Instance().uiStore.Subscribe(this);
-                Invoke(nameof(FromPrimaryToFurnaceHighlight), 5); 
                 break; 
             case TutorialState.TutorialStage.HighlightFurnace:
                 primaryResourceMask.enabled = false;
@@ -197,12 +215,10 @@ public class TutorialController : MonoBehaviour,
             case TutorialState.TutorialStage.CraftedFurnace:
                 componentsMask.enabled = false;
                 recipeMask.enabled = true;
-                Invoke(nameof(FromRecipeToNotesHighlight), 6);
                 break;
             case TutorialState.TutorialStage.HighlightBlueprintNotes:
                 recipeMask.enabled = false;
                 notesMask.enabled = true;
-                Invoke(nameof(FromNotesToProgression), 6);
                 break;
             case TutorialState.TutorialStage.ReturnToProgression:
                 notesMask.enabled = false;
@@ -212,7 +228,7 @@ public class TutorialController : MonoBehaviour,
                 blueprintBackMask.enabled = false;
                 blueprintTemplateCanvas.enabled = false;
                 blueprintCanvas.enabled = true;
-                Invoke(nameof(FinishBlueprintFlow), 2);
+                GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseBlueprint());
                 break;
             case TutorialState.TutorialStage.ShouldCloseBlueprint:
                 ShowMessage("Close Blueprint", "Tap Q or ESC to close the Blueprints");
@@ -240,17 +256,14 @@ public class TutorialController : MonoBehaviour,
                 break; 
             case TutorialState.TutorialStage.ShouldOpenMachine:
                 DisablePlayer();
-                Time.timeScale = 1; 
                 gridMask.enabled = false;
                 machineCanvas.enabled = true;
                 machineInventoryCanvas.enabled = true;
                 machineInputMask.enabled = true;
-                Invoke(nameof(FromMachineInputToOutput), 5);
                 break;
             case TutorialState.TutorialStage.ShowMachineOutputSlots:
                 machineInputMask.enabled = false;
                 machineOutputMask.enabled = true;
-                Invoke(nameof(FromMachineOutputToAll), 5);
                 break;
             case TutorialState.TutorialStage.ShowAllMachine:
                 machineOutputMask.enabled = false;
@@ -266,7 +279,9 @@ public class TutorialController : MonoBehaviour,
                 GameManager.Instance().inventoryStore.Unsubscribe(this);
                 GameManager.Instance().heldItemStore.Unsubscribe(this);
                 GameManager.Instance().mapStore.Unsubscribe(this);
-                Debug.Log("Done");
+                finishingCanvas.enabled = true;
+                Time.timeScale = 1;
+                Invoke(nameof(ToWorld), 6);
                 break;
             default:
                 Debug.Log("UNHANDLED CASE IN STATE DID UPDATE");
@@ -357,7 +372,6 @@ public class TutorialController : MonoBehaviour,
     public void StateDidUpdate(MachineState state) {
         if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShowAllMachine) {
             foreach (Machine machine in state.grid.Values) {
-                Debug.Log(machine.output);
                 if (machine.id == 11 && machine.output.IsPresent()) {
                     GameManager.Instance().tutorialStore.Dispatch(new DidCraftInMachine());
                 }
@@ -374,40 +388,18 @@ public class TutorialController : MonoBehaviour,
         GameManager.Instance().tutorialStore.Dispatch(new ShouldOpenInventory());
     }
     
-    private void FinishInventoryFlow() {
-        GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseInventory());
-    }
-    
     private void StartBlueprintFlow() {
         GameManager.Instance().tutorialStore.Dispatch(new ShouldOpenBlueprint());
-    }
-
-    private void FromPrimaryToFurnaceHighlight() {
-        GameManager.Instance().tutorialStore.Dispatch(new HighlightFurnace());
-    }
-    
-    private void FromRecipeToNotesHighlight() {
-        GameManager.Instance().tutorialStore.Dispatch(new HighlightBlueprintNotes());
-    }
-    
-    private void FromNotesToProgression() {
-        GameManager.Instance().tutorialStore.Dispatch(new ReturnToProgression());
-    }
-
-    private void FinishBlueprintFlow() {
-        GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseBlueprint());
     }
 
     private void StartGridFlow() {
         GameManager.Instance().tutorialStore.Dispatch(new ShowHeldItemScroll());
     }
 
-    private void FromMachineInputToOutput() {
-        GameManager.Instance().tutorialStore.Dispatch(new ShowMachineOutputSlots());
-    }
-    
-    private void FromMachineOutputToAll() {
-        GameManager.Instance().tutorialStore.Dispatch(new ShowAllMachine());
+    private void ToWorld() {
+        GameManager.Instance().ResetGame();
+        GameManager.Instance().uiStore.Dispatch(new OpenPlayingUI());
+        SceneManager.LoadScene(SceneMapping.World);
     }
 
     private void DisablePlayer() {

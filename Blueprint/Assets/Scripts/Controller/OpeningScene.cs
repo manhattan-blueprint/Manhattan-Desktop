@@ -14,7 +14,7 @@ using TMPro;
 using Controller;
 using UnityEngine.Experimental.UIElements;
 
-public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
+public class OpeningScene : MonoBehaviour {
     private GameObject dishBase;
     private bool introCompletionCheck;
     private GameObject mountainPath;
@@ -75,11 +75,6 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         Invoke("intro",0.01f);
         Invoke("disableGridBehaviour", 1f);
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
-       
-        // TODO: REMOVE THIS!
-        SceneManager.LoadScene(SceneMapping.Tutorial);
-        Debug.Log(GameManager.Instance().uiStore.GetState().Selected);
-//        GameManager.Instance().uiStore.Subscribe(this);
     }
 
     private void intro() {
@@ -204,16 +199,10 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
 
         cameraReset();
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
-//        GameManager.Instance().uiStore.Dispatch(new CloseUI());
+        GameManager.Instance().inTutorialMode = true;
+        SceneManager.LoadScene(SceneMapping.Tutorial);
     }
-
-    public void StateDidUpdate(UIState state) {
-        if (state.Selected == UIState.OpenUI.Playing) {
-            GameManager.Instance().uiStore.Unsubscribe(this);
-            SceneManager.LoadScene(SceneMapping.World);
-        }
-    }
-
+    
     private IEnumerator cameraSpin() {
         while (play) {
             yield return new WaitForSeconds(1.0f / 60.0f);

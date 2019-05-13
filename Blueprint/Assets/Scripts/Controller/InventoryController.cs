@@ -134,6 +134,9 @@ namespace Controller {
                 GameManager.Instance().inventoryStore.GetState(),
                 GameManager.Instance().machineStore.GetState());
 
+            
+            if (GameManager.Instance().inTutorialMode) return;
+            
             StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), gameState, result => {
                 if (!result.isSuccess()) {
                     this.ShowAlert("Error", "Could not get inventory " + result.GetError());

@@ -223,7 +223,8 @@ namespace Controller {
                     currentSI.blueprint[i].quantity));
             }
             GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(currentSI.item_id, 1));
-            Debug.Log("Added to inventory store");
+
+            if (GameManager.Instance().inTutorialMode) return;
             
             // Update progress
             if (GameManager.Instance().completedBlueprints.Contains(new Item(currentSI.item_id))) return;
