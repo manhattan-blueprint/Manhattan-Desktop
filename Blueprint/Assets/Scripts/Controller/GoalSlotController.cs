@@ -77,7 +77,6 @@ public class GoalSlotController : InventorySlotController {
             if (GameManager.Instance().mapStore.GetState().getGoal().IsComplete()) {
                 GameManager.Instance().uiStore.Dispatch(new CloseUI());
                 GameManager.Instance().uiStore.Dispatch(new OpenEndGameUI());
-                //GameObject.Find("MenuController").GetComponent<MenuController>().GameOver();
                 goalUIController.StartWinAnimation();
             }
 

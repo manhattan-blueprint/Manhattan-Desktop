@@ -86,11 +86,9 @@ namespace Model.Reducer {
             }
         }
 
-        public void visit(OpenEndGameUI cap)
-        {
+        public void visit(OpenEndGameUI cap) {
             UIState.OpenUI current = state.Selected;
-            switch (current)
-            {
+            switch (current) {
                 case UIState.OpenUI.Playing:
                     state.Selected = UIState.OpenUI.EndGame;
                     break;

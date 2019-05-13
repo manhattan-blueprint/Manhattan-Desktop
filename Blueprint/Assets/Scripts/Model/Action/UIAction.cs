@@ -46,10 +46,8 @@ namespace Model.Action {
         }
     }
 
-    public class OpenEndGameUI : UIAction
-    {
-        public override void Accept(UIVisitor visitor)
-        {
+    public class OpenEndGameUI : UIAction {
+        public override void Accept(UIVisitor visitor) {
             visitor.visit(this);
         }
     }
