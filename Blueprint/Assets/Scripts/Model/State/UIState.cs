@@ -27,6 +27,8 @@ namespace Model.State {
         public Vector2 SelectedMachineLocation;
         public int SelectedBlueprintID = -1;
         public bool ShouldShowHelpUI = false;
+        public bool fromGateRMB = false;
+        public bool fromBeaconRMB = false;
 
         public UIState() {
             this.Selected = OpenUI.Login;

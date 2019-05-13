@@ -313,9 +313,15 @@ namespace Controller {
 
         private void EnableMouse() {
             Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             gateCanvas.enabled = false;
             cursor.enabled = false;
+            cursorCanvas.enabled = true;
             rmb.enabled = true;
+            pauseCanvas.enabled = false;
+            blueprintCanvas.enabled = false;
+            inventoryCanvas.enabled = false;
         }
 
         private void PauseGame() {
