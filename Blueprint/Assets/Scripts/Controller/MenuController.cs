@@ -138,7 +138,6 @@ namespace Controller {
         public void GameOver() {
             gameOver = true;
             soundController.PlayOutroMusic();
-            GameManager.Instance().uiStore.Dispatch(new CloseUI());
             heldCanvas.enabled = false;
             cursorCanvas.enabled = false;
             pauseCanvas.enabled = false;
@@ -368,6 +367,9 @@ namespace Controller {
                     break;
                 case UIState.OpenUI.Logout:
                     LogoutPrompt();
+                    break;
+                case UIState.OpenUI.EndGame:
+                    GameOver();
                     break;
                 case UIState.OpenUI.Login:
                     GameObject.Find("Player").GetComponent<PlayerMoveController>().enabled = true;

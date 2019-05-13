@@ -56,6 +56,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Playing:
                 case UIState.OpenUI.Welcome:
                 case UIState.OpenUI.Logout:
+                case UIState.OpenUI.EndGame:
                     state.Selected = UIState.OpenUI.Login;
                     break;
                 default:
@@ -84,6 +85,20 @@ namespace Model.Reducer {
                     throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenInventoryUI");
             }
         }
+
+        public void visit(OpenEndGameUI cap)
+        {
+            UIState.OpenUI current = state.Selected;
+            switch (current)
+            {
+                case UIState.OpenUI.Playing:
+                    state.Selected = UIState.OpenUI.EndGame;
+                    break;
+                default:
+                    throw new Exception("Invalid state transition. Cannot transition from " + current + " to OpenEndgameUI");
+            }
+        }
+
 
         public void visit(OpenBlueprintUI blueprint) {
             UIState.OpenUI current = state.Selected;
