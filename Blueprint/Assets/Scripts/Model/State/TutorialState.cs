@@ -20,7 +20,15 @@ namespace Model.State {
             InsideBlueprint,
             HighlightFurnace,
             OpenFurnace,
-            CraftedFurnace
+            CraftedFurnace,
+            HighlightBlueprintNotes,
+            ReturnToProgression,
+            ShouldCloseBlueprintTemplate, 
+            ShouldCloseBlueprint, 
+            ClosedBlueprint,
+            ShowHeldItemScroll,
+            ScrolledHeldItem,
+            PlacedFurnace
         }
         public TutorialStage stage;
 

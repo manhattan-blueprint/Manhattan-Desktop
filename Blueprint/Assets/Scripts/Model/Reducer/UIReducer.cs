@@ -26,6 +26,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.GateMouse:
                 case UIState.OpenUI.BeaconMouse:
                 case UIState.OpenUI.BindingsIntro:
+                    Debug.Log("1");
                     state.Selected = UIState.OpenUI.Playing;
                     break;
                 case UIState.OpenUI.Intro:
@@ -171,6 +172,7 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Login:
+                case UIState.OpenUI.Blueprint:
                     state.Selected = UIState.OpenUI.Intro;
                     GameManager.Instance().mapStore.Dispatch(new IntroComplete());
                     break;
@@ -183,6 +185,7 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Playing:
+                case UIState.OpenUI.Intro:
                     state.Selected = UIState.OpenUI.Machine;
                     state.SelectedMachineLocation = machine.machinePosition;
                     break;

@@ -60,12 +60,44 @@ namespace Model.Reducer {
             this.state.stage = TutorialState.TutorialStage.HighlightFurnace;
         }
 
-        public void visit(OpenFurnace openFurnace) {
+        public void visit(OpenFurnaceBlueprint openFurnaceBlueprint) {
             this.state.stage = TutorialState.TutorialStage.OpenFurnace;
         }
         
         public void visit(CraftedFurnace craftedFurnace) {
             this.state.stage = TutorialState.TutorialStage.CraftedFurnace;
+        }
+        
+        public void visit(HighlightBlueprintNotes highlightBlueprintNotes) {
+            this.state.stage = TutorialState.TutorialStage.HighlightBlueprintNotes;
+        }
+        
+        public void visit(ReturnToProgression returnToProgression) {
+            this.state.stage = TutorialState.TutorialStage.ReturnToProgression;
+        }
+
+        public void visit(ShouldCloseBlueprintTemplate shouldCloseBlueprintTemplate) {
+            this.state.stage = TutorialState.TutorialStage.ShouldCloseBlueprintTemplate;
+        }
+        
+        public void visit(ShouldCloseBlueprint shouldCloseBlueprint) {
+            this.state.stage = TutorialState.TutorialStage.ShouldCloseBlueprint;
+        }
+
+        public void visit(ClosedBlueprint closedBlueprint) {
+            this.state.stage = TutorialState.TutorialStage.ClosedBlueprint;
+        }
+
+        public void visit(ShowHeldItemScroll showHeldItemScroll) {
+            this.state.stage = TutorialState.TutorialStage.ShowHeldItemScroll;
+        }
+        
+        public void visit(DidScrollHeldItem didScrollHeldItem) {
+            this.state.stage = TutorialState.TutorialStage.ScrolledHeldItem;
+        }
+
+        public void visit(DidPlaceFurnace didPlaceFurnace) {
+            this.state.stage = TutorialState.TutorialStage.PlacedFurnace;
         }
     }
 }

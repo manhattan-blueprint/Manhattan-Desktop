@@ -204,7 +204,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
 
         cameraReset();
         animationManager.StartAppearanceAnimation(blackOverlay, Anim.Disappear, 1.0f, true, 0.0f, 0.0f);
-        GameManager.Instance().uiStore.Dispatch(new CloseUI());
+//        GameManager.Instance().uiStore.Dispatch(new CloseUI());
     }
 
     public void StateDidUpdate(UIState state) {

@@ -12,8 +12,16 @@ namespace Model.Action {
         void visit(ShouldOpenBlueprint shouldOpenBlueprint);
         void visit(InsideBlueprint insideBlueprint);
         void visit(HighlightFurnace highlightFurnace);
-        void visit(OpenFurnace openFurnace);
+        void visit(OpenFurnaceBlueprint openFurnaceBlueprint);
         void visit(CraftedFurnace craftedFurnace);
+        void visit(HighlightBlueprintNotes highlightNotes);
+        void visit(ReturnToProgression returnToProgression);
+        void visit(ShouldCloseBlueprintTemplate shouldCloseBlueprintTemplate);
+        void visit(ShouldCloseBlueprint shouldCloseBlueprint);
+        void visit(ClosedBlueprint closedBlueprint);
+        void visit(ShowHeldItemScroll showHeldItemScroll);
+        void visit(DidScrollHeldItem didScrollHeldItem);
+        void visit(DidPlaceFurnace didPlaceFurnace);
     }
 
     public abstract class TutorialAction: Action {
@@ -92,7 +100,7 @@ namespace Model.Action {
         }
     }
 
-    public class OpenFurnace: TutorialAction {
+    public class OpenFurnaceBlueprint: TutorialAction {
         public override void Accept(TutorialVisitor visitor) {
             visitor.visit(this);
         }
@@ -104,4 +112,51 @@ namespace Model.Action {
         }
     }
 
+    public class HighlightBlueprintNotes: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ReturnToProgression: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShouldCloseBlueprintTemplate : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShouldCloseBlueprint : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ClosedBlueprint: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+    
+    public class ShowHeldItemScroll: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class DidScrollHeldItem: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class DidPlaceFurnace : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
 }

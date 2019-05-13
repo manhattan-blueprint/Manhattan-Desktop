@@ -27,7 +27,8 @@ using UnityEngine.UI;
 // - Explain things can make with furnace
 // - Explain notes
 
-public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subscriber<InventoryState>, Subscriber<UIState> {
+public class TutorialController : MonoBehaviour, 
+    Subscriber<TutorialState>, Subscriber<InventoryState>, Subscriber<UIState>, Subscriber<HeldItemState>, Subscriber<MapState> {
     [SerializeField] private Image cursor;
     [SerializeField] private SVGImage rmb;
     [SerializeField] private Canvas alertCanvas;
@@ -36,6 +37,7 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     [SerializeField] private Canvas machineInventoryCanvas;
     [SerializeField] private Canvas blueprintCanvas;
     [SerializeField] private Canvas blueprintTemplateCanvas;
+    [SerializeField] private Canvas heldItemCanvas;
     [SerializeField] private Canvas inventoryMask;
     [SerializeField] private Canvas backpackMask;
     [SerializeField] private Canvas heldItemMask;
@@ -43,8 +45,12 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     [SerializeField] private Canvas furnaceMask;
     [SerializeField] private Canvas componentsMask;
     [SerializeField] private Canvas recipeMask;
+    [SerializeField] private Canvas notesMask;
+    [SerializeField] private Canvas blueprintBackMask;
+    [SerializeField] private Canvas gridMask;
 
     private List<InventoryEntry> mockBackpackContents;
+    private int scrollCount = 0;
 
     void Start() {
         rmb.enabled = false;
@@ -54,6 +60,7 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
         machineInventoryCanvas.enabled = false;
         blueprintCanvas.enabled = false;
         blueprintTemplateCanvas.enabled = false;
+        heldItemCanvas.enabled = false;
         inventoryMask.enabled = false;
         backpackMask.enabled = false;
         heldItemMask.enabled = false;
@@ -61,6 +68,9 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
         furnaceMask.enabled = false;
         componentsMask.enabled = false;
         recipeMask.enabled = false;
+        notesMask.enabled = false;
+        blueprintBackMask.enabled = false;
+        gridMask.enabled = false;
         inventoryCanvas.gameObject.GetComponent<InventoryController>().backpackButton.enabled = false;
         GameManager.Instance().tutorialStore.Subscribe(this);
         
@@ -105,10 +115,15 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
                 GameManager.Instance().tutorialStore.Dispatch(new InsideBlueprint());
             }
         }
+
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShouldCloseBlueprint && !alertCanvas.enabled) {
+            if (Input.GetKeyDown(KeyMapping.Blueprint) || Input.GetKeyDown(KeyCode.Escape)) {
+                GameManager.Instance().tutorialStore.Dispatch(new ClosedBlueprint());
+            }
+        }
     }
 
     public void StateDidUpdate(TutorialState state) {
-        Debug.Log("State did update to " + state.stage);
         switch (state.stage) {
             case TutorialState.TutorialStage.Welcome:
                 // Show welcome message
@@ -174,7 +189,47 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
             case TutorialState.TutorialStage.CraftedFurnace:
                 componentsMask.enabled = false;
                 recipeMask.enabled = true;
+                Invoke(nameof(FromRecipeToNotesHighlight), 6);
                 break;
+            case TutorialState.TutorialStage.HighlightBlueprintNotes:
+                recipeMask.enabled = false;
+                notesMask.enabled = true;
+                Invoke(nameof(FromNotesToProgression), 6);
+                break;
+            case TutorialState.TutorialStage.ReturnToProgression:
+                notesMask.enabled = false;
+                blueprintBackMask.enabled = true;
+                break;
+            case TutorialState.TutorialStage.ShouldCloseBlueprintTemplate:
+                blueprintBackMask.enabled = false;
+                blueprintTemplateCanvas.enabled = false;
+                blueprintCanvas.enabled = true;
+                Invoke(nameof(FinishBlueprintFlow), 2);
+                break;
+            case TutorialState.TutorialStage.ShouldCloseBlueprint:
+                ShowMessage("Close Blueprint", "Tap Q or ESC to close the Blueprints");
+                break;
+            case TutorialState.TutorialStage.ClosedBlueprint:
+                blueprintCanvas.enabled = false;
+                heldItemCanvas.enabled = true;
+                GameManager.Instance().uiStore.Dispatch(new OpenIntroUI());
+                EnablePlayer();
+                Invoke(nameof(StartGridFlow), 2);
+                break;
+            case TutorialState.TutorialStage.ShowHeldItemScroll:
+                heldItemMask.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Scroll the scroll wheel to select an item to place";
+                heldItemMask.enabled = true;
+                heldItemCanvas.enabled = true;
+                GameManager.Instance().heldItemStore.Subscribe(this);
+                break;
+            case TutorialState.TutorialStage.ScrolledHeldItem:
+                heldItemMask.enabled = false;
+                gridMask.enabled = true;
+                GameManager.Instance().mapStore.Subscribe(this);
+                break;
+            case TutorialState.TutorialStage.PlacedFurnace:
+                gridMask.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "To interact with a machine, point your cursor at it and right click";
+                break; 
             default:
                 Debug.Log("UNHANDLED CASE IN STATE DID UPDATE");
                 break;
@@ -182,7 +237,6 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
     }
 
     public void StateDidUpdate(InventoryState state) {
-        Debug.Log(state.inventoryContents.Keys);
         TutorialState.TutorialStage tutorialState = GameManager.Instance().tutorialStore.GetState().stage;
         
         if (tutorialState == TutorialState.TutorialStage.InsideInventory) {
@@ -207,7 +261,6 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
         } else if (tutorialState == TutorialState.TutorialStage.OpenFurnace) {
             // Check inventory for crafted furnace
             if (state.inventoryContents.ContainsKey(11)) {
-                Debug.Log("Made furnace");
                 GameManager.Instance().tutorialStore.Dispatch(new CraftedFurnace()); 
             }
         }
@@ -217,12 +270,39 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
         if (state.Selected == UIState.OpenUI.BlueprintTemplate) {
             // If tapped furnace AND are at right stage in tutorial
             if (state.SelectedBlueprintID == 11 && GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.HighlightFurnace) {
-                GameManager.Instance().tutorialStore.Dispatch(new OpenFurnace());
+                GameManager.Instance().tutorialStore.Dispatch(new OpenFurnaceBlueprint());
             } else {
                 // Invalid click, go back to blueprint
                 GameManager.Instance().uiStore.Dispatch(new OpenBlueprintUI());
             }
         }
+
+        if (state.Selected == UIState.OpenUI.Blueprint && GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ReturnToProgression) {
+            GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseBlueprintTemplate());
+        }
+
+        if (state.Selected == UIState.OpenUI.Machine && GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.PlacedFurnace) {
+            Debug.Log("Lets go crazy crazy crazy till we see the sun");
+        }
+        
+    }
+
+    public void StateDidUpdate(HeldItemState state) {
+        if (GameManager.Instance().tutorialStore.GetState().stage == TutorialState.TutorialStage.ShowHeldItemScroll) {
+            if (scrollCount == 5) {
+                GameManager.Instance().tutorialStore.Dispatch(new DidScrollHeldItem());
+            }
+            scrollCount++;
+        }
+    }
+
+    public void StateDidUpdate(MapState state) {
+        foreach (MapObject mapObject in state.GetObjects().Values) {
+            if (mapObject.GetID() == 11) {
+                GameManager.Instance().tutorialStore.Dispatch(new DidPlaceFurnace());
+            } 
+        }
+
     }
 
     private void ShowMessage(string title, string description) {
@@ -244,6 +324,22 @@ public class TutorialController : MonoBehaviour, Subscriber<TutorialState>, Subs
 
     private void FromPrimaryToFurnaceHighlight() {
         GameManager.Instance().tutorialStore.Dispatch(new HighlightFurnace());
+    }
+    
+    private void FromRecipeToNotesHighlight() {
+        GameManager.Instance().tutorialStore.Dispatch(new HighlightBlueprintNotes());
+    }
+    
+    private void FromNotesToProgression() {
+        GameManager.Instance().tutorialStore.Dispatch(new ReturnToProgression());
+    }
+
+    private void FinishBlueprintFlow() {
+        GameManager.Instance().tutorialStore.Dispatch(new ShouldCloseBlueprint());
+    }
+
+    private void StartGridFlow() {
+        GameManager.Instance().tutorialStore.Dispatch(new ShowHeldItemScroll());
     }
 
     private void DisablePlayer() {
