@@ -20,6 +20,7 @@ namespace Model.State {
             GateMouse,
             BeaconMouse,
             Intro,
+            EndGame
         };
 
         public OpenUI Selected;
