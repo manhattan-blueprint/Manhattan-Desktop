@@ -5,7 +5,7 @@ using Model.State;
 namespace Controller {
     public class BeaconController : MonoBehaviour {
         private GameObject player;
-        private const float minDistance = 6;
+        private const float minDistance = 7;
 
         public void Start() {
             player = GameObject.Find("Player");
