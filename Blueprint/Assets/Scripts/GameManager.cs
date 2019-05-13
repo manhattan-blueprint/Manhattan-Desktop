@@ -19,6 +19,7 @@ public class GameManager {
     public readonly StateStore<UIState, UIAction> uiStore;
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
     public readonly StateStore<MachineState, MachineAction> machineStore;
+    public readonly StateStore<TutorialState, TutorialAction> tutorialStore;
     public SchemaManager sm;
     public List<Item> completedBlueprints;
     private AccessToken accessToken;
@@ -32,6 +33,7 @@ public class GameManager {
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
+        this.tutorialStore = new StateStore<TutorialState, TutorialAction>(new TutorialReducer(), new TutorialState());
     }
 
     public static GameManager Instance() {

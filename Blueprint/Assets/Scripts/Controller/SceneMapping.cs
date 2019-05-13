@@ -3,5 +3,6 @@
         public const string MainMenu = "MainMenu";
         public const string World    = "World";
         public const string Intro    = "Intro";
+        public const string Tutorial = "Tutorial";
     }
 }

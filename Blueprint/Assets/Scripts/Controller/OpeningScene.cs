@@ -75,7 +75,10 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
         Invoke("intro",0.01f);
         Invoke("disableGridBehaviour", 1f);
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
-        GameManager.Instance().uiStore.Subscribe(this);
+       
+        // TODO: REMOVE THIS!
+        SceneManager.LoadScene(SceneMapping.Tutorial);
+//        GameManager.Instance().uiStore.Subscribe(this);
     }
 
     private void intro() {
