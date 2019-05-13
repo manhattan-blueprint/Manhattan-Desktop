@@ -31,6 +31,7 @@ namespace Model.Reducer {
                 case UIState.OpenUI.Intro:
                     // *MUST* start the world in playing or bad things happen...
                     state.Selected = UIState.OpenUI.Playing;
+                    // TODO: REMOVE THIS!!
                     // Use a boolean to store the state we want to get to
                     state.ShouldShowHelpUI = true;
                     break;
@@ -102,6 +103,7 @@ namespace Model.Reducer {
             UIState.OpenUI current = state.Selected;
             switch (current) {
                 case UIState.OpenUI.Blueprint:
+                case UIState.OpenUI.Intro:
                     state.Selected = UIState.OpenUI.BlueprintTemplate;
                     break;
                 default:

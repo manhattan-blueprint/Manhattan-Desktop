@@ -5,6 +5,12 @@ namespace Model.Action {
         void visit(ShouldOpenInventory shouldOpenInventory);
         void visit(InsideInventory insideInventory);
         void visit(DidMoveInventoryItem didMoveInventoryItem);
+        void visit(DidSplitInventoryItem didSplitInventoryItem);
+        void visit(DidCollectFromBackpack didCollectFromBackpack);
+        void visit(ShouldCloseInventory shouldCloseInventory);
+        void visit(ClosedInventory closedInventory);
+        void visit(ShouldOpenBlueprint shouldOpenBlueprint);
+        void visit(InsideBlueprint insideBlueprint);
     }
 
     public abstract class TutorialAction: Action {
@@ -41,4 +47,39 @@ namespace Model.Action {
         }
     }
 
+    public class DidSplitInventoryItem : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class DidCollectFromBackpack : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShouldCloseInventory : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ClosedInventory : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class ShouldOpenBlueprint : TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
+
+    public class InsideBlueprint: TutorialAction {
+        public override void Accept(TutorialVisitor visitor) {
+            visitor.visit(this);
+        }
+    }
 }

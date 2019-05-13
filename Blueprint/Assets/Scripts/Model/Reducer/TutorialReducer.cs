@@ -12,7 +12,6 @@ namespace Model.Reducer {
             return this.state;
         }
 
-
         public void visit(StartTutorial startTutorial) {
             this.state.stage = TutorialState.TutorialStage.Welcome;
         }
@@ -31,6 +30,30 @@ namespace Model.Reducer {
 
         public void visit(DidMoveInventoryItem didMoveInventoryItem) {
             this.state.stage = TutorialState.TutorialStage.DidMoveInventoryItem;
+        }
+        
+        public void visit(DidSplitInventoryItem didSplitInventoryItem) {
+            this.state.stage = TutorialState.TutorialStage.DidSplitInventoryItem;
+        }
+        
+        public void visit(DidCollectFromBackpack didCollectFromBackpack) {
+            this.state.stage = TutorialState.TutorialStage.DidCollectFromBackpack;
+        }
+        
+        public void visit(ShouldCloseInventory shouldCloseInventory) {
+            this.state.stage = TutorialState.TutorialStage.ShouldCloseInventory;
+        }
+        
+        public void visit(ClosedInventory closedInventory) {
+            this.state.stage = TutorialState.TutorialStage.ClosedInventory;
+        }
+        
+        public void visit(ShouldOpenBlueprint shouldOpenBlueprint) {
+            this.state.stage = TutorialState.TutorialStage.ShouldOpenBlueprint;
+        }
+        
+        public void visit(InsideBlueprint insideBlueprint) {
+            this.state.stage = TutorialState.TutorialStage.InsideBlueprint;
         }
     }
 }

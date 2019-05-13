@@ -11,12 +11,18 @@ namespace Model.State {
             Moving,
             ShouldOpenInventory,
             InsideInventory,
-            DidMoveInventoryItem
+            DidMoveInventoryItem,
+            DidSplitInventoryItem,
+            DidCollectFromBackpack,
+            ShouldCloseInventory,
+            ClosedInventory,
+            ShouldOpenBlueprint,
+            InsideBlueprint
         }
         public TutorialStage stage;
 
         public TutorialState() {
-            this.stage = TutorialStage.Welcome;
+            this.stage = TutorialStage.ShouldOpenBlueprint;
         }
     }
 }

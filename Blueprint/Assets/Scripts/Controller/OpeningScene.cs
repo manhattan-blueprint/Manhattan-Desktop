@@ -78,6 +78,7 @@ public class OpeningScene : MonoBehaviour, Subscriber<UIState> {
        
         // TODO: REMOVE THIS!
         SceneManager.LoadScene(SceneMapping.Tutorial);
+        Debug.Log(GameManager.Instance().uiStore.GetState().Selected);
 //        GameManager.Instance().uiStore.Subscribe(this);
     }
 
