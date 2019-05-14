@@ -157,7 +157,7 @@ public class TutorialController : MonoBehaviour,
         switch (state.stage) {
             case TutorialState.TutorialStage.Welcome:
                 // Show welcome message
-                ShowMessage("Welcome to Blueprint!", "To move around the world, use:\n W - Forwards\nS - Backwards\nA - Left\nD - Right\n\n You can use the mouse to move the direction you are facing.");
+                ShowMessage("Welcome to Blueprint!", "To move around the world, use:\n W - Forwards\nS - Backwards\nA - Left\nD - Right\n\n You can use the mouse to change the direction you are facing.");
                 break;
             case TutorialState.TutorialStage.Moving:
                 // Allow some exploration before continuing
