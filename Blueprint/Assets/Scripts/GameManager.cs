@@ -19,6 +19,8 @@ public class GameManager {
     public readonly StateStore<UIState, UIAction> uiStore;
     public readonly StateStore<HeldItemState, HeldItemAction> heldItemStore;
     public readonly StateStore<MachineState, MachineAction> machineStore;
+    public readonly StateStore<TutorialState, TutorialAction> tutorialStore;
+    public bool inTutorialMode;
     public SchemaManager sm;
     public List<Item> completedBlueprints;
     private AccessToken accessToken;
@@ -33,7 +35,26 @@ public class GameManager {
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
         this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
+        this.tutorialStore = new StateStore<TutorialState, TutorialAction>(new TutorialReducer(), new TutorialState());
         this.isInventoryInitialised = false;
+    }
+
+    private GameManager(SchemaManager schemaManager, AccessToken accessToken) {
+        this.mapStore = new StateStore<MapState, MapAction>(new MapReducer(), new MapState());
+        this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
+        this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
+        this.heldItemStore = new StateStore<HeldItemState, HeldItemAction>(new HeldItemReducer(), new HeldItemState());
+        this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
+        this.tutorialStore = new StateStore<TutorialState, TutorialAction>(new TutorialReducer(), new TutorialState());
+        this.sm = schemaManager;
+        this.accessToken = accessToken;
+        this.completedBlueprints = new List<Item>();
+        this.isInventoryInitialised = false;
+        this.mapStore.GetState().SetIntroState(true);
+        inventoryStore.Dispatch(
+            new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
+        // Update which machines are connected when loading from save state
+        machineStore.Dispatch(new UpdateConnected());
     }
 
     public static GameManager Instance() {
@@ -60,7 +81,7 @@ public class GameManager {
     }
 
     public void ResetGame() {
-        manager = new GameManager();
+        manager = new GameManager(sm, accessToken);
     }
 
     public AccessToken GetAccessToken() {

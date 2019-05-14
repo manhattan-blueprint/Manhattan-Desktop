@@ -295,7 +295,6 @@ namespace Controller {
         }
         
         public void PlayPlacementSound(int inpID) {
-            Debug.Log("Playing place sound with id " + inpID);
             switch (inpID) {
                 case 1: PlayChopSound(); break;
                 case 2: PlayMineSound(); break;
@@ -333,7 +332,6 @@ namespace Controller {
         }
         
         public void PlayPickupSound(int inpID) {
-            Debug.Log("Playing pick up sound with id " + inpID);
             switch (inpID) {
                 case 1: PlayChopSound(); break;
                 case 2: PlayMineSound(); break;
