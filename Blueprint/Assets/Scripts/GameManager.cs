@@ -39,7 +39,7 @@ public class GameManager {
         this.isInventoryInitialised = false;
     }
 
-    private GameManager(SchemaManager schemaManager) {
+    private GameManager(SchemaManager schemaManager, AccessToken accessToken) {
         this.mapStore = new StateStore<MapState, MapAction>(new MapReducer(), new MapState());
         this.inventoryStore = new StateStore<InventoryState, InventoryAction>(new InventoryReducer(), new InventoryState());
         this.uiStore = new StateStore<UIState, UIAction>(new UIReducer(), new UIState());
@@ -47,7 +47,10 @@ public class GameManager {
         this.machineStore = new StateStore<MachineState, MachineAction>(new MachineReducer(), new MachineState());
         this.tutorialStore = new StateStore<TutorialState, TutorialAction>(new TutorialReducer(), new TutorialState());
         this.sm = schemaManager;
+        this.accessToken = accessToken;
+        this.completedBlueprints = new List<Item>();
         this.isInventoryInitialised = false;
+        this.mapStore.GetState().SetIntroState(true);
     }
 
     public static GameManager Instance() {
@@ -74,7 +77,7 @@ public class GameManager {
     }
 
     public void ResetGame() {
-        manager = new GameManager(sm);
+        manager = new GameManager(sm, accessToken);
     }
 
     public AccessToken GetAccessToken() {
