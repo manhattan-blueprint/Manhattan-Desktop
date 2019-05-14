@@ -111,8 +111,6 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
                 else if (Input.GetKeyDown(KeyCode.Return)) {
                     if (loginPasswordInput.IsActive()) {
                         OnLoginClick();
-                    } else if (registerPasswordInput.IsActive()) {
-                        OnRegisterClick();
                     }
                 } else if (Input.GetKeyDown(KeyCode.Escape)) {
                     ToSplashScreen();
@@ -131,6 +129,10 @@ public class LoginController: MonoBehaviour, Subscriber<UIState> {
                         registerBackButton.Select();
                     } else if (registerBackButton.IsActive()) {
                         registerUsernameInput.Select();
+                    }
+                } else if (Input.GetKeyDown(KeyCode.Return)) { 
+                    if (registerPasswordInput.IsActive()) {
+                        OnRegisterClick();
                     }
                 } else if (Input.GetKeyDown(KeyCode.Escape)) {
                     ToLoginMenu();
