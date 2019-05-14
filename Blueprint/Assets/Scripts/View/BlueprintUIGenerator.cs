@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Model;
 using Model.Action;
+using Model.State;
 using Service.Request;
 using TMPro;
 using UnityEditor;
@@ -222,7 +223,7 @@ public class BlueprintUIGenerator : MonoBehaviour {
         // This probably has side effects ngl
         EventSystem.current.SetSelectedGameObject(null);
         
-        if (GameManager.Instance().inTutorialMode && id != 11) return;
+        if (GameManager.Instance().inTutorialMode && (id != 11 || GameManager.Instance().tutorialStore.GetState().stage != TutorialState.TutorialStage.HighlightFurnace)) return;
         
         GameManager.Instance().uiStore.Dispatch(new OpenBlueprintTemplateUI(id));
     }
