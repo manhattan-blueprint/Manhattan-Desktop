@@ -331,7 +331,6 @@ public class TutorialController : MonoBehaviour,
                 GameManager.Instance().tutorialStore.Dispatch(new OpenFurnaceBlueprint());
             } else {
                 // Invalid click, go back to blueprint
-                // TODO: Fix this, otherwise causes infinite recursion
                 GameManager.Instance().uiStore.GetState().Selected = UIState.OpenUI.Blueprint;
             }
         }
