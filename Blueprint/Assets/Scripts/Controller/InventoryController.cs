@@ -32,28 +32,15 @@ namespace Controller {
             backpackContents = new List<InventoryEntry>();
         }
 
-        private void subscribeToInventory() {
+        public void Subscribe() {
+            allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
+            
+            foreach (InventorySlotController controller in allSlots) {
+                itemSlots.Add(controller.getId(), controller);
+            }
+            
+            GameManager.Instance().uiStore.Subscribe(this);
             GameManager.Instance().inventoryStore.Subscribe(this);
-        }
-
-        void Update() {
-            if (firstUIUpdate) {
-                allSlots = gameObject.GetComponentsInChildren<InventorySlotController>().ToList();
-                
-                foreach (InventorySlotController controller in allSlots) {
-                  itemSlots.Add(controller.getId(), controller);
-                }
-
-                firstUIUpdate = false;
-
-                // *MUST* subscribe *AFTER* finishing configuring the UI.
-                GameManager.Instance().uiStore.Subscribe(this);
-            }
-
-            if (!subscribed && GameManager.Instance().isInventoryInitialised) {
-                subscribed = true;
-                subscribeToInventory();
-            }
         }
         
         public void StateDidUpdate(InventoryState state) {
@@ -126,6 +113,8 @@ namespace Controller {
                 this.ShowAlert("Inventory Full!", "Please make more space before retrieving backpack contents...");
                 return;
             }
+
+            if (backpackContents.Count <= 0) return;
 
             foreach (InventoryEntry entry in backpackContents) {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity));

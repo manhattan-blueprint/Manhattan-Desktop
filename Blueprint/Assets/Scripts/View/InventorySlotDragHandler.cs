@@ -30,13 +30,6 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
     private void Start() {
         raycaster = GetComponentInParent<GraphicRaycaster>();
 
-        Transform parentCanvasObject = gameObject.transform.parent.parent; 
-        if (parentCanvasObject.name == "MachineInventoryCanvas") {
-            secondaryCanvasRaycaster = GameObject.Find("MachineCanvas").GetComponent<GraphicRaycaster>();
-        } else if (parentCanvasObject.name == "MachineCanvas") {
-            secondaryCanvasRaycaster = GameObject.Find("MachineInventoryCanvas").GetComponent<GraphicRaycaster>();
-        }
-
         // Retrieve components
         eventSystem = GetComponent<EventSystem>();
         inventoryController = GameObject.Find("InventoryUICanvas").GetComponent<InventoryController>();
@@ -49,11 +42,19 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
         if (inventorySlotController.id == 0) inventoryController.DragDestination = -1;
     }
 
-    private void Update() {
+    private void Update() {   
+        // Update secondaryCanvasRaycaster for Machine UI
+        Transform parentCanvasObject = this.gameObject.transform.parent.parent; 
+        if (parentCanvasObject.name == "MachineInventoryCanvas") {
+            secondaryCanvasRaycaster = GameObject.Find("MachineCanvas").GetComponent<GraphicRaycaster>();
+        } else if (parentCanvasObject.name == "MachineCanvas") {
+            secondaryCanvasRaycaster = GameObject.Find("MachineInventoryCanvas").GetComponent<GraphicRaycaster>();
+        }
+
         // Used by Goal UI
-        if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Goal) 
+        if (GameManager.Instance().uiStore.GetState().Selected == UIState.OpenUI.Goal)
             secondaryCanvasRaycaster = GameObject.Find("GoalCanvas").GetComponent<GraphicRaycaster>();
-        
+
         // DRAG
         // When left mouse button is down
         if (Input.GetMouseButtonDown(0)) {
@@ -97,6 +98,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                     } else {
                         // Splitting 
                         InventoryItem item = inventorySlotController.storedItem.Get();
+                        string sourceSlot = gameObject.transform.parent.name;
                         
                         if (isc is MachineSlotController) {
                             // Into machine
@@ -113,8 +115,18 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                                     newQuantity, originalItem.GetName(), isc.id));
                                 } else {
                                     // ... of a different type
-                                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
-                                    newQuantity, originalItem.GetName(), inventorySlotController.id));
+                                    if (sourceSlot != "InputSlot0" && sourceSlot != "InputSlot1" && sourceSlot != "FuelSlot") {
+                                        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
+                                        newQuantity, originalItem.GetName(), inventorySlotController.id));
+                                    } else {
+                                        // Cancel split if from machine slot
+                                        Vector2 machineLocation = (inventorySlotController as MachineSlotController).MachineController.machineLocation;
+                                        InventoryItem unDropItem = new InventoryItem(originalItem.GetName(), originalItem.GetId(), originalItem.GetQuantity() + newQuantity);
+                                        
+                                        if (sourceSlot == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(machineLocation, Optional<InventoryItem>.Of(unDropItem)));
+                                        if (sourceSlot == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(machineLocation, unDropItem));
+                                        if (sourceSlot == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(machineLocation, unDropItem));
+                                    }
                                 }
                             } else {
                                 // Into unoccupied slot
