@@ -26,6 +26,7 @@ public class BlueprintUIGenerator : MonoBehaviour {
     private GameObject scrollContainer;
     private GameObject contentContainer;
     private GameObject tooltip;
+    private GameObject scrollText;
     private TextMeshProUGUI tooltipText;
 
     void Start() {
@@ -59,6 +60,17 @@ public class BlueprintUIGenerator : MonoBehaviour {
         contentRT.localPosition = new Vector2(0, 0);
         contentContainer.AddComponent(typeof(SVGImage));
         contentContainer.GetComponent<SVGImage>().sprite = AssetManager.Instance().blueprintUIBackground;
+        
+        scrollText = new GameObject("ScrollText");
+        scrollText.transform.SetParent(contentContainer.transform);
+        RectTransform scrollTextRT = (RectTransform) scrollText.AddComponent(typeof(RectTransform));
+        scrollTextRT.localPosition = new Vector2(scaleUnit * 7, (float) (scaleUnit * -3.5f));
+        scrollText.AddComponent(typeof(TextMeshProUGUI));
+        scrollText.GetComponent<TextMeshProUGUI>().text = "Scroll to reveal more blueprints...";
+        scrollText.GetComponent<TextMeshProUGUI>().font = AssetManager.Instance().FontHelveticaNeueMedium;
+        scrollText.GetComponent<TextMeshProUGUI>().fontSize = scaleUnit * 0.25f;
+        scrollText.AddComponent(typeof(ContentSizeFitter));
+        scrollText.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         // Move tooltip into scroll container, cheers Unity
         tooltip = GameObject.Find("BTooltip");

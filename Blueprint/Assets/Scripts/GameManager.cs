@@ -47,7 +47,6 @@ public class GameManager {
         this.sm = schemaManager;
         this.accessToken = accessToken;
         this.completedBlueprints = new List<Item>();
-        this.isInventoryInitialised = false;
         this.mapStore.GetState().SetIntroState(true);
         inventoryStore.Dispatch(
             new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
