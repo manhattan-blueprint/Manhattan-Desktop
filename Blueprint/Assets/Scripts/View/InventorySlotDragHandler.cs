@@ -98,6 +98,7 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                     } else {
                         // Splitting 
                         InventoryItem item = inventorySlotController.storedItem.Get();
+                        string sourceSlot = gameObject.transform.parent.name;
                         
                         if (isc is MachineSlotController) {
                             // Into machine
@@ -114,8 +115,18 @@ public class InventorySlotDragHandler : MonoBehaviour, IPointerEnterHandler, IPo
                                     newQuantity, originalItem.GetName(), isc.id));
                                 } else {
                                     // ... of a different type
-                                    GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
-                                    newQuantity, originalItem.GetName(), inventorySlotController.id));
+                                    if (sourceSlot != "InputSlot0" && sourceSlot != "InputSlot1" && sourceSlot != "FuelSlot") {
+                                        GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventoryAtHex(originalItem.GetId(), 
+                                        newQuantity, originalItem.GetName(), inventorySlotController.id));
+                                    } else {
+                                        // Cancel split if from machine slot
+                                        Vector2 machineLocation = (inventorySlotController as MachineSlotController).MachineController.machineLocation;
+                                        InventoryItem unDropItem = new InventoryItem(originalItem.GetName(), originalItem.GetId(), originalItem.GetQuantity() + newQuantity);
+                                        
+                                        if (sourceSlot == "FuelSlot") GameManager.Instance().machineStore.Dispatch(new SetFuel(machineLocation, Optional<InventoryItem>.Of(unDropItem)));
+                                        if (sourceSlot == "InputSlot0") GameManager.Instance().machineStore.Dispatch(new SetLeftInput(machineLocation, unDropItem));
+                                        if (sourceSlot == "InputSlot1") GameManager.Instance().machineStore.Dispatch(new SetRightInput(machineLocation, unDropItem));
+                                    }
                                 }
                             } else {
                                 // Into unoccupied slot
