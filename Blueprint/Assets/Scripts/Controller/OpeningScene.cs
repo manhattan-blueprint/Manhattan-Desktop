@@ -77,6 +77,13 @@ public class OpeningScene : MonoBehaviour {
         animationManager = this.gameObject.AddComponent<ManhattanAnimation>();
     }
 
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.F9)) {
+            GameManager.Instance().inTutorialMode = true;
+            SceneManager.LoadScene(SceneMapping.Tutorial);
+        }
+    }
+
     private void intro() {
         introAnimation();
     }
