@@ -18,12 +18,12 @@ namespace Controller {
         public bool DraggingInvItem;
         public int DragDestination;
 
-        [SerializeField] private Button backpackButton;
         private Dictionary<int, InventorySlotController> itemSlots;
         private GameManager gameManager;
         private bool firstUIUpdate;
-        private List<InventoryEntry> backpackContents;
         private List<InventorySlotController> allSlots;
+        public Button backpackButton;
+        public List<InventoryEntry> backpackContents;
         private bool subscribed;
              
         public void Start() {
@@ -42,7 +42,7 @@ namespace Controller {
             GameManager.Instance().uiStore.Subscribe(this);
             GameManager.Instance().inventoryStore.Subscribe(this);
         }
-
+        
         public void StateDidUpdate(InventoryState state) {
             inventoryContents = state.inventoryContents;
             RedrawInventory();
@@ -57,7 +57,7 @@ namespace Controller {
                     this.ShowAlert("Error", "Could not get inventory " + result.GetError());
                 } else {
                     backpackContents = result.GetSuccess().items;
-                    setBackpackState();
+                    SetBackpackState();
                 }
             }));
         }
@@ -72,7 +72,7 @@ namespace Controller {
             return true;
         }
 
-        private void setBackpackState() {
+        public void SetBackpackState() {
             if (backpackContents.Count > 0) {
                 SpriteState ss = new SpriteState {
                     highlightedSprite = AssetManager.Instance().backpackButtonOccupiedHighlight
@@ -120,7 +120,7 @@ namespace Controller {
                 GameManager.Instance().inventoryStore.Dispatch(new AddItemToInventory(entry.item_id, entry.quantity));
             }
             backpackContents.Clear();
-            setBackpackState();
+            SetBackpackState();
             
             // Save game to avoid losing resources if they don't save again
             GameState gameState = new GameState(GameManager.Instance().mapStore.GetState(),
@@ -128,6 +128,9 @@ namespace Controller {
                 GameManager.Instance().inventoryStore.GetState(),
                 GameManager.Instance().machineStore.GetState());
 
+            
+            if (GameManager.Instance().inTutorialMode) return;
+            
             StartCoroutine(BlueprintAPI.SaveGameState(GameManager.Instance().GetAccessToken(), gameState, result => {
                 if (!result.isSuccess()) {
                     this.ShowAlert("Error", "Could not get inventory " + result.GetError());
