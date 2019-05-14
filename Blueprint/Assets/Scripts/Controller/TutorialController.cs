@@ -191,10 +191,10 @@ public class TutorialController : MonoBehaviour,
                 heldItemMask.enabled = false;
                 inventoryCanvas.enabled = false; 
                 EnablePlayer();
-                Invoke(nameof(StartBlueprintFlow), 3);
+                Invoke(nameof(StartBlueprintFlow), 0.5f);
                 break;
             case TutorialState.TutorialStage.ShouldOpenBlueprint:
-                ShowMessage("Blueprints", "To view the blueprints mysteriously left around the beacon, press the Q key");
+                ShowMessage("Blueprints", "To view the mysterious blueprints, press the Q key");
                 break; 
             case TutorialState.TutorialStage.InsideBlueprint:
                 blueprintCanvas.enabled = true;

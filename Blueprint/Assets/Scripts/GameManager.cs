@@ -51,6 +51,10 @@ public class GameManager {
         this.completedBlueprints = new List<Item>();
         this.isInventoryInitialised = false;
         this.mapStore.GetState().SetIntroState(true);
+        inventoryStore.Dispatch(
+            new SetInventorySize((int) (3 * Math.Pow(inventoryLayers + 1, 2) - 3 * (inventoryLayers + 1) + 6)));
+        // Update which machines are connected when loading from save state
+        machineStore.Dispatch(new UpdateConnected());
     }
 
     public static GameManager Instance() {
